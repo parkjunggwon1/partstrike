@@ -1,0 +1,44 @@
+1. reading posted data [2015-12-16 17:00:44 Asia/Seoul] : 
+Array
+(
+)
+
+
+2. make request data [2015-12-16 17:00:44 Asia/Seoul] : 
+cmd=_notify-validate
+
+3. CURL Request [2015-12-16 17:00:45 Asia/Seoul] : 
+HTTP request of validation request:POST /cgi-bin/webscr HTTP/1.1
+Host: www.sandbox.paypal.com
+Accept: */*
+Connection: Close
+Content-Length: 20
+Content-Type: application/x-www-form-urlencoded
+
+cmd=_notify-validate for IPN payload: cmd=_notify-validate
+
+4. CURL Response [2015-12-16 17:00:45 Asia/Seoul] : 
+HTTP response of validation request: HTTP/1.1 200 OK
+Date: Wed, 16 Dec 2015 08:00:45 GMT
+Server: Apache
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: c9MWDuvPtT9GIMyPc3jwol1VSlO=YYX-OTYrENeHAtW8BvLSIq7BF0DWHC6VfRqfcvbCPVaU4J4V9oUWsh8O0wcW_pHwA0314PAPQRZG6X43xYXImyNCfFn2PpcKvC3Jn9BeZhN8dSWdNpP3u6azpqgNTeH9olVKzR1ujc80lyo_0JE_6uMdOm26B2L1wmjjs2T1P5N9AT7NnCBPAbQT71MVf3xP4zNWknYKfy2tLTPjtxh5U7LSaVm8BwqyqAujdJacgMnx2RnZwDRVIJN2DMcA4K9SZYD3j-POY7bVw-iY6ZCIEej3kZrN3E4VLnphnrRFvu4_lHj-pLTT8BZ4nTWpUVJNHqicUx3PZbnVJtzljA_MhfRrM9FUyuqOfktkr6JxlE8fUy_7mvaVQx9-Oz9kc9dbuc-egBmkRlpljtpiQxbpoLEgqF8EZa0mismXA2Cl1fQVgVCMw1WxYueutM0; domain=.paypal.com; path=/; Secure; HttpOnly
+Set-Cookie: cookie_check=yes; expires=Sat, 13-Dec-2025 08:00:45 GMT; domain=.paypal.com; path=/; Secure; HttpOnly
+Set-Cookie: navcmd=_notify-validate; domain=.paypal.com; path=/; Secure; HttpOnly
+Set-Cookie: navlns=0.0; expires=Fri, 15-Dec-2017 08:00:45 GMT; domain=.paypal.com; path=/; Secure; HttpOnly
+Set-Cookie: Apache=10.72.108.11.1450252845566959; path=/; expires=Fri, 08-Dec-45 08:00:45 GMT
+Vary: Accept-Encoding,User-Agent
+Connection: close
+Paypal-Debug-Id: 1fe742be86037
+Set-Cookie: X-PP-SILOVER=name%3DSANDBOX3.WEB.1%26silo_version%3D880%26app%3Dappdispatcher%26TIME%3D756707670; domain=.paypal.com; path=/; Secure; HttpOnly
+Set-Cookie: X-PP-SILOVER=; Expires=Thu, 01 Jan 1970 00:00:01 GMT
+Set-Cookie: Apache=10.72.128.11.1450252845548637; path=/; expires=Fri, 08-Dec-45 08:00:45 GMT
+Strict-Transport-Security: max-age=14400
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+
+INVALID
+
+5. Invalid IPN [2015-12-16 17:00:45 Asia/Seoul] : 
+cmd=_notify-validate
+

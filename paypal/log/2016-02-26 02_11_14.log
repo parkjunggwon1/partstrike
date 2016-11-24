@@ -1,0 +1,57 @@
+1. reading posted data [2016-02-26 02:11:14 Asia/Seoul] : 
+Array
+(
+    [mc_gross] => 3105.00
+    [invoice] => BUY-20160226021030
+    [protection_eligibility] => Eligible
+    [address_status] => confirmed
+    [payer_id] => 3F7H5NPQR2MXL
+    [tax] => 0.00
+    [address_street] => 1 Main St
+    [payment_date] => 09:11:08 Feb 25, 2016 PST
+    [payment_status] => Completed
+    [charset] => windows-1252
+    [address_zip] => 95131
+    [first_name] => test
+    [mc_fee] => 90.35
+    [address_country_code] => US
+    [address_name] => test buyer
+    [notify_version] => 3.8
+    [custom] => 
+    [payer_status] => verified
+    [business] => goodr00-facilitator@naver.com
+    [address_country] => United States
+    [address_city] => San Jose
+    [quantity] => 1
+    [verify_sign] => AfzPPZH.t0ety8o.ciNBEdPv7r-OAJDiQSDb3OYZ-UUPBpArvM8sUp7F
+    [payer_email] => goodr00-buyer@naver.com
+    [txn_id] => 1UN07680H5751590P
+    [payment_type] => instant
+    [last_name] => buyer
+    [address_state] => CA
+    [receiver_email] => goodr00-facilitator@naver.com
+    [payment_fee] => 90.35
+    [receiver_id] => 4M48DLDDTGF3G
+    [txn_type] => web_accept
+    [item_name] => 
+    [mc_currency] => USD
+    [item_number] => 
+    [residence_country] => US
+    [test_ipn] => 1
+    [handling_amount] => 0.00
+    [transaction_subject] => 
+    [payment_gross] => 3105.00
+    [shipping] => 0.00
+    [ipn_track_id] => 42abd6a8c529c
+)
+
+
+
+2. make request data [2016-02-26 02:11:14 Asia/Seoul] : 
+cmd=_notify-validate&mc_gross=3105.00&invoice=BUY-20160226021030&protection_eligibility=Eligible&address_status=confirmed&payer_id=3F7H5NPQR2MXL&tax=0.00&address_street=1+Main+St&payment_date=09%3A11%3A08+Feb+25%2C+2016+PST&payment_status=Completed&charset=windows-1252&address_zip=95131&first_name=test&mc_fee=90.35&address_country_code=US&address_name=test+buyer&notify_version=3.8&custom=&payer_status=verified&business=goodr00-facilitator%40naver.com&address_country=United+States&address_city=San+Jose&quantity=1&verify_sign=AfzPPZH.t0ety8o.ciNBEdPv7r-OAJDiQSDb3OYZ-UUPBpArvM8sUp7F&payer_email=goodr00-buyer%40naver.com&txn_id=1UN07680H5751590P&payment_type=instant&last_name=buyer&address_state=CA&receiver_email=goodr00-facilitator%40naver.com&payment_fee=90.35&receiver_id=4M48DLDDTGF3G&txn_type=web_accept&item_name=&mc_currency=USD&item_number=&residence_country=US&test_ipn=1&handling_amount=0.00&transaction_subject=&payment_gross=3105.00&shipping=0.00&ipn_track_id=42abd6a8c529c
+
+
+3. CURL ERROR [2016-02-26 02:11:14 Asia/Seoul] : 
+Can't connect to PayPal to validate IPN message: error:14077410:SSL routines:SSL23_GET_SERVER_HELLO:sslv3 alert handshake failure
+
+

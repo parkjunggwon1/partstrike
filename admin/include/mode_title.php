@@ -1,0 +1,165 @@
+<?
+switch ($mode) {
+	//게시판
+	case "AA001";
+		$title_text ="공지사항";	
+		break;
+	case "AA002";
+		$title_text ="질의응답";	
+		break;
+	case "AA003";
+		$title_text ="제안";	
+		break;
+
+	case "BB001";
+		$title_text ="이용약관";	
+		break;
+	case "BB002";
+		$title_text ="이용방법";	
+		break;
+
+	case "CC001";
+		$title_text ="유통회사";	
+		break;
+	case "CC002";
+		$title_text ="제조회사";	
+		break;
+	case "CC003";
+		$title_text ="교육기관";	
+		break;
+	case "CC004";
+		$title_text ="개인";	
+		break;
+	case "CC005";
+		$title_text ="학생";	
+		break;
+	case "CC006";
+		$title_text ="직원";	
+		break;
+	case "CC000";
+		$title_text ="파츠정보";	
+		break;
+	case "CC011";
+		$title_text ="탈퇴회원";	
+		break;
+	case "CC012";
+		$title_text ="블랙리스트";	
+		break;
+	
+	case "DD001";
+		$title_text ="배너관리";	
+		break;
+	case "DD002";
+		$title_text ="카테고리 관리";	
+		break;
+	case "DD003";
+		$title_text ="제조회사/대리점";	
+		break;
+	case "DD004";
+		$title_text ="인기부품 관리";	
+		break;
+	case "DD005";
+		$title_text ="부과세 관리";	
+		break;
+	case "DD006";
+		$title_text ="가입차단ID 관리";	
+		break;
+	case "DD007";
+		$title_text ="환율관리";	
+		break;
+	case "DD008";
+		$title_text ="연락처_본사 관리";	
+		break;
+	case "DD009";
+		$title_text ="연락처_연구소 관리";	
+		break;
+
+	case "EE001";
+		$title_text ="쪽지관리";	
+		break;
+	case "EE002";
+		$title_text ="전체쪽지발송";	
+		break;
+	case "EE003";
+		$title_text ="관리자발송쪽지관리";	
+		break;
+
+	case "NN001";
+		$title_text ="메인배너관리";	
+		break;		
+	case "PP001";
+		$title_text ="팝업관리";	
+		break;		
+	case "XX100";
+		$title_text ="회원등급관리";	//테이블 CODE 참고 관리자컨트롤은 없음.(추후)
+		break;	
+	case "XX001";
+		$title_text ="사내회원관리";	
+		break;
+	case "XX002";
+		$title_text ="사내게시판";	
+		break;
+	case "YY001";
+		$title_text ="회원정보";	
+		break;								
+	case "ZZ001";
+		$title_text ="발주관리";	
+		break;
+	case "ZZ002";
+		$title_text ="발주이력관리";	
+		break;
+	case "ZZ003";
+		$title_text ="재고등록현황";	
+		break;
+	case "ZZ004";
+		$title_text ="코드관리";	
+		break;
+	case "ZZ005";
+		$title_text ="게시판관리";	
+		break;
+	case "ZZ006";
+		$title_text ="쪽지관리";	
+		break;
+	case "ZZ007";
+		$title_text ="운영자관리";	
+		break;
+	case "ZZ008";
+		$title_text ="정산관리";	
+		switch ($cate){
+			case "1";
+			$title_text .= " - 회원가입비용";
+			break;
+			case "2";
+			$title_text .= " - 보증금";
+			break;
+			case "3";
+			$title_text .= " - 마이뱅크 충전/사용 내역";
+			break;
+			case "4";
+			$title_text .= " - 인출신청";
+			break;
+			case "5";
+			$title_text .= " - 거래대금";
+			break;
+
+		}
+		break;
+	case "ZZ009";
+		$title_text ="기타관리";	
+		break;
+	case "ZZ011";
+		$title_text ="불량통보이력관리";	
+		break;
+	case "ZZ012";
+		$title_text ="결제관리";	
+		break;
+	case "ZZ013";
+		$title_text ="PARTS 연구소";	
+		break;
+	case "ZZ014";
+		$title_text ="테스트의뢰 목록";	
+		break;
+}
+
+//echo $title_text;
+?>

@@ -1,0 +1,91 @@
+1. reading posted data [2015-12-17 22:30:16 Asia/Seoul] : 
+Array
+(
+    [mc_gross] => 120.00
+    [invoice] => BUY-20151217222950
+    [protection_eligibility] => Eligible
+    [address_status] => confirmed
+    [payer_id] => 3F7H5NPQR2MXL
+    [tax] => 0.00
+    [address_street] => 1 Main St
+    [payment_date] => 05:30:08 Dec 17, 2015 PST
+    [payment_status] => Completed
+    [charset] => windows-1252
+    [address_zip] => 95131
+    [first_name] => test
+    [mc_fee] => 3.78
+    [address_country_code] => US
+    [address_name] => test buyer
+    [notify_version] => 3.8
+    [custom] => 
+    [payer_status] => verified
+    [business] => goodr00-facilitator@naver.com
+    [address_country] => United States
+    [address_city] => San Jose
+    [quantity] => 1
+    [verify_sign] => AvzD5Jb8ZQa.dp9qQtbMO98SezhzAOKQ6iAxwAWzeyZq9Yraar9UTFMT
+    [payer_email] => goodr00-buyer@naver.com
+    [txn_id] => 1AB50776B44939156
+    [payment_type] => instant
+    [last_name] => buyer
+    [address_state] => CA
+    [receiver_email] => goodr00-facilitator@naver.com
+    [payment_fee] => 3.78
+    [receiver_id] => 4M48DLDDTGF3G
+    [txn_type] => web_accept
+    [item_name] => 
+    [mc_currency] => USD
+    [item_number] => 
+    [residence_country] => US
+    [test_ipn] => 1
+    [handling_amount] => 0.00
+    [transaction_subject] => 
+    [payment_gross] => 120.00
+    [shipping] => 0.00
+    [ipn_track_id] => b965d5d51a1b5
+)
+
+
+
+2. make request data [2015-12-17 22:30:16 Asia/Seoul] : 
+cmd=_notify-validate&mc_gross=120.00&invoice=BUY-20151217222950&protection_eligibility=Eligible&address_status=confirmed&payer_id=3F7H5NPQR2MXL&tax=0.00&address_street=1+Main+St&payment_date=05%3A30%3A08+Dec+17%2C+2015+PST&payment_status=Completed&charset=windows-1252&address_zip=95131&first_name=test&mc_fee=3.78&address_country_code=US&address_name=test+buyer&notify_version=3.8&custom=&payer_status=verified&business=goodr00-facilitator%40naver.com&address_country=United+States&address_city=San+Jose&quantity=1&verify_sign=AvzD5Jb8ZQa.dp9qQtbMO98SezhzAOKQ6iAxwAWzeyZq9Yraar9UTFMT&payer_email=goodr00-buyer%40naver.com&txn_id=1AB50776B44939156&payment_type=instant&last_name=buyer&address_state=CA&receiver_email=goodr00-facilitator%40naver.com&payment_fee=3.78&receiver_id=4M48DLDDTGF3G&txn_type=web_accept&item_name=&mc_currency=USD&item_number=&residence_country=US&test_ipn=1&handling_amount=0.00&transaction_subject=&payment_gross=120.00&shipping=0.00&ipn_track_id=b965d5d51a1b5
+
+
+3. CURL Request [2015-12-17 22:30:17 Asia/Seoul] : 
+HTTP request of validation request:POST /cgi-bin/webscr HTTP/1.1
+Host: www.sandbox.paypal.com
+Accept: */*
+Connection: Close
+Content-Length: 987
+Content-Type: application/x-www-form-urlencoded
+
+cmd=_notify-validate&mc_gross=120.00&invoice=BUY-20151217222950&protection_eligibility=Eligible&address_status=confirmed&payer_id=3F7H5NPQR2MXL&tax=0.00&address_street=1+Main+St&payment_date=05%3A30%3A08+Dec+17%2C+2015+PST&payment_status=Completed&charset=windows-1252&address_zip=95131&first_name=test&mc_fee=3.78&address_country_code=US&address_name=test+buyer&notify_version=3.8&custom=&payer_status=verified&business=goodr00-facilitator%40naver.com&address_country=United+States&address_city=San+Jose&quantity=1&verify_sign=AvzD5Jb8ZQa.dp9qQtbMO98SezhzAOKQ6iAxwAWzeyZq9Yraar9UTFMT&payer_email=goodr00-buyer%40naver.com&txn_id=1AB50776B44939156&payment_type=instant&last_name=buyer&address_state=CA&receiver_email=goodr00-facilitator%40naver.com&payment_fee=3.78&receiver_id=4M48DLDDTGF3G&txn_type=web_accept&item_name=&mc_currency=USD&item_number=&residence_country=US&test_ipn=1&handling_amount=0.00&transaction_subject=&payment_gross=120.00&shipping=0.00&ipn_track_id=b965d5d51a1b5 for IPN payload: cmd=_notify-validate&mc_gross=120.00&invoice=BUY-20151217222950&protection_eligibility=Eligible&address_status=confirmed&payer_id=3F7H5NPQR2MXL&tax=0.00&address_street=1+Main+St&payment_date=05%3A30%3A08+Dec+17%2C+2015+PST&payment_status=Completed&charset=windows-1252&address_zip=95131&first_name=test&mc_fee=3.78&address_country_code=US&address_name=test+buyer&notify_version=3.8&custom=&payer_status=verified&business=goodr00-facilitator%40naver.com&address_country=United+States&address_city=San+Jose&quantity=1&verify_sign=AvzD5Jb8ZQa.dp9qQtbMO98SezhzAOKQ6iAxwAWzeyZq9Yraar9UTFMT&payer_email=goodr00-buyer%40naver.com&txn_id=1AB50776B44939156&payment_type=instant&last_name=buyer&address_state=CA&receiver_email=goodr00-facilitator%40naver.com&payment_fee=3.78&receiver_id=4M48DLDDTGF3G&txn_type=web_accept&item_name=&mc_currency=USD&item_number=&residence_country=US&test_ipn=1&handling_amount=0.00&transaction_subject=&payment_gross=120.00&shipping=0.00&ipn_track_id=b965d5d51a1b5
+
+
+4. CURL Response [2015-12-17 22:30:17 Asia/Seoul] : 
+HTTP response of validation request: HTTP/1.1 200 OK
+Date: Thu, 17 Dec 2015 13:30:17 GMT
+Server: Apache
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: c9MWDuvPtT9GIMyPc3jwol1VSlO=IaZdDfxIKcoKqVwGt3PCBd19DN4HLfCyhIACckSkzm-8xEFi_aX0RO1e8XS598hQCzaM8iiClbHlI0CkQ60aO9vJEyrFxVc3Oa8x_ae-yb7AmVkmScrQtDi82JSrEO2onRV-k_6uRj4CndgBZhLwYGMUhmeXY_uh5v_OMeOPesOdH-_6WkRLPy-DZ4ZHM4B2kiImvsQLLx4hsC-AcBhy86OslNjdDL7dx2AddWH_meDrI5cyD7YKqnEb3vYMT9vVUaMfkDcIhEZb-PuyPlr2w96UpxSBTzMi2UFzbmnTiGdshZ5yz2juSkNvJySIXu5zyhVSwMxNNpLMUqS7YT4U6Th_ZKRWmwt6AJS3YuiLs53lbyTmAfBUUaFNk8NsBrw0vE5VDQDb4iKaM55UvSpFyE0kQ1QJDExubbnYsZ6xXsT8nRZ3Xleos_f8xXy; domain=.paypal.com; path=/; Secure; HttpOnly
+Set-Cookie: cookie_check=yes; expires=Sun, 14-Dec-2025 13:30:17 GMT; domain=.paypal.com; path=/; Secure; HttpOnly
+Set-Cookie: navcmd=_notify-validate; domain=.paypal.com; path=/; Secure; HttpOnly
+Set-Cookie: navlns=0.0; expires=Sat, 16-Dec-2017 13:30:17 GMT; domain=.paypal.com; path=/; Secure; HttpOnly
+Set-Cookie: Apache=10.72.108.11.1450359017027062; path=/; expires=Sat, 09-Dec-45 13:30:17 GMT
+Vary: Accept-Encoding,User-Agent
+Connection: close
+Paypal-Debug-Id: 5cde035124d1
+Set-Cookie: X-PP-SILOVER=name%3DSANDBOX3.WEB.1%26silo_version%3D880%26app%3Dappdispatcher%26TIME%3D3921179222; domain=.paypal.com; path=/; Secure; HttpOnly
+Set-Cookie: X-PP-SILOVER=; Expires=Thu, 01 Jan 1970 00:00:01 GMT
+Set-Cookie: Apache=10.72.128.11.1450359017009082; path=/; expires=Sat, 09-Dec-45 13:30:17 GMT
+Strict-Transport-Security: max-age=14400
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+
+VERIFIED
+
+
+5. Verified IPN [2015-12-17 22:30:17 Asia/Seoul] : 
+cmd=_notify-validate&mc_gross=120.00&invoice=BUY-20151217222950&protection_eligibility=Eligible&address_status=confirmed&payer_id=3F7H5NPQR2MXL&tax=0.00&address_street=1+Main+St&payment_date=05%3A30%3A08+Dec+17%2C+2015+PST&payment_status=Completed&charset=windows-1252&address_zip=95131&first_name=test&mc_fee=3.78&address_country_code=US&address_name=test+buyer&notify_version=3.8&custom=&payer_status=verified&business=goodr00-facilitator%40naver.com&address_country=United+States&address_city=San+Jose&quantity=1&verify_sign=AvzD5Jb8ZQa.dp9qQtbMO98SezhzAOKQ6iAxwAWzeyZq9Yraar9UTFMT&payer_email=goodr00-buyer%40naver.com&txn_id=1AB50776B44939156&payment_type=instant&last_name=buyer&address_state=CA&receiver_email=goodr00-facilitator%40naver.com&payment_fee=3.78&receiver_id=4M48DLDDTGF3G&txn_type=web_accept&item_name=&mc_currency=USD&item_number=&residence_country=US&test_ipn=1&handling_amount=0.00&transaction_subject=&payment_gross=120.00&shipping=0.00&ipn_track_id=b965d5d51a1b5 
+
+

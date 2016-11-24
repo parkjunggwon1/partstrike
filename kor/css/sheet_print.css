@@ -1,0 +1,28 @@
+@charset "utf-8";
+
+@page {margin: 1cm;}
+
+@media print{
+	.sheet-wrap .top-info{width:40%}
+	.sheet-wrap .order-info{width:50%}
+	.sheet-wrap .buyer-info .info-wrap{width:95%}
+	.sheet-wrap .buyer-info.ship-info .info-wrap{width:95%}
+	.sheet-wrap .seller-info .info-wrap{width:95%}
+	.sheet-wrap .buyer-info h2>img,
+	.sheet-wrap .seller-info h2>img{width:95%}
+	.sheet-wrap .order-table{min-height:450px; overflow:inherit}
+	.sheet-wrap .etc-info1, .sheet-wrap .etc-info2{width:48%; height:150px; background:none; page-break-inside:avoid;}
+	.sheet-wrap .etc-info2{float:right;  }
+	.sheet-wrap .etc-info2 .txt-area{height:auto; margin-bottom:10px}
+	.sheet-wrap .sign-area{position:relative; bottom:none}
+	.sheet-wrap .sign-area li>span{width:15%}
+	.sheet-wrap .sign-area .sign{width:75%}
+	.sheet-wrap .sign-area li>span.fax{margin-left:10%}
+	/* 프린트 배경설정 관련
+	.sheet-wrap .order-table>table th{background:none; border-top:1px solid #000; border-bottom:1px solid #000; border-left:1px solid #000; color:#000}
+	.sheet-wrap .order-table>table th:first-child{border-left:0 none}
+	.sheet-wrap .order-table .total-price>li>strong, .sheet-wrap .order-table .total-price>li>span{border-top: 1px solid #000000;}
+	.sheet-wrap .order-table .total-price>li.total{color:#000;background: none;font-weight:bold}
+	*/
+	.sheet-img{top:50%; margin-top:-390px; padding-top:0}
+}

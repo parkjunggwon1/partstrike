@@ -1,0 +1,360 @@
+@charset "utf-8";
+
+/* partsTotal */
+#partsTotal{height:337px}
+#partsTotal .total-table{float:left; margin-top:67px; margin-left:144px}
+#partsTotal .total-table th{padding-right:50px; text-align:right; padding-bottom:40px; font-size:13px}
+#partsTotal .total-table td{font-size:14px; text-align:right; vertical-align:top}
+#partsTotal .company-bn{float:right; margin-top:21px}
+#partsTotal .company-bn>ul>li{margin-bottom:17px}
+
+/* partsTop1 */
+#partsTop1{margin-top:40px}
+#partsTop1 .box-type4{float:left; width:397px; margin-bottom:5px; height:352px; margin-top:1px}
+#partsTop1 .box-type4+.box-type4{width:398px}
+#partsTop1 .clear{margin-left:-8px; margin-right:-10px}
+
+/* noticePreview */
+#noticePreview{padding-bottom:20px}
+
+/* partsTop1 */
+#partsTop2{margin-top:37px; min-height:350px}
+
+/* Terms */
+#Terms{line-height:18px; color:#666666}
+#Terms .terms-wrap{position:relative; padding: 0 10px 10px 10px}
+
+#Terms h3,
+#Terms h4,
+#Terms h5{color:#000; font-weight:bold}
+#Terms h3{padding-top:14px}
+#Terms h4{margin-top:18px}
+#Terms h5{margin-top:16px; margin-bottom:10px}
+#Terms p{margin:0}
+#Terms ol{list-style:decimal; padding:0 20px}
+
+#Terms ol>li>ol>li{list-style:none; position:relative; padding-left:20px}
+#Terms ol>li>ol>li:before{content:"①"; position:absolute; left:0}
+#Terms ol>li>ol>li+li:before{content:"②";}
+#Terms ol>li>ol>li+li+li:before{content:"③";}
+#Terms ol>li>ol>li+li+li+li:before{content:"④";}
+#Terms ol>li>ol>li+li+li+li+li:before{content:"⑤";}
+#Terms ol>li>ol>li+li+li+li+li+li:before{content:"⑥";}
+#Terms ol>li>ol>li+li+li+li+li+li+li:before{content:"⑦";}
+#Terms ol>li>ol>li+li+li+li+li+li+li+li:before{content:"⑧";}
+#Terms ol>li>ol>li+li+li+li+li+li+li+li+li:before{content:"⑨";}
+#Terms ol>li>ol>li+li+li+li+li+li+li+li+li+li:before{content:"⑩";}
+
+#Terms ol>li>ol>li>ol>li{list-style:lower-roman; padding:0}
+#Terms ol>li>ol>li>ol>li:before{content:""}
+
+/* stockList */
+#stockList{}
+#stockList .stock-list-table th .select.type3{margin:0}
+#stockList .stock-list-table tbody>tr:only-child>td{height:120px; vertical-align:top}
+#stockList .stock-list-table tbody>tr:only-child>td.title-box.first{height:101px}
+
+
+/* orderDraft */
+#orderDraft .stock-list-table{font-size:10px; letter-spacing:-0.05em}
+#orderDraft .stock-list-table th{height:23px}
+#orderDraft .stock-list-table td{height:22px; padding:0 2px}
+#orderDraft .stock-list-table .title-box{padding:2px 0 0 0; height:auto}
+#orderDraft .stock-list-table .title-box:first-child{padding-top:1px}
+#orderDraft .stock-list-table .nation2{padding-top:4px; letter-spacing:0}
+#orderDraft .stock-list-table tbody:first-of-type .nation2{padding-top:0}
+
+/* mybankSrch */
+#mybankSrch{color:#fff}
+#mybankSrch form{height:44px}
+#mybankSrch form table{float:left; background:url(/kor/images/bar_vrt.gif) no-repeat 100% 0}
+#mybankSrch th:first-child{width:90px}
+#mybankSrch th{width:45px; text-align:right; padding-right:9px}
+#mybankSrch td{padding-right:12px}
+#mybankSrch table+button{float:right; margin-top:1px}
+#mybankSrch .btns{text-align:center; padding:12px 0 3px}
+#mybankSrch .btns button{padding:0 14px}
+#mybankSrch .select{width:74px}
+
+/* mybankTable */
+#mybankTable{min-height:648px}
+#mybankTable td{padding:2px 5px}
+#mybankTable .stock-list-table{}
+#mybankTable .stock-list-table th{background-color:transparent; height:32px; padding:2px 5px}
+
+/* stockTop */
+#stockTop{padding:0 13px 0 8px}
+#stockTop>form{display:table; width:100%}
+#stockTop>form>span{display:table-cell}
+#stockTop .op1{padding-left:47px}
+#stockTop .op2,
+#stockTop .op3{padding-left:16px}
+#stockTop .op4{text-align:right; padding-left:12px}
+#stockTop .op2 label,
+#stockTop .op3 label{white-space:nowrap}
+
+/* stockManageTop */
+#stockManageTop table tr{background-color:transparent}
+#stockManageTop table input{text-align:center; margin:0}
+#stockManageTop table th{padding:0 3px}
+#stockManageTop table td{padding:0 3px}
+#stockManageTop table tbody tr:first-child td{padding-top:8px}
+#stockManageTop table tbody tr:first-child td.pd-0{padding-top:8px !important}
+
+/* stockManage */
+#stockManage{padding-bottom:10px}
+#stockManage table tr{background-color:transparent}
+#stockManage table th{padding:1px 3px}
+#stockManage table td{padding:0 3px}
+#stockManage table input{text-align:center; margin:0}
+#stockManage table tbody tr:first-child td{padding-top:8px !important; height:33px}
+#stockManage input[type='checkbox'] + span{margin-right:0}
+#stockTop+#stockManageTop+#stockManage{min-height:551px; /* 재고관련 최소높이추가 */}
+
+
+/* turnkeyList */
+#turnkeyList{}
+#turnkeyList .stock-list-table{font-size:10px; letter-spacing:-0.05em}
+#turnkeyList .stock-list-table th{height:23px}
+#turnkeyList .stock-list-table td{height:22px; padding:0}
+
+/* turnkeyManageTop */
+#turnkeyManageTop{min-height:222px}
+#turnkeyManageTop table tr{background-color:transparent}
+#turnkeyManageTop table input{text-align:center}
+#turnkeyManageTop table th{}
+#turnkeyManageTop table td{padding:2px}
+#turnkeyManageTop table tbody tr:first-child td{padding-top:6px !important; padding-bottom:2px !important}
+#turnkeyManageTop table table{}
+#turnkeyManageTop table table th{background:#7f7f7f; color:#fff45e; height:21px}
+#turnkeyManageTop table table th.down{background-color:transparent; text-align:right}
+#turnkeyManageTop table table td{padding:0 1px}
+#turnkeyManageTop table table tbody tr:first-child td{padding-top:2px}
+
+#stockManage{min-height:423px; /* 턴키관련 최소높이추가 */}
+
+.join-form-table th{text-align:right; padding-right:10px}
+.join-form-table input[type=text],
+.join-form-table input[type=password],
+.join-form-table .select{width:100%;}
+.join-form-table td{padding:5px 0 6px}
+
+/* joinForm */
+#joinForm1{position:relative; padding-bottom:21px}
+#joinForm1 .option label{margin:0 36px 14px}
+#joinForm1 .join-form-table{margin:45px 0; width:100%}
+#joinForm1 .join-form-table input[type=text]:disabled,
+#joinForm1 .join-form-table input[type=password]:disabled{color:transparent !important; *color:#f0f0f0 !important}
+#joinForm1 .join-form-table input[type=text],
+#joinForm1 .join-form-table input[type=password],
+#joinForm1 .join-form-table .select{width:215px; text-align:left}
+#joinForm1 .join-form-table .select{background:none}
+#joinForm1 .join-form-table .select.type5 label{opacity:0; filter: alpha(opacity=0);}
+#joinForm1 .join-form-table .select.type5 select{background:url(/kor/images/select4_bg.gif) no-repeat 100% 0; opacity:1; filter: alpha(opacity=1); -webkit-appearance:none !important;-moz-appearance: none; appearance: none; border:0 none; color:#00759e}
+#joinForm1 .join-form-table .select.type5 select::-ms-expand{display:none !important}
+#joinForm1 .join-form-table .select.type5 select[disabled=disabled]{background:#f0f0f0}
+#joinForm1 .btn-area{position:absolute; right:13px; bottom:7px; padding:0}
+#joinForm2{padding-bottom:5px}
+#joinForm2 .join-form-table{margin-top:45px}
+#joinForm2 .btn-area{padding-bottom:0; padding-top:0}
+
+.select.bdb{border-color:#999999 !important}
+
+/* 2016-08-17 : '배송지변경'화면(05_04) */
+#delv_chg .company-info-tb .select{width:215px; text-align:left}
+#delv_chg .company-info-tb .select{background:none}
+#delv_chg .company-info-tb .select.type5 label{opacity:0; filter: alpha(opacity=0);}
+/* #delv_chg .company-info-tb .select.type5 {border-color:#00759e; background-image:url(/kor/images/select4_bg.gif); background-color:#fff} */
+#delv_chg .company-info-tb .select.type5 select{background:url(/kor/images/select4_bg.gif) no-repeat 100% 0; opacity:1; filter: alpha(opacity=0); -webkit-appearance:none !important;-moz-appearance: none; appearance: none; border:0 none; color:#00759e; background-color:#fff}
+#delv_chg .company-info-tb .select.type5 select::-ms-expand{display:none !important}
+#delv_chg .company-info-tb .select.type5 select[disabled=disabled]{background:#f0f0f0;  *color:#00759e !important}
+
+
+/* option-table */
+.option-table{margin:15px 0; width:100%}
+.option-table th,
+.option-table td{vertical-align:middle; padding:0}
+.option-table th{text-align:right; padding-right:3px; color:#666666}
+.option-table input{margin:0}
+.option-table .select{margin:0}
+
+/* company-info-img */
+.company-info-img{margin:15px 0}
+.company-info-img th{width:196px; text-align:right; padding-right:15px; color:#666666}
+.company-info-img td{padding:8px 0 7px; padding-right:30px}
+
+/* bank-info */
+#bank-info{padding-bottom:10px}
+#bank-info table{margin-left:95px; margin-top:12px}
+#bank-info table th,
+#bank-info table td{padding:3px 0 2px; color:#666666}
+#bank-info table td input{width:202px}
+#bank-info table th{text-align:right; padding-right:8px}
+
+/* relatedCheck */
+#relatedCheck{padding-bottom:15px}
+/* 160615 판매자 지정 운임 리스트변경
+#relatedCheck .ipt-chk{width:100%}
+#relatedCheck .ipt-chk span{position:absolute; left:13px}
+*/
+
+/* 160615 판매자 지정 운임 리스트변경
+#relatedCheck .stock-list-table .ipt-chk span{top:9px}
+#relatedCheck .stock-list-table{padding-bottom:15px}
+*/
+
+/* 160615 판매자 지정 운임 체크박스 다시변경 */
+#relatedCheck .box-top .ipt-chk span,
+#relatedCheck thead th .ipt-chk span{position:absolute; left:10px; top:14px}
+#relatedCheck .box-top+.stock-list-table{margin-bottom:-1px}
+#relatedCheck .box-top+.stock-list-table td{padding-bottom:15px}
+.related-nation-list>li{display:inline-block; width:32%}
+
+.notice-pop{font-size:13px; color:#000000; font-family:"굴림"; line-height:1.6}
+.notice-pop ol{margin-bottom:20px}
+
+/* pass-form */
+.pass-form{width:430px; margin:0 auto; position:relative; padding:130px 0}
+.pass-form>p{border-bottom:1px solid #ff0909; padding-bottom:10px; margin:0; margin-bottom:40px}
+.pass-form>form{text-align:center}
+.pass-form span{vertical-align:middle}
+
+/* agency-list */
+.agency-list>h3{font-size:15px}
+.agency-list>h4{margin:1px}
+.agency-list>ul>li{padding:2px 0 1px 0}
+.agency-list>ul>li>table{margin:0}
+.agency-list>ul>li:nth-child(even){background:#f7f7f7}
+.agency-list>ul>li .table-type2 th,
+.agency-list>ul>li .table-type2 td{padding:2px 3px}
+.agency-list>ul>li .table-type2 th{width:75px; padding:2px 0; font-size:11px; letter-spacing:-0.1em}
+.agency-list>ul>li .table-type2 th>img{max-width:75px}
+
+/* black-list */
+.black-list>h4>a{display:block; color:#00759e; padding:5px 0}
+.black-lists>h4>span{display:block; padding:5px 0}
+.black-list>.agency-list{margin-bottom:15px}
+#blackList .stock-list-table th{height:23px; font-size:11px}
+
+
+/* side */
+#odr_sell,
+#odr_buy,
+#odr_mybox{min-height:150px}
+
+
+/* con-lab */
+.con-lab .stock-list-table td{height:auto}
+.con-lab .stock-list-table .th2,
+.con-lab .stock-list-table .th3,
+.con-lab .stock-list-table .th4,
+.con-lab .stock-list-table .td2{height:33px !important; padding:5px 0 !important}
+.con-lab p{margin:0}
+
+#memfeeleftBottom{margin-top:46px}
+
+
+/* 레이어 검색박스 */
+#layerPop3 .has-srch{margin-bottom:28px}
+#layerPop3 .has-srch>h1{padding-left:100px}
+#layerPop3 .has-srch .box-type5{position:absolute; top:-20px; left:-89px; z-index:1;font-size:12px}
+
+
+/* 151229 */
+#remitlist .stock-list-table td,
+.stock-list-table.board-list td,
+#memfeeleftTop .stock-list-table td,
+#memfeeleftBottom .stock-list-table td{height:30px}
+
+/* 151230 */
+#orderDraft .select{width:auto; max-width:210px}
+#agentList{min-height:660px}
+#boardleftTop .box-type1{min-height:695px}
+#contactTop{min-height:420px}
+#contactBottom{min-height:214px}
+#memfeeleftTop>.box-type1{min-height:448px}
+#memfeeleftBottom>.box-type1{min-height:268px}
+
+/* 160104 */
+
+#contactTop .contact-list-table{margin-top:0px;}
+.contact-list-table td{padding:10px 3px; line-height:25px;}
+.contact-hd{padding-bottom:0}
+.contact-hd h3{float:left}
+.contact-hd h3>span{display:block;font-size: 11px; margin-top:0; letter-spacing:0.17em}
+.contact-hd h3+span{float:left;font-size: 15px;margin-left: 10px; margin-top:5px}
+.contact-hd h3+span+p{clear:both; margin:0; line-height:1}
+
+#board-con .con-section{line-height:2.3}
+
+#f6 .btn-area{padding:0}
+
+
+/* layer4-section 안에 p 태그 마이너스 마진 삭제 */
+.layer4-section p{margin:0}
+
+/* 로그인전 메인 수정 */
+#partsTop1 .table-type1 td,
+#partsTop2 .table-type1 td{padding:0}
+#partsTop1 .list-type2>li,
+#partsTop2 .list-type2>li{padding-left:26px; padding-right:10px}
+#partsTop1 .list-type2>li>.num,
+#partsTop2 .list-type2>li>.num{left:10px}
+#noticePreview .list-type1{padding:27px 0 10px}
+#noticePreview .list-type1>li>.num{left:10px}
+
+
+/* 우편번호 찾기 레이어 */
+.post_pop .srch-type{text-align:center; background:#f0f0f0; border-bottom:1px solid #cccccc; padding:15px 0; margin:-15px; margin-bottom:20px}
+.post_pop .srch-type dt{display:inline-block; vertical-align:middle}
+.post_pop .srch-type dd{display:inline-block; margin:0 0 0 10px; vertical-align:middle}
+.post_pop .addrs>div{background:#f0f0f0; border:1px solid #cccccc; padding:20px 0; text-align:center; margin:5px; margin-top:20px}
+.post_pop .addrs>div input[type=text]{border:1px solid #000000; height:21px}
+.post_pop .ipt-rd{color:inherit}
+.post_pop .result-list{margin:20px 5px 0}
+.post_pop .result-list .total{border-bottom:1px solid #cccccc; padding-bottom:10px}
+.post_pop .result-list ul>li{border-bottom:1px solid #cccccc; padding:10px 5px}
+.post_pop .result-list ul>li>a,
+.post_pop .result-list ul>li>a>span{display:block; color:#000000}
+
+
+/* 160215 내거래 기록 수정 */
+#recordlist .stock-list-table .step-cell{height:0}
+#recordlist .stock-list-table td{word-wrap:normal; word-break: break-word; -ms-word-break: break-all}
+#recordlist .stock-list-table .title-box{padding-left:0}
+
+
+
+#recordlist .record-on.S tr .layer-step{border-bottom:1px solid #00b050; background-color:#dce6f2}
+#recordlist tbody.S tr>.title-box{border-left:1px solid  #00759e; border-right:1px solid  #00759e}
+#recordlist tbody.S tr:nth-child(2)>td{border-top:1px solid #00759e}
+#recordlist tbody.S tr:nth-child(3)>td{border-bottom:1px solid #00759e}
+#recordlist tbody.S tr:nth-child(3)>td:first-child{border-left:1px solid  #00759e}
+#recordlist tbody.S tr:nth-child(3)>td:last-child{border-right:1px solid  #00759e}
+
+
+#recordlist tbody.record-on.S tr>.title-box{border-left:0px inset #00759e; border-right:0px inset #00759e}
+#recordlist tbody.record-on.S tr:nth-child(2)>td{border-top:0px solid #00759e}
+#recordlist tbody.record-on.S tr:nth-child(3)>td{border-bottom:0px solid #00759e}
+#recordlist tbody.record-on.S tr:nth-child(3)>td:first-child{border-left:0px inset #00759e}
+#recordlist tbody.record-on.S tr:nth-child(3)>td:last-child{border-right:0px inset #00759e}
+
+#recordlist .record-on.B tr .layer-step{border-bottom:1px solid #00b050; background-color:#ffff99}
+#recordlist tbody.B tr>.title-box{border-left:1px solid  #ffe655; border-right:1px solid  #ffe655}
+#recordlist tbody.B tr:nth-child(2)>td{border-top:1px solid #ffe655}
+#recordlist tbody.B tr:nth-child(3)>td{border-bottom:1px solid #ffe655}
+#recordlist tbody.B tr:nth-child(3)>td:first-child{border-left:1px solid  #ffe655}
+#recordlist tbody.B tr:nth-child(3)>td:last-child{border-right:1px solid  #ffe655}
+
+
+#recordlist tbody.record-on.B tr>.title-box{border-left:0px inset #ffe655; border-right:0px inset #ffe655}
+#recordlist tbody.record-on.B tr:nth-child(2)>td{border-top:0px solid #ffe655}
+#recordlist tbody.record-on.B tr:nth-child(3)>td{border-bottom:0px solid #ffe655}
+#recordlist tbody.record-on.B tr:nth-child(3)>td:first-child{border-left:0px inset #ffe655}
+#recordlist tbody.record-on.B tr:nth-child(3)>td:last-child{border-right:0px inset #ffe655}
+
+
+/*#recordlist .record-on .step-cell{border-bottom:1px solid #00b050;}*/
+
+/* 160524 신용정보 */
+.imgs-info .table-type1 td{padding-top:3px}

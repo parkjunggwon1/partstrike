@@ -1,0 +1,23 @@
+History
+
+New in version 1.3
+- Updated to handle new PayPal interface
+
+New in Version 1.2.2
+- Updated code to handle new PayPal interface - Thanx go to Michael Sullivan
+
+New in Version 1.2
+- GetMultipleBalances - some accounts have money in more than
+one currency. This function returns all the currencies and the
+total for each amount. Thanx to Jani Lahti for noticing the need
+for this.
+- GetTransactions removes weird characters you sometimes find
+- the use of the curl binary has better command line options
+- no longer unlinks cookie files, which makes it a problem for people
+who can't chmod 777 the director. instead it just empties
+the contents
+
+
+New in Version 1.1
+- removes the cookie it saves for security
+- automatically detects whether to use PHP curl or the program curl
