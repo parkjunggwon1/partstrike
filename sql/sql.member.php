@@ -1,5 +1,5 @@
 <?
-
+//박정권
 Function QRY_MEMBER_LIST($recordcnt,$searchand,$page){
 	$conn = dbconn();
 	if ($recordcnt && $page){
