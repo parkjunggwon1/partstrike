@@ -82,14 +82,14 @@ if($ref){
 	<input type="hidden" name="no" value="">
 		<?if($mode=="EE001"){?>
 		<?}else{?>
-		<p class="panel1"><label class="ipt-chk chk4 f-rt" lang="ko"><input type="checkbox" name="secret" value="Y"><span></span>비공개</label>
+		<p class="panel1"><!--<label class="ipt-chk chk4 f-rt" lang="ko"><input type="checkbox" name="secret" value="Y"><span></span>비공개</label>-->
 			질문사항이 있다면, 게시판에 모국어로 글을 남겨주시기 바랍니다.</p>
 		<?}?>
 		<table>
 			<tbody>
 				<tr>
 					<th scope="row" style="width:42px">제목 : </th>
-					<td><input type="text" class="i-txt4" style="width:500px" name="title" maxlength="70"></td>
+					<td><input type="text" class="i-txt4 c-blue" style="width:500px" name="title" maxlength="70"></td>
 				</tr>
 				<tr>
 					<td colspan="2" class="edit-col">

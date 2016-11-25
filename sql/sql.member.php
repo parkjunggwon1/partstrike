@@ -1,5 +1,5 @@
 <?
-//박정권
+
 Function QRY_MEMBER_LIST($recordcnt,$searchand,$page){
 	$conn = dbconn();
 	if ($recordcnt && $page){
@@ -40,15 +40,16 @@ Function QRY_MEMBER_VIEW($col,$val){
 	return $result;
 }
 
-function QRY_ODR_MEMBER_VIEW($odr_idx, $col, $val){
+function QRY_ODR_MEMBER_VIEW($odr_idx, $col, $val ,$invoice_no=""){
 	$conn = dbconn();
-	$cnt =QRY_CNT( "odr_member"," and odr_idx = $odr_idx and mem_$col = '$val'");
-	
+	$cnt =QRY_CNT( "odr_member"," and odr_idx = '$odr_idx' and invoice_no = '$invoice_no' and mem_$col = '$val'");	
+
 	if ($cnt == 0 ) {
-		$sql = "insert into odr_member  (mem_idx, odr_idx , nation, mem_nm, mem_nm_en, pos_nm, pos_nm_en, depart_nm, depart_nm_en, rel_nm,rel_nm_en, birthday,tel , fax,hp,zipcode,dosi,dosi_en,dositxt,dositxt_en,sigungu,sigungu_en,addr,addr_en,addr_det,addr_det_en,email,homepage,homepage_rel,skypeId,rel_idx,rel_id,filelogo,filesign,filereg_no,filecerti1,filecerti2,filecerti3,filecerti4,certi1open_yn,certi2open_yn,filestore1,filestore2,filestore3,filestore4,bank_name,bank_account,bank_user_name,bank_addr,bank_tel,swift_code,rout_no,iban_code,memfee,deposit ) 
-				select mem_idx, $odr_idx , nation, mem_nm, mem_nm_en, pos_nm, pos_nm_en, depart_nm, depart_nm_en, rel_nm,rel_nm_en, birthday,tel , fax,hp,zipcode,dosi,dosi_en,dositxt,dositxt_en,sigungu,sigungu_en,addr,addr_en,addr_det,addr_det_en,email,homepage,homepage_rel,skypeId,rel_idx,rel_id,filelogo,filesign,filereg_no,filecerti1,filecerti2,filecerti3,filecerti4,certi1open_yn,certi2open_yn,filestore1,filestore2,filestore3,filestore4,bank_name,bank_account,bank_user_name,bank_addr,bank_tel,swift_code,rout_no,iban_code,memfee,deposit 
+		$sql = "insert into odr_member  (mem_idx, odr_idx , invoice_no, nation, mem_nm, mem_nm_en, pos_nm, pos_nm_en, depart_nm, depart_nm_en, rel_nm,rel_nm_en, birthday,tel , fax,hp,zipcode,dosi,dosi_en,dositxt,dositxt_en,sigungu,sigungu_en,addr,addr_en,addr_det,addr_det_en,email,homepage,homepage_rel,skypeId,rel_idx,rel_id,filelogo,filesign,filereg_no,filecerti1,filecerti2,filecerti3,filecerti4,certi1open_yn,certi2open_yn,filestore1,filestore2,filestore3,filestore4,bank_name,bank_account,bank_user_name,bank_addr,bank_tel,swift_code,rout_no,iban_code,memfee,deposit ) 
+				select mem_idx, '$odr_idx' , '$invoice_no', nation, mem_nm, mem_nm_en, pos_nm, pos_nm_en, depart_nm, depart_nm_en, rel_nm,rel_nm_en, birthday,tel , fax,hp,zipcode,dosi,dosi_en,dositxt,dositxt_en,sigungu,sigungu_en,addr,addr_en,addr_det,addr_det_en,email,homepage,homepage_rel,skypeId,rel_idx,rel_id,filelogo,filesign,filereg_no,filecerti1,filecerti2,filecerti3,filecerti4,certi1open_yn,certi2open_yn,filestore1,filestore2,filestore3,filestore4,bank_name,bank_account,bank_user_name,bank_addr,bank_tel,swift_code,rout_no,iban_code,memfee,deposit 
 				from member 
 				where 1=1 and mem_$col = '$val'";	
+				//echo $sql;
 			$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 	}
 	
@@ -56,7 +57,7 @@ function QRY_ODR_MEMBER_VIEW($odr_idx, $col, $val){
 			SELECT * FROM 
 				odr_member	
 			WHERE
-				1=1 and odr_idx = $odr_idx and mem_$col = '$val' 
+				1=1 and odr_idx = '$odr_idx' and invoice_no = '$invoice_no' and mem_$col = '$val' 
 			";                        
 	//	echo $sql;			
 	$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());

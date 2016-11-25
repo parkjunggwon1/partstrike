@@ -191,15 +191,15 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			<td <?=$goJump?> ><?=$rhtype?></td>
 			<!--odr_stock으로 바꿈 2016-11-8-->
 			<?if ($odr_status==0 || $odr_status==1 || $odr_status==2 || $odr_status==18 || $odr_status==31){?>
-				<td  <?=$goJump?>  class="t-rt"><?=$odr_stock==0?"":number_format($odr_stock)?></td>
+				<td  <?=$goJump?>  class="t-rt"><?=$odr_stock<=0?"":number_format($odr_stock)?></td>
 			<?}else{?>
-				<td  <?=$goJump?>  class="t-rt"><?=$supply_quantity==0?"":number_format($supply_quantity)?></td>
+				<td  <?=$goJump?>  class="t-rt"><?=$supply_quantity<=0?"":number_format($supply_quantity)?></td>
 			<?}?>
 			<!--바꿈 2016-11-8-->
 			<td  <?=$goJump?>  class="t-rt">$<?=number_format($price,2)?></td>
 			<?if ($fr == "S"){?>			
-			<td  <?=$goJump?> class="t-rt" ><?=$odr_quantity==0?"":$odr_quantity?></td>			
-			<td  <?=$goJump?> class="t-rt" ><?=$supply_quantity==0?"":$supply_quantity?></td>
+			<td  <?=$goJump?> class="t-rt" ><?=$odr_quantity<=0?"":$odr_quantity?></td>			
+			<td  <?=$goJump?> class="t-rt" ><?=$supply_quantity<=0?"":$supply_quantity?></td>
 			<?}?>
 			<td class="delivery" <?=$goJump?>><?=($period)?"<span class='c-red'>".$period."</span>":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>
 			<?if ($odr_type == "B") {  //--구매자 화면일경우?>
@@ -743,7 +743,7 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 							$dc = "NEW";
 							$quantity="";
 						}
-						if ($part_type != "7"){	//턴키는 제외..??
+						//if ($part_type != "7"){	//턴키는 제외..??
 						?>
 						<tbody class="<?=$odr_type?>">
 						<tr  style="background-color:#ffffff;">
@@ -809,7 +809,7 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 						<? include $_SERVER["DOCUMENT_ROOT"]."/include/paging2.php"; ?>									
 					</div></td></tr>		
 					<?
-		}?>
+		//}?>
 		
 		</tbody></table>
 	</div>	

@@ -454,7 +454,10 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td><?=$i?></td>
 					<td><img src="/kor/images/nation_title2_<?=$nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$nation)?>"></td>
 					<?if ($part_type=="7"){	//턴키-------------?>
-						<td colspan="6" class="t-lt"><input type="text" class="i-txt4" value="<?=$part_no?>" style="width:560px; ime-mode:disabled" readonly></td>					
+						<td colspan="7" class="t-lt">
+							<?=$part_no;?>
+							<!--input type="text" class="i-txt4" value="<?=$part_no?>" style="width:560px; ime-mode:disabled" readonly-->
+						</td>
 					<?}else{?>
 					<td class="t-lt"><?=($per_cnt>0)? cut_len($part_no,22,"."):$part_no?></td>
 					<td class="t-lt"><?=($per_cnt>0)? cut_len($manufacturer,16,"."):$manufacturer?></td>
@@ -462,11 +465,14 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td><?=$dc?></td>
 					<td><?=$rhtype?></td>
 					<td class="t-rt"><input name="quantity[]" type="hidden" value="<?=$quantity;?>"> <?=$quantity==0?"":number_format($quantity)?></td>
-					<?}?>
 					<td class="t-rt">$<?=$price==0?"":number_format($price,2)?></td>
+					<?}?>
 					<td class="t-rt">
 						<?if (($part_type=="2"||$part_type=="5"||$part_type=="6") && $period ==""){?>
 						<input type="text" class="i-txt0 c-blue onlynum numfmt t-rt"  maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" odr_det_idx="<?=$odr_det_idx?>" value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:58px;ime-mode:disabled;" readonly>
+						<?}else if($part_type=="7"){?>
+							$<?=$price==0?"":number_format($price,2)?>
+							<input type="hidden" name="odr_quantity[]" value="1">
 						<?}else{?>
 						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" odr_det_idx="<?=$odr_det_idx?>" value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:58px;ime-mode:disabled;">
 						<?}?>
@@ -1035,7 +1041,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 											$file = $odr_his["file".$i];											
 						?>
 										<div class="img-cntrl-wrap">
-										<span class="img-wrap" style="width:72px;"><a href="<?=get_noimg($file_path,$file,"#")?>" <?if ($file){?>target="_blank"<?}?>><img <?=get_noimg_photo($file_path, $file, "/kor/images/file_pt.gif")?> alt=""></a></span>											
+										<span class="img-wrap"><a href="<?=get_noimg($file_path,$file,"#")?>" <?if ($file){?>target="_blank"<?}?>><img <?=get_noimg_photo($file_path, $file, "/kor/images/file_pt.gif")?> alt=""></a></span>											
 										</div>
 										<?}?>
 									</td>
@@ -1049,7 +1055,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 											$file = replace_out($row["file$i"]);				
 								?>
 										<div class="img-cntrl-wrap">
-										<span class="img-wrap" style="width:72px;" style="margin-top:10px;"><a href="<?=get_noimg($file_path,$file,"#")?>" <?if ($file){?>target="_blank"<?}?>><img <?=get_noimg_photo($file_path, $file, "/kor/images/file_pt.gif")?> alt=""></a></span>											
+										<span class="img-wrap" style="margin-top:10px;"><a href="<?=get_noimg($file_path,$file,"#")?>" <?if ($file){?>target="_blank"<?}?>><img <?=get_noimg_photo($file_path, $file, "/kor/images/file_pt.gif")?> alt=""></a></span>											
 										</div>
 										<?}?>
 									</td>

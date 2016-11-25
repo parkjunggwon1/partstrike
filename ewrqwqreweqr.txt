@@ -1,0 +1,12 @@
+tseatasesadffasdfaafsdsdfadfsa
+fs
+ddfs
+sdfjj
+sdf
+<<<<<<< HEAD
+sdffsdfsdsfdsfsdfsdfsdfsdfsdfdsfdsfd
+kjjjjjj
+=======
+sdf
+sdffsdfsdsfdsfdsfdsfd
+>>>>>>> parent of f839194... asdf

@@ -12,7 +12,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 <script src="/kor/js/jquery-1.11.3.min.js"></script>
 <script src="/include/function.js"></script>
 <?
-
+	
  $fty_his = get_fty_history($fty_history_idx);
  $odr_idx =  $fty_his[odr_idx];
  $odr_det_idx =  $fty_his[odr_det_idx];
@@ -24,8 +24,8 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
   $row_odr_det = mysql_fetch_array($result_odr_det);
 
   $row_ship = get_ship($row_odr_det["ship_idx"]);
-
-  $result_parts = QRY_MEMBER_VIEW("idx",get_any("member", "min(mem_idx)", "mem_type = 0")); //사는 회사 정보
+  $sell_nation = get_any("member", "nation","mem_idx = ".$fty_his["sell_mem_idx"]);
+  $result_parts = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",get_any("member", "min(mem_idx)", "mem_type = 0")); //사는 회사 정보
   $row_parts = mysql_fetch_array($result_parts);
 
   if ($fty_his[buy_mem_idx]==$_SESSION["MEM_IDX"]){
@@ -54,7 +54,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 		<ul class="contact-info">
 		<li><?=$row_parts["addr_en"]?></li>
 		<li><span class="tel">Tel : <?=$row_parts["tel"]?></span>Fax : <?=$row_parts["fax"]?></li>
-		<li><span class="tel">Contact : <?=$row_parts["pos_nm_en"]?> / CEO</span><?=$row_parts["email"]?></li>
+		<li><span class="tel">Contact : <?=$row_parts["pos_nm_en"]?> / CEO</span><?=get_manage_email($sell_nation)?></li>
 		</ul>
 
 	</div>

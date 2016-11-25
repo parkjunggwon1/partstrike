@@ -73,15 +73,15 @@
 					<tbody>
 						<tr>
 							<th scope="row"><img src="<?=$file_path.$filelogo?>" alt="" style="width:75px; height:18px;"></th>
-							<td colspan="5"> <?=$_SESSION["MEM_IDX"]!=""?$mem_nm:$mem_nm_en?></td>
+							<td colspan="5"> <?=$nation==$_SESSION["NATION"]?$mem_nm:$mem_nm_en?></td>
 						</tr>
 						<tr>
 							<th scope="row">회사 구분 :</th>
-							<td colspan="5"><span lang="en"><?=GF_Common_GetSingleList_LANG("MEM",$mem_type,'_en')?></span></td>
+							<td colspan="5"><span lang="en"><?=($_SESSION["NATION"]==$nation)?GF_Common_GetSingleList("MEM",$mem_type):GF_Common_GetSingleList_LANG("MEM",$mem_type,'_en')?></span></td>
 						</tr>
 						<tr>
 							<th scope="row">대표자 :</th>
-							<td colspan="5"><span lang="en"><?=$pos_nm_en?></span></td>
+							<td colspan="5"><span lang="en"><?=($_SESSION["NATION"]==$nation)?$pos_nm:$pos_nm_en?></span></td>
 						</tr>
 						<tr>
 							<th scope="row"><span lang="en">Tel  :</span></th>
@@ -234,6 +234,7 @@
 			$mem_id= replace_out($row_mem["mem_id"]);
 			$mem_nm_en= replace_out($row_mem["mem_nm_en"]);
 			$depart_nm_en= replace_out($row_mem["depart_nm_en"]);
+			$nation = replace_out($row_mem["nation"]);	
 			$tel= replace_out($row_mem["tel"]);
 			$fax= replace_out($row_mem["fax"]);
 			$homepage= replace_out($row_mem["homepage"]);

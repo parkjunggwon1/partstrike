@@ -70,7 +70,7 @@
 					<ul>
 						<li><a <?if ($_SESSION["MEM_IDX"]){?>href="javascript:if(chkLogin()){record('S');}"<?}?>>판매</a></li>
 						<li><a <?if ($_SESSION["MEM_IDX"]){?>href="javascript:if(chkLogin()){record('B');}"<?}?>>구매</a></li>
-						<li><a <?if ($_SESSION["MEM_IDX"]){?>href="javascript:if(chkLogin()){remit('C');}"<?}?>>송금</a></li>
+						<li><a <?if ($_SESSION["MEM_IDX"]){?>href="javascript:if(chkLogin()){remit('C');}"<?}?>>My Bank</a></li>
 					</ul>
 				</div>
 			</li>
@@ -131,11 +131,11 @@
 				<tbody>
 					<tr>
 						<th scope="row" lang="en">Part No.</th>
-						<td><input type="text" name="top_part_no" class="w100 no_hangul" style="ime-mode:disabled"  onKeyPress="check_key(main_srch);" ></td>
+						<td><input type="text" name="top_part_no" class="w100 onlyEngNum" style="ime-mode:disabled"  onKeyPress="check_key(main_srch);" ></td>
 					</tr>
 					<tr>
 						<th scope="row" lang="en">Manufacturer</th>
-						<td><input type="text" name="top_manufacturer" style="ime-mode:disabled" class="w100 no_hangul"  onKeyPress="check_key(main_srch);" ></td>
+						<td><input type="text" name="top_manufacturer" style="ime-mode:disabled" class="w100 onlyEngNum"  onKeyPress="check_key(main_srch);" ></td>
 					</tr>
 					<tr>
 						<th scope="row">요청수량</th>
@@ -312,7 +312,7 @@
 		}else{			
 			$mem = get_mem($session_com_idx);
 		?>
-	<div class="top-logo2 c-blue"><img src="<?=$file_path.$mem[filelogo]?>" width="33" height="22" alt="<?=$mem[mem_nm]?>"> <?=$mem[mem_nm]?></div>
+	<div class="top-logo2 c-blue"><img src="<?=$file_path.$mem[filelogo]?>" width="75" height="18" alt="<?=$mem[mem_nm]?>"> <?=$mem[mem_nm]?></div>
 	<section id="topMyinfo" class="top-box2">
 		<h2 class="hidden">로그인</h2>
 		<div class="info1 clear"><?=$_SESSION["MEM_NM"]?> <?=$_SESSION["REL_IDX"]>0?"/ ".$_SESSION["POS_NM"]:""?>
@@ -350,7 +350,7 @@
 		<img src="/kor/images/top_btn_mail.png" alt="mail">
 		<?}?>
 		</a> </div>
-		<div class="info4 clear"> <span><span lang="en"><?=$_SESSION["MEM_NM_EN"]?></span> <?=$_SESSION["REL_IDX"]>0?"/ ".$_SESSION["POS_NM_EN"]:""?><br>(파츠담당EMAIL:<?=get_manage_email($mem[nation])?>)</span> 
+		<div class="info4 clear"> <span><span lang="en"><!--<?=$_SESSION["MEM_NM_EN"]?></span> <?=$_SESSION["REL_IDX"]>0?"/ ".$_SESSION["POS_NM_EN"]:""?><br>--><?=get_manager($mem[nation])?></span> 
 		<a href="#" class="msg-02"  mode='EE001'><img src="/kor/images/top_btn_mail2.png" alt="mail"></a> </div>
 	</section>
 		<script type="text/javascript">		

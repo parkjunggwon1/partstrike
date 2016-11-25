@@ -3,6 +3,7 @@
 *** 수정 발주서(Purchase Order Amendment) : 12_07
 *** 2016-04-15 : 수정발주서 번호(amend_no)를 매번 새로 생성(Log기록 때문)
 *** 2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 위해 Sheet No.($sheets_no)를 넘겨준다.
+*** 2016-11-21 : 닫기버튼 제거
 ***************************************************************************************************/
 @header("Content-Type: text/html; charset=utf-8");
 include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";
@@ -11,6 +12,11 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 ?>
 <script src="/kor/js/jquery-1.11.3.min.js"></script>
 <script src="/include/function.js"></script>
+<script language="javascript">
+$(document).ready(function(){
+	$(".btn-close").hide();
+});
+</script>
 <?
 //수정 발주서 sheet
 if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 위해 Sheet No.($sheets_no)를 넘겨준다.
@@ -19,10 +25,10 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
   $result_odr = QRY_ODR_VIEW($odr_idx);    
   $row_odr = mysql_fetch_array($result_odr);
 
-  $result_buyer = QRY_MEMBER_VIEW("idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"]));
+  $result_buyer = QRY_ODR_MEMBER_VIEW($odr_idx, "idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"]));
   $row_buyer = mysql_fetch_array($result_buyer);
 
-  $result_seller = QRY_MEMBER_VIEW("idx",($row_odr["sell_rel_idx"]==0?$row_odr["sell_mem_idx"]:$row_odr["sell_rel_idx"]));
+  $result_seller = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["sell_rel_idx"]==0?$row_odr["sell_mem_idx"]:$row_odr["sell_rel_idx"]));
   $row_seller = mysql_fetch_array($result_seller);
 
   //if($row_odr["amend_no"]==""){ //기존에는 없을 때만 생성을 '무조건 새로 생성' 으로 변경 2016-04-15

@@ -100,7 +100,7 @@ if ($typ=="write" || $typ=="odredit" ||$typ =="periodreq"){   //periodreq : 납�
 		if($dlvr_adv=="Y"){	//선불 일경우..
 			$ship_info = $dlvr_corp;
 			$ship_account_no = $dlvr_acc;
-			$tax = $dlvr_pay;
+			$shipping_charge = $dlvr_pay;
 		}
         $sql = "update ship set
             ship_info = '$ship_info'
@@ -109,7 +109,7 @@ if ($typ=="write" || $typ=="odredit" ||$typ =="periodreq"){   //periodreq : 납�
             ,insur_yn = '$insur_yn'
             ,memo = '$memo'";
 		if($dlvr_adv=="Y"){	//선불 일경우..
-			$sql .= ",tax = $tax";
+			$sql .= ",shipping_charge = $shipping_charge";
 		}
 		$sql .= "
 		where odr_idx = $odr_idx and ship_type = '1'

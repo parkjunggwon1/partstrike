@@ -4,12 +4,7 @@
 	</div>
 	<div class="title-blck first">
 		<h3>발주서</h3>
-		<? if($_SESSION["MEM_IDX"]){ ?>
-		<a href="javascript:right_order();"><img src="/kor/images/btn_oderform.gif" alt="발주서"></a>
-		<?}else{?>
-		<!--<a href="javascript:companyback(<?=$com_idx?>);"><img alt="What’s New" src="/kor/images/btn_close02.gif"></a>-->
-		<a href="<?if ($fr=="M"){?>/kor/<?}else{?>javascript:right_side();<?}?>"><img src="/kor/images/btn_close02.gif" alt="닫기"></a>
-		<? } ?>
+		<a href="<?if ($fr=="M"){?>/kor/<?}else{?>javascript:frReturn('<?=$_REQUEST['rel_idx']?>','<?=$_REQUEST['mem_type']?>');<?}?>"><img src="/kor/images/btn_close02.gif" alt="닫기"></a>
 
 		
 	</div>

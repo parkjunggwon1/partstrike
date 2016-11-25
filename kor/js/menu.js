@@ -179,16 +179,18 @@ function right_side(){
 	showajax(".col-right", mem_idx==""?"side":"side_order");
 	$(".box-type9").hide();					
 }
+
+
 function agreement() {	
 	showajax(".col-left", "terms");
 	//showajax(".col-left", "agreement");
-	showajax(".col-right", mem_idx==""?"side":"side_order");
+//	showajax(".col-right", mem_idx==""?"side":"side_order");
 	setMenu(6, 2);
 }
 
 function guide() {	
 	showajax(".col-left", "guide");
-	showajax(".col-right", mem_idx==""?"side":"side_order");
+//	showajax(".col-right", mem_idx==""?"side":"side_order");
 	setMenu(6, 3);
 }
 
@@ -215,7 +217,7 @@ function board(mode) {
 		
 		switch(mode){
 			case("AA001"):
-				showajax(".col-right", mem_idx==""?"side":"side_order");
+		//		showajax(".col-right", mem_idx==""?"side":"side_order");
 				setMenu(6, 1);
 			break;
 			case("AA002"):
@@ -251,7 +253,7 @@ function remit(ty){
 }
 function agent(){
 	showajax(".col-left", "agent");
-	showajax(".col-right", mem_idx==""?"side":"side_order");
+	//showajax(".col-right", mem_idx==""?"side":"side_order");
 	setMenu(5, 2);
 }
 
@@ -262,7 +264,7 @@ function agentview(idx,nat,strsearch) {
 
 function lab(){
 	showajax(".col-left", "lab");
-	showajax(".col-right", mem_idx==""?"side":"side_order");
+//	showajax(".col-right", mem_idx==""?"side":"side_order");
 	setMenu(5, 3);
 }
 function contact(){
@@ -301,8 +303,29 @@ function side_company_info2(rel_idx,mode){
 }
 
 function main_company_det(rel_idx, fr){
+	var $slt =$("#gnb li[class^=m].active");
+	var topno = $("#gnb li[class^=m]").index($slt)+1;
+	var subno = $slt.find(".gnb2 a").index($slt.find(".chk"))+1;	
+	$("#HidGnb").html(topno+":"+subno);
+	$("#HidLeft").html(encodeURIComponent($(".col-left").html()));
 	setMenuNull();
 	showajaxParam("#partsContent", "main_company_det", "rel_idx="+rel_idx+"&mem_type="+fr);
+}
+
+function frReturn(rel_idx,fr){
+	var cont = $("#HidGnb").html().split(":");
+	setMenu(cont[0],cont[1]);
+
+	if ((cont[0]=="1" && cont[1] =="1") || (cont[0]=="1" && cont[1] =="2"))
+	{
+		order(fr);
+	}else{
+		$(".col-left").html(decodeURIComponent($("#HidLeft").html()));
+	}
+	
+	$("#HidGnb").html("");
+	$("#HidLeft").html("");
+	side_company_info2(rel_idx,fr);	
 }
 
 function layer_company_det(rel_idx){

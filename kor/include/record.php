@@ -1,16 +1,19 @@
+<script src="/kor/js/common.js"></script>
 <SCRIPT LANGUAGE="JavaScript">
 
 	$(document).ready(function(){
 		$(".myrecord").click(function(){
+			document.fr.page.value = "1";
 			 myrecord();				
 		});
 		$(".main tbody:last tr:last").remove();
 		$("#this_mem_idx").change(function(){
 			$(".myrecord").click();
-		});
-		rcdClick();
+		});		
+		myrecord();
+	 });
 
-		function rcdClick(){
+	 function rcdClick(){
 			$(".recordbt").click(function(){
 				var $this = $(this).parents("tr").prev().find(".layer-step");
 				var backgound = ($("#odr_type").val()=="S")?"#dce6f2":"#ffff99";
@@ -40,19 +43,28 @@
 					$(this).find("img").attr("src", "/kor/images/btn_record2.gif");
 				}
 			});
+			$(".pagination a.link").click(function(){
+				document.fr.page.value = $(this).attr("num");
+				myrecord();					
+			});		
 		}
-	 });
 
-	 function myrecord(){
+		function myrecord(){
 		var f = document.fr;
 		var odr_type = $("#odr_type").val();
 		var part_no = f.part_no.value;
+		var page = f.page.value;
 		var yr = $("#fr #yr option:selected").val();
 		var mon = $("#mon option:selected").val();
+
 		var this_mem_idx =$("#this_mem_idx option:selected").val();
-		showajaxParam("#recordlist", "recordlist", "odr_type="+odr_type+"&part_no="+part_no+"&yr="+yr+"&mon="+mon+"&this_mem_idx="+this_mem_idx);
+		showajaxParam("#recordlist", "recordlist", "odr_type="+odr_type+"&part_no="+part_no+"&yr="+yr+"&mon="+mon+"&this_mem_idx="+this_mem_idx+"&page="+page);
 		rcdClick();
 	 }
+
+
+
+	
 	
 </SCRIPT>
 
@@ -61,11 +73,12 @@
 			<section id="mybankSrch" class="box-type6">
 				<form name="fr" id="fr" class="clear" onsubmit="return false;">
 				<input type="hidden" name="odr_type" id = "odr_type" value="<?=$odr_type?>">
+				<input type="hidden" name="page" id = "page" value="<?=$page==""?"1":$page?>">
 					<table>
 						<tbody>
 							<tr>
 								<th scope="row" lang="en">Part No.</th>
-								<td colspan="3"><input class="w100" name="part_no" type="text" style="ime-mode:disabled" maxlength="30" onkeypress="check_key(myrecord);" ></td>
+								<td colspan="3"><input class="w100 onlyEngNum" name="part_no" type="text" style="ime-mode:disabled" maxlength="30" onkeypress="check_key(myrecord);" ></td>
 							</tr>
 							<?if (!$yr){ $yr = "N/A";}
 							 if (!$mon){ $mon = "N/A";}
@@ -111,8 +124,8 @@
 					</div>
 			</div>
 			<div id = "recordlist">
-				<?=GF_GET_RECORD_LIST($odr_type, $part_no,$yr,$mon,$this_mem_idx);?>				
-				<?=GF_GET_TURNKEY_RCD_LIST($odr_type, $part_no,$yr,$mon,$this_mem_idx);?>	
+				<?=GF_GET_RECORD_LIST($odr_type, $part_no,$yr,$mon,$this_mem_idx,$page);?>				
+				<?=GF_GET_TURNKEY_RCD_LIST($odr_type, $part_no,$yr,$mon,$this_mem_idx,$page);?>	
 			</div>
 			</section>
 			<!--// table -->

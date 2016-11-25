@@ -1,3 +1,4 @@
+<script src="/kor/js/common.js"></script>
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 	function writeproc(){
@@ -131,10 +132,10 @@
 			<section id="stockTop" class="box-type1">
 				<form name="f1" method="post" onsubmit="return false;">					
 					<input type="hidden" id="part_type" name="part_type" value="<?=$part_type?>">
-					<span style="padding-left:6px"><a href="/include/filedownload_1.php?filename=parts_sample<?=($part_type=="2"?"2":"1")?>.xls&path=/upload/xls/"  target="proc" ><img src="/kor/images/btn_apply_form_down.gif" alt="등록 양식 Download"></a></span>
+					<span style="padding-left:6px"><a href="/include/filedownload.php?filename=parts_sample<?=($part_type=="2"?"2":"1")?>.xls&path=/upload/xls/"  target="proc" ><img src="/kor/images/btn_apply_form_down.gif" alt="등록 양식 Download"></a></span>
 					<span class="op1"><label class="i-file">재고파일 <input type="file" name="file1" onChange="javascript: document.getElementById('fileName').value = this.value"><input type="text" id="fileName" readonly><span></span></label></span>
-					<span class="op2"><label class="rd"><input type="radio" name="regtype" value="1"><span></span>덮어쓰기</label></span>
-					<span class="op3"><label class="rd"><input type="radio" name="regtype" value="2"><span></span>추가등록</label></span>
+					<span class="op2" style="display:none;"><label class="rd"><input type="radio" name="regtype" value="1"><span></span>덮어쓰기</label></span>
+					<span class="op3"  style="display:none;"><label class="rd"><input type="radio" name="regtype" value="2" class="checked" checked><span></span>추가등록</label></span>
 					<span class="op4">
 					<img src="/kor/images/btn_form_apply_1.gif" alt="등록">
 					<button style="display:none;" type="button" onclick="writeproc();"><img src="/kor/images/btn_form_apply.gif" alt="등록"></button></span>
@@ -196,7 +197,7 @@
 					<input type="hidden" name="part_type" value="<?=$part_type?>">
 					<input type="hidden" name="typ" value="">
 					<div class="box-top srch-box bg2">
-						<div class="srch-block1" style="right:11px;"><label lang="en">Part No. <input type="text"  style="ime-mode:disabled" maxlength="30" onkeypress="check_key_partno(partno_sch);" name="srch_part_no" value="<?=$part_no?>" ></label><button type="button" onclick="partno_sch();"><img src="/kor/images/btn_srch2.gif" alt="검색"></button></div>
+						<div class="srch-block1" style="right:11px;"><label lang="en">Part No. <input type="text" class="onlyEngNum" style="ime-mode:disabled" maxlength="30" onkeypress="check_key_partno(partno_sch);" name="srch_part_no" value="<?=$part_no?>" ></label><button type="button" onclick="partno_sch();"><img src="/kor/images/btn_srch2.gif" alt="검색"></button></div>
 						<h2 class="srch-block2">재고편집</h2>
 						<a href="javascript:excelDown();" class="srch-block3"><img src="/kor/images/btn_stock_list_down.gif" alt="재고목록 download"></a>
 					</div>

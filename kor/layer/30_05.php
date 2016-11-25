@@ -24,10 +24,10 @@ if($sheets_no){ //2016-05-19 : What's New 에서 Sheet 클릭 시 Log 호출을 
 
   $row_ship = get_ship($row_odr["ship_idx"]);
 
-  $result_buyer = QRY_MEMBER_VIEW("idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"])); //사는 회사 정보
+  $result_buyer = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"])); //사는 회사 정보
   $row_buyer = mysql_fetch_array($result_buyer);
 
-  $result_seller = QRY_MEMBER_VIEW("idx",($row_odr["sell_rel_idx"]==0?$row_odr["sell_mem_idx"]:$row_odr["sell_rel_idx"])); //파는 회사 정보
+  $result_seller = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["sell_rel_idx"]==0?$row_odr["sell_mem_idx"]:$row_odr["sell_rel_idx"])); //파는 회사 정보
   $row_seller = mysql_fetch_array($result_seller);
 
   $nation_name = get_any("code_group_detail","code_desc", "grp_code ='NA' and code_depth =1 and use_yn='Y' and dtl_code='$row_buyer[nation]'");
@@ -238,7 +238,7 @@ if($sheets_no){ //2016-05-19 : What's New 에서 Sheet 클릭 시 Log 호출을 
 				{
 				?>
 					<li>
-						<span class="b1"><img src="/upload/file/<?=$row_seller["filelogo"]?>" alt="" width="75" height="18"></span>
+						<span class="b1"><img src="/upload/file/<?=$row_seller["filelogo"]?>" alt="" width="46" height="17"></span>
 						<span class="b2" ><?=$row_seller["mem_nm_en"]?></span>
 					</li>
 					<li>

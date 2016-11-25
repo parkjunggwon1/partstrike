@@ -24,7 +24,7 @@
 				</div>
 				
 						<?
-						echo GET_MYBOX_TURNKEY();
+					//	echo GET_MYBOX_TURNKEY();
 						?>
 			
 			</section>

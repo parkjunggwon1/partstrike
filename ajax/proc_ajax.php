@@ -51,10 +51,10 @@ switch($actty) {
 	   fnSelRecord($actty,$odr_type);
    break;   
    case "memfee1":
-	   fnmemfeelist("1"); 
+	   fnmemfeelist("1",$page); 
    break;
    case "memfee2":
-	   fnmemfeelist("2"); 
+	   fnmemfeelist("2",$page); 
    break;
    case "side_memfee":
 	   fnmemfeeview($actty,$idx); 
@@ -1443,12 +1443,12 @@ function fnImpship($rel_idx,$idx){
 	//mem_idx -> checked_idx
 	echo GF_GET_IMPSHIP_DATA($rel_idx,$idx);
 }
-function fnmemfeelist($gubun){
+function fnmemfeelist($gubun,$page){
 	//mem_idx -> checked_idx
 	if($gubun=="1"){
 		echo GF_GET_MEMFEE_LIST1();
 	}else{
-		echo GF_GET_MEMFEE_LIST2();
+		echo GF_GET_MEMFEE_LIST2($page);
 	}
 }
 function fnmemfeeview($actty,$idx){

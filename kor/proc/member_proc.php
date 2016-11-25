@@ -538,7 +538,6 @@ if($typ =="del"){
 }
 
 if ($typ=="imgfileup" || $typ =="imgfiledel"){
-
 	$i = $no;
 	$filename ="";
 		if ($typ =="imgfileup"){

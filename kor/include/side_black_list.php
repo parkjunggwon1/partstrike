@@ -16,7 +16,7 @@
 				<th scope="col" style="width:14px">No.</th>
 				<th scope="col" style="width:75px">Nation</th>
 				<th scope="col" class="t-lt">Company</th>
-				<th scope="col" lang="ko" style="width:70px">날짜</th>
+				<th scope="col" style="width:70px">Date</th>
 			</tr>
 		</thead>
 	</table>
@@ -67,7 +67,7 @@
 						
 						$log_date = str_replace("-","-",substr(replace_out($row["reg_date"]),0,10));
 						$date=date_create($log_date);
-						$log_date_2=date_format($date,"d,M,Y");
+						$log_date_2=date_format($date,"d M Y");
 
 						$nation= replace_out($row["nation"]);
 						$filelogo= replace_out($row["filelogo"]);
@@ -89,7 +89,7 @@
 						<td style="width:14px"><?=$ListNO?></td>
 						<td style="width:75px"><img src="/kor/images/nation_title2_<?=$nation?>.png" alt=""></td>
 						<td class="t-lt">
-							<a href="javascript:side_company_info2('<?=$idx?>','blacklist')"><!--<img src="/upload/file/<?=$filelogo?>" alt="" style="height:12px" /> --><span lang="en" class="c-blue fs15"><?=$mem_nm_en?></span></a>
+							<a href="javascript:side_company_info2('<?=$idx?>','blacklist')"><!--<img src="/upload/file/<?=$filelogo?>" alt="" style="height:12px" /> --><span lang="en" class="c-blue" style="font-size:11px"><?=$mem_nm_en?></span></a>
 						</td>
 						<td style="width:70px"><?=$log_date_2?></td>
 					</tr>

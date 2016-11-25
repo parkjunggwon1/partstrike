@@ -77,7 +77,7 @@
 #mybankSrch .select{width:74px}
 
 /* mybankTable */
-#mybankTable{min-height:648px}
+#mybankTable{min-height:695px}
 #mybankTable td{padding:2px 5px}
 #mybankTable .stock-list-table{}
 #mybankTable .stock-list-table th{background-color:transparent; height:32px; padding:2px 5px}
@@ -268,7 +268,7 @@
 
 /* 151230 */
 #orderDraft .select{width:auto; max-width:210px}
-#agentList{min-height:660px}
+#agentList{min-height:666px}
 #boardleftTop .box-type1{min-height:695px}
 #contactTop{min-height:420px}
 #contactBottom{min-height:214px}
@@ -352,6 +352,8 @@
 #recordlist tbody.record-on.B tr:nth-child(3)>td{border-bottom:0px solid #ffe655}
 #recordlist tbody.record-on.B tr:nth-child(3)>td:first-child{border-left:0px inset #ffe655}
 #recordlist tbody.record-on.B tr:nth-child(3)>td:last-child{border-right:0px inset #ffe655}
+#recordlist tbody.record-on td.txt-r{text-align:right;padding-right:0}
+#recordlist tbody.record-on td.pd-r-not{padding-right:0}
 
 
 /*#recordlist .record-on .step-cell{border-bottom:1px solid #00b050;}*/

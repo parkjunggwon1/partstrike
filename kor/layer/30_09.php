@@ -462,7 +462,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 		</div>
 		<?}?>
 		<ul class="sign-area">
-			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_buyer["filesign"]?>" height="23" width="152px" alt=""></strong></li>
+			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_buyer["filesign"]?>" height="21" alt=""></strong></li>
 			<?
 			//나라가 같을경우
 			if ($row_seller["nation"]==$row_buyer["nation"])

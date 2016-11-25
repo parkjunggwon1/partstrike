@@ -97,7 +97,7 @@
 						</tbody>
 					</table>
 				</div>
-				<?=GET_TURNKEY_ODRDET_LIST($odr_type, " and b.part_type=7 and a.".($odr_type=="S"?"sell_":"")."mem_idx=$this_mem_idx AND a.odr_status IN(1,2,16,18,19,20,31) ", "S")?>
+				<?//=GET_TURNKEY_ODRDET_LIST($odr_type, " and b.part_type=7 and a.".($odr_type=="S"?"sell_":"")."mem_idx=$this_mem_idx AND a.odr_status IN(1,2,16,18,19,20,31) ", "S")?>
 				</form>
 			</section>
 
@@ -157,7 +157,7 @@
 						</tbody>
 					</table>
 				</div>
-				<?=GET_TURNKEY_ODRDET_LIST($odr_type, " and b.part_type=7 and a.".($odr_type=="S"?"sell_":"")."mem_idx=$this_mem_idx AND a.odr_status NOT IN(1,2,16,18,19,20,31) ", "S")?>
+				<?//=GET_TURNKEY_ODRDET_LIST($odr_type, " and b.part_type=7 and a.".($odr_type=="S"?"sell_":"")."mem_idx=$this_mem_idx AND a.odr_status NOT IN(1,2,16,18,19,20,31) ", "S")?>
 				</form>
 			</section>
 			<!--// table -->

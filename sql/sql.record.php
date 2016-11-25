@@ -6,7 +6,7 @@ function QRY_MYMEMBER_LIST($session_mem_idx, $session_rel_idx){
 		$searchand = "mem_idx= $session_mem_idx";
 	}
 	$conn = dbconn();	
-	$sql = "SELECT mem_idx, case when rel_idx = 0 then mem_nm else concat(mem_nm,'/',pos_nm) end as name  FROM member where $searchand
+	$sql = "SELECT mem_idx, case when rel_idx = 0 then mem_nm_en else concat(mem_nm_en,'/',pos_nm_en) end as name  FROM member where $searchand
 				order by mem_idx";
 	
 	mysql_query( "SET NAMES utf8");	

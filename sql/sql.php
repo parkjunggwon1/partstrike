@@ -1,7 +1,7 @@
 <?
 function dbconn(){
-	$conn=mysql_connect("localhost","root","wjdrnjs1");
-	mysql_select_db("pjg0319", $conn); // DB 명 수정
+	$conn=mysql_connect("localhost","evictor23","whgdmstodrkr2710");  // 서버 /ID/pw
+	mysql_select_db("evictor23", $conn); // DB 명 수정
 	
 	return $conn;
 }
@@ -71,6 +71,7 @@ function QRY_CNT2($c,$tbl,$searchand){
 }
 //재고가 0 보다 작은 갯수 2016-04-03 ccolle
 //2016-09-11 : 지속적...은 카운트에서 제외.
+//2016-11-13 : 턴키도 제외..
 function QRY_CNT_STOCK($arrDet){
 
 	$conn = dbconn();	
@@ -78,7 +79,7 @@ function QRY_CNT_STOCK($arrDet){
 			SELECT COUNT(a.part_idx) AS CNT FROM part AS a
 			LEFT JOIN odr_det AS b
 			ON(a.part_idx = b.part_idx)
-			WHERE a.part_type !='2' AND b.odr_det_idx IN($arrDet) AND (a.quantity - b.odr_quantity) < 0
+			WHERE a.part_type NOT IN('2','7') AND b.odr_det_idx IN($arrDet) AND (a.quantity - b.odr_quantity) < 0
 		";
 		mysql_query( "SET NAMES utf8");
 	$result=mysql_query($sql,$conn) or die ("SQL ERROR(QRY_CNT) : ".mysql_error());

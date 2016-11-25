@@ -20,13 +20,13 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
   $row_odr_det = mysql_fetch_array($result_odr_det);
 
 
-  $result_buyer = QRY_MEMBER_VIEW("idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"]));
+  $result_buyer = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"]));
   $row_buyer = mysql_fetch_array($result_buyer);
 
-  $result_seller = QRY_MEMBER_VIEW("idx",($row_odr["sell_rel_idx"]==0?$row_odr["sell_mem_idx"]:$row_odr["sell_rel_idx"]));
+  $result_seller = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["sell_rel_idx"]==0?$row_odr["sell_mem_idx"]:$row_odr["sell_rel_idx"]));
   $row_seller = mysql_fetch_array($result_seller);
 	
-  $result_parts = QRY_MEMBER_VIEW("idx",get_any("member", "min(mem_idx)", "mem_type = 0")); //사는 회사 정보
+  $result_parts = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",get_any("member", "min(mem_idx)", "mem_type = 0")); //사는 회사 정보
   $row_parts = mysql_fetch_array($result_parts);
 
   $tTy = $_SESSION["MEM_IDX"] == $row_odr["sell_mem_idx"] ? "S" : "B";

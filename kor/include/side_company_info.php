@@ -1,4 +1,4 @@
-<section class="box-type2">
+<section class="box-type2 pd_btm">
 	<div class="title-top">
 		<h2>회사정보</h2>
 	</div>
@@ -60,7 +60,7 @@
 			<?if($mode=="blacklist"){?>
 				<a href="javascript: blacklist();"><img src="/kor/images/btn_close02.gif" alt="닫기"></a>
 			<?}else{?>
-				<a href="javascript:right_order();"><img src="/kor/images/btn_close02.gif" alt="발주서"></a>
+				<a href="javascript:right_order();"><img src="/kor/images/btn_oderform.gif" alt="발주서"></a>
 			<?}?>			
 		<?}else{?>
 			<a href="javascript:right_side();"><img src="/kor/images/btn_close02.gif" alt="닫기"></a>
@@ -69,16 +69,16 @@
 	<table class="table-type2">
 		<tbody>
 			<tr>
-				<th scope="row"><a href="javascript:main_company_det('<?=$com_idx?>');"><img src="<?=$file_path.$filelogo?>" width="75px" height="18px" ></a></th>
-				<td colspan="5"><a href="javascript:main_company_det('<?=$com_idx?>');"><?=$mem_nm?></a></td>
+				<th scope="row"><a href="javascript:main_company_det('<?=$com_idx?>','<?=$mode?>');"><img src="<?=$file_path.$filelogo?>" width="75px" height="18px" ></a></th>
+				<td colspan="5"><a href="javascript:main_company_det('<?=$com_idx?>','<?=$mode?>');"><?=($_SESSION["NATION"]==$nation)?$mem_nm:$mem_nm_en?></a></td>
 			</tr>
 			<tr>
 				<th scope="row">회사 구분 :</th>
-				<td colspan="5"><?=GF_Common_GetSingleList("MEM",$mem_type)?></td>
+				<td colspan="5"><?=($_SESSION["NATION"]==$nation)?GF_Common_GetSingleList("MEM",$mem_type):GF_Common_GetSingleList_LANG("MEM",$mem_type,'_en')?></td>
 			</tr>
 			<tr>
 				<th scope="row">대표자 :</th>
-				<td colspan="5"><span lang="en"><?=$pos_nm?></span></td>
+				<td colspan="5"><?=($_SESSION["NATION"]==$nation)?"<span lang='ko'>".$pos_nm:"<span lang='en'>".$pos_nm_en?></span></td>
 			</tr>
 			<tr>
 				<th scope="row"><span lang="en">Tel  :</span></th>
@@ -90,7 +90,7 @@
 			</tr>
 			<tr>
 				<th scope="row">주소 :</th>
-				<td colspan="5"><span lang="en"><?=$addr?></span></td>
+				<td colspan="5"><?=($_SESSION["NATION"]==$nation)?"<span lang='ko'>".$addr:"<span lang='en'>".$addr_en?></span></td>
 			</tr>
 			<tr>
 				<th scope="row" lang="en">E-mail :</th>

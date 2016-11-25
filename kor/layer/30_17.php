@@ -90,10 +90,10 @@ $row_odr_det = mysql_fetch_array($result_odr_det);
 
 $row_ship = get_ship($row_odr["ship_idx"]);
 
-$result_buyer = QRY_MEMBER_VIEW("idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"]));
+$result_buyer = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"]));
 $row_buyer = mysql_fetch_array($result_buyer);
 
-$result_seller = QRY_MEMBER_VIEW("idx",($row_odr["sell_rel_idx"]==0?$row_odr["sell_mem_idx"]:$row_odr["sell_rel_idx"]));
+$result_seller = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["sell_rel_idx"]==0?$row_odr["sell_mem_idx"]:$row_odr["sell_rel_idx"]));
 $row_seller = mysql_fetch_array($result_seller);
 
 $pay_cnt =QRY_CNT("odr_history", "and odr_idx = $odr_idx and status = 5"); 

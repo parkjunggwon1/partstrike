@@ -1,25 +1,45 @@
+<script src="/kor/js/common.js"></script>
 <script type="text/javascript">
 <!--
 	function agent_sch(str){
 		var f =  document.searchfrm;
 		showajaxParam(".col-left", "agent", "strsearch1="+str);
+		
 	}
 	function agent_basic_sch(){
 		var f =  document.searchfrm;
 		str = f.strsearch.value;
 		showajaxParam(".col-left", "agent", "strsearch="+str);
 	}
+
+	$(document).ready(function(){
+		var f =  document.searchfrm;
+		str = f.strsearch.value;	
+		str1 = f.strsearch1.value;	
+		var recordcnt = document.getElementById("recordcnt").value;
+		$(".pagination a.link").click(function(){
+			showajaxParam(".col-left", "agent", "page="+$(this).attr("num")+"&strsearch1="+str1+"&strsearch="+str);
+		});		
+
+		
+	 });
+
 //-->
 </script>
+<?
+$recordcnt= 20;
+$viewpagecnt = 10;
+?>
 <section class="box-type5 srch1">
 	<form name="searchfrm" id="searchfrm" method="post">
-	<input type="hidden" name="strsearch1" value="">
+	<input type="hidden" id="recordcnt" value="<?=$recordcnt?>">
+	<input type="hidden" name="strsearch1" value="<?=$strsearch1?>">
 		<table>
 			<tbody>
 				<tr>
 					<th scope="row" class="t-rt" style="width:80px">제조회사</th>
 					<td>
-						<input type="text" style="width:205px;ime-mode:disabled"  onkeypress="check_key(agent_basic_sch);" name="strsearch" value="<?=$strsearch?>">
+						<input type="text" style="width:205px;ime-mode:disabled" class="onlyEngNum"  onkeypress="check_key(agent_basic_sch);" name="strsearch" value="<?=$strsearch?>">
 					</td>
 					<td><button type="button" onclick="agent_basic_sch();"><img src="/kor/images/btn_srch.gif" alt="검색"></button></td>
 				</tr>
@@ -79,16 +99,15 @@
 			<tbody>
 				<?
 				if(!$page){$page=1;}
-				$recordcnt=20;
-				$viewpagecnt =	10;
-
+				
+				$searchand = " and rel_idx='0'";	
 				if ($strsearch!=""){
-					$searchand = " and agency_name like '%$strsearch%'";
+					$searchand = $searchand." and agency_name like '%$strsearch%'";
 				}
 				if ($strsearch1!=""){
-					$searchand = " and agency_name like '$strsearch1%'";
+					$searchand = $searchand." and agency_name like '$strsearch1%'";
 				}
-				$searchand = $searchand." and rel_idx='0'";	
+				
 				$cnt = QRY_CNT("agency",$searchand);
 				$totalpage = QRY_TOTALPAGE($cnt,$recordcnt);
 				$result =QRY_LIST("agency",$recordcnt,$page,$searchand," trim(agency_name) ASC ");
@@ -113,7 +132,7 @@
 				?>
 				<tr style="<?=$bgcolor?>">
 					<td><a href="<?=$agency_homepage?>" target="_new"><img src="/upload/file/<?=$agency_file1?>" width="75" height="18" alt=""></a></td>
-					<td class="t-lt c-blue"><a href="<?=$agency_homepage?>" target="_new"><?=$agency_name?></a></td>
+					<td class="t-lt"><a href="<?=$agency_homepage?>" class="c-blue" target="_new"><?=$agency_name?></a></td>
 					<td class="t-lt">
 						<ul class="nation-list">
 							<?

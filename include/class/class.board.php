@@ -16,7 +16,17 @@ $(document).ready(function(){
 		$(".board-list tbody a").removeClass("c-blue");
 		$(this).addClass("c-blue");
 	});
+
+	$('.onlyEngNum').keydown(function(event){ 		//ENG, 숫자만 입력하게.(.도 포함) 	
+	
+	  if (event.which && (event.which == 13 || event.which == 190 || event.which == 110 || event.which > 45 && event.which < 58 || event.which == 8 || event.which > 64 && event.which < 91|| event.which > 95 && event.which < 123 || event.which==229)) {	
+		
+	   } else { 
+	   event.preventDefault(); 
+	  } 
+	});
  });
+
 
 </SCRIPT>
 <?
@@ -48,7 +58,7 @@ $result =QRY_BOARD_LIST($recordcnt,$searchand,$page);
 				<tr>
 					<th scope="row" class="t-rt" style="width:80px">단어</th>
 					<td>
-						<input type="text" style="width:205px" lang="ko" name="strsearch" value="<?=$strsearch?>" onkeypress="check_key_board(board_sch);" >
+						<input type="text" class="onlyEngNum" style="width:205px" lang="ko" name="strsearch" value="<?=$strsearch?>" onkeypress="check_key_board(board_sch);" >
 					</td>
 					<td><button type="button" onclick="board_sch();"><img src="/kor/images/btn_srch.gif" alt="검색" ></button></td>
 				</tr>
@@ -65,7 +75,7 @@ $result =QRY_BOARD_LIST($recordcnt,$searchand,$page);
 				<tr>
 					<th scope="col" lang="en" style="width:40px">No.</th>
 					<?if($mode=="AA002" or $mode=="AA003"){?><th scope="col" style="width:80px">Nation</th><? } ?>
-					<th scope="col" lang="en" class="t-lt">Subejct</th>
+					<th scope="col" lang="en" class="t-lt">Subject</th>
 					<th scope="col" lang="en" style="width:100px">Date</th>
 				</tr>
 			</thead>
@@ -88,7 +98,7 @@ $result =QRY_BOARD_LIST($recordcnt,$searchand,$page);
 					$log_date = str_replace("-",".",substr(replace_out($rowno["reg_date"]),2,8));
 					//$log_date = str_replace("-","-",substr(replace_out($rowno["reg_date"]),0,10));
 					$date=date_create($log_date);
-					$log_date_2=date_format($date,"d,M,Y");
+					$log_date_2=date_format($date,"d M Y");
 					
 					//$newimg = "";
 					//if( strtotime(date("Y-m-d"))-strtotime($log_date)<=432000){
@@ -130,7 +140,7 @@ $result =QRY_BOARD_LIST($recordcnt,$searchand,$page);
 					}
 					$log_date = str_replace("-","-",substr(replace_out($row["reg_date"]),0,10));
 					$date=date_create($log_date);
-					$log_date_2=date_format($date,"d,M,Y");
+					$log_date_2=date_format($date,"d M Y");
 					$ref = replace_out($row["bd_ref"]);
 					$lev = replace_out($row["bd_lev"]);
 					$step = replace_out($row["bd_step"]);

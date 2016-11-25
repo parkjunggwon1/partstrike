@@ -46,3 +46,10 @@
 	</div>
 	<div class="layer-bg"></div>
 </section>
+
+
+<!-- 프로그램용 hidden div-->
+<div id="HidGnb" style="display:none;"></div>
+<div id="HidLeft" style="display:none;"></div>
+<!-- 프로그램용 hidden div end-->
+

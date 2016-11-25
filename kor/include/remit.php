@@ -6,8 +6,11 @@
 				var yr = $("#fr #yr option:selected").val();
 				var mon = $("#mon option:selected").val();
 				var remit_ty = $("#remit_ty").val();
-				showajaxParam("#remitlist", "remitlist", "yr="+yr+"&mon="+mon+"&remit_ty="+remit_ty); 
+				showajaxParam("#remitlist", "remitlist", "yr="+yr+"&mon="+mon+"&remit_ty="+remit_ty+"&page=1"); 
 		});
+
+		
+
 	});
 </SCRIPT>
 
@@ -17,7 +20,7 @@ if ($remit_ty == ""){$remit_ty ="C";}?>
 
 			<!-- mybankSrch -->
 			<section id="mybankSrch" class="box-type5">
-				<form name="fr" id="fr" class="clear">
+				<form name="fr" id="fr" class="clear">				
 				<input type="hidden" name="remit_ty"  id="remit_ty" value="<?=$remit_ty?>">
 					<table>
 						<tbody>
@@ -68,7 +71,7 @@ if ($remit_ty == ""){$remit_ty ="C";}?>
 					<h2><span lang="en">My Bank</span></h2>
 				</div>
 				<div  id="remitlist">
-					<?=GF_GET_REMIT_LIST($yr=="N/A"?"":$yr,$mon=="N/A"?"":$mon,$remit_ty);?>			
+					<?=GF_GET_REMIT_LIST($yr=="N/A"?"":$yr,$mon=="N/A"?"":$mon,$remit_ty,$page);?>			
 			    </div>
 			</section>
 			<!--// mybankTable -->

@@ -30,11 +30,14 @@
 				$rel_idx = replace_out($row["rel_idx"]);
 				$mem_nm = replace_out($row["mem_nm"]);
 				$mem_nm_en = replace_out($row["mem_nm_en"]);
+				$pos_nm = replace_out($row["pos_nm"]);
 				$pos_nm_en = replace_out($row["pos_nm_en"]);
+				$depart_nm = replace_out($row["depart_nm"]);
 				$depart_nm_en = replace_out($row["depart_nm_en"]);
 				$hp = replace_out($row["hp"]);
 				$fax = replace_out($row["fax"]);
 				$zipcode = replace_out($row["zipcode"]);
+				$addr = replace_out($row["addr"]);
 				$addr_en = replace_out($row["addr_en"]);
 				$email = replace_out($row["email"]);
 				$homepage = replace_out($row["homepage"]);
@@ -49,8 +52,29 @@
 					<tbody>
 						<tr>
 							<th scope="row"><img src="/upload/file/<?=$filelogo?>" alt="" width="75" height="18"></th>
-							<td colspan="3"><span lang="en"><?=$rel_name?></span></td>
+							<td colspan="3" class="c-blue"><span lang="en"><?=$rel_name?></span></td>
 						</tr>
+
+						<?if ($nat == $_SESSION["NATION"]){?>
+						<tr>
+							<th scope="row">담당자 / 직책 :</th>
+							<td colspan="3"><span lang="ko"><?=$mem_nm?>/<?=$pos_nm?></span></td>
+						</tr>
+						<tr>
+							<th scope="row">부서 :</th>
+							<td colspan="3"><span lang="ko"><?=$depart_nm?></span></td>
+						</tr>
+						<tr>
+							<th scope="row"><span lang="en">Tel  :</span></th>
+							<td><span lang="en"><?=$hp?></span></td>
+							<th scope="row"><span lang="en">Fax  :</span></th>
+							<td><span lang="en"><?=$fax?></span></td>
+						</tr>
+						<tr>
+							<th scope="row">주소 :</th>
+							<td colspan="3"><span lang="ko"><?=$zipcode?> <?=$addr?></span></td>
+						</tr>
+						<?}else{?>
 						<tr>
 							<th scope="row">담당자 / 직책 :</th>
 							<td colspan="3"><span lang="en"><?=$mem_nm_en?>/<?=$pos_nm_en?></span></td>
@@ -69,6 +93,8 @@
 							<th scope="row">주소 :</th>
 							<td colspan="3"><span lang="en"><?=$zipcode?> <?=$addr_en?></span></td>
 						</tr>
+
+						<?}?>
 						<tr>
 							<th scope="row" lang="en">E-mail :</th>
 							<td colspan="3"><span lang="en"><?=$email?></span></td>

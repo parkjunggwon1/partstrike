@@ -1670,7 +1670,7 @@ function get_manage_email($nation){
 }
 
 function get_manager($nation){
-	$manager = get_any("member" , ($nation =="1"? "concat(mem_nm,' / ',pos_nm)":"concat(mem_nm_en,' / ',pos_nm_en)"), "mem_idx = (SELECT mem_idx FROM `manage` WHERE assign_nation = '$nation')");
+	$manager = get_any("member" , "concat(mem_nm_en,' / ',pos_nm_en)", "mem_idx = (SELECT mem_idx FROM `manage` WHERE assign_nation = '$nation')");
 	return $manager;
 }
 ?>

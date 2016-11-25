@@ -151,10 +151,7 @@ if($typ=="alldel"){
 	 $ary_quantity = $_POST[mod_quantity];
 	 $ary_price = $_POST[mod_price];
  	
-	 if ($part_type =="7"){
-		$sql = "update part set price = '".str_replace("$","",$price)."' where part_idx = $turnkey_idx";
-		$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
-	 }
+	 
 	 
 	 for ($j = 0 ; $j<count($ary_part_idx); $j++){
 		if($ary_part_idx[$j] == $no[$no_pt]){
@@ -199,6 +196,21 @@ if($typ=="alldel"){
 				$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 		}
 	 }
+
+	 if ($part_type =="7"){		
+		$turnkey_cnt = QRY_CNT("part","and turnkey_idx = $turnkey_idx");
+		$column = "GROUP_CONCAT(part_no  ORDER BY part_idx  SEPARATOR ' , ') ";
+		if ($turnkey_cnt>3){
+			$cnt = $turnkey_cnt - 3;
+			$column = "concat(".$column.", ' (','".$cnt."','more)')";			
+		}
+		$turnkey_title = get_any("(select  part_no , part_idx from part where turnkey_idx = $turnkey_idx order by part_idx limit 3) aa ", $column,"1=1");
+
+		$sql = "update part set part_no = '$turnkey_title' , price = '".str_replace("$","",$price)."' where part_idx = $turnkey_idx";
+		$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+
+	 }
+
 	if($result){
 		PageReLoad("저장되었습니다.",$part_type);
 	}
