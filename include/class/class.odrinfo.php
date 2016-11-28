@@ -127,7 +127,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 		while($row = mysql_fetch_array($result)){
 			$i++;		
 			$odr_det_idx = replace_out($row["odr_det_idx"]);
-			$part_idx= replace_out($row["a.part_idx"]);
+			$part_idx= replace_out($row["part_idx"]);			
 			$part_no= replace_out($row["part_no"]);
 			$part_type= replace_out($row["part_type"]);
 			$nation= replace_out($row["nation"]);
@@ -397,10 +397,10 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td><?=$dc?></td>
 					<td><?=$rhtype?></td>					
 					<?}?>
-					<td class="t-rt"><?=$part_stock==0?"":number_format($quantity + $supply_quantity)?></td>
+					<td class="t-rt"><?=$part_stock==0?"":number_format($quantity + $odr_quantity)?></td>
 					<td class="t-rt">$<?=$price==0?"":number_format($price,2)?></td>
 					<td>
-						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" name="odr_quantity[]" odr_det_idx="<?=$odr_det_idx?>" supply_quantity="<?=$supply_quantity;?>" quantity="<?=$quantity + $supply_quantity;?>" amd_yn="Y" value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:56px;">
+						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" name="odr_quantity[]" odr_det_idx="<?=$odr_det_idx?>" supply_quantity="<?=$supply_quantity;?>" quantity="<?=$quantity + $supply_quantity;?>" amd_yn="Y" part_idx="<?=$part_idx?>" value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:56px;">
 					</td>
 					<td class="c-red t-rt"><?=$supply_quantity==0?"":number_format($supply_quantity)?></td>
 					<?=($period)?"<td class='c-red'>".(QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"Stock":$period):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>

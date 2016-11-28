@@ -1175,15 +1175,14 @@ $(document).ready(function(){
 	$("body").on("click",".btn-view-sheet-1207",function(){
 		var $chked_odr = $("input[name^=odr_det_idx]:checked");
 		var odr_idx = $(this).attr("odr_idx");
-		
 		$("#ship_info").val();
 		
 		if($chked_odr.length==0){ 
 			alert_msg("발주서를 선택해 주세요.");
 		}else{
 			var err = false; 
-			//err = updateQty();
-			err = true;
+			updateQty();
+			//err = true;
 			if (err == false)
 			{
 				//2016-04-18 : 송장번호 생성 및 저장
@@ -2466,7 +2465,7 @@ $(document).ready(function(){
 //-------------------------- 수량 변경(ajax 처리 - UQ) ----------------------------------------------------------------
 function updateQty(){
 	var err = false;
-	var qty, amd_yn, quantity;
+	var qty, amd_yn, quantity,part_idx;
 	//-- Row 수량만큼 반복--------------------
 	$("input[name^=odr_quantity]").each(function(){
 		if($(this).val()==""){
@@ -2476,6 +2475,7 @@ function updateQty(){
 			amd_yn = $(this).attr("amd_yn"); //수정발주서 여부
 			quantity = $(this).attr("quantity"); //기존 재고
 			supply_quantity = $(this).attr("supply_quantity"); //공급 수량
+			part_idx = $(this).attr("part_idx"); //공급 수량
 		}
 		//alert("qty:"+qty);
 		if(parseInt($(this).parent().prev().prev().text().replace(/,/gi,"")) < parseInt($(this).val())){
@@ -2494,6 +2494,7 @@ function updateQty(){
 						actkind : qty.replace(",",""),
 						amd_yn : amd_yn,	//수정발주서 여부
 						//supply_quantity : supply_quantity,	//공급 수량
+						part_idx : part_idx,	//수정발주서 여부
 						quantity : quantity	//발주가능 재고
 				},
 				dataType : "html" ,

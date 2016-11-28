@@ -431,7 +431,7 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
                     if($odr_qty < $ary_supply_quantity[$j]){
                         $diff_qty = $ary_supply_quantity[$j] - $odr_qty;
                         $up_stock = $stock_qty - $diff_qty;
-                        update_val("part","quantity", $up_stock, "part_idx", $part_idx);
+                    //    update_val("part","quantity", $up_stock, "part_idx", $part_idx);
                     }
                 }else{  //발주수량 보다 공급수량이 작은경우가 있다면 아래에 처리하자.
                 }
@@ -630,17 +630,22 @@ if ($typ =="odrconfirm2"){  //------------ 확정 발주서 (from:30_05) 2016-04
         $session_mem_idx = $_SESSION["MEM_IDX"];
         $sell_mem_idx = get_any("odr", "sell_mem_idx" , "odr_idx = $odr_idx");
         $buy_mem_idx = get_any("odr", "mem_idx" , "odr_idx = $odr_idx");
-        $sql = "insert into odr_history set
-                odr_idx = '$odr_idx'
-                ,status = 2
-                ,status_name = '발주서'
-                ,etc1 = '$odr_no'
-                ,sell_mem_idx = '$sell_mem_idx'
-                ,buy_mem_idx = '$buy_mem_idx'
-                ,reg_mem_idx = '$session_mem_idx'
-                ,reg_date = now()";
-        //echo $sql;
-        $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+
+        $odr_cnt = QRY_CNT("odr_history", "and odr_idx = $odr_idx and status='2'");
+
+        if ($odr_cnt == 0){
+            $sql = "insert into odr_history set
+                    odr_idx = '$odr_idx'
+                    ,status = 2
+                    ,status_name = '발주서'
+                    ,etc1 = '$odr_no'
+                    ,sell_mem_idx = '$sell_mem_idx'
+                    ,buy_mem_idx = '$buy_mem_idx'
+                    ,reg_mem_idx = '$session_mem_idx'
+                    ,reg_date = now()";
+            //echo $sql;
+            $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+        }
         update_val("odr","save_yn","N", "odr_idx", $odr_idx);
         //MyBox에 해당 품목 있을 시 삭제 2016-04-04
         $sql = "DELETE FROM mybox WHERE mem_idx = '$buy_mem_idx' AND part_idx IN(SELECT part_idx FROM odr_det WHERE odr_idx = $odr_idx) ";
@@ -662,6 +667,9 @@ if ($typ =="odramendconfirm"){ // 확정 발주서(P.O Amendment)12_07 처리 --
         //1. odr_status 변경
         update_val("odr","odr_status","3", "odr_idx", $odr_idx);
         update_val("odr","status_edit_mem_idx",$session_mem_idx, "odr_idx", $odr_idx);
+
+        //재고수량 Update
+        update_val("part","quantity", $up_stock, "part_idx", $part_idx);  
 
         $amend_no = get_any("odr", "amend_no", "odr_idx = $odr_idx"); //수정발주서 번호생성
         //2. history 등록
