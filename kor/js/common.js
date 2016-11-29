@@ -2463,7 +2463,7 @@ $(document).ready(function(){
 
 }); //end if ready..
 //-------------------------- 수량 변경(ajax 처리 - UQ) ----------------------------------------------------------------
-function updateQty(){
+function updateQty(){	
 	var err = false;
 	var qty, amd_yn, quantity,part_idx;
 	//-- Row 수량만큼 반복--------------------

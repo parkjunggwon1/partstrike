@@ -96,24 +96,24 @@ if ($typ=="write" || $typ=="odredit" ||$typ =="periodreq"){   //periodreq : 납�
     //Ship Update------------------------------------<<
     if ($odr_idx && $fromPage!="add"){
     //  elseif($memo || $ship_account_no || $delivery_addr_idx){   //memo 값이 들어있다는 얘기는 extra data가 넘어왔다는 뜻 안들어왔어도 update 하자. 썻다 지우고 싶을수도 있으니까.
-		//2016-11-10 : 선불 배송비 관련 param 정리
-		if($dlvr_adv=="Y"){	//선불 일경우..
-			$ship_info = $dlvr_corp;
-			$ship_account_no = $dlvr_acc;
-			$shipping_charge = $dlvr_pay;
-		}
+        //2016-11-10 : 선불 배송비 관련 param 정리
+        if($dlvr_adv=="Y"){ //선불 일경우..
+            $ship_info = $dlvr_corp;
+            $ship_account_no = $dlvr_acc;
+            $shipping_charge = $dlvr_pay;
+        }
         $sql = "update ship set
             ship_info = '$ship_info'
             ,delivery_addr_idx = '$delivery_addr_idx'
             ,ship_account_no = '$ship_account_no'
             ,insur_yn = '$insur_yn'
             ,memo = '$memo'";
-		if($dlvr_adv=="Y"){	//선불 일경우..
-			$sql .= ",shipping_charge = $shipping_charge";
-		}
-		$sql .= "
-		where odr_idx = $odr_idx and ship_type = '1'
-		";
+        if($dlvr_adv=="Y"){ //선불 일경우..
+            $sql .= ",shipping_charge = $shipping_charge";
+        }
+        $sql .= "
+        where odr_idx = $odr_idx and ship_type = '1'
+        ";
         $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
     }
     // end of 3개(write/odredit/periodreq)공통 ---------------------------------------------------------------------------
@@ -397,7 +397,7 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
      $ary_package = $_POST[package];
      $ary_rosh = $_POST[rosh];
      $ary_rhtype = $_POST[rhtype];
-	 $ary_memo = $_POST[memo];
+     $ary_memo = $_POST[memo];
 
 
     //1. odr_det 정보 업데이트
@@ -441,9 +441,9 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
      //2016-04-18 송장번호 생성하자
     $inv_no = get_auto_no("EI", "odr", "invoice_no");
     update_val("odr","invoice_no",$inv_no , "odr_idx", $odr_idx);
-	 //2016-11-11 : 아래.. 왜 하는지 모르겠으나, tax Update 제거
+     //2016-11-11 : 아래.. 왜 하는지 모르겠으나, tax Update 제거
      //$sql = "update ship set appoint_yn = '$appoint_yn' , tax = '$tax' where odr_idx = $odr_idx";
-	 $sql = "update ship set appoint_yn = '$appoint_yn',tax = '$tax' where odr_idx = $odr_idx";
+     $sql = "update ship set appoint_yn = '$appoint_yn',tax = '$tax' where odr_idx = $odr_idx";
      $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 
 
@@ -513,11 +513,11 @@ if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : �
             ,reg_date = now()";
     $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 
-	$sql = "update part set 
-			invreg_chk = '1'
-			where part_idx in (".$part_no_val.")";
-	
-	$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+    $sql = "update part set 
+            invreg_chk = '1'
+            where part_idx in (".$part_no_val.")";
+    
+    $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 
     //사본 생성 2016-04-15
     $result = CP_To_Log($odr_idx, $inv_no);
@@ -630,10 +630,10 @@ if ($typ =="odrconfirm2"){  //------------ 확정 발주서 (from:30_05) 2016-04
         $session_mem_idx = $_SESSION["MEM_IDX"];
         $sell_mem_idx = get_any("odr", "sell_mem_idx" , "odr_idx = $odr_idx");
         $buy_mem_idx = get_any("odr", "mem_idx" , "odr_idx = $odr_idx");
-
-        $odr_cnt = QRY_CNT("odr_history", "and odr_idx = $odr_idx and status='2'");
-
-        if ($odr_cnt == 0){
+        
+        //2016-11-29 : 중복저장 방지 - KSR
+        $his_cnt = QRY_CNT("odr_history"," and odr_idx=$odr_idx and status=2 ");
+        if($his_cnt<1){
             $sql = "insert into odr_history set
                     odr_idx = '$odr_idx'
                     ,status = 2
@@ -916,6 +916,9 @@ if ($typ == "pay_jisok2"){
         //Invoice No. 신규 작성.
         $inv_no = get_auto_no("EI", "odr" , "invoice_no");
         //잔금(구매자) 송장(Invoice) 읽음 으로 Insert
+        $his_cnt = QRY_CNT("odr_history"," and odr_idx=$odr_idx and status=18 ");
+        
+        if($his_cnt<1){
         $sql = "insert into odr_history set
                 odr_idx = '$odr_idx'
                 ,status = 18
@@ -926,6 +929,8 @@ if ($typ == "pay_jisok2"){
                 ,reg_mem_idx = '$buy_mem_idx'
                 ,confirm_yn = 'Y'
                 ,reg_date = now()";
+        }
+        
         $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
     }else{
         $charge_type = '2'; //계약금
@@ -975,17 +980,20 @@ if ($typ == "pay_jisok2"){
     //6-1. 송장(판매자)
     if($pay_mem_idx == $sell_mem_idx){
         //송장번호 가져오자
-        $sql = "insert into odr_history set
-                odr_idx = '$odr_idx'
-                ,status = 18
-                ,status_name = '송장'
-                ,etc1 = '$inv_no'
-                ,sell_mem_idx = '$sell_mem_idx'
-                ,buy_mem_idx = '$buy_mem_idx'
-                ,reg_mem_idx = '$buy_mem_idx'
-                ,confirm_yn = 'Y'
-                ,reg_date = now()";
-        $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+        $his_cnt = QRY_CNT("odr_history"," and odr_idx=$odr_idx and status=18 ");
+        if($his_cnt<1){
+            $sql = "insert into odr_history set
+                    odr_idx = '$odr_idx'
+                    ,status = 18
+                    ,status_name = '송장'
+                    ,etc1 = '$inv_no'
+                    ,sell_mem_idx = '$sell_mem_idx'
+                    ,buy_mem_idx = '$buy_mem_idx'
+                    ,reg_mem_idx = '$buy_mem_idx'
+                    ,confirm_yn = 'Y'
+                    ,reg_date = now()";
+            $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+        }
     }
 
     //6-2. 결재완료
