@@ -611,13 +611,12 @@ switch($actty) {
 	case "UQ":	//[발주서]창에서 '발주서 확인' 버튼
 		//수정 발주서
 		if($amd_yn == "Y"){
-				
-			$old_odr = get_any("odr_det", "odr_quantity", " odr_det_idx = $actidx");	
-			$part_qty = get_any("part", "quantity", " part_idx = $part_idx");			
+			
+			$part_idx = get_any("odr_det", "part_idx", " odr_det_idx = $actidx");
+			$old_odr = get_any("odr_det", "odr_quantity", " odr_det_idx = $actidx");			
 		
 			//$up_stock = $quantity  - $actkind; //재고수랑 계산	
-			$up_stock = ($part_qty + $old_odr) - $actkind; //재고수랑 계산
-
+			$up_stock = ($quantity + $old_odr) - $actkind; //재고수랑 계산
 			//재고수량 Update
 			update_val("part","quantity", $up_stock, "part_idx", $part_idx);	  
 		}
@@ -933,7 +932,6 @@ switch($actty) {
 				SET a.quantity = (a.quantity - b.odr_quantity)
 				WHERE b.odr_det_idx IN($actkind) AND a.part_type != '2'
 				";
-	
 		$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 		//-- 발주서 처리--------------------------------------------------------------------
 		if ($remain_cnt > 0) {   //선택한 발주외에도  임시 발주서에 부품이 남아있다면 
