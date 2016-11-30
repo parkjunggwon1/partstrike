@@ -1185,13 +1185,13 @@ function get_variable_name($mem_type, $word){
 	 }
 	 return $word;
 }
-function get_bank_info($row_parts, $nation){
+function get_bank_info($nation){
 				if ($nation == "1"){?>
 				<strong>PARTStrike Bank Information</strong>
 				<ul class="txt3">					
-					<li>은행 : <?=$row_parts["bank_name"]?></li>
-					<li>계좌번호 <?=$row_parts["bank_account"]?></li>
-					<li><?=$row_parts["bank_user_name"]?></li>
+					<li>은행 : 기업은행</li>
+					<li>계좌번호 632-018768-56-00018</li>
+					<li>(주)파츠스트라이크</li>
 				</ul>
 				<?}else{?>				
 				<strong>PARTStrike Bank Information</strong>

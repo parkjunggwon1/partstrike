@@ -143,7 +143,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/class/class.memfee.php";
 	
 	<div class="etc-info1">
 		<div class="txt-area">
-			<?=get_bank_info($row_parts, $row_buyer["nation"])?>
+			<?=get_bank_info($row_buyer["nation"])?>
 		</div>
 	</div>
 	
