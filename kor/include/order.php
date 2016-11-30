@@ -41,7 +41,7 @@
 </SCRIPT>
 <!-- table -->
 
-			<section class="box-type1">
+			<section class="box-type1" style="min-height:359px">
 			<form name="fr" id="fr" class="clear">
 			<input type="hidden" name="odr_type" id = "odr_type" value="<?=$odr_type?>">
 				<div class="hd-type-wrap">
@@ -101,7 +101,7 @@
 				</form>
 			</section>
 
-			<section class="box-type1">
+			<section class="box-type1" style="min-height:358px">
 			<form name="fr" id="fr" class="clear">
 			<input type="hidden" name="odr_type" id = "odr_type" value="<?=$odr_type?>">
 				<div class="hd-type-wrap">
