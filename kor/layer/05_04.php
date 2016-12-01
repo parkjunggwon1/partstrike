@@ -38,7 +38,6 @@ if (!$_SESSION["MEM_IDX"]){ReopenLayer("layer6","alert","?alert=sessionend");exi
 	$b_nation = get_any("member","nation", "mem_idx=$session_mem_idx");
 	$det_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx ");  //odr_det 수량
 	$per_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and odr_status=16 ");  //납기 받은 품목 수
-	$turnkey_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and part_type=7 ");  //턴키
 }
 //국제 배송비 관련
 $trade_type = ($s_nation == $b_nation)? 1:0;
@@ -694,7 +693,6 @@ function checkActive(){
 		var Erchkbox = false , ErchkCnt = true, FailCnt = 0;
 		var det_cnt = $("#det_cnt").val();
 		var dlvr_cnt = $("#dlvr_cnt").val();
-		var turnkey_cnt = $("#turnkey_cnt").val();
 		$("#layerPop3 .btn-area :eq(2)").css("cursor","pointer").addClass("btn-dialog-save").attr("src","/kor/images/btn_order_save.gif"); //저장버튼
 		//2016-03-30 ccolle-------------------------------------------------------------------
 		if(det_cnt>1){ //-- 여러개 일때 --------------------------
@@ -711,14 +709,10 @@ function checkActive(){
 			}**/
 		}
 		var odr_qty=0, stock_qty=0;
-		sel_box.each(function(e){ //선택 갯수만큼 반복--------------------
+		sel_box.each(function(e){ //실제 삭제 처리 (선택 갯수만큼 반복)--------------------
 			Erchkbox = true;
 			stock_qty = Number($(this).attr("quantity"));
-			if($(this).attr("part_type")=='7'){
-				odr_qty = 1;
-			}else{
-				odr_qty = $(this).parent().parent().parent().find("input[name^=odr_quantity]").val();
-			}
+			odr_qty = $(this).parent().parent().parent().find("input[name^=odr_quantity]").val();
 			if(odr_qty == ""){
 				odr_qty = 0;
 			}else{
@@ -728,7 +722,6 @@ function checkActive(){
 			if($(this).attr("part_type")!='2' && $(this).attr("part_type")!='7'){ //지속적이 아닐 경우..2016-11-13:턴키도 안전재고 체크 무
 				if(odr_qty > stock_qty) FailCnt++; //안전재고 체크
 			}
-
 		}); // end each
 		//end of ccolle--------------------------------------------------------------------------------
 		
@@ -762,14 +755,14 @@ function checkActive(){
 				Erchkbox = true;
 			}
 		}
+
 		//-- 발주확인 버튼-------------------------
 		if (Erchkbox==true && ErchkCnt == true && FailCnt==0)
 		{
-			$("#layerPop3 #btn-confirm").css("cursor","pointer").addClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm.gif");
-			//$("#layerPop3 .btn-area :eq(1)").css("cursor","pointer").addClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm.gif");
+			$("#layerPop3 .btn-area :eq(1)").css("cursor","pointer").addClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm.gif");
 		}else{
-			$("#layerPop3 #btn-confirm").css("cursor","").removeClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm_1.gif");
-			//$("#layerPop3 .btn-area :eq(1)").css("cursor","").removeClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm_1.gif");
+			$("#layerPop3 .btn-area :eq(1)").css("cursor","").removeClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm_1.gif");
+			//$("#layerPop3 .btn-area :eq(2)").css("cursor","").removeClass("btn-dialog-save").attr("src","/kor/images/btn_order_save_1.gif");
 			
 		}
 		//-- 삭제버튼 처리 --------------------
@@ -984,7 +977,6 @@ function checkActive(){
 	<input type="hidden" id="per_cnt" value="<?=$per_cnt?>">
 	<input type="hidden" id="odr_status" value="<?=$odr_status?>">
 	<input type="hidden" id="dlvr_cnt" value="<?=$dlvr_cnt?>">
-	<input type="hidden" id="turnkey_cnt" value="<?=$turnkey_cnt?>">
 	<?
 	if($per_cnt>0){
 		$partno_width = 180;
@@ -1004,14 +996,14 @@ function checkActive(){
 				<?}?>
 				<th scope="col" class="t-no">No. </th>
 				<th scope="col" class="t-nation">Nation</th>
-				<th scope="col" class="t-partno" Style="width:<?=$partno_width;?>px;"><?=($turnkey_cnt==0)?"Part No.":"Title"?></th>
-				<th scope="col" class="t-Manufacturer"><?=($turnkey_cnt==0)?"Manufacturer No.":""?></th>
-				<th scope="col" class="t-Package"><?=($turnkey_cnt==0)?"Package":""?></th>
-				<th scope="col" class="t-dc"><?=($turnkey_cnt==0)?"D/C":""?></th>
-				<th scope="col" class="t-rohs"><?=($turnkey_cnt==0)?"RoHS":""?></th>
-				<th scope="col" class="t-oty"><?=($turnkey_cnt==0)?"O'ty":""?></th>
-				<th scope="col" class="t-unitprice"><?=($turnkey_cnt==0)?"Unit Price":""?></th>
-				<th scope="col" lang="ko" class="t-orderoty"><?=($turnkey_cnt==0)?"발주수량":"Price"?></th>
+				<th scope="col" class="t-partno" Style="width:<?=$partno_width;?>px;">Part No.</th>
+				<th scope="col" class="t-Manufacturer">Manufacturer</th>
+				<th scope="col" class="t-Package">Package</th>
+				<th scope="col" class="t-dc">D/C</th>
+				<th scope="col" class="t-rohs">RoHS</th>
+				<th scope="col" class="t-oty">O'ty</th>
+				<th scope="col" class="t-unitprice">Unit Price</th>
+				<th scope="col" lang="ko" class="t-orderoty">발주수량</th>
 				<?if($per_cnt>0){?>
 				<th scope="col" lang="ko" id="t-supplyoty" class="t-supplyoty">공급수량</th>
 				<?}?>
@@ -1032,20 +1024,17 @@ function checkActive(){
 	</table>
 	</form>
 	<div class="btn-area t-rt">
-		<?if($turnkey_cnt>0){?>
-			<img id="btn-confirm" src="/kor/images/btn_order_confirm_1.gif" alt="발주서 확인">
+		<img src="/kor/images/btn_order_add.gif" class="btn-dialog-0501" alt="발주 추가" style="cursor:pointer">
+		<img src="/kor/images/btn_order_confirm_1.gif" alt="발주서 확인" style="cursor:pointer"><!--class="btn-order-confirm" -->
+		
+		<?if ($save_yn =="Y"){?>
+			<img src="/kor/images/btn_order_save_1.gif" alt="발주 저장">
+			<!--img src="/kor/images/btn_delete2.gif" alt="발주 삭제" style="cursor:pointer" class="btn-close odr" imsi_odr_no="<?=$imsi_odr_no?>"-->
 		<?}else{?>
-			<img src="/kor/images/btn_order_add.gif" class="btn-dialog-0501" alt="발주 추가" style="cursor:pointer">
-			<img id="btn-confirm" src="/kor/images/btn_order_confirm_1.gif" alt="발주서 확인" style="cursor:pointer"><!--class="btn-order-confirm" -->
-			
-			<?if ($save_yn =="Y"){?>
-				<img src="/kor/images/btn_order_save_1.gif" alt="발주 저장">
-				<!--img src="/kor/images/btn_delete2.gif" alt="발주 삭제" style="cursor:pointer" class="btn-close odr" imsi_odr_no="<?=$imsi_odr_no?>"-->
-			<?}else{?>
-				<img src="/kor/images/btn_order_save.gif" alt="발주 저장" style="cursor:pointer" class="btn-dialog-save"><!--class="btn-dialog-save" -->
-			<?}?>
-			<img src="/kor/images/btn_delete2_1.gif" alt="삭제" id="btn_del_0504">
+			<img src="/kor/images/btn_order_save.gif" alt="발주 저장" style="cursor:pointer" class="btn-dialog-save"><!--class="btn-dialog-save" -->
 		<?}?>
+		<img src="/kor/images/btn_delete2_1.gif" alt="삭제" id="btn_del_0504">
+
 	</div>
 </div>
 

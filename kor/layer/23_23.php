@@ -7,17 +7,14 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 <script src="/include/function.js"></script>
 <?
  // chkLogin($session_mem_idx);
-  if ($invoice_no==""){
-	 $invoice_no = get_auto_no("WI", "invoice" , "invoice_no");
-  }
 
  //인출 관련 sheet 
-  $result_buyer = QRY_ODR_MEMBER_VIEW("","idx",($_SESSION["REL_IDX"]==0?$_SESSION["MEM_IDX"]:$_SESSION["REL_IDX"]),$invoice_no); //사는 회사 정보
+  $result_buyer = QRY_MEMBER_VIEW("idx",($session_rel_idx==0?$session_mem_idx:$session_rel_idx)); //사는 회사 정보
   $row_buyer = mysql_fetch_array($result_buyer);
   $parts_mem_idx = get_any("member", "min(mem_idx)", "mem_type = 0");
-  $result_seller = QRY_ODR_MEMBER_VIEW("","idx",$parts_mem_idx, $invoice_no); //파는 회사 정보
+  $result_seller = QRY_MEMBER_VIEW("idx",$parts_mem_idx); //파는 회사 정보
   $row_seller = mysql_fetch_array($result_seller);
-  
+  $invoice_no = get_auto_no("WI", "invoice" , "invoice_no");
   
   //날짜 형식 이렇게 표시
   $invoice_date = date("d, M, Y",strtotime($log_date)); 

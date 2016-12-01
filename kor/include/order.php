@@ -41,7 +41,7 @@
 </SCRIPT>
 <!-- table -->
 
-			<section class="box-type1" style="min-height:359px">
+			<section class="box-type1">
 			<form name="fr" id="fr" class="clear">
 			<input type="hidden" name="odr_type" id = "odr_type" value="<?=$odr_type?>">
 				<div class="hd-type-wrap">
@@ -97,11 +97,11 @@
 						</tbody>
 					</table>
 				</div>
-				<?//=GET_TURNKEY_ODRDET_LIST($odr_type, " and b.part_type=7 and a.".($odr_type=="S"?"sell_":"")."mem_idx=$this_mem_idx AND a.odr_status IN(1,2,16,18,19,20,31) ", "S")?>
+				<?=GET_TURNKEY_ODRDET_LIST($odr_type, " and b.part_type=7 and a.".($odr_type=="S"?"sell_":"")."mem_idx=$this_mem_idx AND a.odr_status IN(1,2,16,18,19,20,31) ", "S")?>
 				</form>
 			</section>
 
-			<section class="box-type1" style="min-height:358px">
+			<section class="box-type1">
 			<form name="fr" id="fr" class="clear">
 			<input type="hidden" name="odr_type" id = "odr_type" value="<?=$odr_type?>">
 				<div class="hd-type-wrap">
@@ -119,8 +119,7 @@
 									<th scope="col" style="width: 36px;">RoHS</th>
 									<th scope="col" class="t-rt" style="width:66px">Q'ty</th>
 									<th scope="col" class="t-rt" style="width:62px">Unit Price</th>
-									<th scope="col" class="t-rt" lang="ko" style="width:66px">발주수량</th>
-									<th scope="col" class="t-rt" lang="ko" style="width:66px">공급수량</th>
+									<th scope="col" class="t-rt" lang="ko" style="width:66px">Amount</th>
 									<th scope="col" lang="ko" style="width:35px">납기</th>
 									<th scope="col" style="width:52px">Company</th>
 								<?}else{?>
@@ -132,8 +131,7 @@
 									<th scope="col" style="width: 36px;">RoHS</th>
 									<th scope="col" class="t-rt" style="width:66px">Q'ty</th>
 									<th scope="col" class="t-rt" style="width:62px">Unit Price</th>
-									<th scope="col" class="t-rt" lang="ko" style="width:66px">발주수량</th>
-									<th scope="col" class="t-rt" lang="ko" style="width:66px">공급수량</th>
+									<th scope="col" class="t-rt" lang="ko" style="width:66px">Amount</th>
 									<th scope="col" lang="ko" style="width:35px">납기</th>									
 								<?}?>								
 							</tr>
@@ -157,7 +155,7 @@
 						</tbody>
 					</table>
 				</div>
-				<?//=GET_TURNKEY_ODRDET_LIST($odr_type, " and b.part_type=7 and a.".($odr_type=="S"?"sell_":"")."mem_idx=$this_mem_idx AND a.odr_status NOT IN(1,2,16,18,19,20,31) ", "S")?>
+				<?=GET_TURNKEY_ODRDET_LIST($odr_type, " and b.part_type=7 and a.".($odr_type=="S"?"sell_":"")."mem_idx=$this_mem_idx AND a.odr_status NOT IN(1,2,16,18,19,20,31) ", "S")?>
 				</form>
 			</section>
 			<!--// table -->

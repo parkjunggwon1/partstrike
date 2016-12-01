@@ -285,7 +285,7 @@ if($sheets_no){ //2016-05-19 : What's New 에서 Sheet 클릭 시 Log 호출을 
 	<div class="order-table">
 		<h2><img src="/kor/images/st_tit_purchase_order.gif" alt="Purchase Order"></h2>
 		<span class="currency">( Currency : US$ ) </span>		
-		<?echo GET_ODR_DET_LIST_V2(" and odr_idx=$odr_idx " ,"30_05"); ?>
+		<?echo GET_ODR_DET_LIST_V2(" and odr_idx=$odr_idx " ,"30_05"); ?>			
 	</div>
 	<!-- //order-table -->
 	

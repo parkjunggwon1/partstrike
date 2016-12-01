@@ -4,7 +4,7 @@
 	</div>
 	<div class="title-blck first">
 		<h3>발주서</h3>
-		<a href="<?if ($fr=="M"){?>/kor/<?}else{?>javascript:frReturn('<?=$_REQUEST['rel_idx']?>','<?=$_REQUEST['mem_type']?>');<?}?>"><img src="/kor/images/btn_close02.gif" alt="닫기"></a>
+		<a href="<?if ($fr=="M"){?>/kor/<?}elseif($_REQUEST['mem_type']=="blacklist"){?>javascript:board('AA001');side_company_info2('<?=$_REQUEST['rel_idx']?>','<?=$_REQUEST['mem_type']?>');<?}else{?>javascript:frRecord('<?=$_REQUEST['rel_idx']?>','<?=$_REQUEST['mem_type']?>');<?}?>"><img src="/kor/images/btn_close02.gif" alt="닫기"></a>
 
 		
 	</div>
