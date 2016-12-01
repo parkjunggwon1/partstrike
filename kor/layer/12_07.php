@@ -3,6 +3,7 @@
 *** 수정 발주서(Purchase Order Amendment) : 12_07
 *** 2016-04-15 : 수정발주서 번호(amend_no)를 매번 새로 생성(Log기록 때문)
 *** 2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 위해 Sheet No.($sheets_no)를 넘겨준다.
+*** 2016-11-21 : 닫기버튼 제거
 ***************************************************************************************************/
 @header("Content-Type: text/html; charset=utf-8");
 include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";
@@ -11,6 +12,11 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 ?>
 <script src="/kor/js/jquery-1.11.3.min.js"></script>
 <script src="/include/function.js"></script>
+<script language="javascript">
+$(document).ready(function(){
+	$(".btn-close").hide();
+});
+</script>
 <?
 //수정 발주서 sheet
 if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 위해 Sheet No.($sheets_no)를 넘겨준다.
@@ -20,11 +26,9 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
   $row_odr = mysql_fetch_array($result_odr);
 
   $result_buyer = QRY_ODR_MEMBER_VIEW($odr_idx, "idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"]));
-  //$result_buyer = QRY_MEMBER_VIEW("idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"]));
   $row_buyer = mysql_fetch_array($result_buyer);
 
   $result_seller = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["sell_rel_idx"]==0?$row_odr["sell_mem_idx"]:$row_odr["sell_rel_idx"]));
-  //$result_seller = QRY_MEMBER_VIEW("idx",($row_odr["sell_rel_idx"]==0?$row_odr["sell_mem_idx"]:$row_odr["sell_rel_idx"]));
   $row_seller = mysql_fetch_array($result_seller);
 
   //if($row_odr["amend_no"]==""){ //기존에는 없을 때만 생성을 '무조건 새로 생성' 으로 변경 2016-04-15
@@ -60,7 +64,7 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 	<div class="order-info">
 		<ul>
 			<li class="b1"><strong>Purchase Order Amendment No.</strong><span><?=$row_odr["amend_no"]?></span></li>
-			<li class="b2"><strong>Date</strong><span><?=$row_odr["reg_date_fmt"]?></span></li>
+			<li class="b2"><strong>Date</strong><span><?=$row_odr["amend_date"]?></span></li>
 			<li><strong>Page</strong><span>1</span></li>
 		</ul>
 		<ul>
@@ -99,7 +103,7 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 										
 									?>
 										<li><?=$row_buyer["mem_nm"]?></li>
-										<li> <?=$row_buyer["addr"]?></li>
+										<li><?=$row_buyer["addr_det"]?> <?=$row_buyer["addr"]?></li>
 										<li><span class="tel">Tel : <?=preg_replace('/\+.+\-/', "0",$row_buyer["tel"])?></span>Fax : <?=preg_replace('/\+.+\-/', "0",$row_buyer["fax"])?></li>
 										<li>Contact : <?=$row_odr["rel_idx"]==0?$row_buyer["pos_nm"]:get_any("member", "mem_nm", "mem_idx=".$row_odr["mem_idx"])?> / <?=$row_odr["rel_idx"]==0?"CEO":get_any("member", "pos_nm", "mem_idx=".$row_odr["mem_idx"])?></li>
 										<li><?=$row_buyer["email"]?></li>
@@ -109,7 +113,7 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 									{
 									?>
 										<li><?=$row_buyer["mem_nm_en"]?></li>
-										<li> <?=$row_buyer["addr_en"]?></li>
+										<li><?=$row_buyer["addr_det_en"]?> <?=$row_buyer["addr_en"]?></li>
 										<li><span class="tel">Tel : <?=$row_buyer["tel"]?></span>Fax : <?=$row_buyer["fax"]?></li>
 										<li>Contact : <?=$row_odr["rel_idx"]==0?$row_buyer["pos_nm_en"]:get_any("member", "mem_nm_en", "mem_idx=".$row_odr["mem_idx"])?> / <?=$row_odr["rel_idx"]==0?"CEO":get_any("member", "pos_nm_en", "mem_idx=".$row_odr["mem_idx"])?></li>
 										<li><?=$row_buyer["email"]?></li>
@@ -132,7 +136,7 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 									
 								?>
 									<li><?=$row_buyer["mem_nm"]?></li>
-									<li> <?=$row_buyer["addr"]?></li>
+									<li><?=$row_buyer["addr_det"]?> <?=$row_buyer["addr"]?></li>
 									<li><span class="tel">Tel : <?=preg_replace('/\+.+\-/', "0",$row_buyer["tel"])?></span>Fax : <?=preg_replace('/\+.+\-/', "0",$row_buyer["fax"])?></li>
 									<li>Contact : <?=$row_odr["rel_idx"]==0?$row_buyer["pos_nm"]:get_any("member", "mem_nm", "mem_idx=".$row_odr["mem_idx"])?> / <?=$row_odr["rel_idx"]==0?"CEO":get_any("member", "pos_nm", "mem_idx=".$row_odr["mem_idx"])?></li>
 									<li><?=$row_buyer["email"]?><?=$testtt?></li>
@@ -143,7 +147,7 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 									
 								?>
 									<li><?=$row_buyer["mem_nm_en"]?></li>
-									<li><?=$row_buyer["addr_en"]?></li>
+									<li><?=$row_buyer["addr_det_en"]?> <?=$row_buyer["addr_en"]?></li>
 									<li><span class="tel">Tel : <?=$row_buyer["tel"]?></span>Fax : <?=$row_buyer["fax"]?></li>
 									<li>Contact : <?=$row_odr["rel_idx"]==0?$row_buyer["pos_nm_en"]:get_any("member", "mem_nm_en", "mem_idx=".$row_odr["mem_idx"])?> / <?=$row_odr["rel_idx"]==0?"CEO":get_any("member", "pos_nm_en", "mem_idx=".$row_odr["mem_idx"])?></li>
 									<li><?=$row_buyer["email"]?><?=$testtt?></li>
@@ -199,7 +203,7 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 				if ($row_seller["nation"]==$row_buyer["nation"])
 				{								
 				?>
-					<li><?=$row_seller["addr"]?></li>
+					<li><?=$row_seller["addr_det"]?> <?=$row_seller["addr"]?></li>
 					<li><span class="tel">Tel : <?=preg_replace('/\+.+\-/', "0",$row_seller["tel"])?></span>Fax : <?=preg_replace('/\+.+\-/', "0",$row_seller["fax"])?> </li>
 					<li>Contact : <?=$row_odr["sell_rel_idx"]==0?$row_seller["pos_nm"]:get_any("member", "mem_nm", "mem_idx=".$row_odr["sell_mem_idx"])?> / <?=$row_odr["sell_rel_idx"]==0?"CEO":get_any("member", "pos_nm", "mem_idx=".$row_odr["sell_mem_idx"])?> </li>
 					<li><?=$row_seller["email"]?></li>
@@ -208,7 +212,7 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 				else
 				{								
 				?>
-					<li> <?=$row_seller["addr_en"]?></li>
+					<li><?=$row_seller["addr_det_en"]?> <?=$row_seller["addr_en"]?></li>
 					<li><span class="tel">Tel : <?=$row_seller["tel"]?></span>Fax : <?=$row_seller["fax"]?> </li>
 					<li>Contact : <?=$row_odr["sell_rel_idx"]==0?$row_seller["pos_nm_en"]:get_any("member", "mem_nm_en", "mem_idx=".$row_odr["sell_mem_idx"])?> / <?=$row_odr["sell_rel_idx"]==0?"CEO":get_any("member", "pos_nm_en", "mem_idx=".$row_odr["sell_mem_idx"])?> </li>
 					<li><?=$row_seller["email"]?></li>
@@ -242,21 +246,21 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 			<p class="txt2">I hereby certify that I buyer will not violate any items that are mentioned in the Treatment of PARTStrike and is willing to make the Purchase Order perfectly accomplished by not making any cancellation without reason</p>
 		</div>
 		<ul class="sign-area">
-			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_buyer["filesign"]?>" height="21" alt=""></strong></li>
+			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_seller["filesign"]?>" height="23" width="152px" alt=""></strong></li>
 			<?
 			//나라가 같을경우
 			if ($row_seller["nation"]==$row_buyer["nation"])
 			{								
 			?>
-				<li><span>CEO : </span><strong><?=$row_buyer["pos_nm"]?></strong></li>
-				<li><span>Tel : </span><strong><?=preg_replace('/\+.+\-/', "0",$row_buyer["tel"])?></strong><span class="fax">Fax : </span><strong><?=preg_replace('/\+.+\-/', "0",$row_buyer["fax"])?></strong></li>
+				<li><span>CEO : </span><strong><?=$row_seller["pos_nm"]?></strong></li>
+				<li><span>Tel : </span><strong><?=preg_replace('/\+.+\-/', "0",$row_seller["tel"])?></strong><span class="fax">Fax : </span><strong><?=preg_replace('/\+.+\-/', "0",$row_seller["fax"])?></strong></li>
 			<?
 			}
 			else
 			{								
 			?>
-				<li><span>CEO : </span><strong><?=$row_buyer["pos_nm_en"]?></strong></li>
-				<li><span>Tel : </span><strong><?=$row_buyer["tel"]?></strong><span class="fax">Fax : </span><strong><?=$row_buyer["fax"]?></strong></li>
+				<li><span>CEO : </span><strong><?=$row_seller["pos_nm_en"]?></strong></li>
+				<li><span>Tel : </span><strong><?=$row_seller["tel"]?></strong><span class="fax">Fax : </span><strong><?=$row_seller["fax"]?></strong></li>
 			<?
 			}
 			?>
