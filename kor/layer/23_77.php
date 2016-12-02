@@ -7,14 +7,17 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/class/class.memfee.php";
 <script src="/kor/js/jquery-1.11.3.min.js"></script>
 <script src="/include/function.js"></script>
 <?
- $result_parts = QRY_MEMBER_VIEW("idx",get_any("member", "min(mem_idx)", "mem_type = 0")); //사는 회사 정보
+if ($invoice_no==""){
+	 $invoice_no=get_auto_no("MFI", "mybank" , "invoice_no");
+}
+ $result_parts =  QRY_ODR_MEMBER_VIEW("","idx",get_any("member", "min(mem_idx)", "mem_type = 0"), $invoice_no); //사는 회사 정보
  $row_parts = mysql_fetch_array($result_parts);
 
- $result_buyer = QRY_MEMBER_VIEW("idx",($_SESSION["REL_IDX"]==0?$_SESSION["MEM_IDX"]:$_SESSION["REL_IDX"])); //사는 회사 정보
+ $result_buyer = QRY_ODR_MEMBER_VIEW("","idx",($_SESSION["REL_IDX"]==0?$_SESSION["MEM_IDX"]:$_SESSION["REL_IDX"]),$invoice_no); //사는 회사 정보
  $row_buyer = mysql_fetch_array($result_buyer);
  $row_ship = get_ship($row_odr_det["ship_idx"]);
 
- $invoice_no=get_auto_no("MFI", "mybank" , "invoice_no");
+
 // $invoice_date = date("Y-m-d"); 
  $invoice_date = date("d,M,Y"); 
 

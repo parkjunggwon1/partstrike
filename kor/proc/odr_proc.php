@@ -626,21 +626,25 @@ if ($typ =="odrconfirm2"){  //------------ 확정 발주서 (from:30_05) 2016-04
         update_val("odr","status_edit_mem_idx",$session_mem_idx, "odr_idx", $odr_idx);
 
         $odr_no = get_any("odr", "odr_no", "odr_idx = $odr_idx");
-        //2. history 등록
-        $session_mem_idx = $_SESSION["MEM_IDX"];
-        $sell_mem_idx = get_any("odr", "sell_mem_idx" , "odr_idx = $odr_idx");
-        $buy_mem_idx = get_any("odr", "mem_idx" , "odr_idx = $odr_idx");
-        $sql = "insert into odr_history set
-                odr_idx = '$odr_idx'
-                ,status = 2
-                ,status_name = '발주서'
-                ,etc1 = '$odr_no'
-                ,sell_mem_idx = '$sell_mem_idx'
-                ,buy_mem_idx = '$buy_mem_idx'
-                ,reg_mem_idx = '$session_mem_idx'
-                ,reg_date = now()";
-        //echo $sql;
-        $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+		//2016-11-29 : 중복저장 방지 - KSR
+		$his_cnt = QRY_CNT("odr_history"," and odr_idx=$odr_idx and status=2 ");
+		//if($his_cnt<1){  //증상 만들기 위해 잠시 주석처리...
+			//2. history 등록
+			$session_mem_idx = $_SESSION["MEM_IDX"];
+			$sell_mem_idx = get_any("odr", "sell_mem_idx" , "odr_idx = $odr_idx");
+			$buy_mem_idx = get_any("odr", "mem_idx" , "odr_idx = $odr_idx");
+			$sql = "insert into odr_history set
+					odr_idx = '$odr_idx'
+					,status = 2
+					,status_name = '발주서'
+					,etc1 = '$odr_no'
+					,sell_mem_idx = '$sell_mem_idx'
+					,buy_mem_idx = '$buy_mem_idx'
+					,reg_mem_idx = '$session_mem_idx'
+					,reg_date = now()";
+			//echo $sql;
+			$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+		//}
         update_val("odr","save_yn","N", "odr_idx", $odr_idx);
         //MyBox에 해당 품목 있을 시 삭제 2016-04-04
         $sql = "DELETE FROM mybox WHERE mem_idx = '$buy_mem_idx' AND part_idx IN(SELECT part_idx FROM odr_det WHERE odr_idx = $odr_idx) ";

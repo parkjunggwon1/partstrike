@@ -1,4 +1,4 @@
-<script src="/kor/js/common.js"></script>
+
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 	function writeproc(){

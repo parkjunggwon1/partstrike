@@ -246,24 +246,25 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<?if($loadPage== "30_22"){?><input type="hidden" name="odr_det_idx[]" value="<?=$odr_det_idx?>"><?}?>
 					<td><?=$i?></td>
 					<?if($part_type=="7"){?>
-						<td class="t-lt" colspan="5"><?=$part_no?></td>
+						<td class="t-lt" colspan="7"><?=$part_no?></td>
 					<?}else{?>
 						<td class="t-lt"><?=$part_no?></td>
 						<td class="t-lt"><?=$manufacturer?></td>
 						<td><?=$package?></td>
 						<td><?=$dc?></td>
 						<td><?=$rhtype?></td>
+						<td class="t-rt">
+							<?if ($loadPage == "30_22"){
+								echo $odr_quantity==0?"":number_format($odr_quantity);
+							}else{
+								echo $odr_stock==0?"-":number_format($odr_stock);
+							}
+							?>
+						</td>
+						<td class="t-rt">$<?=number_format($price,2)?></td>
 					<?}?>
-					<td class="t-rt">
-					<?if ($loadPage == "30_22"){
-						echo $odr_quantity==0?"":number_format($odr_quantity);
-					}else{
-						echo $odr_stock==0?"-":number_format($odr_stock);
-					}
-					?></td>
-					<td class="t-rt">$<?=number_format($price,2)?></td>
 					<?if ($loadPage == "30_06" || $loadPage== "09_03"|| $loadPage== "01_29" ){?>
-					<td class="c-blue t-rt"><?=number_format($odr_quantity)?></td>
+						<td class="c-blue t-rt"><?=($part_type=="7")?number_format($price,2):number_format($odr_quantity)?></td>
 					<?if($loadPage == "01_29"){?><td class="c-red t-rt"><?=number_format($supply_quantity)?></td><?}?>
 					<td class=""><?=($period)?"".$period:(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>					
 					<?}elseif ($loadPage == "31_04"){?>
@@ -454,7 +455,10 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td><?=$i?></td>
 					<td><img src="/kor/images/nation_title2_<?=$nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$nation)?>"></td>
 					<?if ($part_type=="7"){	//턴키-------------?>
-						<td colspan="6" class="t-lt"><input type="text" class="i-txt4" value="<?=$part_no?>" style="width:560px; ime-mode:disabled" readonly></td>					
+						<td colspan="7" class="t-lt">
+							<?=$part_no;?>
+							<!--input type="text" class="i-txt4" value="<?=$part_no?>" style="width:560px; ime-mode:disabled" readonly-->
+						</td>
 					<?}else{?>
 					<td class="t-lt"><?=($per_cnt>0)? cut_len($part_no,22,"."):$part_no?></td>
 					<td class="t-lt"><?=($per_cnt>0)? cut_len($manufacturer,16,"."):$manufacturer?></td>
@@ -462,11 +466,14 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td><?=$dc?></td>
 					<td><?=$rhtype?></td>
 					<td class="t-rt"><input name="quantity[]" type="hidden" value="<?=$quantity;?>"> <?=$quantity==0?"":number_format($quantity)?></td>
-					<?}?>
 					<td class="t-rt">$<?=$price==0?"":number_format($price,2)?></td>
+					<?}?>
 					<td class="t-rt">
 						<?if (($part_type=="2"||$part_type=="5"||$part_type=="6") && $period ==""){?>
 						<input type="text" class="i-txt0 c-blue onlynum numfmt t-rt"  maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" odr_det_idx="<?=$odr_det_idx?>" value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:58px;ime-mode:disabled;" readonly>
+						<?}else if($part_type=="7"){?>
+							$<?=$price==0?"":number_format($price,2)?>
+							<input type="hidden" name="odr_quantity[]" value="1">
 						<?}else{?>
 						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" odr_det_idx="<?=$odr_det_idx?>" value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:58px;ime-mode:disabled;">
 						<?}?>
@@ -563,7 +570,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					?>
 					<td class="t-rt" style="width:60px;"><?=$origin_qty==0?"-":number_format($origin_qty)?></td>
 					
-					<?}?>
+					<?}	 //end of 턴키($part_type=="7")?>
 					<td class="t-rt" style="width:61px;">$<?=number_format($price,2)?></td>
 					<!--발주수량-->
 					<td class="t-rt" style="width:66px;"><span class="c-blue"><?=$odr_quantity==0?"":number_format($odr_quantity)?></span></td>
@@ -1504,13 +1511,13 @@ if ($for_readonly != "P") {?>
 		<?}?>
 		
 		<?
-		if($loadPage=="30_09"){
-			//2016-11-11 : 선불 배송비 추가
+		if($loadPage=="30_05" || $loadPage=="30_09"){
+			//2016-11-25 : 아래 선불 배송비 입니다. - KSR
 			$ship_idx = get_any("odr", "ship_idx", "1=1 ".$searchand);
-			$shipping_charge = get_any("ship", "tax", "ship_idx=$ship_idx");
+			$shipping_charge = get_any("ship", "shipping_charge", "ship_idx=$ship_idx");
 			if($shipping_charge>0){
-				echo "<li class=\"sub\"><strong>Shipping Charge : </strong><span>".$shipping_charge."%</span></li>";
-				//$tot += $shipping_charge;
+				echo "<li class=\"sub\"><strong>Shipping Charge : </strong><span>$".number_format($shipping_charge,2)."</span></li>";
+				$tot += $shipping_charge;
 			}
 		}
 
@@ -2108,7 +2115,8 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 	<?}
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
 	function layerOrdListData($loadPage ,$odr_idx , $odr_det_idx=""){ // History 목록에서의 odr_det 내역
-		?>
+		$turnkey_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and part_type=7 ");  //턴키
+	?>
 		<!-- layer-data -->
 	<input type="hidden" name="odr_idx" id="odr_idx_<?=$loadPage?>" value="<?=$odr_idx?>">
 	<div class="layer-data">
@@ -2117,17 +2125,17 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 				<tr>
 					<th scope="col" class="t-no">No.</th>
 					<?if ($loadPage=="02_02"){?><th scope="col" class="t-nation">Nation</th><?}?>
-					<th scope="col" class="t-partno" style="width:250px;">Part No.</th>
-					<th scope="col" class="t-Manufacturer" style="width:180px;">Manufacturer</th>
-					<th scope="col" class="t-Package">Package</th>
-					<th scope="col" class="t-dc">D/C</th>
-					<th scope="col" class="t-rohs">RoHS</th>
-					<th scope="col" class="t-oty">O'ty</th>
-					<th scope="col" class="t-unitprice">Unit Price</th>
+					<th scope="col" class="t-partno" style="width:250px;"><?=($turnkey_cnt>0)? "Title":"Part No.";?></th>
+					<th scope="col" class="t-Manufacturer" style="width:180px;"><?=($turnkey_cnt>0)? "":"Manufacturer";?></th>
+					<th scope="col" class="t-Package"><?=($turnkey_cnt>0)? "":"Package";?></th>
+					<th scope="col" class="t-dc"><?=($turnkey_cnt>0)? "":"D/C";?></th>
+					<th scope="col" class="t-rohs"><?=($turnkey_cnt>0)? "":"RoHS";?></th>
+					<th scope="col" class="t-oty"><?=($turnkey_cnt>0)? "":"O'ty";?></th>
+					<th scope="col" class="t-unitprice"><?=($turnkey_cnt>0)? "":"Unit Price";?></th>
 					<?if ($loadPage == "30_22"){?>
 					<th scope="col" class="t-amount">Amount</th>
 					<?}else{?>
-					<th scope="col" class="delivery t-orderoty" lang="ko">발주수량</th>
+					<th scope="col" class="delivery t-orderoty" lang="ko"><?=($turnkey_cnt>0)? "Price":"발주수량";?></th>
 					<th scope="col" lang="ko" class="t-period">납기</th>
 					<?}?>
 				</tr>

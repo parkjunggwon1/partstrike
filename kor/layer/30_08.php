@@ -2,6 +2,7 @@
 /************************************************************************************************************************
 **** 판매자 : 송장(30_08) 화면
 **** 2016-04-12 : Option(Checkbox) 추가, '취소' 버튼 추가(선택 송장확인, 취소)
+**** 2016-11-25 : 턴키 품목 처리 - GET_ODR_DET_LIST 다르게 불러오기(턴키 세부 품목)
 ************************************************************************************************************************/
 @header("Content-Type: text/html; charset=utf-8");
 include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";
@@ -109,6 +110,8 @@ $(document).ready(function(){
 
   $b_nation = $b_mem[nation];
   $s_nation = $s_mem[nation];
+
+  $turnkey_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and part_type=7 ");  //턴키
 ?>
 <div class="layer-hd">
 	<h1>송장(3008)-<?=$odr_idx;?></h1>
@@ -147,16 +150,110 @@ $(document).ready(function(){
 						<th scope="col" class="t-dc">D/C</th>
 						<th scope="col" class="t-rohs">RoHS</th>
 						<th scope="col" class="t-oty">O'ty</th>
+						<?if($turnkey_cnt<1){?>
 						<th scope="col" class="t-unitprice">Unit Price</th>
 						<th scope="col" lang="ko" class="t-orderoty" >발주수량</th>
 						<th scope="col" lang="ko" class="t-supplyoty" Style="whdth:66px;">공급수량</th>
+						<?}?>
 						<th scope="col" lang="ko" class="t-period">납기</th>
 					</tr>
 				</thead>
 
-				<?	for ($i = 1; $i<=7; $i++){
+				<?
+				if($turnkey_cnt>0){
+					$turnkey_idx = get_any("odr_det", "part_idx", "odr_idx=$odr_idx");
+					$sql = "select * from part where turnkey_idx = $turnkey_idx order by part_idx";
+					$conn = dbconn();	
+					$result_t=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+					//판매 중인지 체크
+					$part_inv_chk =QRY_CNT("part", "and invreg_chk <> 1 and part_idx=$turnkey_idx"); 		
+					if($part_inv_chk =='0')
+					{
+						$no_modify = "readonly";
+						$no_modify_border = "border:0;";
+					}
+				?>
+					<tbody id="tbd_7">
+					<tr>
+						<td colspan="8" class="title-box">
+							<h3 class="title"><img src="/kor/images/stock_title07.gif" alt="<?=GF_Common_GetSingleList("PART",7)?>"></h3>
+						</td>
+					</tr>
+				<?
+					while($row_t = mysql_fetch_array($result_t)){
+						$k++;
+						$part_idx= replace_out($row_t["part_idx"]);
+						$price_t= replace_out($row_t["price"]);
+						$part_no= replace_out($row_t["part_no"]);
+						$manufacturer= replace_out($row_t["manufacturer"]);
+						$package= replace_out($row_t["package"]);
+						$dc= replace_out($row_t["dc"]);
+						$rhtype= replace_out($row_t["rhtype"]);
+						$quantity= replace_out($row_t["quantity"]);
+						$odr_quantity_t= replace_out($row_t["odr_quantity"]);
+
+						//$part_idx = get_any("part" , "part_idx", "part_no= '$part_no' ");
+						$i++;
+				?>
+					<tr id="tr_">
+						<td><?=$i;?></td>
+						<td class="t-lt">
+							<input type="text" class="i-txt4" name="part_no[]" value="<?=$part_no?>" maxlength="24" <?=$no_modify?> style="<?=$no_modify_border?>width:<?=($det_cnt>1)? "190":"210";?>px; ime-mode:disabled" >
+						</td>
+						<td class="t-lt">
+							<input type="text" class="i-txt4" name="manufacturer[]" value="<?=$manufacturer?>" maxlength="20" <?=$no_modify?> style="<?=$no_modify_border?>width:<?=($det_cnt>1)? "156":"170";?>px; ime-mode:disabled" >
+						</td>
+						<td class="t-ct">
+							<input type="text" class="i-txt4 t-ct" name="package[]" value="<?=$package?>" maxlength="10" <?=$no_modify?> style="<?=$no_modify_border?>width:80px; ime-mode:disabled" >
+						</td>
+						<td class="t-ct"><?=$dc;?></td>
+						<td class="t-ct"><?=$rhtype;?></td>
+						<td class="t-rt">99,999,999</td>
+						<td class="t-ct">Stock</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td colspan="11" style="padding:0">
+							<table class="detail-table">
+								<tbody>
+									<?if($part_type=="2"){?>
+										<input type="hidden" name="part_condition[]" value="">
+										<input type="hidden" name="pack_condition1[]" value="">
+										<input type="hidden" name="pack_condition2[]" value="">
+									<?}?>
+									<tr <?=$part_type=="2"?"disabled":""?>>
+										<th scope="row" style="width:230px">
+											&nbsp;부품상태&nbsp;&nbsp;<div class="select type4" lang="en" style="width:150px">
+											<label  class="c-blue"><?=($part_condition)?GF_Common_GetSingleList("PARTCOND",$part_condition):""?></label>
+											<?=GF_Common_SetComboList("part_condition[]", "PARTCOND", "", 1, "True",  "", $part_condition , "", "", "part_condition");?>
+											</div>
+										</th>
+										<th scope="row">
+											&nbsp;포장상태&nbsp;&nbsp;<div class="select type4" lang="en" style="width:77px">
+											<label  class="c-blue"><?=($pack_condition1)?GF_Common_GetSingleList("PACKCOND1",$pack_condition1):""?></label>
+											<?=GF_Common_SetComboList("pack_condition1[]", "PACKCOND1", "", 1, "True",  "", $pack_condition1 , "");?></div>
+											<div class="select type4" lang="en" style="width:90px">
+											<label  class="c-blue"><?=($pack_condition2)?GF_Common_GetSingleList("PACKCOND2",$pack_condition2):""?></label>
+											<?=GF_Common_SetComboList("pack_condition2[]", "PACKCOND2", "", 1, "True",  "", $pack_condition2 , "");?></div>
+										</th>
+									</tr>
+									<tr>
+										<td colspan="2" ><strong class="c-black">&nbsp;Memo&nbsp;&nbsp;</strong> <input type="text" class="i-txt5" name="memo[]" value="" style="width:415px;color:#00759e;"></td>
+									</tr>
+								</tbody>
+							</table>
+						</td>
+				<?
+					}	//end of while
+				?>
+				</tbody>
+				<?
+				}else{	//턴키 이외..
+					for ($i = 1; $i<7; $i++){
 						echo GET_ODR_DET_LIST("30_08", $i," and odr_idx=$odr_idx ", $det_cnt);
-				}?>
+					}
+				}
+				?>
 
 				
 				<tbody >

@@ -1,4 +1,4 @@
-<script src="/kor/js/common.js"></script>
+
 <script type="text/javascript">
 <!--
 	function agent_sch(str){

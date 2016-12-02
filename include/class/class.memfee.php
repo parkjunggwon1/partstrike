@@ -127,9 +127,19 @@ function GF_GET_MEMFEE_LIST1(){
 <?}?>
 
 <?
-function GF_GET_MEMFEE_LIST2(){
+function GF_GET_MEMFEE_LIST2($page){
 	global $viewpagecnt;
 ?>	
+<script type="text/javascript">
+<!--
+	$(document).ready(function(){		
+		$(".pagination a.link").click(function(){
+			showajaxParam("#memfeeleftBottom", "memfee2", "page="+$(this).attr("num"));
+		});				
+	 });
+//-->
+</script>
+
 <section class="box-type1">
 	<div class="box-top">
 		<h2>내 회원 가입비</h2>
@@ -144,13 +154,13 @@ function GF_GET_MEMFEE_LIST2(){
 			<th scope="col" class="th2">&nbsp;</th>
 		</thead>
 		<tbody>
-			<?
+		<?
 			if(!$page){$page=1;}
 			$recordcnt=5;
 			$cnt = QRY_CNT2("DISTINCT(invoice_no) "," mybank "," and (com_idx='".$_SESSION["REL_IDX"]."' or com_idx='".$_SESSION["MEM_IDX"]."') and charge_type='14'" );
 			$totalpage = QRY_TOTALPAGE($cnt,$recordcnt);
 			$searchand=" and (a.com_idx='".$_SESSION["REL_IDX"]."' or a.com_idx='".$_SESSION["MEM_IDX"]."')  and a.charge_type='14' and a.mem_idx=b.mem_idx ";
-			$result =QRY_C_LIST_GROUP("a.*, b.mem_id,b.mem_nm_en,b.pos_nm_en"," mybank a, member b ","all","1",$searchand," a.invoice_no  order by a.mem_idx");
+			$result =QRY_C_LIST_GROUP("a.*, b.mem_id,b.mem_nm_en,b.pos_nm_en"," mybank a, member b ",$recordcnt,$page,$searchand," a.invoice_no  order by a.mem_idx");
 			?>
 			<?
 			$ListNO=$cnt-(($page-1)*$recordcnt);
@@ -174,7 +184,7 @@ function GF_GET_MEMFEE_LIST2(){
 				}
 			?>
 			<tr style="<?=$bgcolor?>">
-				<td><?=$cnt?></td>
+				<td><?=$ListNO?></td>
 				<td class="c-red2" lang="en" style="letter-spacing:0"><?=substr($reg_date,0,4)?><span lang="ko">년</span> <?=substr($reg_date,5,2)?><span lang="ko">월</span> <?=substr($reg_date,8,2)?>일 ~ 
 				<?=substr($end_date,0,4)?><span lang="ko">년</span> <?=substr($end_date,5,2)?><span lang="ko">월</span> <?=substr($reg_date,8,2)?><span lang="ko">일</span></td>
 				<td class="t-lt" style="width:85px"><?=$mem_id?></td>
@@ -185,11 +195,12 @@ function GF_GET_MEMFEE_LIST2(){
 				$ListNO--;
 			}
 			?>
+			
 		</tbody>					
 	</table>
-	<div class="pagination">
-		<? include $_SERVER["DOCUMENT_ROOT"]."/include/paging2.php"; ?>									
-	</div>
+<div class="pagination">
+				<? include $_SERVER["DOCUMENT_ROOT"]."/include/paging2.php"; ?>									
+			</div>
 </section>
 
 <?	}?>

@@ -103,7 +103,7 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 										
 									?>
 										<li><?=$row_buyer["mem_nm"]?></li>
-										<li><?=$row_buyer["addr_det"]?> </li>
+										<li><?=$row_buyer["addr_det"]?> <?=$row_buyer["addr"]?></li>
 										<li><span class="tel">Tel : <?=preg_replace('/\+.+\-/', "0",$row_buyer["tel"])?></span>Fax : <?=preg_replace('/\+.+\-/', "0",$row_buyer["fax"])?></li>
 										<li>Contact : <?=$row_odr["rel_idx"]==0?$row_buyer["pos_nm"]:get_any("member", "mem_nm", "mem_idx=".$row_odr["mem_idx"])?> / <?=$row_odr["rel_idx"]==0?"CEO":get_any("member", "pos_nm", "mem_idx=".$row_odr["mem_idx"])?></li>
 										<li><?=$row_buyer["email"]?></li>

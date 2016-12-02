@@ -180,10 +180,7 @@ function right_side(){
 	$(".box-type9").hide();					
 }
 
-function frRecord(rel_idx, fr){
-	record(fr);
-	side_company_info2(rel_idx,fr);
-}
+
 function agreement() {	
 	showajax(".col-left", "terms");
 	//showajax(".col-left", "agreement");
@@ -306,8 +303,29 @@ function side_company_info2(rel_idx,mode){
 }
 
 function main_company_det(rel_idx, fr){
+	var $slt =$("#gnb li[class^=m].active");
+	var topno = $("#gnb li[class^=m]").index($slt)+1;
+	var subno = $slt.find(".gnb2 a").index($slt.find(".chk"))+1;	
+	$("#HidGnb").html(topno+":"+subno);
+	$("#HidLeft").html(encodeURIComponent($(".col-left").html()));
 	setMenuNull();
 	showajaxParam("#partsContent", "main_company_det", "rel_idx="+rel_idx+"&mem_type="+fr);
+}
+
+function frReturn(rel_idx,fr){
+	var cont = $("#HidGnb").html().split(":");
+	setMenu(cont[0],cont[1]);
+
+	if ((cont[0]=="1" && cont[1] =="1") || (cont[0]=="1" && cont[1] =="2"))
+	{
+		order(fr);
+	}else{
+		$(".col-left").html(decodeURIComponent($("#HidLeft").html()));
+	}
+	
+	$("#HidGnb").html("");
+	$("#HidLeft").html("");
+	side_company_info2(rel_idx,fr);	
 }
 
 function layer_company_det(rel_idx){

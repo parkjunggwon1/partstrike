@@ -443,26 +443,9 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 			<div class="txt-area">
 				<?if ($for_readonly!="Y"){?>
 					<?
-					if ($forread !="Y")
+					if ($row_seller["nation"]==$row_buyer["nation"])
 					{
-						if ($row_seller["nation"]==$row_buyer["nation"] && ($row_seller["nation"]==1 || $row_buyer["nation"] ==1))
-						{
-							echo get_bank_info($row_buyer["nation"]);
-						}
-					}
-					else
-					{
-						?>
-						<strong>PARTStrike Bank Information</strong>
-						<ul class="txt3">
-							<li>Beneficiary Name : PARTStrike Co., Ltd.</li>
-							<li>Bank Name : Inderstrial Bank of Korea</li>
-							<li>Account No. 632-018768-56-00018</li>
-							<li>Bank Address : EunSan Building, 8, Gyeonginro53gil, Guro-gu, Seoul, 152-864, Korea </li>
-							<li>Bank Phone No. : +82-2-2672-7911</li>
-							<li>Swift(BIC) Code : IBKOKRSEXXX</li>
-						</ul>
-						<?
+						echo get_bank_info($row_parts,$row_buyer["nation"]);
 					}
 					
 					?>
@@ -479,7 +462,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 		</div>
 		<?}?>
 		<ul class="sign-area">
-			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_buyer["filesign"]?>" height="21" width="152px" alt=""></strong></li>
+			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_buyer["filesign"]?>" height="21" alt=""></strong></li>
 			<?
 			//나라가 같을경우
 			if ($row_seller["nation"]==$row_buyer["nation"])

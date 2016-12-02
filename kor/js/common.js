@@ -1182,8 +1182,8 @@ $(document).ready(function(){
 			alert_msg("발주서를 선택해 주세요.");
 		}else{
 			var err = false; 
-			//err = updateQty();
-			err = true;
+			err = updateQty();
+			//err = true;
 			if (err == false)
 			{
 				//2016-04-18 : 송장번호 생성 및 저장
@@ -1289,7 +1289,7 @@ $(document).ready(function(){
 	
 	
 	////////////////////////* dialog *///////////////////////////////////
-	$("body").on("click",".btn-order , .btn-dialog-3102",function(){	
+	$("body").on("click",".btn-order , .btn-dialog-3102",function(){
 		var loadPage  = $(this).attr("class")=="btn-dialog-3102" ? "31_02" : "05_04";
 		if (mem_idx=="")
 		{
@@ -1301,12 +1301,12 @@ $(document).ready(function(){
 			{
 				openLayer("layer3", loadPage ,"?part_idx="+$(this).attr("id"));
 			}else{
-			 var f =  document.ftop;
-			 f.part_idx.value=$(this).attr("id");
-			 f.typ.value="write";
-			 f.target = "proc";
-			 f.action = "/kor/proc/odr_proc.php";
-			 f.submit();		
+				 var f =  document.ftop;
+				 f.part_idx.value=$(this).attr("id");
+				 f.typ.value="write";
+				 f.target = "proc";
+				 f.action = "/kor/proc/odr_proc.php";
+				 f.submit();		
 			}			
 		}
 	});	
@@ -2491,7 +2491,7 @@ function updateQty(){
 				url: "/ajax/proc_ajax.php", 
 				data: { actty : "UQ", //Update QUANTITY
 						actidx : $(this).attr("odr_det_idx"),
-						actkind : qty.replace(",",""),
+						actkind : qty,
 						amd_yn : amd_yn,	//수정발주서 여부
 						//supply_quantity : supply_quantity,	//공급 수량
 						quantity : quantity	//발주가능 재고
