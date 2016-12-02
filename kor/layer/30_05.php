@@ -302,7 +302,7 @@ if($sheets_no){ //2016-05-19 : What's New 에서 Sheet 클릭 시 Log 호출을 
 			<p class="txt2" style="margin:0">I hereby certify that I buyer will not violate any items that are mentioned in the Treatment of PARTStrike and is willing to make the Purchase Order perfectly accomplished by not making any cancellation without reason</p>
 		</div>
 		<ul class="sign-area">
-			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_buyer["filesign"]?>" height="21" alt=""></strong></li>
+			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_buyer["filesign"]?>" height="21" width="180" alt=""></strong></li>
 			
 			<?
 			//나라가 같을경우

@@ -227,7 +227,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 	<div class="buyer-info">
 		<h2><img src="/kor/images/txt_buyer.gif" alt="buyer"></h2>
 		<div class="info-wrap">
-			<ul class="company-info pd-l20">
+			<ul class="company-info">
 				<?
 				if ($row_seller["nation"]==$row_buyer["nation"])
 				{
@@ -442,12 +442,9 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 			<?}else{?>
 			<div class="txt-area">
 				<?if ($for_readonly!="Y"){?>
-					<?
-					if ($row_seller["nation"]==$row_buyer["nation"])
-					{
-						echo get_bank_info($row_parts,$row_buyer["nation"]);
-					}
-					
+					<?					
+						//송장은 무조건 외화계좌만 나옴 20161202 박정권
+						echo get_bank_info($row_parts,"-1");									
 					?>
 				<?}?>
 			<?}?>
@@ -462,26 +459,26 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 		</div>
 		<?}?>
 		<ul class="sign-area">
-			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_buyer["filesign"]?>" height="21" alt=""></strong></li>
+			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_seller["filesign"]?>" width="180" height="21" alt=""></strong></li>
 			<?
 			//나라가 같을경우
-			if ($row_seller["nation"]==$row_buyer["nation"])
+			if ($row_seller["nation"]==$row_seller["nation"])
 			{		
-				$tel_nation = explode("-",$row_buyer["tel"]);
-				$fax_nation = explode("-",$row_buyer["fax"]);
+				$tel_nation = explode("-",$row_seller["tel"]);
+				$fax_nation = explode("-",$row_seller["fax"]);
 
-				$tel_buyer = str_replace($tel_nation[0]."-","0",$row_buyer["tel"]);
-				$fax_buyer = str_replace($fax_nation[0]."-","0",$row_buyer["fax"]);
+				$tel_buyer = str_replace($tel_nation[0]."-","0",$row_seller["tel"]);
+				$fax_buyer = str_replace($fax_nation[0]."-","0",$row_seller["fax"]);
 			?>
-				<li><span>CEO : </span><strong><?=$row_buyer["pos_nm"]?></strong></li>
+				<li><span>CEO : </span><strong><?=$row_seller["pos_nm"]?></strong></li>
 				<li><span>Tel : </span><strong><?=$tel_buyer?></strong><span class="fax">Fax : </span><strong><?=$fax_buyer?></strong></li>
 			<?
 			}
 			else
 			{								
 			?>
-				<li><span>CEO : </span><strong><?=$row_buyer["pos_nm_en"]?></strong></li>
-				<li><span>Tel : </span><strong><?=$row_buyer["tel"]?></strong><span class="fax">Fax : </span><strong><?=$row_buyer["fax"]?></strong></li>
+				<li><span>CEO : </span><strong><?=$row_seller["pos_nm_en"]?></strong></li>
+				<li><span>Tel : </span><strong><?=$row_seller["tel"]?></strong><span class="fax">Fax : </span><strong><?=$row_seller["fax"]?></strong></li>
 			<?
 			}
 			?>

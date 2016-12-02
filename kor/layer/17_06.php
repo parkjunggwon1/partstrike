@@ -10,7 +10,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 	<a href="#" class="btn-close"><img src="/kor/images/btn_layer_close_w.png" alt="close"></a>
 </div>
 <div class="layer-content">
-	<p class="txt-warning">당신의 첫 거래입니다. 판매자와 구매자 양측 모두 보증금(<span lang="en">US$1,000.00</span>)을 지불해야지만 다음 단계로 진행할 수 있습니다. 보증금은 탈퇴 시 은행 수수료를 제외하고 환불될 것입니다. 보증금은 당신의 권리 보호를 위해 요구하고 있습니다. </p>
+	<p class="txt-warning">당신의 첫 거래입니다. 판매자와 구매자 양측 모두 보증금[<span lang="en">$1,000.00</span>]을 지불해야지만 다음 단계로 진행할 수 있습니다. 보증금은 탈퇴시 My Bank로 전액 충전됩니다. 보증금은 당신의 권리 보호를 위해 요구하고 있습니다. </p>
 	<div class="btn-area t-rt">
 	<?$sell_mem_idx = get_any("odr", "sell_mem_idx", "odr_idx=$odr_idx");
 	if ($sell_mem_idx == $_SESSION["MEM_IDX"]){
