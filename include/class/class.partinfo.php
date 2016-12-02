@@ -535,6 +535,16 @@ function GET_MAIN_LIST($titleyn, $part_type, $page, $searchand , $area =""){   /
 				$rhtype= replace_out($row["rhtype"]);
 				$quantity= replace_out($row["quantity"]);
 				$price= replace_out($row["price"]);	
+
+				//금액이 정수면 ,2 실수면 ,4 포멧 20161202 박정권
+				if( ($price == (int)$price) )
+				{					
+					$price = number_format($price,2);
+				}
+				else {					
+					$price = number_format($price,4);
+				}
+
 				$already_idx = get_want("mybox","idx"," and mem_idx = '".$_SESSION["MEM_IDX"]."' and part_idx = '$part_idx'");
 				if(($already_idx and $_SESSION["MEM_IDX"] ) ){$already="1";}else{$already="";}
 				if ($part_type =="2"){
@@ -554,7 +564,7 @@ function GET_MAIN_LIST($titleyn, $part_type, $page, $searchand , $area =""){   /
 					<td><?=$dc?></td>
 					<td><?=$rhtype?></td>
 					<td class="t-rt"><?=$quantity==0?"":number_format($quantity)?></td>
-					<td class="t-rt">$<?=number_format($price,2)?></td>
+					<td class="t-rt">$<?=$price?></td>
 					<td class="delivery t-ct">
 					<?if ($part_type=="2" || $part_type=="5" || $part_type=="6"){?>
 						<?if ($_SESSION["COM_IDX"]==$sell_com_idx) { ?>

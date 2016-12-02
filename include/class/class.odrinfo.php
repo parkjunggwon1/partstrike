@@ -1273,6 +1273,17 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly=""){   //shee
 			if ($loadPage=="19_1_04" && $for_readonly=="Y"){
 				$odr_quantity = $fault_quantity;
 			}
+
+			//금액이 정수면 ,2 실수면 ,4 포멧 20161202 박정권
+			if( ($price == (int)$price) )
+			{					
+				$price_val = number_format($price,2);
+				$total_price = number_format($odr_quantity*$price,2);
+			}
+			else {					
+				$price_val = number_format($price,4);
+				$total_price = number_format($odr_quantity*$price,4);
+			}
 			
 			if ($loadPage!="12_07_v"){ //수정발주서 Sheet(Purchase Order Amendment)
 				$extra = "";
@@ -1291,9 +1302,9 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly=""){   //shee
 					<td><?=$i?></td>
 					<td class="t-lt" colspan="2"><?=get_cut($part_no,65,"..")?></td>
 					<td class="t-rt"><?=$odr_quantity==0?"":number_format($odr_quantity)?></td>
-					<td class="t-rt">$<?=number_format($price,2)?></td>
+					<td class="t-rt">$<?=$price_val?></td>
 					<td><?=($period)?( QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"Stock":$period):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Turnkey")?></td>
-					<td class="t-rt"><?if ($loadPage!="18_2_09"){?>$<?=number_format($odr_quantity*$price,2)?><?}?></td>
+					<td class="t-rt"><?if ($loadPage!="18_2_09"){?>$<?=$total_price?><?}?></td>
 				</tr>
 				<?
 				$sql = "select * from part where turnkey_idx = $part_idx order by part_idx";
@@ -1336,11 +1347,11 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly=""){   //shee
 							<input type="text" class="i-txt2 onlynum numfmt t-rt" maxlength="10" name="odr_quantity[]" id="odr_qty_<?=$odr_det_idx;?>" value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" onblur="calcu_amount();" style="width:50px; ">
 						</td>
 						<td class="t-rt">
-							<input type="text" class="i-txt2 numprice t-rt" maxlength="10" name="unit_price[]" id="unit_price_<?=$odr_det_idx;?>" value="<?=$price==0?"":"$".number_format($price,2)?>" style="width:65px;">
+							<input type="text" class="i-txt2 numprice t-rt" maxlength="10" name="unit_price[]" id="unit_price_<?=$odr_det_idx;?>" value="<?=$price==0?"":"$".$price_val?>" style="width:65px;">
 						</td>
 						<td><?=($period)?( QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"Stock":$period):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>
 						<td class="t-rt">
-							<input type="text" class="i-txt0 t-rt" maxlength="10" name="amount[]" id="amount_<?=$odr_det_idx;?>" value="$<?=number_format($odr_quantity*$price,2);?>" style="width:70px;">
+							<input type="text" class="i-txt0 t-rt" maxlength="10" name="amount[]" id="amount_<?=$odr_det_idx;?>" value="$<?=$total_price;?>" style="width:70px;">
 						</td>
 					</tr>
 				<?}else{ //---------- 공통(턴키 아니고, 30_17 아닌것) ------------
@@ -1360,12 +1371,12 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly=""){   //shee
 						<td class="t-lt"><?=$part_no?></td>
 						<td class="t-lt"><?=$manufacturer?>, <?=$package?>, <?=$dc?>, <?=$rhtype?><?=$extra?></td>
 						<td class="t-rt"><?=number_format($odr_quantity)?></td>
-						<td class="t-rt">$<?=number_format($price,2)?></td>
+						<td class="t-rt">$<?=$price_val?></td>
 						<td><?=($period)?( QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"Stock":$period):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>
 						<td class="t-rt">
 							<?//2016-10-02 : 지속적... 계약금에서는 'Amount' 표시 무.
 							if ($loadPage!="18_2_09" && !($loadPage=="30_09" && $part_type=="2" && $pay_cnt<2) ){
-								echo "$".number_format($odr_quantity*$price,3);
+								echo "$".$total_price;
 							}
 							?>
 						</td>
@@ -1448,11 +1459,13 @@ if ($for_readonly != "P") {?>
 
 		if( ($tot == (int)$tot) )
 		{
+			$total_val = $tot;
 			$tot = number_format($tot,2);
 			$tot_vat_minus = number_format($tot_vat_minus,2);
 			$vat_plus = number_format($vat_plus,2);
 		}
 		else {
+			$total_val = $tot;
 			$tot = number_format($tot,4);
 			$tot_vat_minus = number_format($tot_vat_minus,4);
 			$vat_plus = number_format($vat_plus,4);
@@ -1517,7 +1530,18 @@ if ($for_readonly != "P") {?>
 			$shipping_charge = get_any("ship", "shipping_charge", "ship_idx=$ship_idx");
 			if($shipping_charge>0){
 				echo "<li class=\"sub\"><strong>Shipping Charge : </strong><span>$".number_format($shipping_charge,2)."</span></li>";
-				$tot += $shipping_charge;
+				$tot = (double)$total_val + (double)$shipping_charge;
+				if( ($tot == (int)$tot) )
+				{
+					$tot = number_format($tot,2);
+					$tot_vat_minus = number_format($tot_vat_minus,2);
+					$vat_plus = number_format($vat_plus,2);
+				}
+				else {
+					$tot = number_format($tot,4);
+					$tot_vat_minus = number_format($tot_vat_minus,4);
+					$vat_plus = number_format($vat_plus,4);
+				}
 			}
 		}
 
@@ -1526,8 +1550,19 @@ if ($for_readonly != "P") {?>
 		?>
 		<?if ($_SESSION["DEPOSIT"]=="N" && $deposit_cnt==1){?>
 			<!-- 대표님 요청으로 display:none -->
-			<!--<li class="sub"><strong>Deposit :</strong><span>$1,000.00	</li>		-->	
-		<?$tot = $tot + 1000;
+			<li class="sub"><strong>Deposit :</strong><span>$1,000.00	</li>
+		<?$tot = (double)$total_val + (double)$shipping_charge+1000;
+			if( ($tot == (int)$tot) )
+				{
+					$tot = number_format($tot,2);
+					$tot_vat_minus = number_format($tot_vat_minus,2);
+					$vat_plus = number_format($vat_plus,2);
+				}
+				else {
+					$tot = number_format($tot,4);
+					$tot_vat_minus = number_format($tot_vat_minus,4);
+					$vat_plus = number_format($vat_plus,4);
+				}
 		}
 		?>
 
