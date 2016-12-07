@@ -2302,7 +2302,7 @@ if($typ=="delivery_save"){
                     ,dosi = '$dosi'
                     ,dositxt = '$dositxt'
                     ,sigungu = '$sigungu'
-                    ,addr_det = '$addr_det'
+                    ,addr_det = '$addr_full'
                     ,addr = '$addr'
                     where delivery_addr_idx = $delivery_addr_idx
             ";
@@ -2326,7 +2326,7 @@ if($typ=="delivery_save"){
                     ,dosi = '$dosi'
                     ,dositxt = '$dositxt'
                     ,sigungu = '$sigungu'
-                    ,addr_det = '$addr_det'
+                    ,addr_det = '$addr_full'
                     ,addr = '$addr'
                     ,reg_date = '$log_date'
                     ,reg_ip = '$log_ip'
