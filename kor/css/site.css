@@ -583,7 +583,7 @@ button .ss{margin-top:10px;}
 
 /* pagination */
 .pagination{text-align:center; font-family:"Times New Roman", serif; padding:0 0;position:absolute;left:0;bottom:0;width:100%}
-.pagination.not_pos{/*position:relative;left:0;bottom:auto*/}
+.pagination.not_pos{position:relative;left:0;bottom:auto;padding-top:20px}
 .pagination li{display:inline-block; vertical-align:middle}
 .pagination li a{color:#666666; padding:0 8px}
 .pagination li.current a{color:#00759e}

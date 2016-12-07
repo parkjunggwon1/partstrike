@@ -21,10 +21,10 @@ $invoice_no = get_want("mybank","invoice_no"," and mybank_idx='$idx'");
 			<tr>
 				<th scope="col" style="width:14px">No.</th>
 				<th scope="col" lang="ko" style="width:75px">가입일</th>
-				<th scope="col" class="t-lt" style="width:85px; padding-left:5px;">UserID</th>
+				<th scope="col" class="t-lt" style="width:85px; padding-left:5px;">User ID</th>
 				<th scope="col" lang="ko" class="t-lt">성명/직책</th>
+				<th scope="col" style="width:70px">Invoice No.</th>
 				<th scope="col" lang="ko" style="width:50px">방법</th>
-				<th scope="col" lang="ko" style="width:70px">Invoice No.</th>
 				<th scope="col" lang="ko" class="t-rt" style="width:55px; padding-right:5px;">회원가입비</th>
 			</tr>
 		</thead>
@@ -63,8 +63,8 @@ $invoice_no = get_want("mybank","invoice_no"," and mybank_idx='$idx'");
 				<td><?=substr($reg_date,0,4)?><span lang="ko">년</span> <?=substr($reg_date,5,2)?><span lang="ko">월</span> <?=substr($reg_date,8,2)?><span lang="ko">일</span></td>
 				<td class="t-lt" style="padding-left:5px;"><?=$mem_id?></td>
 				<td class="t-lt"><?=$mem_nm_en?>/<?=$pos_nm_en?></td>
+				<td><span class="c-blue"><?=$invoice_no?></span></td>
 				<td><?=$charge_method?></td>
-				<td><?=$invoice_no?></td>
 				<td class="t-rt" style="padding-right:5px;">$<?=number_format($charge_amt,2)?></td>				
 			</tr>
 			<?

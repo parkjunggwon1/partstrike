@@ -132,7 +132,7 @@
 				<input type="hidden" id="part_type" name="part_type" value="7">
 					<span style="padding-left:6px"><a href="/include/filedownload.php?filename=parts_sample3.xls&path=/upload/xls/"    target="proc" ><img src="/kor/images/btn_apply_form_down.gif" alt="등록 양식 Download"></a></span>
 					<span class="op1" style="padding-right:15px"><label class="i-file">턴키 파일 <input type="file" name="file1" onChange="javascript: document.getElementById('fileName').value = this.value"><input type="text" id="fileName" readonly><span></span></label></span>
-					<span class="op4"><label class="c-red " lang="en">Price </label><label class="c-blue"></label><input type="text" style="width:105px" class="i-txt2 c-red t-rt onlynum numfmt" maxlength="11" name="price" id="price" value="" placeholder=""> 
+					<span class="op4"><label class="c-red " lang="en">Price </label><label class="c-blue"></label><input type="text" style="width:105px" class="i-txt2 c-blue t-rt onlynum numfmt" maxlength="11" name="price" id="price" value="" placeholder=""> 
 					<span class="reg"><img src="/kor/images/btn_form_apply_1.gif" alt="등록"></span>
 					<button type="button" class="reg" style="display:none;" onclick="writeproc();"><img src="/kor/images/btn_form_apply.gif" alt="등록"></button></span>
 				</form>

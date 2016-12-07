@@ -610,16 +610,16 @@ switch($actty) {
 		break;
 	case "UQ":	//[발주서]창에서 '발주서 확인' 버튼
 		//수정 발주서
+		/*2016-12-06 : 수정발주서의 재고 계산을 여기서 않고, 서류 확인 후 계산 - ccolle
 		if($amd_yn == "Y"){
-			
 			$part_idx = get_any("odr_det", "part_idx", " odr_det_idx = $actidx");
 			$old_odr = get_any("odr_det", "odr_quantity", " odr_det_idx = $actidx");			
-		
 			//$up_stock = $quantity  - $actkind; //재고수랑 계산	
 			$up_stock = ($quantity + $old_odr) - $actkind; //재고수랑 계산
 			//재고수량 Update
-			update_val("part","quantity", $up_stock, "part_idx", $part_idx);	  
+			update_val("part","quantity", $up_stock, "part_idx", $part_idx);
 		}
+		*/
 		$sql = "update odr_det set 
 				odr_quantity = '$actkind' 
 				where odr_det_idx =$actidx";

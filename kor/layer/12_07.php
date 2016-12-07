@@ -12,11 +12,6 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 ?>
 <script src="/kor/js/jquery-1.11.3.min.js"></script>
 <script src="/include/function.js"></script>
-<script language="javascript">
-$(document).ready(function(){
-	$(".btn-close").hide();
-});
-</script>
 <?
 //수정 발주서 sheet
 if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 위해 Sheet No.($sheets_no)를 넘겨준다.

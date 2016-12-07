@@ -6,6 +6,7 @@
 ***********************************************************************************************************************/
  ob_start();
 include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";
+include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.odr.php";	//2016-12-06
 include $_SERVER["DOCUMENT_ROOT"]."/include/fileuploader.php";
 
 if (!$_SESSION["MEM_IDX"]){ReopenLayer("layer6","alert","?alert=sessionend");exit;}
@@ -425,6 +426,7 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
                 $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 
                 //발주수량과 공급수량이 다를경우 재고처리
+				/** 2016-12-06 : 재고 건들지 않고, 서류 확인 후 '확정송장' 단계에서 처리 - ccolle
                 $odr_qty = get_any("odr_det", "odr_quantity" ,"odr_det_idx=$ary_odr_det_idx[$j]");
                 $stock_qty = get_any("part", "quantity" ,"part_idx=$part_idx");
                 if($odr_qty != $ary_supply_quantity[$j]){
@@ -435,6 +437,7 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
                     }
                 }else{  //발주수량 보다 공급수량이 작은경우가 있다면 아래에 처리하자.
                 }
+				**/
 
      }
 
@@ -489,6 +492,21 @@ if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : �
     update_val("odr","odr_status","18", "odr_idx", $odr_idx);
     update_val("odr","status_edit_mem_idx",$session_mem_idx, "odr_idx", $odr_idx);
     update_val("odr","invoice_no",$inv_no, "odr_idx", $odr_idx);    //invoice sheet(30_09)에서 가져온 $inv_no
+	//2016-12-06 : 재고 Update (기존 'invreg' 에서 처리 하던 것을 여기서 처리) - ccolle
+	$result =QRY_ODR_DET_LIST(0," and odr_idx=$odr_idx ",0,"","asc");
+	while($row = mysql_fetch_array($result)){
+		$part_idx = replace_out($row["part_idx"]);
+		$stock_qty = replace_out($row["quantity"]);
+		$odr_qty = replace_out($row["odr_quantity"]);
+		$supp_qty = replace_out($row["supply_quantity"]);
+		if($odr_qty < $supp_qty){	//공급 수량이 발주 수량보다 클 경우
+			$up_qty = $stock_qty - ($supp_qty - $odr_qty);
+			update_val("part","quantity", $up_qty, "part_idx", $part_idx);
+		}else if($odr_qty > $supp_qty){	//공급 수량이 발주 수량보다 작을 경우
+			$up_qty = $stock_qty + ($odr_qty - $supp_qty);
+			update_val("part","quantity", $up_qty, "part_idx", $part_idx);
+		}
+	}
     //2. 송장 번호 등록
     /** 2016-04-18 송장번호는 'invreg' 에서 처리
     $inv_no = get_auto_no("EI", "odr", "invoice_no");
@@ -691,6 +709,18 @@ if ($typ =="odramendconfirm"){ // 확정 발주서(P.O Amendment)12_07 처리 --
 }
 
 if ($typ =="odramendconfirm2"){ //구매자: 수정발주서(P.O Amendment)12_07 처리 / 2016-04-15 : Log 기록 -------------------------------------------------------------
+		//2016-12-06 : 재고 UPDATE('UQ'에서 Upate 것을 여기서 Update) - ccolle
+		$result =QRY_ODR_DET_LIST(0," and odr_idx=$odr_idx ",0,"","asc");
+		while($row = mysql_fetch_array($result)){
+			$part_idx = replace_out($row["part_idx"]);
+			$stock_qty = replace_out($row["quantity"]);
+			$odr_qty = replace_out($row["odr_quantity"]);
+			$supp_qty = replace_out($row["supply_quantity"]);
+			if($odr_qty > $supp_qty){	//공급 수량보다 발주 수량이 큰 경우만 존재
+				$up_qty = $stock_qty - ($odr_qty - $supp_qty);
+				update_val("part","quantity", $up_qty, "part_idx", $part_idx);
+			}
+		}
         //0. 만약에 odr_status가  송장 또는 도착한 데이터가 있다면 그 테이터를 확인 한것으로 표시 (confirm_yn = Y')  왜냐면, 수정 발주서를 발행하는 시점은 처음 송장 받았거나, 물건이 도착 한 후에 할수 있으므로. JSJ
         $odr_history_idx = get_any("odr_history" , "odr_history_idx", "odr_idx= $odr_idx and (status = 18 or status = 19) and confirm_yn='N'");
         if ($odr_history_idx){update_val("odr_history","confirm_yn","Y", "odr_history_idx", $odr_history_idx);}

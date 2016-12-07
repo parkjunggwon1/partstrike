@@ -274,7 +274,7 @@ function GF_GET_TURNKEY_EDIT($page){
 									?>				
 							<tr id="maintr_<?=$turnkey_idx?>" <?if ($ListNO %2 ==1){?>style="background-color:#f7f7f7;"<?}?>>							
 								<td><?=$ListNO?></td>
-								<td class="t-lt"><a href="javascript:showtr(<?=$turnkey_idx?>);"><?=get_cut($title,80)?></a></td>
+								<td class="t-lt"><a  href="javascript:showtr(<?=$turnkey_idx?>);"><?=get_cut($title,80)?></a></td>
 								<td class="t-rt"><span class="c-blue"></span> <input type="text" name="price_<?=$turnkey_idx?>" class="i-txt2 onlynum numfmt t-rt" maxlength="11" style="width:76px" value="<?if($price){echo "$".number_format($price,2);}?>"></td>
 								<td><span class="del" style="display:none;"><img src="/kor/images/btn_turn_del_1.gif" alt="삭제"></span><button type="button" class="del" onclick="delturnkey('<?=$turnkey_idx?>');"  ><img src="/kor/images/btn_turn_del.gif" alt="삭제"></button></td>
 								<td class="pd-0"><span class="reg"><img src="/kor/images/btn_turn_save_1.gif" alt="저장"></span><button class="reg" type="button" onclick="del('<?=$turnkey_idx?>');" style="display:none;"><img src="/kor/images/btn_turn_save.gif" alt="저장"></button></td>
@@ -391,6 +391,10 @@ function GF_GET_TURNKEY_LIST($page,$part_no){
 		 });
 
 	 });
+	$(".board-list tbody a").on("click",function(){
+		$(".board-list tbody a").removeClass("c-blue");
+		$(this).addClass("c-blue");
+	});
 	</SCRIPT>
 					<form name="f3" id="f3" method="post">
 					<input type="hidden" name="part_type" value="7">
@@ -399,7 +403,7 @@ function GF_GET_TURNKEY_LIST($page,$part_no){
 						<div class="srch-block1"><label lang="en">Part No. <input type="text" class="onlyEngNum" style="ime-mode:disabled" maxlength="30" onkeypress="check_key(part_sch);" name="srch_part_no" value="<?=$part_no?>" ></label><button type="button" onclick="part_sch();"><img src="/kor/images/btn_srch2.gif" alt="검색"></button></div>
 						<h2 class="srch-block2" style="padding-right:30px;">턴키 목록</h2>
 					</div>
-					<table class="stock-list-table">
+					<table class="stock-list-table  board-list">
 						<thead>
 							<tr>
 								<th scope="col" style="width:23px">No. </th>
