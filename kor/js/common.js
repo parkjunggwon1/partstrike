@@ -2486,12 +2486,13 @@ function updateQty(){
 		}else{
 			maskoff();
 			//alert("qty:"+qty+", det_idx:"+$(this).attr("odr_det_idx"));
+
 			$.ajax({ 
 				type: "GET", 
 				url: "/ajax/proc_ajax.php", 
 				data: { actty : "UQ", //Update QUANTITY
 						actidx : $(this).attr("odr_det_idx"),
-						actkind : qty,
+						actkind : qty.replace(",",""),
 						amd_yn : amd_yn,	//수정발주서 여부
 						//supply_quantity : supply_quantity,	//공급 수량
 						quantity : quantity	//발주가능 재고
@@ -2675,6 +2676,7 @@ function chg_ship_info(obj){
 	
 	var ship_ch_btn = $("#delivery_addr_idx").val();
 	var load_page = $("#delv_load").val();
+	var chk_val=$("input:checkbox[id='delivery_chg']").is(":checked");
 	//alert(load_page);
 		if (obj.value)
 		{
@@ -2710,6 +2712,11 @@ function chg_ship_info(obj){
 							if(load_page=="05_04" || load_page=="09_01")
 							{
 								if (ship_ch_btn == 0)
+								{
+									$("#ship_account_no").val("");
+								}
+
+								if (chk_val==true)
 								{
 									$("#ship_account_no").val("");
 								}

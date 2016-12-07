@@ -608,9 +608,28 @@ $(document).ready(function(){
 
 	//-- 값 변경
 	$("#layerPop3 .stock-list-table input[name^=odr_quantity] , #layerPop3 #ship_account_no, #layerPop3 #memo").keyup(function(e){	
-		maskoff();
-		checkActive();	
-		maskon();
+		var chk_val=$("input:checkbox[id='delivery_chg']").is(":checked");
+		//alert(chk_val);
+		if (chk_val==true)
+		{
+			if (MustChk() == true)
+			{
+				maskoff();
+				checkActive();	
+				maskon();				
+			}
+			maskoff();
+			//	checkActive();	
+			maskon();	
+			
+		}
+		else
+		{
+			maskoff();
+			checkActive();	
+			maskon();
+		}
+		
 	});
 	//발주 수량 키업~
 	$("#layerPop3 .stock-list-table input[name^=odr_quantity]").keyup(function(e){
@@ -920,17 +939,24 @@ function checkActive(){
 		//alert(chk_val);
 		if (chk_val==true)
 		{
-			$("#delivery_addr_idx").val("0");
-			$("#ship_account_no").val("");	
-			$("#ship_info option:eq(0)").attr("selected", "selected");
-			$(".text_lang").text("");
+			if ($("#ship_info").val() != 5)
+			{
+				$("#layerPop3 #btn-confirm").css("cursor","").removeClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm_1.gif");
+				$("#delivery_addr_idx").val("0");
+				$("#ship_account_no").val("");	
+				$("#ship_info option:eq(0)").attr("selected", "selected");
+				$(".text_lang").text("");
+			}
 		}
 		else
 		{
-			$("#delivery_addr_idx").val("aaaa");
-			$("#ship_account_no").val("");	
-			$("#ship_info option:eq(0)").attr("selected", "selected");
-			$(".text_lang").text("");
+			if ($("#ship_info").val() != 5)
+			{
+				$("#delivery_addr_idx").val("aaaa");
+				$("#ship_account_no").val("");	
+				$("#ship_info option:eq(0)").attr("selected", "selected");
+				$(".text_lang").text("");
+			}
 		}		
 	}
 

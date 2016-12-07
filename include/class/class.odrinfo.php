@@ -2995,7 +2995,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 
 				if(MustChk() == true){
 					$("#save_deact").hide();
-					$(".delivery_save").show();
+					$(".delivery_save").show();					
 				}else{
 					$("#save_deact").show();
 					$(".delivery_save").hide();
@@ -3129,7 +3129,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 			</tr>			
 			<tr>
 				<th scope="row"><strong class="c-red">*</strong> 주소</th>
-				<td colspan="2"><input class="i-txt3 c-blue w50" name="addr_full" id="addr_full" onkeyup="detail_addr(this.value);" value="<?=$addr;?>" type="text" lang="ko"></td>
+				<td colspan="2"><input class="i-txt3 c-blue w50" name="addr_full" id="addr_full" onkeyup="detail_addr(this.value);" value="<?=$addr_det;?>" type="text" lang="ko"></td>
 			</tr>
 			<tr>
 				<th scope="row" style="height:20px;"><strong class="c-red">*</strong>  주소확인</th>
@@ -3143,7 +3143,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						$zip_code_val = $zipcode.",";
 					}
 					?>
-					<span class="c-blue"  id="sp_addr" style="width:508px" ><?=$addr?>, <?=$zip_code_val?> <?=$nation_name?></span>
+					<span class="c-blue"  id="sp_addr" style="width:508px" ><?=$addr?></span>
 
 				</td>
 			</tr>
