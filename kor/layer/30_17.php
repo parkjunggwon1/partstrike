@@ -12,7 +12,6 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 <script src="/kor/js/jquery.maskMoney.js"></script>
 <script src="/kor/js/print-div-jquery.js"></script>
 <script src="/include/function.js"></script>
-<script src="/kor/js/common.js"></script>
 <link rel="stylesheet" href="/kor/css/site.css">
 <SCRIPT LANGUAGE="JavaScript">
 //-- Amount 계산

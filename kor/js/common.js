@@ -2492,7 +2492,7 @@ function updateQty(){
 				url: "/ajax/proc_ajax.php", 
 				data: { actty : "UQ", //Update QUANTITY
 						actidx : $(this).attr("odr_det_idx"),
-						actkind : qty.replace(",",""),
+						actkind : qty,
 						amd_yn : amd_yn,	//수정발주서 여부
 						//supply_quantity : supply_quantity,	//공급 수량
 						quantity : quantity	//발주가능 재고

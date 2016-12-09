@@ -1134,15 +1134,8 @@ function GF_PRODUCT_ACCESSORY($modechr,$param){
 
 
 function get_odr_no($ty){     //purchase odr no
-	//2016-12-07 : PO No. 생성 방식을 카운트에서 Max로 변경 - ccolle
-	/** 본 주석처리 내용은 JSJ
 	$cnt = QRY_CNT("odr","and odr_no like '".$ty.date("y")."%'");
 	return $ty.date("y")."-PS".str_pad(fmod($cnt,99999)+1,5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
-	**/
-	$max_str = get_any("odr", "MAX(odr_no)" , "odr_status<99");
-	$max_str = substr($max_str, 7, 6);
-	$max_int = (int)$max_str;
-	return $ty.date("y")."-PS".str_pad(fmod($max_int,99999)+1,5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
 }
 
 
@@ -1680,4 +1673,21 @@ function get_manager($nation){
 	$manager = get_any("member" , "concat(mem_nm_en,' / ',pos_nm_en)", "mem_idx = (SELECT mem_idx FROM `manage` WHERE assign_nation = '$nation')");
 	return $manager;
 }
+
+//시작 금액 소수점 자리 절삭 시작
+function round_down($num,$d=0)
+{
+	return sgn($num)*p_floor(abs($num),$d);
+}
+
+function p_floor($val,$d)
+{
+	return floor($val * pow(10,$d))/pow(10,$d);
+}
+
+function sgn($x)
+{
+	return $x ? ($x>0 ? 1 : -1) : 0;
+}
+//시작 금액 소수점 자리 절삭 끝
 ?>

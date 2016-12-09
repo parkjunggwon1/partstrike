@@ -7,8 +7,8 @@
 			<tr>
 				<th scope="col" style="width:14px">No.</th>
 				<th scope="col" style="width:77px">Nation</th>
-				<th scope="col" class="t-lt">Part No.</th>
-				<th scope="col" class="t-lt" style="width:67px">Manufacturer</th>
+				<th scope="col" class="t-lt" style="width:100px">Part No.</th>
+				<th scope="col" class="t-lt" style="width:70px">Manufacturer</th>
 				<th scope="col" style="width:60px">Package</th>
 				<th scope="col" style="width:24px">D/C</th>
 				<th scope="col" style="width:25px">RoHS</th>

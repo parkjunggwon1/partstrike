@@ -1,4 +1,5 @@
 <?
+
 /******************************************************************************************
 *** 발주서(Puarchase Order)30_05
 *** 2016-05-27 : price 를 odr_det 의 odr_price 로 변경 GET_ODR_DET_LIST_V2
@@ -301,7 +302,7 @@ if($sheets_no){ //2016-05-19 : What's New 에서 Sheet 클릭 시 Log 호출을 
 			<p class="txt2" style="margin:0">I hereby certify that I buyer will not violate any items that are mentioned in the Treatment of PARTStrike and is willing to make the Purchase Order perfectly accomplished by not making any cancellation without reason</p>
 		</div>
 		<ul class="sign-area">
-			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_buyer["filesign"]?>" height="21" width="180" alt=""></strong></li>
+			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_buyer["filesign"]?>" height="21" width="120" alt=""></strong></li>
 			
 			<?
 			//나라가 같을경우

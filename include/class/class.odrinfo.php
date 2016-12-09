@@ -460,13 +460,23 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<!--input type="text" class="i-txt4" value="<?=$part_no?>" style="width:560px; ime-mode:disabled" readonly-->
 						</td>
 					<?}else{?>
+					<?
+						if(strpos($price, ".") == false)  
+						{
+							$price_val= round_down($price,2);
+						}
+						else
+						{
+							$price_val= $price;
+						}
+					?>
 					<td class="t-lt"><?=($per_cnt>0)? cut_len($part_no,22,"."):$part_no?></td>
 					<td class="t-lt"><?=($per_cnt>0)? cut_len($manufacturer,16,"."):$manufacturer?></td>
 					<td><?=cut_len($package,10,".")?></td>
 					<td><?=$dc?></td>
 					<td><?=$rhtype?></td>
 					<td class="t-rt"><input name="quantity[]" type="hidden" value="<?=$quantity;?>"> <?=$quantity==0?"":number_format($quantity)?></td>
-					<td class="t-rt">$<?=$price==0?"":number_format($price,2)?></td>
+					<td class="t-rt">$<?=$price_val?></td>
 					<?}?>
 					<td class="t-rt">
 						<?if (($part_type=="2"||$part_type=="5"||$part_type=="6") && $period ==""){?>
@@ -1262,7 +1272,7 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly=""){   //shee
 			$supply_quantity= replace_out($row["supply_quantity"]);
 			$fault_quantity= replace_out($row["fault_quantity"]);
 			//$price= replace_out($row["price"]); //2016-05-27 : price 를 odr_price로 변경
-			$price= replace_out($row["odr_price"]);
+			$price= $row["odr_price"];
 			$odr_det_idx = replace_out($row["odr_det_idx"]);	
 			$part_condition = replace_out($row["part_condition"]);
 			$pack_condition1 = replace_out($row["pack_condition1"]);
@@ -1277,12 +1287,12 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly=""){   //shee
 			//금액이 정수면 ,2 실수면 ,4 포멧 20161202 박정권
 			if( ($price == (int)$price) )
 			{					
-				$price_val = number_format($price,2);
-				$total_price = number_format($odr_quantity*$price,2);
+				$price_val = round_down($price,2);
+				$total_price = round_down($odr_quantity*$price,2);
 			}
-			else {					
-				$price_val = number_format($price,4);
-				$total_price = number_format($odr_quantity*$price,4);
+			else {			
+				$price_val = $price;
+				$total_price = round_down($odr_quantity*$price,2);
 			}
 			
 			if ($loadPage!="12_07_v"){ //수정발주서 Sheet(Purchase Order Amendment)
@@ -1460,15 +1470,15 @@ if ($for_readonly != "P") {?>
 		if( ($tot == (int)$tot) )
 		{
 			$total_val = $tot;
-			$tot = number_format($tot,2);
-			$tot_vat_minus = number_format($tot_vat_minus,2);
-			$vat_plus = number_format($vat_plus,2);
+			$tot = round_down($tot,2);
+			$tot_vat_minus = round_down($tot_vat_minus,2);
+			$vat_plus = round_down($vat_plus,2);
 		}
 		else {
 			$total_val = $tot;
-			$tot = number_format($tot,4);
-			$tot_vat_minus = number_format($tot_vat_minus,4);
-			$vat_plus = number_format($vat_plus,4);
+			$tot = round_down($tot,4);
+			$tot_vat_minus = round_down($tot_vat_minus,4);
+			$vat_plus = round_down($vat_plus,4);
 		}
 		
 		if ($pay_cnt ==2){	$searchand .= " and part_type = 2";}

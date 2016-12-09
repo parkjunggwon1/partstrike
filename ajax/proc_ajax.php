@@ -620,6 +620,7 @@ switch($actty) {
 			update_val("part","quantity", $up_stock, "part_idx", $part_idx);
 		}
 		*/
+		$actkind = str_replace(",","",$actkind);
 		$sql = "update odr_det set 
 				odr_quantity = '$actkind' 
 				where odr_det_idx =$actidx";
