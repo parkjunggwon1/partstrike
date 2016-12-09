@@ -1134,8 +1134,15 @@ function GF_PRODUCT_ACCESSORY($modechr,$param){
 
 
 function get_odr_no($ty){     //purchase odr no
+	//2016-12-07 : PO No. 생성 방식을 카운트에서 Max로 변경 - ccolle
+	/** 본 주석처리 내용은 JSJ
 	$cnt = QRY_CNT("odr","and odr_no like '".$ty.date("y")."%'");
 	return $ty.date("y")."-PS".str_pad(fmod($cnt,99999)+1,5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
+	**/
+	$max_str = get_any("odr", "MAX(odr_no)" , "odr_status<99");
+	$max_str = substr($max_str, 7, 6);
+	$max_int = (int)$max_str;
+	return $ty.date("y")."-PS".str_pad(fmod($max_int,99999)+1,5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
 }
 
 
