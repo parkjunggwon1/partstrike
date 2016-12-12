@@ -63,7 +63,22 @@ function checkActive(){
 		$("#btn_cancel_3008").css("cursor","").removeClass("btn-cancel-3008").attr("src","/kor/images/btn_cancel_1.gif");
 	}
 }
+//공급수량 체크
+function check_supp(){
+	$("input[name^=supply_quantity]").each(function(e){ //부품상태
+		if($(this).attr("part_type")!="7"){
+			maskoff();
+			if(parseInt($(this).val()) > parseInt($(this).attr("origin_qty"))){
+				$(this).val("");
+			}
+			maskon();
+		}
+	});
+}
 $(document).ready(function(){
+
+	check_supp();
+
 	$("#layerPop3 .stock-list-table tbody:eq(0) tr:eq(0) td").addClass("first");
 	//-- 옵션(체크박스) 클릭
 	$("#layerPop3 .stock-list-table input[name^=odr_det_idx]").click(function(e){

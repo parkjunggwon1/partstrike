@@ -371,6 +371,7 @@ $(document).ready(function(){
 	//수정발주서 Sheet(P.O Amendment) 12_07 '확정 발주서' 클릭
 	$("body").on("click",".odrAmendConfirm",function(){
 		//openLayer("layer","30_06","?mn=02");
+		odr_idx = $(this).attr("odr_idx");
 		$.ajax({
 				url: "/kor/proc/odr_proc.php", 
 				//data: "typ=odramendconfirm&odr_idx="+$(this).attr("odr_idx"),  //JSJ
@@ -380,12 +381,19 @@ $(document).ready(function(){
 					if (trim(data) == "SUCCESS"){		
 						//alert_msg("판매자에게 확정 발주서를 전송했습니다.");
 						document.location.href="/kor/";
+					}else if(trim(data) == "ERR"){
+						//재고 경고
+						closeCommLayer("layer5");	//invoic 닫고
+						closeCommLayer("layer3");	//수정발주서(0901) 닫고
+						openLayer("layer5","30_09","?odr_idx="+odr_idx);	//invoice 다시 열고
+						openLayer('layer3','09_01','?odr_idx='+odr_idx);		//수정발주서 다시 열고
+						openLayer('layer4','alarm','?odr_idx='+odr_idx);		//경고창 띄우고
 					}else{
 						alert_msg(data);
 					}
 				}
 		});		
-	});	 
+	}); 
 
 	$("body").on("click",".complete",function(){
 		$.ajax({ 
@@ -701,7 +709,12 @@ $(document).ready(function(){
 //						alert_msg("구매자에게 송장을 발송했습니다.");
 						document.location.href="/kor/";
 					}else{
-						alert_msg(data);
+						//2016-12-11 : 재고 경고
+						closeCommLayer("layer5");	//invoic 닫고
+						closeCommLayer("layer3");	//송장(3008) 닫고
+						openLayer("layer5","30_05","?odr_idx="+$("#odr_idx_30_09").val());	//P.O 다시 열고
+						openLayer('layer3','30_08','?odr_idx='+$("#odr_idx_30_09").val());		//송장 다시 열고
+						openLayer('layer4','alarm','?odr_idx='+$("#odr_idx_30_09").val());		//경고창 띄우고
 					}
 				}
 		});		
@@ -1182,7 +1195,9 @@ $(document).ready(function(){
 			alert_msg("발주서를 선택해 주세요.");
 		}else{
 			var err = false; 
+			maskoff();
 			err = updateQty();
+			maskon();
 			//err = true;
 			if (err == false)
 			{

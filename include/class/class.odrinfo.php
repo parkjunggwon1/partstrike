@@ -159,6 +159,15 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 			$odr_status= replace_out($row["odr_status"]);
 			$det_reason= replace_out($row["reason"]);
 			$part_stock= replace_out($row["part_stock"]);
+
+			if( ($price == (int)$price) )
+			{					
+				$price_val = round_down($price,2);
+			}
+			else {			
+				$price_val = $price;
+			}
+
 			if ($part_type =="2"){
 					$dc = "NEW";
 					$quantity="";
@@ -261,7 +270,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							}
 							?>
 						</td>
-						<td class="t-rt">$<?=number_format($price,2)?></td>
+						<td class="t-rt">$<?=$price_val?></td>
 					<?}?>
 					<?if ($loadPage == "30_06" || $loadPage== "09_03"|| $loadPage== "01_29" ){?>
 						<td class="c-blue t-rt"><?=($part_type=="7")?number_format($price,2):number_format($odr_quantity)?></td>
@@ -297,7 +306,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td><?=$package?></td>
 					<td><?=$dc?></td>
 					<td><?=$rhtype?></td>
-					<td class="t-rt">$<?=number_format($price,2)?></td>
+					<td class="t-rt">$<?=$price_val?></td>
 					<td class="c-red2 t-rt"><?=number_format($fault_quantity);?></td>
 					<td>
 					<?if ($period){
@@ -372,7 +381,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						-->
 					</td>
 					<td class="t-rt"><?=$quantity==0?"":number_format($quantity)?><input type="hidden" name="qty" id="31_05_qty" value="<?=$quantity;?>"></td>
-					<td class="t-rt">$<?=number_format($price,2)?></td>
+					<td class="t-rt">$<?=$price_val?></td>
 					<td class="c-blue t-rt"><?=number_format($odr_quantity)?></td>
 					<td><input type="text" id = "supply_quantity" name="supply_quantity" class="i-txt4 c-red2 onlynum numfmt t-rt" maxlength="10" value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:58px"></td>
 					<td><input type="text" class="i-txt4 c-red2 t-ct" id = "period" name="period" value="" style="width:38px" maxlength="4" readonly> <span><?if ($part_type=="2"){echo "WK";}else{echo "Days";}?></span></td>
@@ -399,7 +408,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td><?=$rhtype?></td>					
 					<?}?>
 					<td class="t-rt"><?=$part_stock==0?"":number_format($quantity + $supply_quantity)?></td>
-					<td class="t-rt">$<?=$price==0?"":number_format($price,2)?></td>
+					<td class="t-rt">$<?=$price==0?"":$price_val?></td>
 					<td>
 						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" name="odr_quantity[]" odr_det_idx="<?=$odr_det_idx?>" supply_quantity="<?=$supply_quantity;?>" quantity="<?=$quantity + $supply_quantity;?>" amd_yn="Y" value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:56px;">
 					</td>
@@ -482,7 +491,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<?if (($part_type=="2"||$part_type=="5"||$part_type=="6") && $period ==""){?>
 						<input type="text" class="i-txt0 c-blue onlynum numfmt t-rt"  maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" odr_det_idx="<?=$odr_det_idx?>" value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:58px;ime-mode:disabled;" readonly>
 						<?}else if($part_type=="7"){?>
-							$<?=$price==0?"":number_format($price,2)?>
+							$<?=$price==0?"":$price_val?>
 							<input type="hidden" name="odr_quantity[]" value="1">
 						<?}else{?>
 						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" odr_det_idx="<?=$odr_det_idx?>" value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:58px;ime-mode:disabled;">
@@ -519,7 +528,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					}elseif  ($loadPage== "30_08"){
 						//2016-05-27 : 재고 수량에서 현 거래의 주문 수량을 더해 재고로 잡는다.(PO 당시 재고에서 빠졌으므로...)
 						if($part_type!="2"){
-							$origin_qty = $quantity + $odr_quantity;
+							$origin_qty = $quantity + $odr_quantity;	//2016-12-11 : 파츠대표님 요구대로 되어 있슴(실재고+발주수량)
 						}
 					?>
 					<?if($part_type=="2"){?>
@@ -580,8 +589,11 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					?>
 					<td class="t-rt" style="width:60px;"><?=$origin_qty==0?"-":number_format($origin_qty)?></td>
 					
-					<?}	 //end of 턴키($part_type=="7")?>
-					<td class="t-rt" style="width:61px;">$<?=number_format($price,2)?></td>
+					<?}	 //end of 턴키($part_type=="7")
+					//금액이 정수면 ,2 실수면 ,4 포멧 20161202 박정권
+					
+					?>
+					<td class="t-rt" style="width:61px;">$<?=$price_val?></td>
 					<!--발주수량-->
 					<td class="t-rt" style="width:66px;"><span class="c-blue"><?=$odr_quantity==0?"":number_format($odr_quantity)?></span></td>
 					<!--공급수량-->
@@ -636,11 +648,11 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td><?=$package?></td>
 					<td><?=$dc?></td>
 					<td><?=$rhtype?></td>
-					<td class="t-rt"><?=$quantity==0?"":number_format($quantity)?></td>
+					<td class="t-rt"><?=$quantity==0?"":number_format($quantity+$odr_quantity)?></td>
 					<?}?>
-					<td class="t-rt">$<?=number_format($price,2)?></td>
+					<td class="t-rt">$<?=$price_val?></td>
 					<td class="t-rt"><span class="c-blue"><?=$odr_quantity==0?"":number_format($odr_quantity)?></span></td>
-					<td class="t-rt"><?=$supply_quantity==0?"":number_format($supply_quantity)?></td>
+					
 					<?=($period)?"<td class='c-red'>".$period:(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
 					</tr>
 					<tr>
@@ -655,7 +667,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 										</td>
 									</tr>
 									<tr>
-										<td lang="ko" class="c-red2" style="padding-left:43px;" >취소 시 ‘발주 취소’ 항목의 숫자가 증가할 것입니다.</td>
+										<td lang="ko" class="c-red2" style="padding-left:43px;padding-top:0;font-size:11px;" >취소 시 ‘발주 취소’ 항목의 숫자가 증가할 것입니다.</td>
 									</tr>
 								</tbody>
 							</table>
@@ -703,7 +715,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<? 
 								$price_sum = $price*$supply_quantity;
 							?>
-							<td class="t-rt">$<?=number_format($price,2)?></td>
+							<td class="t-rt">$<?=$price_val?></td>
 							<td class="t-rt">$<?=number_format($price_sum,2)?></td>
 						<?}?>
 						<?=($period)?"<td class='c-red'>".$period:(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
@@ -813,7 +825,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							</div>
 						</td>
 						<td class="t-rt"><?=$odr_stock==0?"-":number_format($odr_stock); //수량?></td>
-						<td class="t-rt">$<?=number_format($price,2)?></td>
+						<td class="t-rt">$<?=$price_val?></td>
 						<td class="t-rt c-blue"><?=$odr_quantity==0?"":number_format($odr_quantity); //발주수량?></td>
 						<td class="t-rt c-red"><?=number_format($supply_quantity) //공급수량?></td>
 						<td class="t-ct c-red"><?=($period)? $period:"Stock";?></td>	
@@ -863,7 +875,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<td><?=$rhtype?></td>
 						<?}?>
 						<td class="t-rt"><?=$supply_quantity==0?"-":number_format($supply_quantity); //수량?></td>
-						<td class="t-rt">$<?=number_format($price,2)?></td>
+						<td class="t-rt">$<?=$price_val?></td>
 						<?
 							$price_sum = $price*$supply_quantity;
 						?>
@@ -979,7 +991,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								<?}?>
 							<?}?>
 						<?}?>
-						<td class="t-rt">$<?=number_format($price,2)?></td>
+						<td class="t-rt">$<?=$price_val?></td>
 						<td class="t-rt ">
 						<!-- 발주수량/반품수량-->
 							<?if($loadPage == "18_1_04"){?>
@@ -1272,7 +1284,7 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly=""){   //shee
 			$supply_quantity= replace_out($row["supply_quantity"]);
 			$fault_quantity= replace_out($row["fault_quantity"]);
 			//$price= replace_out($row["price"]); //2016-05-27 : price 를 odr_price로 변경
-			$price= $row["odr_price"];
+			$price= replace_out($row["odr_price"]);
 			$odr_det_idx = replace_out($row["odr_det_idx"]);	
 			$part_condition = replace_out($row["part_condition"]);
 			$pack_condition1 = replace_out($row["pack_condition1"]);

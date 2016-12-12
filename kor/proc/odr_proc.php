@@ -6,7 +6,7 @@
 ***********************************************************************************************************************/
  ob_start();
 include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";
-include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.odr.php";	//2016-12-06
+include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.odr.php";   //2016-12-06
 include $_SERVER["DOCUMENT_ROOT"]."/include/fileuploader.php";
 
 if (!$_SESSION["MEM_IDX"]){ReopenLayer("layer6","alert","?alert=sessionend");exit;}
@@ -97,24 +97,24 @@ if ($typ=="write" || $typ=="odredit" ||$typ =="periodreq"){   //periodreq : 납�
     //Ship Update------------------------------------<<
     if ($odr_idx && $fromPage!="add"){
     //  elseif($memo || $ship_account_no || $delivery_addr_idx){   //memo 값이 들어있다는 얘기는 extra data가 넘어왔다는 뜻 안들어왔어도 update 하자. 썻다 지우고 싶을수도 있으니까.
-		//2016-11-10 : 선불 배송비 관련 param 정리
-		if($dlvr_adv=="Y"){	//선불 일경우..
-			$ship_info = $dlvr_corp;
-			$ship_account_no = $dlvr_acc;
-			$shipping_charge = $dlvr_pay;
-		}
+        //2016-11-10 : 선불 배송비 관련 param 정리
+        if($dlvr_adv=="Y"){ //선불 일경우..
+            $ship_info = $dlvr_corp;
+            $ship_account_no = $dlvr_acc;
+            $shipping_charge = $dlvr_pay;
+        }
         $sql = "update ship set
             ship_info = '$ship_info'
             ,delivery_addr_idx = '$delivery_addr_idx'
             ,ship_account_no = '$ship_account_no'
             ,insur_yn = '$insur_yn'
             ,memo = '$memo'";
-		if($dlvr_adv=="Y"){	//선불 일경우..
-			$sql .= ",shipping_charge = $shipping_charge";
-		}
-		$sql .= "
-		where odr_idx = $odr_idx and ship_type = '1'
-		";
+        if($dlvr_adv=="Y"){ //선불 일경우..
+            $sql .= ",shipping_charge = $shipping_charge";
+        }
+        $sql .= "
+        where odr_idx = $odr_idx and ship_type = '1'
+        ";
         $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
     }
     // end of 3개(write/odredit/periodreq)공통 ---------------------------------------------------------------------------
@@ -398,7 +398,7 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
      $ary_package = $_POST[package];
      $ary_rosh = $_POST[rosh];
      $ary_rhtype = $_POST[rhtype];
-	 $ary_memo = $_POST[memo];
+     $ary_memo = $_POST[memo];
 
 
     //1. odr_det 정보 업데이트
@@ -426,7 +426,7 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
                 $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 
                 //발주수량과 공급수량이 다를경우 재고처리
-				/** 2016-12-06 : 재고 건들지 않고, 서류 확인 후 '확정송장' 단계에서 처리 - ccolle
+                /** 2016-12-06 : 재고 건들지 않고, 서류 확인 후 '확정송장' 단계에서 처리 - ccolle
                 $odr_qty = get_any("odr_det", "odr_quantity" ,"odr_det_idx=$ary_odr_det_idx[$j]");
                 $stock_qty = get_any("part", "quantity" ,"part_idx=$part_idx");
                 if($odr_qty != $ary_supply_quantity[$j]){
@@ -437,16 +437,16 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
                     }
                 }else{  //발주수량 보다 공급수량이 작은경우가 있다면 아래에 처리하자.
                 }
-				**/
+                **/
 
      }
 
      //2016-04-18 송장번호 생성하자
     $inv_no = get_auto_no("EI", "odr", "invoice_no");
     update_val("odr","invoice_no",$inv_no , "odr_idx", $odr_idx);
-	 //2016-11-11 : 아래.. 왜 하는지 모르겠으나, tax Update 제거
+     //2016-11-11 : 아래.. 왜 하는지 모르겠으나, tax Update 제거
      //$sql = "update ship set appoint_yn = '$appoint_yn' , tax = '$tax' where odr_idx = $odr_idx";
-	 $sql = "update ship set appoint_yn = '$appoint_yn',tax = '$tax' where odr_idx = $odr_idx";
+     $sql = "update ship set appoint_yn = '$appoint_yn',tax = '$tax' where odr_idx = $odr_idx";
      $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 
 
@@ -492,21 +492,28 @@ if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : �
     update_val("odr","odr_status","18", "odr_idx", $odr_idx);
     update_val("odr","status_edit_mem_idx",$session_mem_idx, "odr_idx", $odr_idx);
     update_val("odr","invoice_no",$inv_no, "odr_idx", $odr_idx);    //invoice sheet(30_09)에서 가져온 $inv_no
-	//2016-12-06 : 재고 Update (기존 'invreg' 에서 처리 하던 것을 여기서 처리) - ccolle
-	$result =QRY_ODR_DET_LIST(0," and odr_idx=$odr_idx ",0,"","asc");
-	while($row = mysql_fetch_array($result)){
-		$part_idx = replace_out($row["part_idx"]);
-		$stock_qty = replace_out($row["quantity"]);
-		$odr_qty = replace_out($row["odr_quantity"]);
-		$supp_qty = replace_out($row["supply_quantity"]);
-		if($odr_qty < $supp_qty){	//공급 수량이 발주 수량보다 클 경우
-			$up_qty = $stock_qty - ($supp_qty - $odr_qty);
-			update_val("part","quantity", $up_qty, "part_idx", $part_idx);
-		}else if($odr_qty > $supp_qty){	//공급 수량이 발주 수량보다 작을 경우
-			$up_qty = $stock_qty + ($odr_qty - $supp_qty);
-			update_val("part","quantity", $up_qty, "part_idx", $part_idx);
-		}
-	}
+    //2016-12-06 : 재고 Update (기존 'invreg' 에서 처리 하던 것을 여기서 처리) - ccolle
+    $result =QRY_ODR_DET_LIST(0," and odr_idx=$odr_idx ",0,"","asc");
+    while($row = mysql_fetch_array($result)){
+        $part_idx = replace_out($row["part_idx"]);
+        $stock_qty = replace_out($row["quantity"]);
+        $odr_qty = replace_out($row["odr_quantity"]);
+        $supp_qty = replace_out($row["supply_quantity"]);
+        $real_stock = $stock_qty + $odr_qty;    //공급 가능수량(실재고+발주수량)
+        //2016-12-11 : 재고수량보다 공급수량이 클 경우 BACK!!
+        if($real_stock < $supp_qty){
+            echo "ERR";
+            exit;
+        }else{
+            if($odr_qty < $supp_qty){   //공급 수량이 발주 수량보다 클 경우
+                $up_qty = $stock_qty - ($supp_qty - $odr_qty);
+                update_val("part","quantity", $up_qty, "part_idx", $part_idx);
+            }else if($odr_qty > $supp_qty){ //공급 수량이 발주 수량보다 작을 경우
+                $up_qty = $stock_qty + ($odr_qty - $supp_qty);
+                update_val("part","quantity", $up_qty, "part_idx", $part_idx);
+            }
+        }
+    }
     //2. 송장 번호 등록
     /** 2016-04-18 송장번호는 'invreg' 에서 처리
     $inv_no = get_auto_no("EI", "odr", "invoice_no");
@@ -531,11 +538,11 @@ if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : �
             ,reg_date = now()";
     $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 
-	$sql = "update part set 
-			invreg_chk = '1'
-			where part_idx in (".$part_no_val.")";
-	
-	$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+    $sql = "update part set 
+            invreg_chk = '1'
+            where part_idx in (".$part_no_val.")";
+    
+    $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 
     //사본 생성 2016-04-15
     $result = CP_To_Log($odr_idx, $inv_no);
@@ -644,25 +651,25 @@ if ($typ =="odrconfirm2"){  //------------ 확정 발주서 (from:30_05) 2016-04
         update_val("odr","status_edit_mem_idx",$session_mem_idx, "odr_idx", $odr_idx);
 
         $odr_no = get_any("odr", "odr_no", "odr_idx = $odr_idx");
-		//2016-11-29 : 중복저장 방지 - KSR
-		$his_cnt = QRY_CNT("odr_history"," and odr_idx=$odr_idx and status=2 ");
-		//if($his_cnt<1){  //증상 만들기 위해 잠시 주석처리...
-			//2. history 등록
-			$session_mem_idx = $_SESSION["MEM_IDX"];
-			$sell_mem_idx = get_any("odr", "sell_mem_idx" , "odr_idx = $odr_idx");
-			$buy_mem_idx = get_any("odr", "mem_idx" , "odr_idx = $odr_idx");
-			$sql = "insert into odr_history set
-					odr_idx = '$odr_idx'
-					,status = 2
-					,status_name = '발주서'
-					,etc1 = '$odr_no'
-					,sell_mem_idx = '$sell_mem_idx'
-					,buy_mem_idx = '$buy_mem_idx'
-					,reg_mem_idx = '$session_mem_idx'
-					,reg_date = now()";
-			//echo $sql;
-			$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
-		//}
+        //2016-11-29 : 중복저장 방지 - KSR
+        $his_cnt = QRY_CNT("odr_history"," and odr_idx=$odr_idx and status=2 ");
+        //if($his_cnt<1){  //증상 만들기 위해 잠시 주석처리...
+            //2. history 등록
+            $session_mem_idx = $_SESSION["MEM_IDX"];
+            $sell_mem_idx = get_any("odr", "sell_mem_idx" , "odr_idx = $odr_idx");
+            $buy_mem_idx = get_any("odr", "mem_idx" , "odr_idx = $odr_idx");
+            $sql = "insert into odr_history set
+                    odr_idx = '$odr_idx'
+                    ,status = 2
+                    ,status_name = '발주서'
+                    ,etc1 = '$odr_no'
+                    ,sell_mem_idx = '$sell_mem_idx'
+                    ,buy_mem_idx = '$buy_mem_idx'
+                    ,reg_mem_idx = '$session_mem_idx'
+                    ,reg_date = now()";
+            //echo $sql;
+            $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+        //}
         update_val("odr","save_yn","N", "odr_idx", $odr_idx);
         //MyBox에 해당 품목 있을 시 삭제 2016-04-04
         $sql = "DELETE FROM mybox WHERE mem_idx = '$buy_mem_idx' AND part_idx IN(SELECT part_idx FROM odr_det WHERE odr_idx = $odr_idx) ";
@@ -709,18 +716,25 @@ if ($typ =="odramendconfirm"){ // 확정 발주서(P.O Amendment)12_07 처리 --
 }
 
 if ($typ =="odramendconfirm2"){ //구매자: 수정발주서(P.O Amendment)12_07 처리 / 2016-04-15 : Log 기록 -------------------------------------------------------------
-		//2016-12-06 : 재고 UPDATE('UQ'에서 Upate 것을 여기서 Update) - ccolle
-		$result =QRY_ODR_DET_LIST(0," and odr_idx=$odr_idx ",0,"","asc");
-		while($row = mysql_fetch_array($result)){
-			$part_idx = replace_out($row["part_idx"]);
-			$stock_qty = replace_out($row["quantity"]);
-			$odr_qty = replace_out($row["odr_quantity"]);
-			$supp_qty = replace_out($row["supply_quantity"]);
-			if($odr_qty > $supp_qty){	//공급 수량보다 발주 수량이 큰 경우만 존재
-				$up_qty = $stock_qty - ($odr_qty - $supp_qty);
-				update_val("part","quantity", $up_qty, "part_idx", $part_idx);
-			}
-		}
+        //2016-12-06 : 재고 UPDATE('UQ'에서 Upate 것을 여기서 Update) - ccolle
+        $result =QRY_ODR_DET_LIST(0," and odr_idx=$odr_idx ",0,"","asc");
+        while($row = mysql_fetch_array($result)){
+            $part_idx = replace_out($row["part_idx"]);
+            $stock_qty = replace_out($row["quantity"]);
+            $odr_qty = replace_out($row["odr_quantity"]);
+            $supp_qty = replace_out($row["supply_quantity"]);
+            $real_stock = $stock_qty + $supp_qty;
+            //2016-12-11 : 재고 변동여부 체크하여 BACK~
+            if($real_stock < $odr_qty){
+                echo "ERR";
+                exit;
+            }else{
+                if($odr_qty >= $supp_qty){  //공급 수량보다 발주 수량이 크거나 같은 경우만 존재
+                    $up_qty = $stock_qty - ($odr_qty - $supp_qty);
+                    update_val("part","quantity", $up_qty, "part_idx", $part_idx);
+                }
+            }
+        }
         //0. 만약에 odr_status가  송장 또는 도착한 데이터가 있다면 그 테이터를 확인 한것으로 표시 (confirm_yn = Y')  왜냐면, 수정 발주서를 발행하는 시점은 처음 송장 받았거나, 물건이 도착 한 후에 할수 있으므로. JSJ
         $odr_history_idx = get_any("odr_history" , "odr_history_idx", "odr_idx= $odr_idx and (status = 18 or status = 19) and confirm_yn='N'");
         if ($odr_history_idx){update_val("odr_history","confirm_yn","Y", "odr_history_idx", $odr_history_idx);}
@@ -2307,6 +2321,8 @@ if($typ=="delivery_save"){
                     where delivery_addr_idx = $delivery_addr_idx
             ";
         $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
+     
+        echo $delivery_addr_idx;
     }else{  //추가
             $sql = "insert into delivery_addr set
                     mem_idx = '$session_mem_idx'
