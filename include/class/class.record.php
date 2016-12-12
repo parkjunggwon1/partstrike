@@ -179,6 +179,17 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				} 
 			}
 
+			if(strpos($price, ".") == false)  
+			{
+				$price_val= number_format($price,2);
+				$total_price_value = round_down($odr_quantity*$price,4);
+			}				
+			else
+			{
+				$price_val= $price;
+				$total_price_value = round_down($odr_quantity*$price,4);
+			}
+
 		?>
 		<tr class="criteria" criteria_idx="<?=$criteria_now_idx?>">
 			<td ><?$j = ($criteria_now_idx != $criteria_idx)? 1:$j;
@@ -190,16 +201,24 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			<td <?=$goJump?> ><?=$dc;?></td>
 			<td <?=$goJump?> ><?=$rhtype?></td>
 			<!--odr_stock으로 바꿈 2016-11-8-->
-			<?if ($odr_status==0 || $odr_status==1 || $odr_status==2 || $odr_status==18 || $odr_status==31){?>
+			
+			<?if ($odr_status==0 || $odr_status==1 || $odr_status==2  || $odr_status==16 || $odr_status==18 || $odr_status==19 || $odr_status==20 || $odr_status==31){?>
 				<td  <?=$goJump?>  class="t-rt"><?=$odr_stock<=0?"":number_format($odr_stock)?></td>
+			<?}elseif($odr_status==8){?>
+				<td  <?=$goJump?>  class="t-rt"><?=$odr_quantity<=0?"":number_format($odr_quantity)?></td>
 			<?}else{?>
 				<td  <?=$goJump?>  class="t-rt"><?=$supply_quantity<=0?"":number_format($supply_quantity)?></td>
 			<?}?>
 			<!--바꿈 2016-11-8-->
-			<td  <?=$goJump?>  class="t-rt">$<?=number_format($price,2)?></td>
-			<?if ($fr == "S"){?>			
-			<td  <?=$goJump?> class="t-rt" ><?=$odr_quantity<=0?"":$odr_quantity?></td>			
-			<td  <?=$goJump?> class="t-rt" ><?=$supply_quantity<=0?"":$supply_quantity?></td>
+			<td  <?=$goJump?>  class="t-rt">$<?=$price_val?></td>
+			<?if ($fr == "S"){?>	
+				<?if ($odr_status==0 || $odr_status==1 || $odr_status==2 || $odr_status==16 || $odr_status==18 || $odr_status==19 || $odr_status==20 || $odr_status==31){?>
+					<td  <?=$goJump?> class="t-rt" ><?=$odr_quantity<=0?"":$odr_quantity?></td>			
+					<td  <?=$goJump?> class="t-rt" ><?=$supply_quantity<=0?"":$supply_quantity?></td>
+				<?}else{?>
+					<td  <?=$goJump?> class="t-rt" >$<?=number_format($total_price_value,4)?></td>
+				<?}?>		
+			
 			<?}?>
 			<td class="delivery" <?=$goJump?>><?=($period)?"<span class='c-red'>".$period."</span>":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>
 			<?if ($odr_type == "B") {  //--구매자 화면일경우?>

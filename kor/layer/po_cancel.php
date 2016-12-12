@@ -88,6 +88,7 @@ $(document).ready(function(){
 				<thead>
 					<tr>
 						<th scope="col" class="t-no">No. </th>
+						<th scope="col" class="t-nation">Nation</th>
 						<th scope="col" class="t-lt" Style="width:280px;">Part No.</th>
 						<th scope="col" class="t-Manufacturer">Manufacturer</th>
 						<th scope="col" class="t-Package">Package</th>
@@ -96,8 +97,11 @@ $(document).ready(function(){
 						<th scope="col" class="t-oty">O'ty</th>
 						<th scope="col" class="t-unitprice">Unit Price</th>
 						<th scope="col" class="t-orderoty t-rt" lang="ko">발주수량</th>
+						<?if($load_page == "30_08" || $load_page == "30_16"){?>
 						<th scope="col" class="t-supplyoty t-rt" style="width:66px;" lang="ko">공급수량</th>
+						<?}?>
 						<th scope="col" lang="ko" class="t-period">납기</th>
+						<th scope="col" class="t-company">Company</th>
 					</tr>
 				</thead>
 				<?	for ($i = 1; $i<=7; $i++){
