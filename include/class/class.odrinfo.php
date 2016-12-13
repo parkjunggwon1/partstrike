@@ -120,7 +120,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 		   $colspan="13";
 	   break;	 
 		case "po_cancel":
-		   $colspan="11";
+		   $colspan="15";
 	   break;	 
 	 }
 	
@@ -656,7 +656,9 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<?}?>
 					<td class="t-rt">$<?=$price_val?></td>
 					<td class="t-rt"><span class="c-blue"><?=$odr_quantity==0?"":number_format($odr_quantity)?></span></td>
-					
+					<?if($load_page == "30_08" || $load_page == "30_16"){?>
+					<td class="t-rt"><span class="c-blue"><?=$supply_quantity==""?"0":number_format($supply_quantity)?></span></td>		
+					<?}?>			
 					<?=($period)?"<td class='c-red'>".$period:(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
 					<td >
 					<?
@@ -666,6 +668,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<a href="javascript:layer_company_det('<?=$com_idx?>');"><?=cut_len($company_nm,8,".")?></a>
 					</td>
 					</tr>
+					<?if ($part_condition){?>
 					<tr class="bg-none">	
 						<td></td>
 						<td class="c-red" colspan="12" style="text-align:left;">	
@@ -675,6 +678,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span>
 						</td>
 					</tr>
+					<?}?>
 					<?if (strlen($memo)>0){?>
 					<tr class="t-lt">
 						<td></td>
@@ -683,7 +687,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<?}?>
 					<tr>
 						<td></td>
-						<td colspan="11" style="padding:0">
+						<td colspan="15" style="padding:0">
 							<table class="detail-table w100" style="margin:0;">
 								<tbody>
 									<tr>
