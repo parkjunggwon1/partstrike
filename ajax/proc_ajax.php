@@ -1245,7 +1245,7 @@ switch($actty) {
 						,odr_det_idx = '$mybank[odr_det_idx]'
 						,status = 5
 						,status_name = '결제완료'
-						,etc1 = '$".number_format($mybank[charge_amt],2)."-은행 송금'
+						,etc1 = '은행 송금'
 						,etc2 = 'Mybank 충전'
 						,with_deposit = '$mybank[deposit_yn]'
 						,charge_ty = '$charge_ty'
@@ -1283,7 +1283,8 @@ switch($actty) {
 						,odr_det_idx = '$mybank[odr_det_idx]'
 						,status = 5
 						,status_name = '결제완료'
-						,etc1 = '$".number_format(-$mybank[charge_amt],2)."-은행 송금'
+						,etc1 = '은행 송금'
+						,etc2 = '$".number_format(($mybank[charge_amt]*-1),2)."'
 						,with_deposit = '$mybank[deposit_yn]'
 						,charge_ty = '$charge_ty'
 						,confirm_yn = '$confirm_yn'
@@ -1370,7 +1371,7 @@ switch($actty) {
 						,odr_det_idx = '$mybank[odr_det_idx]'
 						,status = 5
 						,status_name = '결제완료'
-						,etc1 = '$".number_format(($mybank[charge_amt]*-1),2)."-은행 송금'
+						,etc1 = '은행 송금'
 						,etc2 = '인출'
 						,with_deposit = '$mybank[deposit_yn]'
 						,charge_ty = '$charge_ty'

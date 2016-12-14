@@ -445,7 +445,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 					<?					
 						if ($row_odr["sell_mem_idx"]!=$session_mem_idx && $for_readonly =="")
 						{
-							if ($row_seller["nation"]==$row_seller["nation"] && $row_seller["nation"]==1)
+							if ($row_seller["nation"]==$row_buyer["nation"] && $row_seller["nation"]==1)
 							{ 
 								echo get_bank_info($row_parts,"1");			
 							}

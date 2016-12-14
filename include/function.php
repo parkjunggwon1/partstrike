@@ -1384,6 +1384,10 @@ function get_odr_history($odr_history_idx, $fields='*'){
 		return sql_fetch("select $fields from odr_history where odr_history_idx = trim('$odr_history_idx')");
 }
 
+function get_odr_history2($odr_idx, $fields='*'){
+		return sql_fetch("select $fields from odr_history where odr_idx = trim('$odr_idx') and status=5");
+}
+
 function get_ship($ship_idx, $fields='*'){
 		return sql_fetch("select $fields from ship where ship_idx = trim('$ship_idx')");
 }
@@ -1556,6 +1560,10 @@ function openSheet($status, $etc1, $odr_idx,$etc_change){
 		   case "3":  //수정발주서
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"12_07\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>"; //JSJ
 			 $return_val = "<a style='color:#00759e;text-decoration:underline;' href='javascript:openCommLayer(\"layer5\",\"12_07\",\"?sheets_no=".$etc1."&odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>"; //2016-04-18
+			 break;
+			case "5":  //결제완료
+			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"12_07\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>"; //JSJ
+			 $return_val = "<a style='color:#00759e;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"payment_ok\",\"?odr_idx=".$odr_idx."\")'>".$etc1."</a>"; //2016-04-18
 			 break;
 		   case "18": //송장
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>";  //JSJ
