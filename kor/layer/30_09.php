@@ -55,7 +55,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 			</li>
 		</ul>
 	<?}else{?>
-		<ul class="company-info pd-l20">			
+		<ul class="company-info pd-l30">			
 				<?
 				if ($row_seller["nation"]==$row_buyer["nation"])
 				{
@@ -454,6 +454,10 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 								echo get_bank_info($row_parts,"-1");
 							}			
 						}			
+						else
+						{
+							echo get_bank_info($row_parts,"-1");
+						}
 					?>
 				<?}?>
 			<?}?>

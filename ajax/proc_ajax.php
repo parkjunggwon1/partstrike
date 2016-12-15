@@ -1087,6 +1087,7 @@ switch($actty) {
 				$odr_det = get_odr_det_each($det_idx);
 				$part_idx = $odr_det[part_idx];
 				update_val("part","quantity", 0, "part_idx", $part_idx);	//재고수량 Update
+				update_val("part","del_chk", 0, "part_idx", $part_idx);	//재고수량 Update
 			}
 		}else{	//그 외 : 구매자 '송장' -> '수정 발주서(09_01)'->'취소'
 			for($i=0; $i<count($odr_det_idx); $i++){

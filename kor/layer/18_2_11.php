@@ -128,8 +128,8 @@ function pay2(){
 				<td><span class="c-blue">$ <?=number_format($summybank,4)?></span></td>
 			</tr>
 			<tr>
-				<th scope="row"><span class="c-red">(-)</span> Total Amount : </th>
-				<td><span class="c-red">$ <?=number_format($tot_amt,4)?></span></td>
+				<th scope="row"><span class="c-red">(-)</span> Total : </th>
+				<td><span class="c-red">-$ <?=number_format($tot_amt,4)?></span></td>
 			</tr>
 			<tr class="lst">
 				<td colspan="2"></td>

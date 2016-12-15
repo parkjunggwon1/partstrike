@@ -167,8 +167,8 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 				$price_val = number_format($price,2);
 			}
 			else {			
-				$price_val = round_down($price,4);
-				$price_val = round_down($price,4);
+				$price_val = $price;
+				$price_val = $price;
 			}
 
 			if ($part_type =="2"){
@@ -657,7 +657,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td class="t-rt"><?=$odr_stock==0?"":number_format($odr_stock)?></td>
 					<?}?>
 					<td class="t-rt">$<?=$price_val?></td>
-					<td class="t-rt"><span class="c-blue"><?=$odr_quantity==0?"":number_format($odr_quantity)?></span></td>
+					<td class="t-rt"><span class="c-blue"><?=$odr_quantity==0?"":number_format($odr_quantity)?>adsfasdf</span></td>
 					<?if($sell_mem_idx != $_SESSION['MEM_IDX']){?>
 					<td class="t-rt"><span class="c-blue"><?=$supply_quantity==""?"0":number_format($supply_quantity)?></span></td>		
 					<?}?>			
@@ -1018,7 +1018,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<td><?=$package?></td>
 							<td><?=$dc?></td>
 							<td><?=$rhtype?></td>
-							<?if($loadPage != "18R_19" && $loadPage!="19_1_05" && $loadPage!="19_1_06" && $loadPage!="30_14"){?>
+							<?if($loadPage != "18R_19" && $loadPage!="19_1_05" && $loadPage!="19_1_06" && $loadPage!="30_14" && $loadPage!="30_14"){?>
 								<?if($loadPage == "30_10"){?>
 									<td class="t-rt"><?=$odr_stock==0?"-":number_format($odr_stock)?></td>		
 								<?}else{?>
@@ -1046,7 +1046,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<!--//발주수량-->
 						</td>
 						<?if ($loadPage !="21_04" || $loadPage !="30_20" || $loadPage =="30_14" ){?>
-								<?if($loadPage!="02_02"&& $loadPage !="05_04_1" && $loadPage !="30_20" && $loadPage !="30_14"){?><td class="t-rt c-red"><?=$supply_quantity==0?"":number_format($supply_quantity)?></td><?}?>
+								<?if($loadPage!="02_02"&& $loadPage !="05_04_1" && $loadPage !="30_20" && $loadPage !="30_14"  && $loadPage!="13_04s"){?><td class="t-rt c-red"><?=$supply_quantity==0?"":number_format($supply_quantity)?></td><?}?>
 								<?if($loadPage!="19_1_05" && $loadPage!="19_1_06"){  //납기표기?>
 								<?=($period)?(QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"<td>Stock":"<td class='c-red'>".$period):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
 								<?}?>
@@ -1070,7 +1070,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td colspan="12" style="padding:0;">
 						<table class="detail-table" style="margin:0;">
 							<tbody>
-								<?if ($loadPage != "05_04_1" && $loadPage != "08_02" && $loadPage !="10_02" && $loadPage!="10_04" && $loadPage != "13_04" && $loadPage != "13_04s" && $loadPage != "13_02s" && $loadPage != "03_02" && $loadPage != "19_1_06"){?>
+								<?if ($loadPage != "05_04_1" && $loadPage != "08_02" && $loadPage !="10_02" && $loadPage!="10_04" && $loadPage != "13_04" && $loadPage != "13_04s" && $loadPage != "13_02s" && $loadPage != "03_02" && $loadPage != "19_1_06" ){?>
 									<?if(strlen($part_condition)>0 && $part_condition>0){?>
 									<tr class="noinput">
 										<th scope="row" style="width:150px">&nbsp;부품상태&nbsp;:&nbsp;&nbsp;<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span></th>
@@ -1083,22 +1083,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 									<td colspan="2" ><strong class="c-black" >Memo : </strong><?=$memo;?> </td>
 								</tr>
 								<?}?>
-								<?if ($loadPage == "13_04s" || $loadPage == "13_02s"){?>
-								<tr class="bg-none">	
-									
-									<td class="c-red" colspan="12" style="text-align:left;">	
-										부품상태 : 
-										<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span>&nbsp&nbsp
-										포장상태 : 
-										<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span>
-									</td>
-								</tr>
-								<?if (strlen($memo)>0){?>
-								<tr class="t-lt">
-									
-									<td class="t-lt" colspan="12" ><strong class="c-black" >Memo : </strong><?=$memo;?> </td>
-								</tr>
-								<?}?>
+								<?if ($loadPage == "13_04s" || $loadPage == "13_02s"){?>	
 								<tr class="noinput">
 									<td  ><strong class="c-black">사유 : </strong><?=$det_reason;?> </td>
 								</tr>
@@ -2199,7 +2184,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						    break;
 							case "13_04s": // 2016-04-13 : 판매자가 '송장' 단계에서 품목선택 취소 -----------------------------------------------------------------------------------------------------------
 					?>
-							<td class="t-ct w100 c-red">&nbsp;</td><!-- 2016-04-13 : 일단 메세지 없이 -->
+							<td class="t-ct w100 c-red" style="width:33%;text-align:center;font-size:15px;">판매자가 물품을 취소하였습니다.</td><!-- 2016-04-13 : 일단 메세지 없이 -->
 							</tr></tbody></table></div>	
 							<?echo layerInvListData($loadPage ,$odr_idx,$odr_det_idx,$odr_history_idx);
 						    break;							
@@ -2426,7 +2411,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 							?>
 							<?}else{?>발주수량<?}?>
 						</th>
-						<?if($loadPage!="30_20_F" && $loadPage!="30_22_F"){?><th scope="col" lang="ko" class="t-supplyoty">공급수량</th><?}?>
+						<?if($loadPage!="30_20_F" && $loadPage!="30_22_F" && $loadPage!="13_04s"){?><th scope="col" lang="ko" class="t-supplyoty">공급수량</th><?}?>
 						<?if($loadPage=="19_1_05" || $loadPage=="19_1_06"){?><th scope="col" lang="en" class="t-amount">Amount</th>
 						<?}else{?><th scope="col" lang="ko" class="t-period">납기</th>
 						<?}?>
