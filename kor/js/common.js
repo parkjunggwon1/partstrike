@@ -763,7 +763,7 @@ $(document).ready(function(){
 		openLayer("layer","02_02","?mn=09&status=7&page=1");
 	});
 	$("body").on("click",".buy-mn10",function(){
-		openLayer("layer","06_02","?mn=10&status=8&page=1");
+		openLayer("layer","13_04","?mn=10&status=8&page=1");
 	});
 	$("body").on("click",".buy-mn10-1304",function(){
 		openLayer("layer","13_04","?mn=10&status=8&page=1");
