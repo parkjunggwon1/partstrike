@@ -180,7 +180,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 				<tbody id="tbd_<?=$part_type?>">
 				<!------------------------------------- 아이템 종류 ------------------------------------------------------------------------>
 				<tr>
-					<td colspan="<?=$colspan;?>" class="title-box">
+					<td colspan="<?=$colspan;?>" class="title-box" style="padding-top:0px;">
 						<h3 class="title"><img src="/kor/images/stock_title0<?=$part_type?>.gif" alt="<?=GF_Common_GetSingleList("PART",$part_type)?>"></h3>
 						<?if ($loadPage=="05_04"){?>
 						<!-- 2016-06-02 주석처리
