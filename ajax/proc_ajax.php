@@ -244,9 +244,11 @@ switch($actty) {
        // 또는 삭제/ 취소후 완료 버튼을 눌렀을 때 actidx = odr_history_idx
 	   //1. odr_status 변경 : 종료로.
 	   $odr_idx = get_any("odr_history" , "odr_idx", "odr_history_idx= $actidx");
-   	   $odr_det_idx = get_any("odr_history" , "odr_det_idx", "odr_history_idx= $actidx");
+   	   $odr_det_idx = get_any("odr_history" , "odr_idx", "odr_history_idx= $actidx");
 	   $buy_mem_idx = get_any("odr", "mem_idx" , "odr_idx = $odr_idx");
 	   $sell_mem_idx = get_any("odr", "sell_mem_idx" , "odr_idx = $odr_idx");
+	   $part_idx = get_any("odr_det", "part_idx" , "odr_det_idx = $odr_det_idx");
+
 	   update_val("odr_history","confirm_yn","Y", "odr_history_idx", $actidx);
 
 	   $sql = "insert into odr_history set 
@@ -263,13 +265,26 @@ switch($actty) {
 		//echo $sql;
 		$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 
-		$det_cnt = QRY_CNT("odr_det", "odr_idx= $odr_idx");
-		$end_cnt = QRY_CNT("odr_history", "odr_idx= $odr_idx and status=15");
+		$det_cnt = QRY_CNT("odr_det", "and odr_idx= $odr_idx");
+		$end_cnt = QRY_CNT("odr_history", "and odr_idx= $odr_idx and status=15");
 		if ($det_cnt == $end_cnt ) { //전체 일경우.
 		   update_val("odr","odr_status","15", "odr_idx", $odr_idx);
 		   update_val("odr","status_edit_mem_idx",$session_mem_idx, "odr_idx", $odr_idx);	   
 		   update_val("odr","complete_yn","Y", "odr_idx", $odr_idx);	   
 		}
+
+		//판매자가 취소할때만 주문이 한 건도 없을때 파트 삭제 2016-12-12 박정권
+		if ($buy_mem_idx == $_SESSION["MEM_IDX"])
+		{			
+			$odr_cnt_check = QRY_CNT("odr_det","and part_idx ='".$part_idx."' and odr_idx <> ".$odr_idx." and (odr_status <> 0 and odr_status <> 99)") ;
+
+			if ($odr_cnt_check == "0")
+			{	
+				$sql = "delete from part where part_idx ='".$part_idx."' ";							
+				$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+			}
+		}		
+		
 		break;
 	//-- 종료 및 입금 처리 : 구매자가 수령했다는 내용을 판매자가 확인 하고, 완료 버튼을 눌렀을 때 ----------------------------------------
    case "CF2": 
@@ -1072,6 +1087,7 @@ switch($actty) {
 				$odr_det = get_odr_det_each($det_idx);
 				$part_idx = $odr_det[part_idx];
 				update_val("part","quantity", 0, "part_idx", $part_idx);	//재고수량 Update
+				update_val("part","del_chk", 0, "part_idx", $part_idx);	//재고수량 Update
 			}
 		}else{	//그 외 : 구매자 '송장' -> '수정 발주서(09_01)'->'취소'
 			for($i=0; $i<count($odr_det_idx); $i++){
@@ -1230,7 +1246,7 @@ switch($actty) {
 						,odr_det_idx = '$mybank[odr_det_idx]'
 						,status = 5
 						,status_name = '결제완료'
-						,etc1 = '$".number_format($mybank[charge_amt],2)."-은행 송금'
+						,etc1 = '은행 송금'
 						,etc2 = 'Mybank 충전'
 						,with_deposit = '$mybank[deposit_yn]'
 						,charge_ty = '$charge_ty'
@@ -1268,7 +1284,8 @@ switch($actty) {
 						,odr_det_idx = '$mybank[odr_det_idx]'
 						,status = 5
 						,status_name = '결제완료'
-						,etc1 = '$".number_format(-$mybank[charge_amt],2)."-은행 송금'
+						,etc1 = '은행 송금'
+						,etc2 = '$".number_format(($mybank[charge_amt]*-1),2)."'
 						,with_deposit = '$mybank[deposit_yn]'
 						,charge_ty = '$charge_ty'
 						,confirm_yn = '$confirm_yn'
@@ -1355,7 +1372,7 @@ switch($actty) {
 						,odr_det_idx = '$mybank[odr_det_idx]'
 						,status = 5
 						,status_name = '결제완료'
-						,etc1 = '$".number_format(($mybank[charge_amt]*-1),2)."-은행 송금'
+						,etc1 = '은행 송금'
 						,etc2 = '인출'
 						,with_deposit = '$mybank[deposit_yn]'
 						,charge_ty = '$charge_ty'

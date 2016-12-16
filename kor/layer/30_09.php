@@ -55,7 +55,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 			</li>
 		</ul>
 	<?}else{?>
-		<ul class="company-info">			
+		<ul class="company-info pd-l30">			
 				<?
 				if ($row_seller["nation"]==$row_buyer["nation"])
 				{
@@ -153,7 +153,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 	<div class="buyer-info ship-info" style="margin-top:6px">
 		<h2><img src="/kor/images/txt_shipto.gif" alt="ship to"></h2>
 		<div class="info-wrap">
-			<ul class="company-info">
+			<ul class="company-info pd-l20">
 				<?
 				if ($row_seller["nation"]==$row_buyer["nation"])
 				{
@@ -194,7 +194,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 	<div class="seller-info" style="bottom:-7px">
 		<h2><img src="/kor/images/txt_billto.gif" alt="bill to"></h2>
 		<div class="info-wrap">
-			<ul class="company-info">
+			<ul class="company-info pd-l20">
 				<?
 				if ($row_seller["nation"]==$row_buyer["nation"])
 				{
@@ -227,7 +227,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 	<div class="buyer-info">
 		<h2><img src="/kor/images/txt_buyer.gif" alt="buyer"></h2>
 		<div class="info-wrap">
-			<ul class="company-info">
+			<ul class="company-info pd-l20">
 				<?
 				if ($row_seller["nation"]==$row_buyer["nation"])
 				{
@@ -443,8 +443,21 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 			<div class="txt-area">
 				<?if ($for_readonly!="Y"){?>
 					<?					
-						//송장은 무조건 외화계좌만 나옴 20161202 박정권
-						echo get_bank_info($row_parts,"-1");									
+						if ($row_odr["sell_mem_idx"]!=$session_mem_idx && $for_readonly =="")
+						{
+							if ($row_seller["nation"]==$row_buyer["nation"] && $row_seller["nation"]==1)
+							{ 
+								echo get_bank_info($row_parts,"1");			
+							}
+							else
+							{
+								echo get_bank_info($row_parts,"-1");
+							}			
+						}			
+						else
+						{
+							echo get_bank_info($row_parts,"-1");
+						}
 					?>
 				<?}?>
 			<?}?>

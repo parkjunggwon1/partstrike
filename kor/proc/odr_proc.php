@@ -894,16 +894,17 @@ if ($typ == "pay"){
         //3. histoy update(송장을 확인 한 상태로 update)
         $sql = "update odr_history set confirm_yn  = 'Y' where odr_idx = $odr_idx and status= 18 and confirm_yn = 'N'";
         $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
-        $prt_method = $charge_method=="1" ? "[C/C]" : ($charge_method=="2"?"[W/T]":"[M/B]");
+        $prt_method = $charge_method=="1" ? "신용카드" : ($charge_method=="2"?"은행송금":"My Bank");
         //4. history 등록
             $session_mem_idx = $_SESSION["MEM_IDX"];
             $buy_mem_idx = get_any("odr", "mem_idx" , "odr_idx = $odr_idx");
-            $tot_amt = "$".number_format($tot_amt,2);
+            $tot_amt = "$".$tot_amt;
             $sql = "insert into odr_history set
                     odr_idx = '$odr_idx'
                     ,status = 5
                     ,status_name = '결제완료'
-                    ,etc1 = '$prt_method $tot_amt'
+                    ,etc1 = '$prt_method'
+                    ,etc2 = '$tot_amt'
                     ,with_deposit = '$with_deposit'
                     ,sell_mem_idx = '$sell_mem_idx'
                     ,buy_mem_idx = '$mem_idx'
@@ -935,7 +936,7 @@ if ($typ == "pay_jisok2"){
     $sell_rel_idx = $odr[sell_rel_idx];
     $inv_no = $odr[invoice_no];
 
-    $prt_method = $charge_method=="1" ? "[C/C]" : ($charge_method=="2"?"[W/T]":"[M/B]");
+    $prt_method = $charge_method=="1" ? "신용카드" : ($charge_method=="2"?"은행송금":"My Bank");
 
     //1. 결재를 누가 하는가? (구매자 or 판매자)
     if ($_SESSION["MEM_IDX"] == $mem_idx){
@@ -1011,7 +1012,7 @@ if ($typ == "pay_jisok2"){
     $sql = "update odr_history set confirm_yn  = 'Y' where odr_idx = $odr_idx and status= 18 and confirm_yn = 'N'";
     $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
     //6. history 등록 --------------------------------------------
-    $tot_amt = "$".number_format($tot_amt,2);
+    $tot_amt = "$".$tot_amt;
     //6-1. 송장(판매자)
     if($pay_mem_idx == $sell_mem_idx){
         //송장번호 가져오자
@@ -1033,7 +1034,8 @@ if ($typ == "pay_jisok2"){
             odr_idx = '$odr_idx'
             ,status = 5
             ,status_name = '결제완료'
-            ,etc1 = '$prt_method $tot_amt'
+            ,etc1 = '$prt_method'
+            ,etc2 = '$tot_amt'
             ,charge_ty = '$charge_ty'
             ,sell_mem_idx = '$sell_mem_idx'
             ,buy_mem_idx = '$buy_mem_idx'
@@ -1117,14 +1119,15 @@ if ($typ == "pay_jisok"){
     //2. odr_status 변경
     update_val("odr","odr_status","5", "odr_idx", $odr_idx);
     update_val("odr","status_edit_mem_idx",$session_mem_idx, "odr_idx", $odr_idx);
-    $prt_method = $charge_method=="1" ? "[C/C]" : ($charge_method=="2"?"[W/T]":"[M/B]");
+    $prt_method = $charge_method=="1" ? "신용카드" : ($charge_method=="2"?"은행송금":"My Bank");
     //4. history 등록
-        $tot_amt = "$".number_format($tot_amt,2);
+        $tot_amt = "$".$tot_amt;
         $sql = "insert into odr_history set
                 odr_idx = '$odr_idx'
                 ,status = 5
                 ,status_name = '결제완료'
-                ,etc1 = '$prt_method $tot_amt'
+                ,etc1 = '$prt_method'
+                ,etc2 = '$tot_amt'
                 ,charge_ty = '$charge_ty'
                 ,sell_mem_idx = '$sell_mem_idx'
                 ,buy_mem_idx = '$buy_mem_idx'
@@ -1258,17 +1261,18 @@ if ($typ == "pay_access"){ //부대비용 지불--------------------------------
     $sql = "update odr_history set confirm_yn  = 'Y' where odr_idx = $odr_idx and  (status = 11 or status=18)  and confirm_yn = 'N'";
     $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
 
-    $prt_method = $charge_method=="1" ? "[C/C]" : ($charge_method=="2"?"[W/T]":"[M/B]");
+    $prt_method = $charge_method=="1" ? "신용카드" : ($charge_method=="2"?"은행송금":"My Bank");
     //4. history 등록
         $session_mem_idx = $_SESSION["MEM_IDX"];
         $buy_mem_idx = get_any("odr", "mem_idx" , "odr_idx = $odr_idx");
-        $tot_amt = "$".number_format($tot_amt,2);
+        $tot_amt = "$".$tot_amt;
         $sql = "insert into odr_history set
                 odr_idx = '$odr_idx'
                 ,odr_det_idx = '$odr_det_idx'
                 ,status = 5
                 ,status_name = '결제완료'
-                ,etc1 = '$prt_method $tot_amt'
+                ,etc1 = '$prt_method'
+                ,etc2 = '$tot_amt'
                 ,sell_mem_idx = '$sell_mem_idx'
                 ,buy_mem_idx = '$mem_idx'
                 ,reg_mem_idx = '$session_mem_idx'
@@ -1319,17 +1323,18 @@ if ($typ == "refund"){  //환불 처리 JSJ
     //3. histoy update(환불 해달라는 history요청을 확인 한 상태로 update)    status = 10 인 경우도 환불 하지만, 5(결제완료)인 경우도 환불 하는경우가 있다. (18-2-15 상황)
     $odr_history_idx = get_any("odr_history" , "odr_history_idx", "odr_idx= $odr_idx and odr_det_idx = $odr_det_idx and (status = 10 or status= 5) and confirm_yn='N'");
     update_val("odr_history","confirm_yn","Y", "odr_history_idx", $odr_history_idx);
-    $prt_method = $charge_method=="1" ? "[C/C]" : ($charge_method=="2"?"[W/T]":"[M/B]");
+    $prt_method = $charge_method=="1" ? "신용카드" : ($charge_method=="2"?"은행송금":"My Bank");
     //4. history 등록
         $session_mem_idx = $_SESSION["MEM_IDX"];
         $buy_mem_idx = get_any("odr", "mem_idx" , "odr_idx = $odr_idx");
-        $tot_amt = "$".number_format($tot_amt,2);
+        $tot_amt = "$".$tot_amt;
         $sql = "insert into odr_history set
                 odr_idx = '$odr_idx'
                 ,odr_det_idx = '$odr_det_idx'
                 ,status = 24
                 ,status_name = '환불'
-                ,etc1 = '$prt_method $tot_amt'
+                ,etc1 = '$prt_method'
+                ,etc2 = '$tot_amt'
                 ,fault_select = '4'
                 ,sell_mem_idx = '$sell_mem_idx'
                 ,buy_mem_idx = '$mem_idx'
@@ -1401,17 +1406,18 @@ if ($typ == "refund2"){  //환불 처리2 2016-05-11
     //3. histoy update
     update_val("odr_history","confirm_yn","Y", "odr_history_idx", $odr_history_idx);  //odr_history_idx => form으로 받았음
     //$prt_method = $charge_method=="1" ? "신용카드" : ($charge_method=="2"?"입금":"My Bank"); //JSJ
-    $prt_method = "[M/B]"; //무조건 마이뱅크
+    $prt_method = "My Bank"; //무조건 마이뱅크
     //4. history 등록
         $session_mem_idx = $_SESSION["MEM_IDX"];
         $buy_mem_idx = get_any("odr", "mem_idx" , "odr_idx = $odr_idx");
-        $tot_amt = "$".number_format($tot_amt,2);
+        $tot_amt = "$".$tot_amt;
         $sql = "insert into odr_history set
                 odr_idx = '$odr_idx'
                 ,odr_det_idx = '$odr_det_idx'
                 ,status = 24
                 ,status_name = '환불'
-                ,etc1 = '$prt_method $tot_amt'
+                ,etc1 = '$prt_method'
+                ,etc2 = '$tot_amt'
                 ,fault_select = '4'
                 ,sell_mem_idx = '$sell_mem_idx'
                 ,buy_mem_idx = '$mem_idx'
@@ -1489,7 +1495,7 @@ if($typ == "shipping"){  //------------------------------------------- 선적(�
         $sell_mem_idx = get_any("odr", "sell_mem_idx" , "odr_idx = $odr_idx");
         if ($session_mem_idx == $buy_mem_idx) {
         }
-        $tot_amt = number_format($tot_amt,2);
+        $tot_amt = $tot_amt;
         $sql = "insert into odr_history set
                 odr_idx = '$odr_idx'
                 ,odr_det_idx = '$odr_det_idx'

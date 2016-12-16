@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<?include $_SERVER["DOCUMENT_ROOT"]."/include/header.php";?>
+<?
+$today = date("Y");
+// 모바일 목록
+ $mobilechk = '/(iPod|iPhone|Android|BlackBerry|SymbianOS|SCH-M\d+|Opera Mini|Windows CE|Nokia|SonyEricsson|webOS|PalmOS)/i'; 
+ 
+?>
+<?
+ // 모바일 접속인지 PC로 접속했는지 체크합니다.
+ if(preg_match($mobilechk, $_SERVER['HTTP_USER_AGENT'])) 
+ {
+	$width = "100%";
+	$layer_width = "100%";
+	$col_work = "24";
+
+ }
+ else
+ {
+	$width = "300px";
+	$layer_width = "700px";
+	$col_work = "70";
+
+ }
+ ?>
+<link rel="stylesheet" href="/css/mypage.css">
+<body class="header-fixed header-fixed-space-v2">
+  <div class="wrapper">    
+    <?include $_SERVER["DOCUMENT_ROOT"]."/include/navbar.php";?>
+
+	<div class="sub_top">
+		<h2>마이페이지</h2>
+		<hr class="tit_udline">
+		<span>정보수정 하는 페이지 입니다.</span>
+	</div>
+     <!-- Call to Action -->
+    <div class="call-action-v1 margin-top-40">
+      <div class="container">
+        <div class="form-block equal-height-column">         
+          
+        <div id="contents">
+			<table width="100%" align="center" cellpadding="0" cellspacing="0"><tr><td>		
+		  <!-- 본문 -->
+			 <div class="com_tap" >
+				<div>
+					<ul id="com_tap_1">
+						<li id="total_menu_btn" >
+							<a href="/member/member_info.php">
+								<span class="underline">회원정보</span>
+							</a>
+						</li>
+						<li id="date_menu_btn" >
+							<a href="/member/member_team.php?type=info">
+								<span class="underline">팀정보</span>
+							</a>
+						</li>	
+						<li id="date_menu_btn" class="selected">
+							<a href="/member/mywork.php">
+								<span class="underline">작업내역</span>
+							</a>
+						</li>	
+						<li id="date_menu_btn" >
+							<a href="free_list.php">
+								<span class="underline">정회원신청</span>
+							</a>
+						</li>	
+										
+					</ul>
+				</div>
+			</div>					
+				  
+					
+			<div class="sub_center_body" style="margin-top:20px;" >	
+				<span class="title">스카웃내역</span>	
+						
+				<div id="sub_layer" class="license_tap">	
+				
+					<div class="sub_board_td" style="background-color: #ebebeb;">						
+						<div class="sub_td_value" style="width:16%;text-align:center;padding-left:10px;" >이름</div>					 
+						<div class="sub_td_value" style="width:16%">나이</div>
+						<div class="sub_td_value" style="width:16%">직업</div>
+						<div class="sub_td_value" style="width:20%">주 업무</div>
+						<div class="sub_td_value" style="width:16%">지역</div>
+						<div class="sub_td_value" style="width:16%">상태</div>
+					</div>
+				  <?								
+					$team_support_sql = " SELECT  ";
+					$team_support_sql .= "  member.idx as member_idx, ";
+					$team_support_sql .= "  member.name as member_name, ";
+					$team_support_sql .= "  member.year as member_year, ";
+					$team_support_sql .= "  member.type as member_type, ";
+					$team_support_sql .= "  member.job as member_job, ";
+					$team_support_sql .= "  member.address_si as member_si, ";
+					$team_support_sql .= "  member.address_gu as member_gu, ";
+					$team_support_sql .= "  team_support.pass as pass ";
+					$team_support_sql .= " FROM team_support ";
+					$team_support_sql .= " left join team on team.idx = team_support.team_idx ";
+					$team_support_sql .= " left join member on member.idx = team_support.member_idx ";
+					$team_support_sql .= " where leader=".$_SESSION['idx']." order by team_support.idx asc ";		
+
+					$team_support_result = mysql_query($team_support_sql, $connect2);
+					$team_support_cnt = mysql_num_rows($team_support_result);
+					$i = 1;
+					while($team_row = mysql_fetch_array($team_support_result))
+					{
+						$date = new DateTime($license_row['license_date']);
+						$result_date = $date->format('Y-m-d');
+				?>
+				  <div class="sub_board_td">						
+					<div id="license_name_<?=$license_row['idx']?>" class="sub_td_value" style="width:16%;text-align:center;padding-left:10px;" ><a href="#"><?=$team_row['member_name']?></a></div>		 
+					<div id="license_company_<?=$license_row['idx']?>" class="sub_td_value" style="width:16%"><?=date("Y")-$team_row['member_year']?>세</div>
+					<div id="license_date_<?=$license_row['idx']?>" class="sub_td_value" style="width:16%"><?=$team_row['member_job']?></div>	
+					<div id="license_date_<?=$license_row['idx']?>" class="sub_td_value" style="width:20%"><?=$team_row['member_type']?></div>
+					<div id="license_date_<?=$license_row['idx']?>" class="sub_td_value" style="width:16%"><?=$team_row['member_si']?>,<?=$team_row['member_gu']?></div>
+					<div id="license_date_<?=$license_row['idx']?>" class="sub_td_value" style="width:16%">
+						<? 
+						if ($team_row['pass'] == "")
+						{
+							echo "답변 대기중";
+						}
+						else if($team_row['pass'] == "y")
+						{
+							echo "성공";
+						}
+						else if($team_row['pass'] == "n")
+						{
+							echo "거부";
+						}
+						?>
+					</div>
+				  </div>
+				<?
+					}  
+				?>				
+			
+				<!-- 전체layer end-->					
+			  </div>	
+			</div>
+			<div class="sub_center_body" style="margin-top:20px;" >	
+				
+				<span class="title">지원내역</span>					
+				
+					<div style="float:right;">								
+						<button id="btn_license_add" class="btn-u btn-u-blue" type="button">팀 등록</button>								
+					</div>
+			
+				<div id="sub_layer" class="team_tap">	
+				
+					<div class="sub_board_td" style="background-color: #ebebeb;">						
+						<div class="sub_td_value" style="width:20%;text-align:center;padding-left:10px;" >팀명</div>					 
+						<div class="sub_td_value" style="width:20%">리더</div>
+						<div class="sub_td_value" style="width:20%">주 업무</div>
+						<div class="sub_td_value" style="width:20%">지역</div>
+						<div class="sub_td_value" style="width:20%">상태</div>
+					</div>
+				  <?								
+					$team_support_sql = " SELECT  ";
+					$team_support_sql .= "	team.idx as team_idx, ";
+					$team_support_sql .= "	team.name as team_name, ";
+					$team_support_sql .= "	team.leader as leader_idx, ";
+					$team_support_sql .= "	team_support.member_idx as member_idx,";
+					$team_support_sql .= "	(select name from member where team.leader = member.idx) as team_leader, team.type as team_type, team.address_si_want as team_si, ";
+					$team_support_sql .= "	team.address_gu_want as team_gu, ";
+					$team_support_sql .= "	team_support.pass as pass ";
+					$team_support_sql .= "FROM ";
+					$team_support_sql .= "	team_support ";
+					$team_support_sql .= "left join team on team.idx = team_support.team_idx ";
+					$team_support_sql .= "left join member on member.idx = team_support.member_idx  ";
+					$team_support_sql .= " where member_idx=".$_SESSION['idx']." or team.leader=".$_SESSION['idx']." ";
+					$team_support_sql .= "order by ";
+					$team_support_sql .= "(team.leader=".$_SESSION['idx'].")  desc,team_idx asc , team.leader asc";
+
+					$team_support_result = mysql_query($team_support_sql, $connect2);
+					$team_support_cnt = mysql_num_rows($team_support_result);
+					$i = 0;
+					while($team_row = mysql_fetch_array($team_support_result))
+					{
+						$date = new DateTime($license_row['license_date']);
+						$result_date = $date->format('Y-m-d');
+						
+				?>
+				<?
+				//echo $i."AAA".$team_row['team_idx']."BBB";
+						if ($i != $team_row['team_idx'])
+						{
+							if($team_row['leader_idx'] == $_SESSION['idx'])
+							{
+								$team_supp = "내 팀에 지원한 사람";
+							}
+							else
+							{
+								$team_supp = "내가 지원한 팀";
+							}
+					?>
+						<div class="sub_board_td div_team">	
+							<div id="team_name" class="sub_td_value" style="width:100%;text-align:center;padding-left:10px;color:#FFFFCC" ><a href="#"><?=$team_supp?></a></div>	
+						</div>
+					<?
+						$i = $team_row['team_idx'];
+						}
+						else
+						{
+						}
+					
+					?>
+				  <div class="sub_board_td div_team">	
+				  
+					<div id="team_name" class="sub_td_value" style="width:20%;text-align:center;padding-left:10px;" ><a href="#"><?=$team_row['team_name']?></a></div>		 
+					<div id="team_leader" class="sub_td_value" style="width:20%"><?=$team_row['team_leader']?></div>
+					<div id="team_type" class="sub_td_value" style="width:20%"><?=$team_row['team_type']?></div>	
+					<div id="team_addr" class="sub_td_value" style="width:20%"><?=$team_row['team_si']?>,<?=$team_row['team_gu']?></div>
+					<div id="team_pass" class="sub_td_value" style="width:20%">
+						<? 		
+						if ($team_row['leader_idx'] == $_SESSION['idx'])
+						{
+								echo "<select><option>대기</option><option>성공</option><option>거절</option></select>";
+						}
+						else
+						{
+							if ($team_row['pass'] == "")
+							{
+								echo "답변 대기중";
+							}
+							else if($team_row['pass'] == "y")
+							{
+								echo "성공";
+							}
+							else if($team_row['pass'] == "n")
+							{
+								echo "거부";
+							}	
+						}
+						?>
+					</div>
+				  </div>
+				<?
+						
+					}  
+				?>				
+			
+				<!-- 전체layer end-->					
+			  </div>	
+			</div>
+			<div class="sub_center_body">	
+				<span class="title">일거리 내역</span>	
+				<div style="float:right;">								
+					<button id="btn_skill_add" class="btn-u btn-u-blue" type="button">일거리 등록</button>								
+				</div>	
+				<div id="sub_layer" class="skill_tap">
+					<div class="sub_board_td" style="background-color: #ebebeb;">						
+						<div class="sub_td_value" style="width:50%;text-align:center;padding-left:10px;" >갖고 있는 스킬</div>					 
+						<div class="sub_td_value" style="width:50%">등급</div>
+					</div>
+				   <?								
+					$skill_sql = " SELECT  ";
+					$skill_sql .= "  * ";
+					$skill_sql .= " FROM member_skill ";
+					$skill_sql .= " where member_idx=".$_SESSION['idx']." and status=1 order by idx asc ";		
+
+					$skill_result = mysql_query($skill_sql, $connect2);
+					$skill_cnt = mysql_num_rows($skill_result);
+					while($skill_row = mysql_fetch_array($skill_result))
+					{
+				?>
+				  <div class="sub_board_td" id="skill_div_<?=$skill_row['idx']?>">						
+					<div id="skill_name_<?=$skill_row['idx']?>" class="sub_td_value" style="width:50%;text-align:center;padding-left:10px;" ><a href="javascript:layer_query('skill','<?=$skill_row['idx']?>')"><?=$skill_row['skill']?></a></div>					 
+					<div id="skill_rating_<?=$skill_row['idx']?>" class="sub_td_value" style="width:50%"><?=$skill_row['rating']?></div>					
+				  </div>
+				<?
+					}  
+				?>			
+				<!-- 전체layer end-->					
+			  </div>	
+			</div>
+			<div class="sub_center_body">	
+				<span class="title">스터디 내역</span>	
+				<div style="float:right;">								
+					<button id="btn_work_add" class="btn-u btn-u-blue" type="button">스터디 등록</button>								
+				</div>
+				<div id="sub_layer" class="work_tap">							 
+						<div class="sub_board_td" style="background-color: #ebebeb;">					
+							<div class="sub_td_value" style="width:25%;text-align:center;padding-left:10px;" >프로젝트명</div>					 
+							<div class="sub_td_value" style="width:25%">담당업무</div>
+							<div class="sub_td_value" style="width:25%">직책</div>
+							<div class="sub_td_value" style="width:25%">근무기간</div>
+						</div>
+					   <?								
+						$work_sql = " SELECT  ";
+						$work_sql .= "  * ";
+						$work_sql .= " FROM member_work ";
+						$work_sql .= " where member_idx=".$_SESSION['idx']." and status=1 order by idx asc ";		
+
+						$work_result = mysql_query($work_sql, $connect2);
+						$work_cnt = mysql_num_rows($work_result);
+						while($work_row = mysql_fetch_array($work_result))
+						{
+					?>
+					  <div class="sub_board_td" id="work_div_<?=$work_row['idx']?>">						
+						<div id="work_name_<?=$work_row['idx']?>" class="sub_td_value" style="width:25%;text-align:center;padding-left:10px;" ><a href="javascript:layer_query('work','<?=$work_row['idx']?>')"><?=$work_row['shop_name']?></a></div>					 
+						<div id="work_position_<?=$work_row['idx']?>" class="sub_td_value" style="width:25%"><?=$work_row['mywork']?></div>	
+						<div id="work_<?=$work_row['idx']?>" class="sub_td_value" style="width:25%"><?=$work_row['position']?></div>	
+						<div id="work_date_<?=$work_row['idx']?>" class="sub_td_value" style="width:25%"><?=$work_row['work_start']?> ~ <?=$work_row['work_end']?></div>	
+					  </div>
+					<?
+						}  
+					?>		
+				</div>
+			</div>		
+			 
+								
+		
+				  <!-- 본문 end -->
+		</tr></td></table>
+		</div>
+	</div>  
+
+	</div>
+		
+	</div>
+
+<!-- End Call to Action -->
+<?include $_SERVER["DOCUMENT_ROOT"]."/include/footer.php";?>
+	
+
+</div><!--/wrapper-->
+
+
+
+</body>
+</html>
+<script>
+function team_change(val)
+{
+	
+}
+</script>

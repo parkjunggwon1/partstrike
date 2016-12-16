@@ -97,6 +97,7 @@ function change_select()
 									$quantity= replace_out($row["quantity"]);
 									$price= replace_out($row["price"]);
 									$turnkey_idx= replace_out($row["turnkey_idx"]);
+									$del_chk= replace_out($row["del_chk"]);
 									//$dc = substr($dc, 2,2);
 									if ($part_type =="2"){
 										$dc = "NEW";
@@ -114,6 +115,8 @@ function change_select()
 										$no_modify = "";
 										$no_modify_border="";
 									}
+
+
 									?>
 								<tr>
 									<td class="pd-0"><input type="hidden" name="mod_part_idx[]" value="<?=$part_idx?>"><!--<?=$ListNO?>--></td>
@@ -158,7 +161,7 @@ function change_select()
 									<td class="t-rt"><?=$test?><?if ($part_type==2){?><input type="text" name="quantity_tmp" readonly class="i-txt6 onlynum numfmt t-rt" maxlength="10" style="width:66px" value="I"><?}else{?><input type="text" name="mod_quantity[]" class="i-txt2 onlynum numfmt t-rt" maxlength="10" style="width:66px" value="<?echo number_format($quantity);?>"> <?}?></td>
 									
 									<td class="t-rt"><input type="text" name="mod_price[]" id="mod_price_<?=$i?>" onkeyup="javascript:doller_add('<?=$i?>');" class="i-txt2 onlynum numfmt t-rt price_fmt" style="width:76px" maxlength="9" value="<?if($price){echo "$".$price_val;}?>"></td>
-									<td class="td_c"><label class="ipt-chk chk3"><input type="checkbox" name="delchk[]" value="<?=$part_idx?>"><span></span></label></td>
+									<td class="td_c"><label class="ipt-chk chk2"><input type="checkbox" name="delchk[]" value="<?=$part_idx?>" style="cursor:Default;" <?if ($del_chk=="0"){echo "disabled ";}?>><span></span></label></td>
 								</tr>	
 								<?
 									$ListNO--;	
@@ -540,15 +543,7 @@ function GET_MAIN_LIST($titleyn, $part_type, $page, $searchand , $area =""){   /
 				$quantity= replace_out($row["quantity"]);
 				$price= replace_out($row["price"]);	
 
-				//금액이 정수면 ,2 실수면 ,4 포멧 20161202 박정권
-				if( ($price == (int)$price) )
-				{					
-					$price = number_format($price,2);
-				}
-				else {					
-					$price = number_format($price,4);
-				}
-
+				
 				$already_idx = get_want("mybox","idx"," and mem_idx = '".$_SESSION["MEM_IDX"]."' and part_idx = '$part_idx'");
 				if(($already_idx and $_SESSION["MEM_IDX"] ) ){$already="1";}else{$already="";}
 				if ($part_type =="2"){

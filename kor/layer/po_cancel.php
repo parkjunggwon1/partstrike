@@ -69,7 +69,8 @@ $(document).ready(function(){
 				<tbody>
 					<tr>
 						<td class="company">
-						<img src="/kor/images/nation_title_<?=$b_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$b_nation)?>"> <span class="name"><?=$b_mem[mem_nm_en]?></span>
+						<img src="/kor/images/nation_title_<?=$b_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$b_nation)?>"> <span class="name">
+						<a href="javascript:layer_company_det('<?=$buy_com_idx?>');" style="color:#00759e;"><?=$b_mem[mem_nm_en]?></a></span>
 						</td>
 						<td class="c-red2" style="font-size:14px;">
 							취소 시 해당 품목은 당신의 재고 목록에서 삭제됩니다. <br>
@@ -88,6 +89,9 @@ $(document).ready(function(){
 				<thead>
 					<tr>
 						<th scope="col" class="t-no">No. </th>
+						<?if($load_page == "09_01"){?>
+						<th scope="col" class="t-nation">Nation</th>
+						<?}?>
 						<th scope="col" class="t-lt" Style="width:280px;">Part No.</th>
 						<th scope="col" class="t-Manufacturer">Manufacturer</th>
 						<th scope="col" class="t-Package">Package</th>
@@ -96,8 +100,13 @@ $(document).ready(function(){
 						<th scope="col" class="t-oty">O'ty</th>
 						<th scope="col" class="t-unitprice">Unit Price</th>
 						<th scope="col" class="t-orderoty t-rt" lang="ko">발주수량</th>
+						<?if($load_page == "09_01"){?>
 						<th scope="col" class="t-supplyoty t-rt" style="width:66px;" lang="ko">공급수량</th>
+						<?}?>
 						<th scope="col" lang="ko" class="t-period">납기</th>
+						<?if($load_page == "09_01"){?>
+						<th scope="col" class="t-company">Company</th>
+						<?}?>
 					</tr>
 				</thead>
 				<?	for ($i = 1; $i<=7; $i++){
