@@ -1047,7 +1047,15 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<!--//발주수량-->
 						</td>
 						<?if ($loadPage !="21_04" || $loadPage !="30_20" || $loadPage =="30_14" ){?>
-								<?if($loadPage!="02_02"&& $loadPage !="05_04_1" && $loadPage !="30_20" && $loadPage !="30_14"  && $loadPage!="13_04s"){?><td class="t-rt c-red"><?=$supply_quantity==0?"":number_format($supply_quantity)?></td><?}?>
+								<?if($loadPage!="02_02"&& $loadPage !="05_04_1" && $loadPage !="30_20" && $loadPage !="30_14"){?>
+									<td class="t-rt c-red">
+										<?if($part_type=="7"){?>
+										$<?=number_format($price,2);?>
+										<?}else{?>
+										<?=$supply_quantity==0?"":number_format($supply_quantity)?>
+										<?}?>
+									</td>
+								<?}?>
 								<?if($loadPage!="19_1_05" && $loadPage!="19_1_06"){  //납기표기?>
 								<?=($period)?(QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"<td>Stock":"<td class='c-red'>".$period):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
 								<?}?>
@@ -1254,7 +1262,7 @@ function GET_ODR_DET_LIST_VT($loadPage, $part_type, $searchand){   //part_type�
 			?>
 				<tbody id="tbd_<?=$part_type?>">
 				<tr>
-					<td colspan="<?=$colspan?>" class="title-box <?if ($part_type=="1"){?>first<?}?>">
+					<td colspan="<?=$colspan?>" class="title-box <?if ($part_type=="1"){?>first<?}?>" style="padding-top:0px;">
 						<h3 class="title"><img src="/kor/images/stock_title0<?=$part_type?>.gif" alt="<?=GF_Common_GetSingleList("PART",$part_type)?>"></h3>
 						<?if ($loadPage=="05_04"){?><div class="txt_stock" style="display: none; float:right; width:136px; padding:0 0 0 0;"><img src="/kor/images/txt_stock.gif" alt="재고수량 이하로 입력"></div><?}?>
 					</td>
@@ -2393,13 +2401,13 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						$part_no_style = "style='width:215px;'";
 					}
 					?>
-					<th scope="col" class="t-partno" <?=$part_no_style?> >Part No.</th>					
-					<th scope="col" class="t-Manufacturer" style="width:150px;">Manufacturer</th>
-					<th scope="col" class="t-Package" style="width:80px;">Package</th>
-					<th scope="col" class="t-dc" style="width:36px;">D/C</th>
-					<th scope="col" class="t-rohs" style="width:36px;">RoHS</th>
-					<?if($loadPage!="18R_19" && $loadPage!="19_1_05" && $loadPage!="19_1_06" && $loadPage != "30_14" && $loadPage != "30_20_F" && $loadPage != "30_22_F"){?><th scope="col" class="t-oty">O'ty</th><?}?>
-					<th scope="col" class="t-unitprice" style="width:61px;">Unit Price</th>
+					<th scope="col" class="t-partno" <?=$part_no_style?> ><?=($loadPage=="30_10")? "Title":"Part No.";?></th>					
+					<th scope="col" class="t-Manufacturer" style="width:150px;"><?if($loadPage!="30_10"){?>Manufacturer<?}?></th>
+					<th scope="col" class="t-Package" style="width:80px;"><?if($loadPage!="30_10"){?>Package<?}?></th>
+					<th scope="col" class="t-dc" style="width:36px;"><?if($loadPage!="30_10"){?>D/C<?}?></th>
+					<th scope="col" class="t-rohs" style="width:36px;"><?if($loadPage!="30_10"){?>RoHS<?}?></th>
+					<?if($loadPage!="18R_19" && $loadPage!="19_1_05" && $loadPage!="19_1_06" && $loadPage != "30_14" && $loadPage != "30_20_F" && $loadPage != "30_22_F"){?><th scope="col" class="t-oty"><?if($loadPage!="30_10"){?>O'ty<?}?></th><?}?>
+					<th scope="col" class="t-unitprice" style="width:61px;"><?if($loadPage!="30_10"){?>Unit Price<?}?></th>
 					<?if ($loadPage=="21_04" || $loadPage=="30_15" || $loadPage=="30_20" || $loadPage=="30_14"){?>
 						<th scope="col" lang="en" class="t-amount" style="width:65px;">Amount</th>
 						<?if ($loadPage=="30_15" || $loadPage=="30_20" || $loadPage=="30_14"){?>
@@ -2414,7 +2422,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 								$fault_select = get_any("odr_history", "fault_select", "odr_history_idx=$odr_history_idx");
 								echo ($fault_select=="1")? "교환수량":"부족수량";
 							?>
-							<?}else{?>발주수량<?}?>
+							<?}else{?><?if($loadPage!="30_10"){?>발주수량<?}?><?}?>
 						</th>
 						<?if($loadPage!="30_20_F" && $loadPage!="30_22_F" && $loadPage!="13_04s"){?><th scope="col" lang="ko" class="t-supplyoty">공급수량</th><?}?>
 						<?if($loadPage=="19_1_05" || $loadPage=="19_1_06"){?><th scope="col" lang="en" class="t-amount">Amount</th>
