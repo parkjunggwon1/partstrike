@@ -657,6 +657,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td class="t-rt"><?=$odr_stock==0?"":number_format($odr_stock)?></td>
 					<?}?>
 					<td class="t-rt">$<?=$price_val?></td>
+
 					<td class="t-rt"><span class="c-blue"><?=$odr_quantity==0?"":number_format($odr_quantity)?></span></td>
 					<?if($sell_mem_idx != $_SESSION['MEM_IDX']){?>
 					<td class="t-rt"><span class="c-blue"><?=$supply_quantity==""?"0":number_format($supply_quantity)?></span></td>		

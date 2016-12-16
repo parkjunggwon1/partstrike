@@ -247,7 +247,7 @@ switch($actty) {
    	   $odr_det_idx = get_any("odr_history" , "odr_idx", "odr_history_idx= $actidx");
 	   $buy_mem_idx = get_any("odr", "mem_idx" , "odr_idx = $odr_idx");
 	   $sell_mem_idx = get_any("odr", "sell_mem_idx" , "odr_idx = $odr_idx");
-	   $part_idx = get_any("odr_det", "part_idx" , "odr_det_idx = $odr_det_idx");
+	   $part_idx = get_any("odr_det", "part_idx" , "odr_det_idx = $actidx");
 
 	   update_val("odr_history","confirm_yn","Y", "odr_history_idx", $actidx);
 
@@ -273,14 +273,16 @@ switch($actty) {
 		   update_val("odr","complete_yn","Y", "odr_idx", $odr_idx);	   
 		}
 
-		//판매자가 취소할때만 주문이 한 건도 없을때 파트 삭제 2016-12-12 박정권
+		//판매자가 취소할때만 주문이 한 건도 없을때 파트 삭제 2016-12-12 박정권						
+
 		if ($buy_mem_idx == $_SESSION["MEM_IDX"])
 		{			
 			$odr_cnt_check = QRY_CNT("odr_det","and part_idx ='".$part_idx."' and odr_idx <> ".$odr_idx." and (odr_status <> 0 and odr_status <> 99)") ;
 
 			if ($odr_cnt_check == "0")
 			{	
-				$sql = "delete from part where part_idx ='".$part_idx."' ";							
+				$sql = "delete from part where part_idx ='".$part_idx."' ";					
+
 				$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 			}
 		}		
