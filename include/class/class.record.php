@@ -210,7 +210,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			<!--바꿈 2016-11-8-->
 			<td  <?=$goJump?>  class="t-rt">$<?=$price_val?></td>
 			<?if ($fr == "S"){?>	
-				<?if ($odr_status==0 || $odr_status==1 || $odr_status==2 || $odr_status==16 || $odr_status==18 || $odr_status==19 || $odr_status==20 || $odr_status==31){?>
+				<?if ($odr_status==0 || $odr_status==1 || $odr_status==2 || $odr_status==8 || $odr_status==16 || $odr_status==18 || $odr_status==19 || $odr_status==20 || $odr_status==31){?>
 					<td  <?=$goJump?> class="t-rt c-blue" ><?=$odr_quantity<=0?"":number_format($odr_quantity)?></td>			
 					<td  <?=$goJump?> class="t-rt c-red" ><?=$supply_quantity<=0?"":number_format($supply_quantity)?></td>
 				<?}else{?>
@@ -657,15 +657,15 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 			<tr>
 				<th scope="col" style="width:23px">No.</th>
 				<?if ($odr_type == "B"){?><th scope="col" style="width:80px">Nation</th><?}?>
-				<th scope="col" class="t-lt">Part No.</th>
-				<th scope="col" class="t-lt">Manufacturer</th>
+				<th scope="col" class="t-lt" style="width:180px;">Part No.</th>
+				<th scope="col" class="t-lt" style="width:140px;">Manufacturer</th>
 				<th scope="col">Package</th>
 				<th scope="col">D/C</th>
 				<th scope="col">RoHS</th>
 				<th scope="col" class="t-rt" style="width:65px">Q'ty</th>
-				<th scope="col" class="t-rt" style="width:65px">Unit Price</th>
-				<th scope="col" class="t-rt" style="width:70px">Amount</th>
-				<?if ($odr_type == "B"){?><th scope="col" class="t-rt">Company</th><?}?>
+				<th scope="col" class="t-ct" style="width:65px">Unit Price</th>
+				<th scope="col" class="t-rt" style="width:70px;padding-right:5px;">Amount</th>
+				<?if ($odr_type == "B"){?><th scope="col" class="t-ct" style="width:70px;">Company</th><?}?>
 			</tr>
 		</thead>
 <?		
@@ -745,6 +745,15 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 					$supply_quantity= replace_out($row2["supply_quantity"]);
 					$com_idx = $rel_idx==0 ? $sell_mem_idx : $rel_idx;
 					
+					if( ($price == (int)$price) )
+					{					
+						$price_val = round_down($price,2);
+						$price_val = number_format($price,2);
+					}
+					else {			
+						$price_val = $price;
+					}
+
 					if ($com_idx ){
 						$company_nm = get_any("member","mem_nm_en", "mem_idx=$com_idx"); 	
 					
@@ -795,16 +804,19 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 						<td><?=$dc?></td>
 						<td><?=$rhtype?></td>
 						<td class="t-rt"><?=$odr_quantity==0?"":number_format($odr_quantity)?></td>
-						<td class="t-rt">$<?=number_format($price,2)?></td>
-						<td class="t-rt">$<?=number_format($odr_quantity*$price,2)?></td>
-						<?if ($odr_type == "B"){?><td class="txt-r t-rt"><?if ($end_yn=="Y"){?><div class="c-blue company_div" style="cursor:pointer;" onclick="side_company_info2(<?=$com_idx?>,'<?=$odr_type?>')"><?=$company_nm?></div>
+						<td class="t-ct">$<?=$price_val?></td>
+						<td class="t-rt">$<?=number_format(round_down($odr_quantity*$price,4),4)?></td>
+						<?if ($odr_type == "B"){?><td class="txt-r t-ct"><?if ($end_yn=="Y"){?><div class="c-blue company_div" style="cursor:pointer;" onclick="side_company_info2(<?=$com_idx?>,'<?=$odr_type?>')"><?=$company_nm?></div>
 						<?
 						$now_date = date("Y-m-d H:i:s", strtotime(date('Y-m-d').' - 6month')); 
 						$reg_date = get_any("odr","reg_date" , "odr_idx = $odr_idx");
 						$fault_valid_yn = $now_date<=$reg_date?"Y":"N";					
 						if($fty_exist_yn =="N" && $fault_valid_yn =="Y"){
+							$badness_chk = QRY_CNT("odr_history", "and odr_idx = $odr_idx  and status in (8)") > 0 ? "Y": "N";  //종료까지 무사히 왔는지 여부
+							if($badness_chk =="N"){
 						?>
 						<a href="#" odr_det_idx="<?=$odr_det_idx?>" class="btn-pop-2102"><img src="/kor/images/btn_badness.gif" alt="불량통보" class="badness" style="display:none;"></a>
+							<?}?>
 						<?}else{?>
 							<!--<img src="/kor/images/btn_badness_1.gif" alt="불량통보" title="보증기간 만료" class="badness" style="display:none;">-->
 						<?}?>

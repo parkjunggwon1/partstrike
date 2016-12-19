@@ -153,7 +153,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 	<div class="buyer-info ship-info" style="margin-top:6px">
 		<h2><img src="/kor/images/txt_shipto.gif" alt="ship to"></h2>
 		<div class="info-wrap">
-			<ul class="company-info pd-l20">
+			<ul class="company-info pd-l30">
 				<?
 				if ($row_seller["nation"]==$row_buyer["nation"])
 				{
@@ -194,7 +194,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 	<div class="seller-info" style="bottom:-7px">
 		<h2><img src="/kor/images/txt_billto.gif" alt="bill to"></h2>
 		<div class="info-wrap">
-			<ul class="company-info pd-l20">
+			<ul class="company-info pd-l30">
 				<?
 				if ($row_seller["nation"]==$row_buyer["nation"])
 				{
@@ -227,7 +227,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 	<div class="buyer-info">
 		<h2><img src="/kor/images/txt_buyer.gif" alt="buyer"></h2>
 		<div class="info-wrap">
-			<ul class="company-info pd-l20">
+			<ul class="company-info pd-l30">
 				<?
 				if ($row_seller["nation"]==$row_buyer["nation"])
 				{
@@ -252,14 +252,22 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 					<tr>
 						<th scope="row">Ship to :</th>
 						<td>
-							<ul class="contact-info">
+							<?
+							if ($row_ship["delivery_addr_idx"])
+							{
+								$change_color = "style='color:#00759e;'";
+							}
+							else
+							{
+								$change_color = "";
+							}
+							?>
+							<ul class="contact-info" <?=$change_color?>>
 								<?if ($row_ship["delivery_addr_idx"]){// 배송지 변경한 건
-								$delivery_addr=get_delivery_addr($row_ship["delivery_addr_idx"]);
+								$delivery_addr=get_delivery_addr($row_ship["delivery_addr_idx"]);				
 								
 								$tel_nation = explode("-",$delivery_addr["tel"]);
 								$fax_nation = explode("-",$delivery_addr["fax"]);
-
-
 								
 								if ($row_seller["nation"]==$row_buyer["nation"])
 								{
@@ -271,6 +279,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 									$tel = $delivery_addr["tel"];
 									$fax = $delivery_addr["fax"];
 								}
+								
 								?>
 									<li><?=$delivery_addr["com_name"]?></li>
 									<li><?=$delivery_addr["addr"]?></li>
@@ -441,6 +450,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 
 			<?}else{?>
 			<div class="txt-area">
+			<?if ($forread!="Y"){?>
 				<?if ($for_readonly!="Y"){?>
 					<?					
 						if ($row_odr["sell_mem_idx"]!=$session_mem_idx && $for_readonly =="")
@@ -459,7 +469,12 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 							echo get_bank_info($row_parts,"-1");
 						}
 					?>
-				<?}?>
+				<?}
+			}
+			else
+			{
+				echo get_bank_info($row_parts,"-1");
+			}?>
 			<?}?>
 		</div>
 	</div>

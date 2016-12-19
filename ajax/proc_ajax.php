@@ -274,7 +274,7 @@ switch($actty) {
 		}
 
 		//판매자가 취소할때만 주문이 한 건도 없을때 파트 삭제 2016-12-12 박정권						
-
+/*
 		if ($buy_mem_idx == $_SESSION["MEM_IDX"])
 		{			
 			$odr_cnt_check = QRY_CNT("odr_det","and part_idx ='".$part_idx."' and odr_idx <> ".$odr_idx." and (odr_status <> 0 and odr_status <> 99)") ;
@@ -286,7 +286,7 @@ switch($actty) {
 				$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 			}
 		}		
-		
+*/		
 		break;
 	//-- 종료 및 입금 처리 : 구매자가 수령했다는 내용을 판매자가 확인 하고, 완료 버튼을 눌렀을 때 ----------------------------------------
    case "CF2": 

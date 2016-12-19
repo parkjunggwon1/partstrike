@@ -2524,7 +2524,7 @@ function updateQty(){
 	//-- 배송지 변경--------------------
 	//2016-04-08 form 'f' 를 'f_05_04'로 변경
 	//if($("#delivery_chg").is(":checked") && f.com_name.value!=""){			
-	if($("#delivery_chg").is(":checked") && f_05_04.com_name.value!=""){			
+	if($("#delivery_chg").is(":checked")){			
 			if($("#delivery_addr_idx").val()==""){   //save_yn='N'으로 먼저 저장해야 함.
 				$("#delivery_save_yn").val("N");
 				$("#typ").val("delivery_save");		

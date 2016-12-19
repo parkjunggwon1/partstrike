@@ -17,29 +17,17 @@ function checkActive(){
 	var btnConfirm = false; //버튼 상태
 	var selCnt=0, opCond=0, opCond1=0, opCond2=0, sqty=0;
 	var sel_box;
-	var turnkey_cnt = $("#turnkey_cnt").val();	//2016-12-12 : 턴키 여부~
-	if(turnkey_cnt>0){	//2016-12-12 : 턴키일때~
-		sel_box = $(".stock-list-table input[name^=part_idx]");
-		//sel_box = $("#part_idx_3008");
-		var det_cnt = sel_box.length;
-	}else{
-		var det_cnt = $("#det_cnt_30_08").val();
-	}
-	//alert(turnkey_cnt);
+	var det_cnt = $("#det_cnt_30_08").val();
 	//지속적 갯수 카운팅 해보자...
 	var part2 = $("#layerPop3 .stock-list-table input[name^=part_type]").length;
-	if(turnkey_cnt>0){	//2016-12-12 : 턴키일때~
-		selCnt = det_cnt;
+
+	if(det_cnt>1){ //-- 여러개 일때 --------------------------
+		sel_box = $("input[name^=odr_det_idx]:checked");
+		selCnt = sel_box.length;
+	}else{	//-- 한개일때 ---------------------------------------
+		sel_box = $("input[name^=odr_det_idx]");
+		selCnt=1;
 		cntOK = true;
-	}else{
-		if(det_cnt>1){ //-- 여러개 일때 --------------------------
-			sel_box = $("input[name^=odr_det_idx]:checked");
-			selCnt = sel_box.length;
-		}else{	//-- 한개일때 ---------------------------------------
-			sel_box = $("input[name^=odr_det_idx]");
-			selCnt=1;
-			cntOK = true;
-		}
 	}
 	//지속적공급... 일때, 부품상태 생략
 	//필수 값 체크
@@ -57,7 +45,7 @@ function checkActive(){
 	opCond1 = opCond1 + part2;
 	opCond2 = opCond2 + part2;
 	//공급수량 체크
-	$("input[name^=supply_quantity]").each(function(e){ //공급수량
+	$("input[name^=supply_quantity]").each(function(e){ //포장상태2
 		if($(this).val().replace(/,/gi,"")>0) sqty++;
 	});
 	//alert("selCnt:"+selCnt);
@@ -77,7 +65,7 @@ function checkActive(){
 }
 //공급수량 체크
 function check_supp(){
-	$("input[name^=supply_quantity]").each(function(e){ //공급수량
+	$("input[name^=supply_quantity]").each(function(e){ //부품상태
 		if($(this).attr("part_type")!="7"){
 			maskoff();
 			if(parseInt($(this).val()) > parseInt($(this).attr("origin_qty"))){
@@ -146,8 +134,7 @@ $(document).ready(function(){
 </div>
 <div class="layer-content">
 	<form name="f" id="f" method="post" >
-	<input type="hidden" name="typ" value="invreg">
-	<input type="hidden" name="turnkey_cnt" id="turnkey_cnt" value="<?=$turnkey_cnt;?>">
+	<input type="hidden" name="typ" value="invreg">	
 	<input type="hidden" name="odr_idx" id="odr_idx_30_08" value="<?=$odr_idx?>">	
 	<input type="hidden" name="det_cnt" id="det_cnt_30_08" value="<?=$det_cnt?>">
 	<input type="hidden" name="odr_period" id="odr_period" value="<?=$odr_period?>">
@@ -157,7 +144,8 @@ $(document).ready(function(){
 			<table>
 				<tbody>
 					<tr>
-						<td class="company"><img src="/kor/images/nation_title_<?=$b_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$b_nation)?>"> <span class="name">&nbsp&nbsp<?=$b_mem[mem_nm_en]?></span></td>
+						<td class="company"><img src="/kor/images/nation_title_<?=$b_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$b_nation)?>"> 
+						<span class="name"><a class="c-blue" href="javascript:layer_company_det('<?=$buy_com_idx?>');"><?=$b_mem[mem_nm_en]?></a></span></td>
 					</tr>
 				</tbody>
 			</table>
@@ -188,7 +176,7 @@ $(document).ready(function(){
 				</thead>
 
 				<?
-				if($turnkey_cnt>0){	//------------------------------------------------------------------- 턴키 ----------------------------------------------------------------------------------
+				if($turnkey_cnt>0){
 					$turnkey_idx = get_any("odr_det", "part_idx", "odr_idx=$odr_idx");
 					$sql = "select * from part where turnkey_idx = $turnkey_idx order by part_idx";
 					$conn = dbconn();	
@@ -218,13 +206,14 @@ $(document).ready(function(){
 						$dc= replace_out($row_t["dc"]);
 						$rhtype= replace_out($row_t["rhtype"]);
 						$quantity= replace_out($row_t["quantity"]);
+						$odr_quantity_t= replace_out($row_t["odr_quantity"]);
+
 						//$part_idx = get_any("part" , "part_idx", "part_no= '$part_no' ");
 						$i++;
 				?>
 					<tr id="tr_">
 						<td><?=$i;?></td>
 						<td class="t-lt">
-							<input type="hidden" name="part_idx[]" id="part_idx_3008" value="<?=$part_idx;?>">
 							<input type="text" class="i-txt4" name="part_no[]" value="<?=$part_no?>" maxlength="24" <?=$no_modify?> style="<?=$no_modify_border?>width:<?=($det_cnt>1)? "190":"210";?>px; ime-mode:disabled" >
 						</td>
 						<td class="t-lt">
@@ -237,7 +226,6 @@ $(document).ready(function(){
 						<td class="t-ct"><?=$rhtype;?></td>
 						<td class="t-rt">99,999,999</td>
 						<td class="t-ct">Stock</td>
-						<input type="hidden" name="supply_quantity[]" class="i-txt4 c-red2 onlynum numfmt t-rt" value="1" maxlength="10" style="width:58px" origin_qty="1" part_type="<?=$part_type;?>">
 					</tr>
 					<tr>
 						<td></td>

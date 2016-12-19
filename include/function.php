@@ -1296,7 +1296,9 @@ function SumMyBank2($mem_idx, $rel_idx, $ty=2){
 
 	$pay = get_any("mybank" ,"sum( charge_amt )", "(mem_idx =$com_idx or rel_idx =$com_idx) and mybank_yn = 'Y'");
 	if($ty>0){
-		return number_format($pay,2);
+		$pay_val = round_down($pay,4);
+		$pay_val = number_format($pay,4);
+		return $pay_val;
 	}else{
 		return $pay;
 	}
@@ -1307,7 +1309,9 @@ function SumBankHold($mem_idx, $rel_idx, $ty=2){
 
 	$pay = get_any("mybank" ,"sum(mybank_hold)", "(mem_idx =$com_idx or rel_idx =$com_idx) and mybank_yn = 'Y'");
 	if($ty>0){
-		return number_format($pay,2);
+		$pay_val = round_down($pay,4);
+		$pay_val = number_format($pay,4);
+		return $pay_val;
 	}else{
 		return $pay;
 	}

@@ -50,13 +50,13 @@ if ($invoice_no==""){
 			<li><strong>Page</strong><span>1</span></li>
 		</ul>
 		<ul>
-			<li class="b3"><strong>Ship Via</strong><span>&nbsp;</span></li>
-			<li><strong>Account No.</strong><span>&nbsp;</span></li>
-			<li class="b2"><strong>Transport insurance</strong><span>&nbsp;</span></li>
+			<li class="b3"><strong>Ship Via</strong><span></span></li>
+			<li><strong>Account No.</strong><span></span></li>
+			<li class="b2"><strong>Transport insurance</strong><span></span></li>
 		</ul>
 		<ul>
 			<li class="b1"><strong>Payment Term</strong><span>CBD</span></li>
-			<li><img src="/kor/images/nation_title2_<?=$row_parts["nation"]?>.png" alt="<?=GF_Common_GetSingleList("NA",$row_parts["nation"])?>" class="country"><strong>Incoterms</strong><span>EXW-</span></li>
+			<li><img src="/kor/images/nation_title_<?=$row_parts["nation"]?>.png" alt="<?=GF_Common_GetSingleList("NA",$row_parts["nation"])?>" class="country"><strong>Incoterms</strong><span>EXW-</span></li>
 		</ul>
 	</div>
 	
@@ -65,11 +65,11 @@ if ($invoice_no==""){
 		<div class="info-wrap">
 			<ul class="company-info">
 				<li>
-					<span class="b1"><img src="/upload/file/<?=$row_buyer["filelogo"]?>" width="75" height="18" alt=""></span>
+					<span class="b1"><img src="/upload/file/<?=$row_buyer["filelogo"]?>" width="46" height="17" alt=""></span>
 					<span class="b2" lang="en"><?=$row_buyer["mem_nm_en"]?></span>
 				</li>
 				<li>
-					<span class="b1"><img src="/kor/images/nation_title_<?=$row_buyer["nation"]?>.png" alt="<?=GF_Common_GetSingleList("NA",$row_buyer["nation"])?>"></span>
+					
 					<span lang="en"><?=$row_buyer["homepage"]?></span>
 				</li>
 			</ul>
@@ -87,11 +87,11 @@ if ($invoice_no==""){
 		<div class="info-wrap">
 			<ul class="company-info">
 				<li>
-					<span class="b1"><img src="/upload/file/<?=$row_buyer["filelogo"]?>" width="75" height="18" alt=""></span>
+					<span class="b1"><img src="/upload/file/<?=$row_buyer["filelogo"]?>" width="46" height="17" alt=""></span>
 					<span class="b2" lang="en"><?=$row_buyer["mem_nm_en"]?></span>
 				</li>
 				<li>
-					<span class="b1"><img src="/kor/images/nation_title_<?=$row_buyer["nation"]?>.png" alt="<?=GF_Common_GetSingleList("NA",$row_buyer["nation"])?>"></span>
+					<span class="b1"><img src="/kor/images/nation_title2_<?=$row_buyer["nation"]?>.png" alt="<?=GF_Common_GetSingleList("NA",$row_buyer["nation"])?>"></span>
 					<span lang="en"><?=$row_buyer["homepage"]?></span>
 				</li>
 			</ul>
@@ -217,9 +217,9 @@ if ($invoice_no==""){
 			<p class="txt2">I hereby certify that I as a member is well-informed with the PARTStrike’s  Treatments mentioned on the pages also will not violate any items mentioned  in the Treatment of PARTStrike and agrees to pay the above lists without any  complaints or argument. </p>
 		</div>
 		<ul class="sign-area">
-			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_parts["filesign"]?>" height="21" alt=""></strong></li>
-			<li><span>CEO : </span><strong><?=$row_parts["pos_nm_en"]?></strong></li>
-			<li><span>Tel : </span><strong><?=$row_parts["tel"]?></strong><span class="fax">Fax : </span><strong><?=$row_parts["fax"]?></strong></li>
+			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_buyer["filesign"]?>" height="21" alt=""></strong></li>
+			<li><span>CEO : </span><strong><?=$row_buyer["pos_nm_en"]?></strong></li>
+			<li><span>Tel : </span><strong><?=$row_buyer["tel"]?></strong><span class="fax">Fax : </span><strong><?=$row_buyer["fax"]?></strong></li>
 		</ul>
 	</div>
 	

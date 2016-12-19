@@ -332,7 +332,7 @@
 					<tr>
 						<th scope="row" lang="en">My Bank</th>
 						<td lang="en">$<?=SumMyBank2($_SESSION["MEM_IDX"], $_SESSION["REL_IDX"])?>
-							<span lang="en" class="c-red">($<?=SumBankHold($_SESSION["MEM_IDX"], $_SESSION["REL_IDX"]);?>)</span>
+							<br><span lang="en" class="c-red">[$<?=SumBankHold($_SESSION["MEM_IDX"], $_SESSION["REL_IDX"]);?>]</span>
 							<img src="/kor/images/top_btn_remittance.gif" alt="remittance" class="btn-remittance" style="cursor:pointer;"></td>
 					</tr>
 					<tr>

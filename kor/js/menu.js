@@ -634,6 +634,7 @@ function openCommLayer(layerNum,loadPage,varNum){
 				$(this).css("z-index","900");
 			}
 		});
+		$(".layer5-section .btn-close img").css("display","block");
 		$layer.css("z-index","999");
 		$("body").addClass("open-layer");
 		!varNum? $var = "" : $var = varNum;

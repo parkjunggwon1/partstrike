@@ -125,18 +125,18 @@ function pay2(){
 		<tbody>
 			<tr>
 				<th scope="row"><span class="c-purple">My Bank</span> : </th>
-				<td><span class="c-blue">US$ <?=number_format($summybank,2)?></span></td>
+				<td><span class="c-blue">$ <?=number_format($summybank,4)?></span></td>
 			</tr>
 			<tr>
-				<th scope="row"><span class="c-red">(-)</span> Total Amount : </th>
-				<td><span class="c-blue">US$ <?=number_format($tot_amt,2)?></span></td>
+				<th scope="row"><span class="c-red">(-)</span> Total : </th>
+				<td><span class="c-red">-$ <?=number_format($tot_amt,4)?></span></td>
 			</tr>
 			<tr class="lst">
 				<td colspan="2"></td>
 			</tr>
 			<tr>
 				<th scope="row"><span class="c-red" lang="ko">잔액 : </span></th>
-				<td><span class="c-red">US$ <?=number_format($balance,2)?></span></td>
+				<td><span class="c-blue">$ <?=number_format($balance,4)?></span></td>
 			</tr>
 		</tbody>
 	</table>

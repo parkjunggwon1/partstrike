@@ -93,13 +93,13 @@ $(document).ready(function(){
 						<th scope="col" class="t-nation">Nation</th>
 						<?}?>
 						<th scope="col" class="t-lt" Style="width:280px;">Part No.</th>
-						<th scope="col" class="t-Manufacturer">Manufacturer</th>
+						<th scope="col" class="t-Manufacturer" Style="width:220px;">Manufacturer</th>
 						<th scope="col" class="t-Package">Package</th>
 						<th scope="col" class="t-dc">D/C</th>
 						<th scope="col" class="t-rohs">RoHS</th>
-						<th scope="col" class="t-oty">O'ty</th>
-						<th scope="col" class="t-unitprice">Unit Price</th>
-						<th scope="col" class="t-orderoty t-rt" lang="ko">발주수량</th>
+						<th scope="col" class="t-oty" style="width:66px;">O'ty</th>
+						<th scope="col" class="t-unitprice" style="width:66px;">Unit Price</th>
+						<th scope="col" class="t-orderoty t-rt" lang="ko" style="width:66px;">발주수량</th>
 						<?if($load_page == "09_01"){?>
 						<th scope="col" class="t-supplyoty t-rt" style="width:66px;" lang="ko">공급수량</th>
 						<?}?>
