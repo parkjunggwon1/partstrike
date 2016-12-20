@@ -1153,6 +1153,8 @@ function get_odr_det_no($ty){  //agreement no
 
 
 function get_auto_no($ty, $table, $column){  // 통합 no 생성
+	global $odr_idx;
+
 	if ($ty == "TFI"){
 		//$addCl = " or testB_invoice like '".$ty.date("y")."%'"; //error에의한 주석처리.아래도 수정 2016-10-16
 		$addCl = " or invoice_no like '".$ty.date("y")."%'";
@@ -1162,11 +1164,22 @@ function get_auto_no($ty, $table, $column){  // 통합 no 생성
 		//$cnt = QRY_CNT($table,"and odr_status NOT IN(8,99) AND ($column like '".$ty.date("y")."%'".$addCl.")"); //JSJ : 수량으로 되어있어서 번호 늘지 않는다.
 		//cnt 아닌 최대번호 가져오자. 2016-04-19
 		$cut_bit = strlen($ty) + 6; //ty 문자열 길이에따라 자르는 시작 위치 바뀌어야 한다.
+		$odr_no_cnt = QRY_CNT("odr","and ($column like '".$ty.date("y")."%'".$addCl.") and odr_idx = '".$odr_idx."' ");
 		$cnt = get_any("odr","IFNULL(CAST(SUBSTR(MAX($column),$cut_bit,5) AS UNSIGNED),0)", "odr_status NOT IN(8,99) AND ($column like '".$ty.date("y")."%'".$addCl.")");
+		if ($odr_no_cnt)
+		{
+			$result_value = $ty.date("y")."-PS".str_pad(fmod($cnt,99999),5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
+		}
+		else
+		{
+			$result_value = $ty.date("y")."-PS".str_pad(fmod($cnt,99999)+1,5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
+		}
+		
 	}else{
 		$cnt = QRY_CNT($table,"and ($column like '".$ty.date("y")."%'".$addCl.")");
+		$result_value = $ty.date("y")."-PS".str_pad(fmod($cnt,99999)+1,5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
 	}
-	return $ty.date("y")."-PS".str_pad(fmod($cnt,99999)+1,5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
+	return $result_value;
 }
 
 function get_memfee_no($ty, $table, $column){     //memfee no

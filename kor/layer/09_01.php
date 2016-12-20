@@ -88,6 +88,25 @@ function chgnation(obj){
 		}
 		$("#nation").val(obj.value).attr("selected", "selected");
 		$("#nation").siblings("label").text($("#nation").children("option:selected").text());
+		
+		if (obj.value=="")
+		{
+			$("input[name=nation_nm]").val("");		
+		}else{
+			$.ajax({ 
+			type: "GET", 
+			url: "/ajax/proc_ajax.php", 
+			data: { actty : "STC",
+					actidx : obj.value
+			},
+				dataType : "html" ,
+				async : false ,
+				success: function(data){ 
+					$("input[name=nation_nm]").val(data);	
+				}
+			});		
+		}
+
 		$.ajax({ 
 		type: "GET", 
 		url: "/ajax/proc_ajax.php", 
@@ -219,6 +238,60 @@ function chgdositxt(obj,enty){
 			$(".text_lang").text("");
 		}		
 	}
+	function new_addr()
+	{
+		$(".company-info-wrap input").val("");
+		$(".company-info-wrap select").val("");
+		$("#sp_addr").html("");
+		$("#delv_load").val("05_04");
+		$("#delivery_addr_idx").val("0");
+		$(".company-rank td").attr('class',"");
+		$(".company-info-wrap input,select").attr("disabled",true);
+		$(".company-info-wrap select:eq(0)").attr("disabled",false);
+		$("#ship_info").attr("disabled",false);	
+		$(".company-info-wrap select:eq(1)").attr("disabled",true);
+		MustChk();
+	}
+
+	function detail_addr(str)
+	{			
+		var s_nation ="<?=$s_nation?>";
+		var check_val = $("input:checkbox[id='zipcode_no']").is(":checked");
+		var nation_code = $("#nation").children("option:selected").val();
+		var nation_val=$("#nation").children("option:selected").text();		
+		var zipcode_val=$("#zipcode").val();
+		var dosi_val=$("#real_do_val").val();
+		var sigungu_val=$("#sigungu").val();
+		var detail_val=$("#addr_det").val();
+		var post_val="";
+		var post_val_en="";
+
+		if (check_val==true)
+		{
+			post_val="";
+			post_val_en="";
+
+			$("#zipcode").attr("readonly",true);
+			$("#zipcode").css("background-color",'rgb(235, 235, 228)');
+			$("#zipcode").val(" ");
+		}
+		else
+		{
+			$("#zipcode").css("background-color",'');
+			$("#zipcode").attr("readonly",false);
+
+			
+			post_val=" "+$("#zipcode").val()+", ";
+			post_val_en=""+$("#zipcode").val()+", ";
+			
+		}	
+		
+		
+		$("#addr").val($("#addr_full").val()+" "+", "+post_val+" "+nation_val);
+				
+		$("#sp_addr").html($("#addr_full").val()+" "+", "+post_val+" "+nation_val);
+					
+	}
 
 $(document).ready(function(){
 	//sorting 부분
@@ -241,12 +314,13 @@ $(document).ready(function(){
 	}
 	var $input = $("input:checkbox[name^=odr_det_idx]");   //:enabled
 	var $notamendinput = $("input:checkbox[amend_yn=N]"); 
-	$("input[name=insur_yn]").click(function(){
-		if($(this).hasClass("checked")){
+	$("input[name=insur_yn]").click(function(){	
+		if($(this).hasClass("checked")){			
 			$(this).parent().next().html(" : No");
+			$(this).attr("class"," ");
 		}else{
 			$(this).parent().next().html(" : Yes");
-		
+			$(this).attr("class","checked");
 		}
 	});
 
@@ -297,6 +371,7 @@ $(document).ready(function(){
 }); //end of ready
 
 function checkActive(){
+
 	//alert("checkActive");
 	var Erchkbox = false , ErchkCnt = true;
 	var det_cnt = $("#det_cnt_0901").val();
@@ -325,7 +400,7 @@ function checkActive(){
 	});
 	maskon();
 	//선적정보
-	if(($("#ship_info option:selected").val()>=5  && $("#memo").val()=="") ||$("#ship_info option:selected").val()<5  && $("#ship_account_no").val()=="" || $("#ship_info option:selected").val()=="" ){
+	if(($("#ship_info option:selected").val()>=5  && $("#memo").val()=="") ||$("#ship_info option:selected").val()<5  && $("#ship_account_no").val()=="" || $("#ship_info option:selected").val()=="" || MustChk()!=true ){
 		ErchkCnt = false;
 	}
 	//발주서 확인 버튼 활성

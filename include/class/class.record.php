@@ -657,8 +657,8 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 			<tr>
 				<th scope="col" style="width:23px">No.</th>
 				<?if ($odr_type == "B"){?><th scope="col" style="width:80px">Nation</th><?}?>
-				<th scope="col" class="t-lt" style="width:180px;">Part No.</th>
-				<th scope="col" class="t-lt" style="width:140px;">Manufacturer</th>
+				<th scope="col" class="t-lt" style="width:160px;">Part No.</th>
+				<th scope="col" class="t-lt" style="width:120px;">Manufacturer</th>
 				<th scope="col">Package</th>
 				<th scope="col">D/C</th>
 				<th scope="col">RoHS</th>
@@ -803,10 +803,10 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 						<td><?=$package?></td>
 						<td><?=$dc?></td>
 						<td><?=$rhtype?></td>
-						<td class="t-rt"><?=$odr_quantity==0?"":number_format($odr_quantity)?></td>
+						<td class="t-rt"><?=$supply_quantity==0?"":number_format($supply_quantity)?></td>
 						<td class="t-ct">$<?=$price_val?></td>
 						<td class="t-rt">$<?=number_format(round_down($odr_quantity*$price,4),4)?></td>
-						<?if ($odr_type == "B"){?><td class="txt-r t-ct"><?if ($end_yn=="Y"){?><div class="c-blue company_div" style="cursor:pointer;" onclick="side_company_info2(<?=$com_idx?>,'<?=$odr_type?>')"><?=$company_nm?></div>
+						<?if ($odr_type == "B"){?><td class="txt-r t-ct"><?if ($end_yn=="Y"){?><div class="c-blue company_div" style="cursor:pointer;" onclick="side_company_info2(<?=$com_idx?>,'<?=$odr_type?>')"><?=get_cut($company_nm,"8",".")?></div>
 						<?
 						$now_date = date("Y-m-d H:i:s", strtotime(date('Y-m-d').' - 6month')); 
 						$reg_date = get_any("odr","reg_date" , "odr_idx = $odr_idx");

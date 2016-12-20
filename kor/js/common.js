@@ -1186,9 +1186,19 @@ $(document).ready(function(){
 
 	// 수정 발주서 amend sheet '발주서 확인' 클릭 from:09_01 
 	$("body").on("click",".btn-view-sheet-1207",function(){
+		
 		var $chked_odr = $("input[name^=odr_det_idx]:checked");
 		var odr_idx = $(this).attr("odr_idx");
-		
+		var insur_chk = "";
+		if($("#insur_yn").attr("class")=="checked")
+		{
+			insur_chk = "o";
+		}
+		else
+		{
+			insur_chk = "";
+		}
+
 		$("#ship_info").val();
 		
 		if($chked_odr.length==0){ 
@@ -1204,7 +1214,7 @@ $(document).ready(function(){
 				//2016-04-18 : 송장번호 생성 및 저장
 				$.ajax({
 						url: "/kor/proc/odr_proc.php", 
-						data: "typ=poano&odr_idx="+odr_idx+"&ship_info="+$("#ship_info").val()+"&ship_account_no="+$("#ship_account_no").val()+"&memo="+$("#memo").val(),
+						data: "typ=poano&odr_idx="+odr_idx+"&ship_info="+$("#ship_info").val()+"&ship_account_no="+$("#ship_account_no").val()+"&memo="+$("#memo").val()+"&insur_yn="+insur_chk+"&delivery_addr_idx="+$("#delivery_addr_idx").val(),
 						encType:"multipart/form-data",
 						success: function (data) {	
 							if (trim(data) == "SUCCESS"){						

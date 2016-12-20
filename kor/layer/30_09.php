@@ -269,7 +269,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 								$tel_nation = explode("-",$delivery_addr["tel"]);
 								$fax_nation = explode("-",$delivery_addr["fax"]);
 								
-								if ($row_seller["nation"]==$row_buyer["nation"])
+								if ($row_seller["nation"]==$delivery_addr["nation"])
 								{
 									$tel = str_replace($tel_nation[0]."-","0",$delivery_addr["tel"]);
 									$fax = str_replace($fax_nation[0]."-","0",$delivery_addr["fax"]);

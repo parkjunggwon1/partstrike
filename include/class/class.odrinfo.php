@@ -296,6 +296,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td class="c-blue t-rt">$<?=number_format($odr_quantity*$price,2)?></td>
 					<?}?>
 					</tr>
+					<?if ($part_condition){?>
 					<tr class="bg-none">
 						<td></td>
 						<td colspan="13" style="padding:0">
@@ -318,6 +319,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<!-- //부품상태 ---------------->
 						</td>
 					</tr>
+					<?}?>
 				<?}elseif ($loadPage== "30_20_F" || $loadPage== "30_21_F"  || $loadPage== "30_22_F"){ //--------------------------- 선적(Fault), 수령(fault)-POP -----------------------------------------------------------
 						$com_idx = $rel_idx==0 ? $sell_mem_idx : $rel_idx;
 						$company_nm = get_any("member","mem_nm_en", "mem_idx=$com_idx");
@@ -436,7 +438,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td class="t-rt"><?=$part_stock==0?"":number_format($quantity + $supply_quantity)?></td>
 					<td class="t-rt">$<?=$price==0?"":$price_val?></td>
 					<td>
-						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" name="odr_quantity[]" odr_det_idx="<?=$odr_det_idx?>" supply_quantity="<?=$supply_quantity;?>" quantity="<?=$quantity + $supply_quantity;?>" amd_yn="Y" value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:56px;">
+						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" name="odr_quantity[]" odr_det_idx="<?=$odr_det_idx?>" supply_quantity="<?=$supply_quantity;?>" quantity="<?=$quantity + $supply_quantity;?>" amd_yn="Y" value="" style="width:56px;">
 					</td>
 					<td class="c-red t-rt"><?=$supply_quantity==0?"":number_format($supply_quantity)?></td>
 					<?=($period)?"<td class='c-red'>".(QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"Stock":$period):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
@@ -2299,7 +2301,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 			
 			<tr class="bg-none">
 				<td></td>
-				<td colspan="9" style="padding:0">
+				<td colspan="9" style="padding:0;">
 					<table class="detail-table">
 						<tbody>
 							<tr>								
@@ -2363,7 +2365,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 							<?if($ship[delivery_addr_idx] > 0){?>
 
 							<tr>
-								<td scope="row" colspan="2" bgcolor="#FFFFCC" style="text-align:left;">배송지 변경</td>								
+								<td scope="row" colspan="2" bgcolor="#FFFFCC" style="text-align:left;color:#000000;">배송지 변경</td>								
 							</tr>
 							<tr>								
 								<td lang="ko" colspan="2" bgcolor="#FFFFCC" style="text-align:left;">
@@ -2804,7 +2806,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 			<tr class="bg-none">
                 <td></td>
 				<?=($det_cnt>1)? "<td></td>":"";?>
-				<td colspan="10" style="padding:0">		
+				<td colspan="10" style="padding:0;padding-top:20px;">		
 				 <div class="txt_option" style="display:none;margin-left:-580px;"><img src="/kor/images/txt_option.gif" alt="선적Option을 선택하여 발주서를 각각 발행할 수 있습니다.발주서 기준 최종 납기 제품과 일괄 배송됩니다." /></div>
    
 					<table class="detail-table" style="margin-top:0;">
@@ -2919,7 +2921,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 			}	
 		}
 		?>
-		<table class="company-info-tb2" style="width:500px" align="">
+		<table class="company-info-tb2" style="width:700px" align="">
 				<tbody>
 					<!--<tr>
 						<th scope="row">회사구분 :</th>
@@ -2927,11 +2929,11 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 					</tr>-->
 					<tr>
 						<th scope="row">국가 :</th>
-						<td colspan="5"><span lang="kor"><?=GF_Common_GetSingleList("NA",$nation)?></span></td>
+						<td colspan="5"><span class="c-red"><?=GF_Common_GetSingleList("NA",$nation)?></span></td>
 					</tr>
 					<tr>
 						<th scope="row">회사명 :</th>
-						<td colspan="5"><span lang="kor"><?=$com_name?></span></td>
+						<td colspan="5"><span ><?=$com_name?></span></td>
 					</tr>
 					<tr>
 						<th scope="row">담당자/직책 :</th>
@@ -2951,11 +2953,11 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 					</tr>
 					<tr>
 						<th scope="row">주소 :</th>
-						<td colspan="5"><span lang="en"><?=$addr?></span></td>
+						<td colspan="5"><span><?=$addr?></span></td>
 					</tr>
 					<tr>
-						<th scope="row"><span lang="en">E-mail :</span></th>
-						<td colspan="5"><?=$email?></td>
+						<th scope="row"><span>E-mail :</span></th>
+						<td colspan="5" class="c-red"><?=$email?></td>
 					</tr>
 					<?if(strlen($homepage) > 0){?>
 					<tr>

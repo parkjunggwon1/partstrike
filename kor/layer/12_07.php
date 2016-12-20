@@ -59,12 +59,33 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 	<div class="order-info">
 		<ul>
 			<li class="b1"><strong>Purchase Order Amendment No.</strong><span><?=$row_odr["amend_no"]?></span></li>
-			<li class="b2"><strong>Date</strong><span><?=$row_odr["amend_date"]?></span></li>
+			<li class="b2"><strong>Date</strong><span><?=date("Y-m-d",strtotime( $row_odr["amend_date"] ))?></span></li>
 			<li><strong>Page</strong><span>1</span></li>
 		</ul>
 		<ul>
-			<li class="b3"><strong>Ship Via</strong><span> <?if ($row_ship["ship_info"]){?><img src="/kor/images/icon_<?=strtolower(GF_Common_GetSingleList("DLVR",$row_ship["ship_info"]))?>.gif" alt="" height="10"><?}?></span></li>
-			<li><strong>Account No.</strong><span><?=$row_ship["ship_account_no"]?></span></li>
+		<?
+		if ($row_ship["ship_info"]==5)
+		{
+			$ship_via = "Another";
+			$ship_address = "Address";
+		}
+		else if ($row_ship["ship_info"]==6)
+		{
+			$ship_via = "Pick Up";
+			$ship_address = "Address";
+		}
+		else
+		{
+			$ship_via = "<img src='/kor/images/icon_".strtolower(GF_Common_GetSingleList('DLVR',$row_ship['ship_info'])).".gif' alt='' height='10'>";
+			$ship_address = $row_ship["ship_account_no"];
+		}
+		?>
+			<li class="b3"><strong>Ship Via</strong>
+				<span> 				
+					<?=$ship_via?>		
+				</span>
+			</li>
+			<li><strong>Account No.</strong><span><?=$ship_address?></span></li>
 			<li class="b2"><strong>Transport insurance</strong><span><?=$row_ship["insur_yn"]=="o"?"Yes":"No"?></span></li>
 		</ul>
 		<ul>
@@ -81,13 +102,38 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 					<tr>
 						<th scope="row">Ship to :</th>
 						<td>
-							<ul class="contact-info">
+							<?
+							if ($row_ship["delivery_addr_idx"])
+							{
+								$change_color = "style='color:#00759e;'";
+							}
+							else
+							{
+								$change_color = "";
+							}
+							?>
+							<ul class="contact-info" <?=$change_color?>>
 								<?if ($row_ship["delivery_addr_idx"]){// 배송지 변경한 건
-								$delivery_addr=get_delivery_addr($row_ship["delivery_addr_idx"]);
+								$delivery_addr=get_delivery_addr($row_ship["delivery_addr_idx"]);				
+								
+								$tel_nation = explode("-",$delivery_addr["tel"]);
+								$fax_nation = explode("-",$delivery_addr["fax"]);
+								
+								if ($row_seller["nation"]==$delivery_addr["nation"])
+								{
+									$tel = str_replace($tel_nation[0]."-","0",$delivery_addr["tel"]);
+									$fax = str_replace($fax_nation[0]."-","0",$delivery_addr["fax"]);
+								}
+								else
+								{
+									$tel = $delivery_addr["tel"];
+									$fax = $delivery_addr["fax"];
+								}
+								
 								?>
 									<li><?=$delivery_addr["com_name"]?></li>
 									<li><?=$delivery_addr["addr"]?></li>
-									<li><span class="tel">Tel : <?=$delivery_addr["tel"]?></span>Fax : <?=$delivery_addr["fax"]?></li>
+									<li><span class="tel">Tel : <?=$tel?></span>Fax : <?=$fax?></li>
 									<li>Contact : <?=$delivery_addr["manager"]?> / <?=$delivery_addr["pos_nm"]?></li>
 									<li><?=$delivery_addr["email"]?></li>
 								<?}else{?>
@@ -95,11 +141,15 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 									//나라가 같을경우
 									if ($row_seller["nation"]==$row_buyer["nation"])
 									{
-										
+										$tel_nation = explode("-",$row_buyer["tel"]);
+										$fax_nation = explode("-",$row_buyer["fax"]);
+
+										$tel_buyer = str_replace($tel_nation[0]."-","0",$row_buyer["tel"]);
+										$fax_buyer = str_replace($fax_nation[0]."-","0",$row_buyer["fax"]);
 									?>
 										<li><?=$row_buyer["mem_nm"]?></li>
 										<li><?=$row_buyer["addr"]?></li>
-										<li><span class="tel">Tel : <?=preg_replace('/\+.+\-/', "0",$row_buyer["tel"])?></span>Fax : <?=preg_replace('/\+.+\-/', "0",$row_buyer["fax"])?></li>
+										<li><span class="tel">Tel : <?=$tel_buyer?></span>Fax : <?=$fax_buyer?></li>
 										<li>Contact : <?=$row_odr["rel_idx"]==0?$row_buyer["pos_nm"]:get_any("member", "mem_nm", "mem_idx=".$row_odr["mem_idx"])?> / <?=$row_odr["rel_idx"]==0?"CEO":get_any("member", "pos_nm", "mem_idx=".$row_odr["mem_idx"])?></li>
 										<li><?=$row_buyer["email"]?></li>
 									<?
