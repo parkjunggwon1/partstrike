@@ -218,7 +218,7 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 				{							
 				?>
 					<li>
-						<span class="b1"><img src="/upload/file/<?=$row_seller["filelogo"]?>" alt="" width="46" height="17"></span>
+						<span class="b1"><img src="/upload/file/<?=$row_seller["filelogo"]?>" alt="" width="75" height="18"></span>
 						<span class="b2" ><?=$row_seller["mem_nm"]?></span>
 					</li>
 					<li>
@@ -231,7 +231,7 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 				{
 				?>
 					<li>
-						<span class="b1"><img src="/upload/file/<?=$row_seller["filelogo"]?>" alt="" width="46" height="17"></span>
+						<span class="b1"><img src="/upload/file/<?=$row_seller["filelogo"]?>" alt="" width="75" height="18"></span>
 						<span class="b2" ><?=$row_seller["mem_nm_en"]?></span>
 					</li>
 					<li>
@@ -281,7 +281,7 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 	<div class="etc-info1">
 		<div class="txt-area">
 			<strong>Request from buyer</strong>
-			<p class="txt1 c-blue"><?=$row_ship["memo"]?></p>
+			<p class="txt1 c-blue" style="margin:0;padding-top:5px;"><?=$row_ship["memo"]?></p>
 		</div>
 	</div>
 	
@@ -291,7 +291,7 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 			<p class="txt2">I hereby certify that I buyer will not violate any items that are mentioned in the Treatment of PARTStrike and is willing to make the Purchase Order perfectly accomplished by not making any cancellation without reason</p>
 		</div>
 		<ul class="sign-area">
-			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_seller["filesign"]?>" height="23" width="152px" alt=""></strong></li>
+			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_seller["filesign"]?>" height="21" width="180" alt=""></strong></li>
 			<?
 			//나라가 같을경우
 			if ($row_seller["nation"]==$row_buyer["nation"])

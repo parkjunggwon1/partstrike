@@ -61,7 +61,7 @@ if($sheets_no){ //2016-05-19 : What's New 에서 Sheet 클릭 시 Log 호출을 
 	<div class="order-info">		
 		<ul>
 			<li class="b1"><strong>Purchase Order No.</strong><span><?=$row_odr["odr_no"]?></span></li>
-			<li class="b2"><strong>Date</strong><span><?=$row_odr["reg_date_fmt"]?></span></li>
+			<li class="b2"><strong>Date</strong><span><?=date("Y-m-d",strtotime( $row_odr["reg_date"] ))?></span></li>
 			<li><strong>Page</strong><span>1</span></li>
 		</ul>
 		<ul>

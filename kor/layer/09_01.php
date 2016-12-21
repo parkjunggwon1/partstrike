@@ -400,8 +400,14 @@ function checkActive(){
 	});
 	maskon();
 	//선적정보
-	if(($("#ship_info option:selected").val()>=5  && $("#memo").val()=="") ||$("#ship_info option:selected").val()<5  && $("#ship_account_no").val()=="" || $("#ship_info option:selected").val()=="" || MustChk()!=true ){
+	if(($("#ship_info option:selected").val()>=5  && $("#memo").val()=="") ||$("#ship_info option:selected").val()<5  && $("#ship_account_no").val()=="" || $("#ship_info option:selected").val()==""){
 		ErchkCnt = false;
+	}
+
+	var chk_val=$("input:checkbox[id='delivery_chg']").is(":checked");
+	if(chk_val==true && MustChk()!=true)
+	{
+		ErchkCnt = false;	
 	}
 	//발주서 확인 버튼 활성
 	if(okCnt == det_cnt && ErchkCnt && selCnt == det_cnt && supp_qty <= odr_qty){

@@ -66,6 +66,8 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			$odr_quantity= replace_out($row2["odr_quantity"]);
 			$supply_quantity= replace_out($row2["supply_quantity"]);
 			$odr_stock= replace_out($row2["odr_stock"]);
+			$odr_price= replace_out($row2["odr_price"]);
+			$part_qty= replace_out($row2["part_stock"]);
 			
 			$com_idx = $rel_idx==0 ? $sell_mem_idx : $rel_idx;
 			$company_nm = get_any("member","mem_nm_en", "mem_idx=$com_idx"); 	
@@ -181,12 +183,12 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 
 			if(strpos($price, ".") == false)  
 			{
-				$price_val= number_format($price,2);
+				$price_val= number_format($odr_price,2);
 				$total_price_value = round_down($odr_quantity*$price,4);
 			}				
 			else
 			{
-				$price_val= $price;
+				$price_val= $odr_price;
 				$total_price_value = round_down($odr_quantity*$price,4);
 			}
 
@@ -203,7 +205,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			<!--odr_stock으로 바꿈 2016-11-8-->
 			
 			<?if ($odr_status==0 || $odr_status==1 || $odr_status==2  || $odr_status==8 || $odr_status==16 || $odr_status==18 || $odr_status==19 || $odr_status==20 || $odr_status==31){?>
-				<td  <?=$goJump?>  class="t-rt"><?=$odr_stock<=0?"":number_format($odr_stock)?></td>			
+				<td  <?=$goJump?>  class="t-rt"><?=$part_qty+$odr_quantity<=0?"":number_format($part_qty+$odr_quantity)?></td>			
 			<?}else{?>
 				<td  <?=$goJump?>  class="t-rt"><?=$supply_quantity<=0?"":number_format($supply_quantity)?></td>
 			<?}?>
@@ -657,13 +659,13 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 			<tr>
 				<th scope="col" style="width:23px">No.</th>
 				<?if ($odr_type == "B"){?><th scope="col" style="width:80px">Nation</th><?}?>
-				<th scope="col" class="t-lt" style="width:160px;">Part No.</th>
+				<th scope="col" class="t-lt" style="width:170px;">Part No.</th>
 				<th scope="col" class="t-lt" style="width:120px;">Manufacturer</th>
 				<th scope="col">Package</th>
 				<th scope="col">D/C</th>
 				<th scope="col">RoHS</th>
 				<th scope="col" class="t-rt" style="width:65px">Q'ty</th>
-				<th scope="col" class="t-ct" style="width:65px">Unit Price</th>
+				<th scope="col" class="t-rt" style="width:65px">Unit Price</th>
 				<th scope="col" class="t-rt" style="width:70px;padding-right:5px;">Amount</th>
 				<?if ($odr_type == "B"){?><th scope="col" class="t-ct" style="width:70px;">Company</th><?}?>
 			</tr>
@@ -803,24 +805,44 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 						<td><?=$package?></td>
 						<td><?=$dc?></td>
 						<td><?=$rhtype?></td>
+						<?if ($odr_type == "B"){?>
 						<td class="t-rt"><?=$supply_quantity==0?"":number_format($supply_quantity)?></td>
-						<td class="t-ct">$<?=$price_val?></td>
+						<?}else{?>
+						<td class="t-rt"><?=$odr_quantity==0?"":number_format($odr_quantity)?></td>
+						<?}?>						
+						<td class="t-rt">$<?=$price_val?></td>
 						<td class="t-rt">$<?=number_format(round_down($odr_quantity*$price,4),4)?></td>
-						<?if ($odr_type == "B"){?><td class="txt-r t-ct"><?if ($end_yn=="Y"){?><div class="c-blue company_div" style="cursor:pointer;" onclick="side_company_info2(<?=$com_idx?>,'<?=$odr_type?>')"><?=get_cut($company_nm,"8",".")?></div>
+
+						<?if ($odr_type == "B"){?><td class="txt-r t-ct">
+						<?if ($end_yn=="Y"){?>
+						<div class="c-blue company_div" style="cursor:pointer;" onclick="side_company_info2(<?=$com_idx?>,'<?=$odr_type?>')">
+							<?=get_cut($company_nm,"8",".")?>							
+						</div>
+						<div class="c-blue company_div2" style="cursor:pointer;display: none;" onclick="side_company_info2(<?=$com_idx?>,'<?=$odr_type?>')">
+							<?=get_cut($company_nm,"8",".")?>							
+						</div>
 						<?
 						$now_date = date("Y-m-d H:i:s", strtotime(date('Y-m-d').' - 6month')); 
 						$reg_date = get_any("odr","reg_date" , "odr_idx = $odr_idx");
-						$fault_valid_yn = $now_date<=$reg_date?"Y":"N";					
+						$fault_valid_yn = $now_date<=$reg_date?"Y":"N";		
 						if($fty_exist_yn =="N" && $fault_valid_yn =="Y"){
 							$badness_chk = QRY_CNT("odr_history", "and odr_idx = $odr_idx  and status in (8)") > 0 ? "Y": "N";  //종료까지 무사히 왔는지 여부
+							
 							if($badness_chk =="N"){
 						?>
 						<a href="#" odr_det_idx="<?=$odr_det_idx?>" class="btn-pop-2102"><img src="/kor/images/btn_badness.gif" alt="불량통보" class="badness" style="display:none;"></a>
+							<?}else{?>
+
 							<?}?>
 						<?}else{?>
 							<!--<img src="/kor/images/btn_badness_1.gif" alt="불량통보" title="보증기간 만료" class="badness" style="display:none;">-->
 						<?}?>
-						<?}?></td><?}?>			
+						<?}else{ ?> <div class="c-blue company_div2" style="cursor:pointer;" onclick="side_company_info2(<?=$com_idx?>,'<?=$odr_type?>')">
+							<?=get_cut($company_nm,"8",".")?>							
+						</div><?}?>
+
+						</td>
+						<?}?>			
 					</tr>
 					<?if($y==$cnt1){?>
 					<tr><td colspan='15' style='padding-top:20px; background-color:#FFFFFF;'></td></tr>

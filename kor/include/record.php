@@ -19,21 +19,23 @@
 				var backgound = ($("#odr_type").val()=="S")?"#dce6f2":"#ffff99";
 				
 				if ($this.css("display")=="none")
-				{
+				{					
 					$(this).parents("tbody").addClass("record-on");
 					 $this.css("display","");	
 					 $(this).parent().parent().next().find("img.badness").show();
 					 $(this).parents("tr").css("background-color",backgound);
 					 $(this).parents("tr").next().css("background-color",backgound);
 					$(this).parent().parent().next().find(".company_div").hide();
+					$(this).parent().parent().next().find(".company_div2").show();
 					 
-				}else{					
+				}else{	
 					$(this).parents("tbody").removeClass("record-on");
 					$this.css("display","none");
 					$(this).parent().parent().next().find("img.badness").hide();
 					$(this).parents("tr").css("background-color","#ffffff");
 					$(this).parents("tr").next().css("background-color","#ffffff");
 					$(this).parent().parent().next().find(".company_div").show();
+					$(this).parent().parent().next().find(".company_div2").hide();
 					
 				}
 				if ($(this).find("img").attr("src").indexOf("record2")>0)

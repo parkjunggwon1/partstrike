@@ -2736,11 +2736,12 @@ function chg_ship_info(obj){
 							}
 							if(load_page=="05_04" || load_page=="09_01")
 							{
+								/*
 								if (ship_ch_btn == 0)
 								{
 									$("#ship_account_no").val("");
 								}
-
+								*/
 								if (chk_val==true)
 								{
 									$("#ship_account_no").val("");

@@ -36,7 +36,7 @@ Function QRY_RCD_DET_LIST($recordcnt,$searchand,$page,$ord='odr_det_idx'){
 	}
 
 	$sql = "
-			SELECT *,a.odr_status as order_status FROM odr a 
+			SELECT *,a.odr_status as order_status,c.quantity as part_stock FROM odr a 
 			left outer join odr_det b on a.odr_idx = b.odr_idx
 			left outer join part c on b.part_idx = c.part_idx 
 			WHERE

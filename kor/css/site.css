@@ -535,7 +535,7 @@ button .ss{margin-top:10px;}
 .stock-list-table.bg-type3>tbody>tr{background:#fff}
 .stock-list-table.bg-type3>tbody>tr:nth-child(4n+2),
 .stock-list-table.bg-type3>tbody>tr:nth-child(4n+1){background:#f7f7f7}
-.stock-list-table.bg-type3>tbody>tr>td{padding-top:10px; padding-bottom:10px}
+.stock-list-table.bg-type3>tbody>tr>td{/*padding-top:10px; padding-bottom:10px*/}
 .stock-list-table.bg-type3 .title-box{background-color:transparent; padding:1px}
 .stock-list-table.bg-type3 .detail-table{margin-top:0}
 .stock-list-table.bg-type3 .step-cell{padding:0}

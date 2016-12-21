@@ -269,7 +269,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<?if ($loadPage == "30_22"){
 								echo $odr_quantity==0?"":number_format($odr_quantity);
 							}else{
-								echo $odr_stock==0?"-":number_format($odr_stock);
+								echo $part_stock+$odr_quantity==0?"-":number_format($part_stock+$odr_quantity);
 							}
 							?>
 						</td>
@@ -704,7 +704,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								부품상태 : 
 								<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span>&nbsp&nbsp
 								포장상태 : 
-								<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span>
+								<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> / <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span>
 							</td>
 						</tr>
 						<?if(strlen($memo)>0){?>
@@ -782,7 +782,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<!--<?=($det_cnt>1)? "<td></td>":"";?>-->
 						<tr class="bg-none">				
 					<?if ($loadPage == "30_16"){?>
-							<td></td>
+							<td><input type="hidden" name="odr_det_idx[]" value="<?=$odr_det_idx;?>"></td>
 							<td class="c-red" colspan="10" style="text-align:left;">	
 								부품상태 : 
 								<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span>&nbsp&nbsp
@@ -883,7 +883,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								</select>
 							</div>
 						</td>
-						<td class="t-rt"><?=$odr_stock==0?"-":number_format($odr_stock); //수량?></td>
+						<td class="t-rt"><?=$part_stock+$odr_quantity==0?"-":number_format($part_stock+$odr_quantity); //수량?></td>
 						<td class="t-rt">$<?=$price_val?></td>
 						<td class="t-rt c-blue"><?=$odr_quantity==0?"":number_format($odr_quantity); //발주수량?></td>
 						<td class="t-rt c-red"><?=number_format($supply_quantity) //공급수량?></td>
@@ -1045,7 +1045,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<td><?=$rhtype?></td>
 							<?if($loadPage != "18R_19" && $loadPage!="19_1_05" && $loadPage!="19_1_06" && $loadPage!="30_14" && $loadPage!="30_14"){?>
 								<?if($loadPage == "30_10" || $loadPage == "13_04s"){?>
-									<td class="t-rt"><?=$odr_stock==0?"-":number_format($odr_stock)?></td>		
+									<td class="t-rt"><?=$part_stock+$odr_quantity==0?"-":number_format($part_stock+$odr_quantity)?></td>		
 								<?}else{?>
 									<td class="t-rt"><?=$supply_quantity==0?"-":number_format($supply_quantity)?></td>							
 								<?}?>
@@ -1899,7 +1899,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						   echo layerOrdListData($loadPage ,$odr_idx); //-- 실제 발주 목록 --------------//
 						   break;
 						  case "09_03":?>
-					<td class="company" style="width:33%;"><img src="/kor/images/nation_title_<?=$buy_com_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$buy_com_nation)?>"> <span class="name c-blue"><a href="javascript:layer_company_det('<?=$buy_com_idx?>');"><?=$buy_com_name?></a></span></td>
+					<td class="company" style="width:33%;"><img src="/kor/images/nation_title_<?=$buy_com_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$buy_com_nation)?>"> <span class="name"><a href="javascript:layer_company_det('<?=$buy_com_idx?>');" class="c-blue"><?=$buy_com_name?></a></span></td>
 					<td class="c-red2" style="width:33%;text-align:center;font-size:15px;">수정발주서가 도착했습니다.</td>
 					<td class="c-red2 w100 t-ct" style="width:33%;"></td>		
 					</tr></tbody></table></div>
@@ -2802,7 +2802,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 					</div>
 				</td>
 			</tr>
-		<?}elseif($loadPage!="09_03"){ //------------------------------------ 09_03(수정발주서) 외 그 나머지..--------------------------------------?>
+		<?}elseif($loadPage!="09_03"){ //------------------------------------ 09_03(수정발주서) 외 그 나머지..-------------------------------------- echo?>
 			<tr class="bg-none">
                 <td></td>
 				<?=($det_cnt>1)? "<td></td>":"";?>
@@ -2928,40 +2928,40 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						<td colspan="5"><?=GF_Common_GetSingleList("MEM",$com_type)?></td>
 					</tr>-->
 					<tr>
-						<th scope="row">국가 :</th>
-						<td colspan="5"><span class="c-red"><?=GF_Common_GetSingleList("NA",$nation)?></span></td>
+						<th scope="row" class="c-red">국가 :</th>
+						<td colspan="5"><span><?=GF_Common_GetSingleList("NA",$nation)?></span></td>
 					</tr>
 					<tr>
-						<th scope="row">회사명 :</th>
+						<th scope="row" class="c-red">회사명 :</th>
 						<td colspan="5"><span ><?=$com_name?></span></td>
 					</tr>
 					<tr>
-						<th scope="row">담당자/직책 :</th>
+						<th scope="row" class="c-red">담당자/직책 :</th>
 						<td colspan="5"><?=$manager?> / <?=$pos_nm?></td>
 					</tr>
 					<tr>
-						<th scope="row">부서 :</th>
+						<th scope="row" class="c-red">부서 :</th>
 						<td colspan="5"><?=$depart_nm?></td>
 					</tr>							
 					<tr>
-						<th scope="row" style="width:70px;"><span>Tel :</span></th>
+						<th scope="row" style="width:70px;"><span class="c-red">Tel :</span></th>
 						<td><?=$tel?></td>
-						<th scope="row" style="width:70px;"><span>Fax :</span></th>
+						<th scope="row" style="width:70px;"><span class="c-red">Fax :</span></th>
 						<td><?=$fax?></td>
-						<th scope="row" style="width:70px;">휴대전화 :</th>
+						<th scope="row" style="width:70px;" class="c-red">휴대전화 :</th>
 						<td><?=$hp?></td>
 					</tr>
 					<tr>
-						<th scope="row">주소 :</th>
+						<th scope="row" class="c-red">주소 :</th>
 						<td colspan="5"><span><?=$addr?></span></td>
 					</tr>
 					<tr>
-						<th scope="row"><span>E-mail :</span></th>
-						<td colspan="5" class="c-red"><?=$email?></td>
+						<th scope="row" class="c-red"><span>E-mail :</span></th>
+						<td colspan="5"><?=$email?></td>
 					</tr>
 					<?if(strlen($homepage) > 0){?>
 					<tr>
-						<th scope="row">홈페이지 :</th>
+						<th scope="row" class="c-red">홈페이지 :</th>
 						<td colspan="5"><?=$homepage?></td>
 					</tr>					
 					<?}?>
