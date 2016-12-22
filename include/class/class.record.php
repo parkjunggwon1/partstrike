@@ -68,6 +68,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			$odr_stock= replace_out($row2["odr_stock"]);
 			$odr_price= replace_out($row2["odr_price"]);
 			$part_qty= replace_out($row2["part_stock"]);
+			$part_price= replace_out($row2["part_price"]);
 			
 			$com_idx = $rel_idx==0 ? $sell_mem_idx : $rel_idx;
 			$company_nm = get_any("member","mem_nm_en", "mem_idx=$com_idx"); 	
@@ -192,6 +193,15 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				$total_price_value = round_down($odr_quantity*$price,4);
 			}
 
+			if(strpos($part_price, ".") == false)  
+			{
+				$part_price_val= number_format($part_price,2);
+			}				
+			else
+			{
+				$part_price_val= $part_price;
+			}
+
 		?>
 		<tr class="criteria" criteria_idx="<?=$criteria_now_idx?>">
 			<td ><?$j = ($criteria_now_idx != $criteria_idx)? 1:$j;
@@ -204,15 +214,21 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			<td <?=$goJump?> ><?=$rhtype?></td>
 			<!--odr_stock으로 바꿈 2016-11-8-->
 			
-			<?if ($odr_status==0 || $odr_status==1 || $odr_status==2  || $odr_status==8 || $odr_status==16 || $odr_status==18 || $odr_status==19 || $odr_status==20 || $odr_status==31){?>
+			<?if ($odr_status==1 || $odr_status==2  || $odr_status==3  || $odr_status==8 || $odr_status==16 || $odr_status==18 || $odr_status==19 || $odr_status==20 || $odr_status==31){?>
 				<td  <?=$goJump?>  class="t-rt"><?=$part_qty+$odr_quantity<=0?"":number_format($part_qty+$odr_quantity)?></td>			
+			<?}else if($odr_status==0){?>
+				<td  <?=$goJump?>  class="t-rt"><?=$part_qty<=0?"":number_format($part_qty)?></td>			
 			<?}else{?>
-				<td  <?=$goJump?>  class="t-rt"><?=$supply_quantity<=0?"":number_format($supply_quantity)?></td>
+				<td  <?=$goJump?>  class="t-rt"><?=$odr_quantity<=0?"":number_format($odr_quantity)?></td>
 			<?}?>
-			<!--바꿈 2016-11-8-->
-			<td  <?=$goJump?>  class="t-rt">$<?=$price_val?></td>
+
+			<?if($odr_status==0){?>
+				<td  <?=$goJump?>  class="t-rt">$<?=$part_price?></td>			
+			<?}else{?>
+				<td  <?=$goJump?>  class="t-rt">$<?=$price_val?></td>
+			<?}?>
 			<?if ($fr == "S"){?>	
-				<?if ($odr_status==0 || $odr_status==1 || $odr_status==2 || $odr_status==8 || $odr_status==16 || $odr_status==18 || $odr_status==19 || $odr_status==20 || $odr_status==31){?>
+				<?if ($odr_status==0 || $odr_status==1 || $odr_status==2 || $odr_status==3 || $odr_status==8 || $odr_status==16 || $odr_status==18 || $odr_status==19 || $odr_status==20 || $odr_status==31){?>
 					<td  <?=$goJump?> class="t-rt c-blue" ><?=$odr_quantity<=0?"":number_format($odr_quantity)?></td>			
 					<td  <?=$goJump?> class="t-rt c-red" ><?=$supply_quantity<=0?"":number_format($supply_quantity)?></td>
 				<?}else{?>
@@ -659,11 +675,11 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 			<tr>
 				<th scope="col" style="width:23px">No.</th>
 				<?if ($odr_type == "B"){?><th scope="col" style="width:80px">Nation</th><?}?>
-				<th scope="col" class="t-lt" style="width:170px;">Part No.</th>
-				<th scope="col" class="t-lt" style="width:120px;">Manufacturer</th>
-				<th scope="col">Package</th>
-				<th scope="col">D/C</th>
-				<th scope="col">RoHS</th>
+				<th scope="col" class="t-lt" style="width:150px;">Part No.</th>
+				<th scope="col" class="t-lt" style="width:100px;">Manufacturer</th>
+				<th scope="col" style="width:80px;">Package</th>
+				<th scope="col" style="width:36px">D/C</th>
+				<th scope="col" style="width:36px">RoHS</th>
 				<th scope="col" class="t-rt" style="width:65px">Q'ty</th>
 				<th scope="col" class="t-rt" style="width:65px">Unit Price</th>
 				<th scope="col" class="t-rt" style="width:70px;padding-right:5px;">Amount</th>
@@ -686,7 +702,7 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 			$sn = "and odr_idx in (select odr_idx from odr_det a left outer join part b on a.part_idx = b.part_idx and b.part_no like '%$sch_part_no%')";
 		}
 		
-		$searchand = "and odr_status IN('8','13','14','15','25','26','27','28','29','30') $dateClause and odr_no <> ''  and ".($odr_type=="S"?"sell_":"")."mem_idx =$this_mem_idx $sn";
+		$searchand = "and odr_status IN('13','14','15','25','26','27','28','29','30') $dateClause and odr_no <> ''  and ".($odr_type=="S"?"sell_":"")."mem_idx =$this_mem_idx $sn";
 		//2016-11-13 : 쿼리 수정(거래 완료된 주문만)
 		//$sql = "SELECT * FROM odr where  odr_status <> 99 and DATE_FORMAT(reg_date,'%Y-%m') = '$yr-$mki' and odr_no <> '' and invoice_no <> '' and ".($odr_type=="S"?"sell_":"")."mem_idx =$this_mem_idx $sn order by odr.odr_idx desc";
 		$sql = "SELECT * FROM odr where 1=1 $searchand order by odr.odr_idx desc";
@@ -739,14 +755,14 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 					$dc= replace_out($row2["dc"]);
 					$rhtype= replace_out($row2["rhtype"]);
 					$quantity= replace_out($row2["quantity"]);
-					$price= replace_out($row2["price"]);
+					$price= replace_out($row2["odr_price"]);
 					$period= replace_out($row2["period"]);
 					$rel_idx= replace_out($row2["rel_idx"]);
 					$odr_quantity= replace_out($row2["odr_quantity"]);
 					$reg_date= replace_out($row2["reg_date"]);
 					$supply_quantity= replace_out($row2["supply_quantity"]);
 					$com_idx = $rel_idx==0 ? $sell_mem_idx : $rel_idx;
-					
+
 					if( ($price == (int)$price) )
 					{					
 						$price_val = round_down($price,2);
@@ -760,6 +776,8 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 						$company_nm = get_any("member","mem_nm_en", "mem_idx=$com_idx"); 	
 					
 						$end_yn = QRY_CNT("odr_history", "and odr_idx = $odr_idx  and status in (6,15)") > 0 ? "Y": "N";  //종료까지 무사히 왔는지 여부
+						$cancel_odr = QRY_CNT("odr_history", "and odr_idx = $odr_idx  and status in (8)") > 0 ? "Y": "N";  //취소주문인지 확인
+
 						$fty_exist_yn =  QRY_CNT("fty_history", "and odr_idx = $odr_idx and odr_det_idx = $odr_det_idx") > 0 ?"Y":"N";  //불량 통보에 대한 절차가 기존에 진행 된 적이 있는지 여부
 						
 						if ($bgcolor=="#ffffff") { 
@@ -804,23 +822,21 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 						<td class="t-lt"><?=$manufacturer?></td>
 						<td><?=$package?></td>
 						<td><?=$dc?></td>
-						<td><?=$rhtype?></td>
-						<?if ($odr_type == "B"){?>
-						<td class="t-rt"><?=$supply_quantity==0?"":number_format($supply_quantity)?></td>
-						<?}else{?>
-						<td class="t-rt"><?=$odr_quantity==0?"":number_format($odr_quantity)?></td>
-						<?}?>						
+						<td><?=$rhtype?></td>						
+						<!--16년 12월 21일 발주수량 고정 대표님 요청사항-->
+						<td class="t-rt"><?=$odr_quantity==0?"":number_format($odr_quantity)?></td>										
 						<td class="t-rt">$<?=$price_val?></td>
 						<td class="t-rt">$<?=number_format(round_down($odr_quantity*$price,4),4)?></td>
-
 						<?if ($odr_type == "B"){?><td class="txt-r t-ct">
 						<?if ($end_yn=="Y"){?>
 						<div class="c-blue company_div" style="cursor:pointer;" onclick="side_company_info2(<?=$com_idx?>,'<?=$odr_type?>')">
 							<?=get_cut($company_nm,"8",".")?>							
 						</div>
+						<?if ($cancel_odr=="Y"){?>
 						<div class="c-blue company_div2" style="cursor:pointer;display: none;" onclick="side_company_info2(<?=$com_idx?>,'<?=$odr_type?>')">
 							<?=get_cut($company_nm,"8",".")?>							
 						</div>
+						<?}?>
 						<?
 						$now_date = date("Y-m-d H:i:s", strtotime(date('Y-m-d').' - 6month')); 
 						$reg_date = get_any("odr","reg_date" , "odr_idx = $odr_idx");
