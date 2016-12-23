@@ -628,14 +628,14 @@ function get_noimg_photo($file_path,$img,$noimg){  //width :72, height : 58 ì§œë
 		$get_noimg = "src='".$noimg."'";
 	} Else {
 		$get_noimg = "src='".$file_path.$img."'";	
-		$arrImgInfo = getImageSize("../".$file_path.$img);
-		$org_width = $arrImgInfo[0];
-		$org_height = $arrImgInfo[1];
-		if ($org_width >= $org_height){
+		//$arrImgInfo = getImageSize("../".$file_path.$img);
+		//$org_width = $arrImgInfo[0];
+		//$org_height = $arrImgInfo[1];
+		//if ($org_width >= $org_height){
 			$get_noimg .=" width = '72'";
-		}else{
-			$get_noimg .=" height = '58'";
-		}
+		//}else{
+			$get_noimg .=" height = '72'";
+		//}
 	}
 	//exit;
 	return $get_noimg;

@@ -1,7 +1,6 @@
-<script type="text/javascript">
-      window.onunload = function() {
-           if(event.clientX < 0 && event.clientY < 0) {
-              alert("브라우저를 종료");
-          }
-     }
-</script>
+<?
+
+$arrImgInfo = getImageSize($_SERVER['DOCUMENT_ROOT'].'/upload/file/20161223094024_.png');
+
+print_r($arrImgInfo);
+?>

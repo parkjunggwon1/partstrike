@@ -112,7 +112,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 			
 			</span></li>
 			<input type="hidden" name="invoice_no" id="invoice_no_3009" value="<?=$invoice_no;?>">
-			<li class="b2"><strong>Date</strong><span><?=date("Y-m-d",strtotime( $row_odr["reg_date"] ))?></span></li>
+			<li class="b2"><strong>Date</strong><span><?=$row_odr["reg_date_fmt"]?></span></li>
 			<li><strong>Page</strong><span>1</span></li>
 		</ul>
 		<ul>

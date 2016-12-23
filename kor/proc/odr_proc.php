@@ -2033,7 +2033,7 @@ if ($typ=="imgfileup" || $typ =="imgfiledel"){   //18R_21 에서 사용.
                     ,buy_mem_idx = '$buy_mem_idx'
                     ,reg_mem_idx = '$session_mem_idx'
                     ,reg_date = now()";
-         echo $sql;
+        // echo $sql;
             $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
             $odr_history_idx=mysql_insert_id();
         }

@@ -184,12 +184,12 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 
 			if(strpos($price, ".") == false)  
 			{
-				$price_val= number_format($odr_price,2);
+				$price_val= number_format($price,2);
 				$total_price_value = round_down($odr_quantity*$price,4);
 			}				
 			else
 			{
-				$price_val= $odr_price;
+				$price_val= $price;
 				$total_price_value = round_down($odr_quantity*$price,4);
 			}
 
@@ -223,7 +223,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			<?}?>
 
 			<?if($odr_status==0){?>
-				<td  <?=$goJump?>  class="t-rt">$<?=$part_price?></td>			
+				<td  <?=$goJump?>  class="t-rt">$<?=$part_price_val?></td>			
 			<?}else{?>
 				<td  <?=$goJump?>  class="t-rt">$<?=$price_val?></td>
 			<?}?>
