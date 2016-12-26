@@ -1089,7 +1089,7 @@ switch($actty) {
 				$odr_det = get_odr_det_each($det_idx);
 				$part_idx = $odr_det[part_idx];
 				update_val("part","quantity", 0, "part_idx", $part_idx);	//재고수량 Update
-				update_val("part","del_chk", 0, "part_idx", $part_idx);	//재고수량 Update
+				update_val("part","del_chk", 0, "part_idx", $part_idx);	//재고수정 Update
 			}
 		}else{	//그 외 : 구매자 '송장' -> '수정 발주서(09_01)'->'취소'
 			for($i=0; $i<count($odr_det_idx); $i++){
@@ -1425,7 +1425,7 @@ function fnAgency($rel_idx,$idx){
 
 function fnPartList($page,$part_type,$part_no){
 	//mem_idx -> checked_idx
-	echo GF_GET_PART_LIST($page,$part_type,$part_no);
+	echo GF_GET_PART_LIST($page,$part_type,$part_no);	//class.partinfo.php
 }
 
 function fnRecordList($odr_type, $part_no,$yr,$mon,$this_mem_idx,$page){

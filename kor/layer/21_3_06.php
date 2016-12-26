@@ -14,22 +14,23 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
   $result_odr_det =QRY_ODR_DET_LIST(0,"and odr_det_idx = ".$odr_det_idx,0); 
   $row_odr_det = mysql_fetch_array($result_odr_det);
 
-
-  $result_buyer = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"]));
-  $row_buyer = mysql_fetch_array($result_buyer);
-
-  $result_seller = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["sell_rel_idx"]==0?$row_odr["sell_mem_idx"]:$row_odr["sell_rel_idx"]));
-  $row_seller = mysql_fetch_array($result_seller);
-
-	$result_parts = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",get_any("member", "min(mem_idx)", "mem_type = 0")); //파츠 회사 정보
-	$row_parts = mysql_fetch_array($result_parts);
-
   if($row_odr_det["compensation_invoice"]==""){ 
 	  $sql = "update odr_det set compensation_invoice= '".get_auto_no("CFI", "odr_det" , "compensation_invoice")."', compensation_date = now() where odr_det_idx=".$odr_det_idx;
 	  $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
 	   $result_odr_det =QRY_ODR_DET_LIST(0,"and odr_det_idx = ".$odr_det_idx,0); 
 		  $row_odr_det = mysql_fetch_array($result_odr_det);
   }
+
+  $result_buyer = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"]),$row_odr_det["rework_invoice"]);
+  $row_buyer = mysql_fetch_array($result_buyer);
+
+  $result_seller = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["sell_rel_idx"]==0?$row_odr["sell_mem_idx"]:$row_odr["sell_rel_idx"]),$row_odr_det["rework_invoice"]);
+  $row_seller = mysql_fetch_array($result_seller);
+
+	$result_parts = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",get_any("member", "min(mem_idx)", "mem_type = 0"),$row_odr_det["rework_invoice"]); //파츠 회사 정보
+	$row_parts = mysql_fetch_array($result_parts);
+
+
 ?>
 
 

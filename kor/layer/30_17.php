@@ -90,10 +90,28 @@ $row_odr_det = mysql_fetch_array($result_odr_det);
 
 $row_ship = get_ship($row_odr["ship_idx"]);
 
-$result_buyer = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"]));
+
+if ($sheets_no==""){
+	if ($for_readonly=="Y"){
+	 $chr =  "CI";
+	}elseif ($for_readonly=="P"){
+	 $chr =  "PL";
+	}elseif ($down_yn =="Y"){
+	 $chr = "DPI";
+	}else{
+	 $chr =  "EI";
+	}
+	if ($down_yn =="Y"){
+	  $sheets_no = get_auto_no($chr, "mybank" , "invoice_no");
+	}else{
+	  $sheets_no = $row_odr["invoice_no"]==""?str_replace("EI", $chr, get_auto_no("EI", "odr" , "invoice_no")):str_replace("EI", $chr,$row_odr["invoice_no"]);
+	}
+}
+
+$result_buyer = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"]),$sheets_no);
 $row_buyer = mysql_fetch_array($result_buyer);
 
-$result_seller = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["sell_rel_idx"]==0?$row_odr["sell_mem_idx"]:$row_odr["sell_rel_idx"]));
+$result_seller = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["sell_rel_idx"]==0?$row_odr["sell_mem_idx"]:$row_odr["sell_rel_idx"]),$sheets_no);
 $row_seller = mysql_fetch_array($result_seller);
 
 $pay_cnt =QRY_CNT("odr_history", "and odr_idx = $odr_idx and status = 5"); 
@@ -146,15 +164,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 			}else{?>Escrow Invoice<?
 				$chr =  "EI";
 			}
-			?> No.</strong><span>
-
-			<?if ($down_yn =="Y"){
-				echo get_auto_no($chr, "mybank" , "invoice_no");
-			}else{?>
-			<?=$row_odr["invoice_no"]==""?str_replace("EI", $chr, get_auto_no("EI", "odr" , "invoice_no")):str_replace("EI", $chr,$row_odr["invoice_no"])?>
-			<?}?>
-			
-			</span></li>
+			?> No.</strong><span><?=$sheets_no?></span></li>
 			<li class="b2"><strong>Date</strong><span><?=$row_odr["reg_date_fmt"]?></span></li>
 			<li><strong>Page</strong><span>1</span></li>
 		</ul>

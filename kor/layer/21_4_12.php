@@ -25,7 +25,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 
   $row_ship = get_ship($row_odr_det["ship_idx"]);
   $sell_nation = get_any("member", "nation","mem_idx = ".$fty_his["sell_mem_idx"]);
-  $result_parts = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",get_any("member", "min(mem_idx)", "mem_type = 0")); //사는 회사 정보
+  $result_parts = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",get_any("member", "min(mem_idx)", "mem_type = 0"),$row_odr_det["test_report_no"]); //사는 회사 정보
   $row_parts = mysql_fetch_array($result_parts);
 
   if ($fty_his[buy_mem_idx]==$_SESSION["MEM_IDX"]){

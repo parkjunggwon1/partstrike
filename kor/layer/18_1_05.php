@@ -11,8 +11,6 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 
   $result_odr_det =QRY_ODR_DET_LIST(0,"and odr_idx = ".$odr_idx,0); 
   $row_odr_det = mysql_fetch_array($result_odr_det);
-  $result_buyer = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"])); //사는 회사 정보
-  $row_buyer = mysql_fetch_array($result_buyer);
   $row_ship = get_ship($row_odr_det["ship_idx"]);
   
   if ($row_odr_det[non_com_invoice]==""){
@@ -28,11 +26,15 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 
 	if ($row_ship[ship_type] == "4"){   //RND TEST를 위한 연구소에 반품이므로 parts에 보내야 함.
 		$parts_mem_idx = get_any("member", "min(mem_idx)", "mem_type = 0");
-		$result_seller = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",$parts_mem_idx); //파는 회사 정보
+		$result_seller = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",$parts_mem_idx,$invoice_no); //파는 회사 정보
 	}else{
-		$result_seller = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["sell_rel_idx"]==0?$row_odr["sell_mem_idx"]:$row_odr["sell_rel_idx"])); //파는 회사 정보
+		$result_seller = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["sell_rel_idx"]==0?$row_odr["sell_mem_idx"]:$row_odr["sell_rel_idx"]),$invoice_no); //파는 회사 정보
 	}
 	$row_seller = mysql_fetch_array($result_seller);
+
+	$result_buyer = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"]),$invoice_no); //사는 회사 정보
+	$row_buyer = mysql_fetch_array($result_buyer);
+
 ?>
 <div class="sheet-img"><img src="/kor/images/sheet_bg.jpg" alt=""></div>
 <div class="sheet-wrap">

@@ -13,17 +13,18 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
   $result_odr_det =QRY_ODR_DET_LIST(0,"and odr_det_idx = ".$odr_det_idx,0); 
   $row_odr_det = mysql_fetch_array($result_odr_det);
 
-
-  $result_buyer = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"])); //사는 회사 정보
-  $row_buyer = mysql_fetch_array($result_buyer);
-
-  $result_seller = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["sell_rel_idx"]==0?$row_odr["sell_mem_idx"]:$row_odr["sell_rel_idx"])); //파는 회사 정보
-  $row_seller = mysql_fetch_array($result_seller);
-//echo get_odr_det_no("AS");
   if($row_odr_det["agreement_no"]==""){ 
 	  $sql = "update odr_det set agreement_no= '".get_odr_det_no("AS")."', agreement_reg_date = now() where odr_det_idx=".$odr_det_idx;
 	  $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
   }
+
+  $result_buyer = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"]),$row_odr_det["agreement_no"]); //사는 회사 정보
+  $row_buyer = mysql_fetch_array($result_buyer);
+
+  $result_seller = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["sell_rel_idx"]==0?$row_odr["sell_mem_idx"]:$row_odr["sell_rel_idx"]),$row_odr_det["agreement_no"]); //파는 회사 정보
+  $row_seller = mysql_fetch_array($result_seller);
+//echo get_odr_det_no("AS");
+
 
 ?>
 

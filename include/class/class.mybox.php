@@ -36,6 +36,15 @@ function GET_MYBOX_PART($titleyn, $part_type, $page, $style,$recordcnt){   //$ti
 			}else{
 				$bgcolor="#ffffff";
 			}
+
+			if( ($price == (int)$price) )
+			{					
+				$price_val = round_down($price,2);
+				$price_val = number_format($price,2);
+			}
+			else {			
+				$price_val = $price;
+			}
 			?>
 			<tbody id="tbd_<?=$part_type?>" >
 			<?if($i>1){?><tr><td colspan='15' style='padding-top:20px; background-color:#FFFFFF;'></td></tr><?}?>
@@ -55,7 +64,7 @@ function GET_MYBOX_PART($titleyn, $part_type, $page, $style,$recordcnt){   //$ti
 				<td align="center"><?=$dc?></td>
 				<td align="center"><?=$rhtype?></td>
 				<td class="t-rt"><?=$quantity==0?"":number_format($quantity)?></td>
-				<td class="t-rt">$<?=number_format($price,2)?></td>
+				<td class="t-rt">$<?=$price_val?></td>
 				
 				<?if ($part_type=="2" || $part_type=="5" || $part_type=="6"){?>
 						

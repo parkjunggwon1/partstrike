@@ -138,8 +138,7 @@ if ($typ =="delturnkey"){
 
 }
 
-/*********************************************** 여러개 삭제 *************************************************************/
-//2016-12-20 : 삭제 개념(del_chk컬럼)이 반영되지 않아 수정 - ccolle
+
 if($typ=="alldel"){
 	 $no = $_POST[delchk];
 	 $no_pt =0;
@@ -153,37 +152,50 @@ if($typ=="alldel"){
 	 $ary_price = $_POST[mod_price];
  	
 	 
-	//일단 전체 UPDATE --------------------------------------------- 기존 JSJ
-	for ($j = 0 ; $j<count($ary_part_idx); $j++){
-		if ($part_type== "2"){
-			$option = ", price = '".str_replace("$","",$ary_price[$j])."'";
-		}elseif($part_type =="7"){ //turnkey
-			$option = ", quantity = '".$ary_quantity[$j]."'";
-			if ($i <=4){
-			}
+	 
+	 for ($j = 0 ; $j<count($ary_part_idx); $j++){
+		if($ary_part_idx[$j] == $no[$no_pt]){
+			    // part에서 제거 할때에는 기존에 해당 부품으로 결제가 이루어 진 적이 없는 것인 것만 제거가 가능하다.
+				$sql="
+				delete from part where part_idx in($no[$no_pt]) and part_idx not in (select part_idx from odr_det)
+					";
+					echo $sql."<BR>";
+				$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+				if (count($no)>$no_pt) {$no_pt++;}
 		}else{
-			$option = ", quantity		= '".$ary_quantity[$j]."'
-			, price			= '".str_replace("$","",$ary_price[$j])."' ";
+
+			if ($part_type== "2"){
+				$option = ", price = '".str_replace("$","",$ary_price[$j])."'";
+			  }elseif($part_type =="7"){ //turnkey
+				$option = ", quantity = '".$ary_quantity[$j]."'";
+				if ($i <=4){
+				}
+			  }else{
+				$option = ", quantity		= '".$ary_quantity[$j]."'
+						   , price			= '".str_replace("$","",$ary_price[$j])."' ";
+			  }
+			if(strlen($ary_dc[$j])=="2"){
+				$ary_dc[$j] = "20".$ary_dc[$j];
+			}
+			if ($part_type =="2"){
+					$dc = "";
+					$quantity="";
+				}
+			$sql = "update part set 
+				mem_idx ='".$_SESSION["MEM_IDX"]."'
+				,rel_idx='".$_SESSION["REL_IDX"]."' 
+				, part_no		= '".$ary_part_no[$j]."'
+				, manufacturer	= '".$ary_manufacturer[$j]."'
+				, package		= '".$ary_package[$j]."'
+				,  dc			= '".$ary_dc[$j]."'
+				, rhtype		= '".$ary_rhtype[$j]."' 
+				$option			 
+				where part_idx = $ary_part_idx[$j]";
+
+				echo $sql."<BR>";
+				$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 		}
-		if(strlen($ary_dc[$j])=="2"){
-			$ary_dc[$j] = "20".$ary_dc[$j];
-		}
-		if ($part_type =="2"){
-			$dc = "";
-			$quantity="";
-		}
-		$sql = "update part set 
-		mem_idx ='".$_SESSION["MEM_IDX"]."'
-		,rel_idx='".$_SESSION["REL_IDX"]."' 
-		, part_no		= '".$ary_part_no[$j]."'
-		, manufacturer	= '".$ary_manufacturer[$j]."'
-		, package		= '".$ary_package[$j]."'
-		,  dc			= '".$ary_dc[$j]."'
-		, rhtype		= '".$ary_rhtype[$j]."' 
-		$option			 
-		where part_idx = $ary_part_idx[$j]";
-		$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
-	}
+	 }
 
 	 if ($part_type =="7"){		
 		$turnkey_cnt = QRY_CNT("part","and turnkey_idx = $turnkey_idx");
@@ -197,18 +209,6 @@ if($typ=="alldel"){
 		$sql = "update part set part_no = '$turnkey_title' , price = '".str_replace("$","",$price)."' where part_idx = $turnkey_idx";
 		$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 
-	 }
-	 //2016-12-20 : 거래가 없는 품목은 DB 레코드 삭제, 거래가 있는 품목은 del_chk='0'
-	 //1. 삭제 선택된 만큼 반복
-	 for ($i = 0 ; $i<count($no); $i++){
-		$del_part_idx = $no[$i];
-		$det_cnt = QRY_CNT("odr_det"," and part_idx=$del_part_idx ");
-		if($det_cnt>0){	//--- 거래 있다.(del_chk='0')
-			update_val("part","del_chk",'0', "part_idx", $del_part_idx);
-		}else{	//--------------- 거래 없다.(실제 레코드 삭제)
-			$sql="delete from part where part_idx=$del_part_idx";
-			$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
-		}
 	 }
 
 	if($result){

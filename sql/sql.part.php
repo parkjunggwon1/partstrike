@@ -16,12 +16,12 @@ Function QRY_PART_LIST($recordcnt,$searchand,$page,$ord='price'){
 			$s_ord=" order by price";
 			break;
 	}
-
+	//2016-12-20 : 삭제됨 품목은 어느 목록에도 비 노출(삭제=>del_chk:0)
 	$sql = "
 			SELECT * FROM 
 				part	
 			WHERE
-				1=1 $searchand
+				del_chk='1' $searchand
 			$s_ord
 			$limit
 			";

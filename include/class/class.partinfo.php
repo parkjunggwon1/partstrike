@@ -544,6 +544,7 @@ function GET_MAIN_LIST($titleyn, $part_type, $page, $searchand , $area =""){   /
 				
 				if( ($price == (int)$price) )
 				{					
+
 					$price_val = round_down($price,2);
 					$price_val = number_format($price,2);
 				}
@@ -571,7 +572,7 @@ function GET_MAIN_LIST($titleyn, $part_type, $page, $searchand , $area =""){   /
 					<td><?=$dc?></td>
 					<td><?=$rhtype?></td>
 					<td class="t-rt"><?=$quantity==0?"":number_format($quantity)?></td>
-					<td class="t-rt">$<?=$price?></td>
+					<td class="t-rt">$<?=$price_val?></td>
 					<td class="delivery t-ct">
 					<?if ($part_type=="2" || $part_type=="5" || $part_type=="6"){?>
 						<?if ($_SESSION["COM_IDX"]==$sell_com_idx) { ?>

@@ -907,8 +907,18 @@ $(document).ready(function(){
 		f.action = "/ajax/proc_ajax.php";
 		f.submit();		
 	});
+	//선적(3016)화면에서 취소 버튼 -> '취소' 화면에서 '환불' 버튼
+	$("body").on("click",".btn-refund-cancel",function(){
+		/**
+		var f = document.f_pocancel;
+		f.target = "proc";
+		//f.target = "_blank";
+		f.action = "/ajax/proc_ajax.php";
+		f.submit();	
+		**/
+	});
 	//판매자 송장화면(30_08), 수정발주서(09_01) : '취소' 버튼 -----------------------------------------2016-04-12
-	$("body").on("click",".btn-cancel-3008, .btn-cancel-0901, .btn-cancel-3016",function(){
+	$("body").on("click",".btn-cancel-3008, .btn-cancel-0901",function(){
 		var load_page = $("#load_page").val();
 		var det_cnt = $("#det_cnt_"+load_page).val(); //det 수량
 
@@ -922,6 +932,22 @@ $(document).ready(function(){
 			cancel_det_idx.push($(this).val());
 		});
 		openCommLayer("layer3","po_cancel","?odr_idx="+$("#odr_idx_"+load_page).val()+"&cancel_det_idx="+cancel_det_idx+"&load_page="+load_page);
+	});
+	//판매자 선적화면(30_16) : '취소' 버튼 -----------------------------------------2016-12-22
+	$("body").on("click",".btn-cancel-3016",function(){
+		var load_page = $("#load_page").val();
+		var det_cnt = $("#det_cnt_"+load_page).val(); //det 수량
+
+		if(det_cnt==1){
+			var $chked_det = $("input[name^=odr_det_idx]");//품목 1개일때
+		}else{
+			var $chked_det = $("input[name^=odr_det_idx]:checked");//품목 2개 이상
+		}
+		var cancel_det_idx = [];
+		$chked_det.each(function(e){
+			cancel_det_idx.push($(this).val());
+		});
+		openCommLayer("layer3","3016_cancel","?odr_idx="+$("#odr_idx_"+load_page).val()+"&cancel_det_idx="+cancel_det_idx+"&load_page="+load_page);
 	});
 	//판매자 송장화면(30_08) : '송장 확인' 버튼 ----------------------------------2016-04-12
 	$("body").on("click",".btn-view-sheet-3009",function(){		
@@ -950,8 +976,10 @@ $(document).ready(function(){
 			maskoff();
 			var f =  document.f;
 			 f.target = "proc";
+			 //f.target = "_blank";
 			 f.action = "/kor/proc/odr_proc.php";
-			 f.submit();				
+			 f.submit();
+			 maskon();
 		}
 
 	});
@@ -2520,6 +2548,7 @@ function updateQty(){
 						actkind : qty,
 						amd_yn : amd_yn,	//수정발주서 여부
 						//supply_quantity : supply_quantity,	//공급 수량
+						load_page : $("#load_page").val(),
 						quantity : quantity	//발주가능 재고
 				},
 				dataType : "html" ,

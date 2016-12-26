@@ -8,18 +8,20 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 <?$row_odr_det = sql_fetch("select * from odr_det where ship_idx = trim('$ship_idx')");
   $result_odr = QRY_ODR_VIEW($row_odr_det[odr_idx]);    
   $row_odr = mysql_fetch_array($result_odr);
-  $odr_idx = $row_odr_det[odr_idx];
-  $result_buyer = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"])); //사는 회사 정보
-  $row_buyer = mysql_fetch_array($result_buyer);
-
-  $result_seller = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["sell_rel_idx"]==0?$row_odr["sell_mem_idx"]:$row_odr["sell_rel_idx"])); //파는 회사 정보
-  $row_seller = mysql_fetch_array($result_seller);
+  $odr_idx = $row_odr_det[odr_idx]; 
   $row_ship = get_ship($ship_idx);
   if($row_ship[invoice_no]==""){
 	  $sql = "update ship set invoice_no = '".get_auto_no("NCI","ship","invoice_no")."' where ship_idx=".$ship_idx;
 	  $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
       $row_ship = get_ship($ship_idx);
   }
+
+   $result_buyer = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"]),$row_ship[invoice_no]); //사는 회사 정보
+  $row_buyer = mysql_fetch_array($result_buyer);
+
+  $result_seller = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["sell_rel_idx"]==0?$row_odr["sell_mem_idx"]:$row_odr["sell_rel_idx"]),$row_ship[invoice_no]); //파는 회사 정보
+  $row_seller = mysql_fetch_array($result_seller);
+
 ?>
 <div class="sheet-img"><img src="/kor/images/sheet_bg.jpg" alt=""></div>
 <div class="sheet-wrap">

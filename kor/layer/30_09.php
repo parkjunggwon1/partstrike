@@ -25,13 +25,41 @@ $row_odr_det = mysql_fetch_array($result_odr_det);
 
 $row_ship = get_ship($row_odr["ship_idx"]);
 
-$result_buyer = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"]));
+
+
+
+if ($sheets_no==""){
+	if ($for_readonly=="Y"){
+	    $chr =  "CI";
+	}elseif ($for_readonly=="P"){
+		$chr =  "PL";
+	}elseif ($down_yn =="Y"){
+		$chr = "DPI";
+	}else{
+		$chr =  "EI";
+	}
+	
+	if ($down_yn =="Y"){ //----- 계약금
+		$invoice_no = get_auto_no($chr, "mybank" , "invoice_no");
+	}else{		//---- 계약금 아닌경우
+		if($row_odr_det["part_type"] == 2){
+			$invoice_no = get_auto_no("EI", "odr" , "invoice_no");
+		}else{
+			$invoice_no = $row_odr["invoice_no"]==""?str_replace("EI", $chr, get_auto_no("EI", "odr" , "invoice_no")):str_replace("EI", $chr,$row_odr["invoice_no"]);
+		}
+	}
+}else{
+	$invoice_no =$sheets_no;
+}
+
+
+$result_buyer = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"]),$invoice_no);
 $row_buyer = mysql_fetch_array($result_buyer);
 
-$result_seller = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["sell_rel_idx"]==0?$row_odr["sell_mem_idx"]:$row_odr["sell_rel_idx"]));
+$result_seller = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["sell_rel_idx"]==0?$row_odr["sell_mem_idx"]:$row_odr["sell_rel_idx"]),$invoice_no);
 $row_seller = mysql_fetch_array($result_seller);
 
-$result_parts = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",get_any("member", "min(mem_idx)", "mem_type = 0")); //파츠 회사 정보
+$result_parts = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",get_any("member", "min(mem_idx)", "mem_type = 0"),$invoice_no); //파츠 회사 정보
 $row_parts = mysql_fetch_array($result_parts);
 
 $pay_cnt =QRY_CNT("odr_history", "and odr_idx = $odr_idx and status = 5"); 
@@ -98,21 +126,11 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 			}
 			?> No.</strong><span>
 
-			<?if ($down_yn =="Y"){ //----- 계약금
-				$invoice_no = get_auto_no($chr, "mybank" , "invoice_no");
-			}else{	//---- 계약금 아닌경우
-				if($row_odr_det["part_type"] == 2){
-					$invoice_no = get_auto_no("EI", "odr" , "invoice_no");
-				}else{
-					$invoice_no = $row_odr["invoice_no"]==""?str_replace("EI", $chr, get_auto_no("EI", "odr" , "invoice_no")):str_replace("EI", $chr,$row_odr["invoice_no"]);
-				}
-			}
-			echo $invoice_no;
-			?>
+			<?=$invoice_no?>
 			
 			</span></li>
 			<input type="hidden" name="invoice_no" id="invoice_no_3009" value="<?=$invoice_no;?>">
-			<li class="b2"><strong>Date</strong><span><?=date("Y-m-d",strtotime( $row_odr["reg_date"] ))?></span></li>
+			<li class="b2"><strong>Date</strong><span><?=$row_odr["reg_date_fmt"]?></span></li>
 			<li><strong>Page</strong><span>1</span></li>
 		</ul>
 		<ul>

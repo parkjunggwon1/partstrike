@@ -92,7 +92,7 @@
 						</thead>
 						<tbody id="orderlist">
 						<?//	for ($i = 1; $i<=6; $i++){
-							echo GET_RCD_DET_LIST($i , $odr_type, " and a.".($odr_type=="S"?"sell_":"")."mem_idx=$this_mem_idx AND (a.odr_status IN(1,2,8,16,18,19,20,31) or a.odr_status=0 and imsi_odr_no <> '') ", "S");
+							echo GET_RCD_DET_LIST($i , $odr_type, " and a.".($odr_type=="S"?"sell_":"")."mem_idx=$this_mem_idx AND (a.odr_status IN(1,2,3,8,16,18,19,20,31) or a.odr_status=0 and imsi_odr_no <> '') ", "S");
 						//}?>							
 						</tbody>
 					</table>
@@ -119,7 +119,8 @@
 									<th scope="col" style="width: 36px;">RoHS</th>
 									<th scope="col" class="t-rt" style="width:66px">Q'ty</th>
 									<th scope="col" class="t-rt" style="width:62px">Unit Price</th>
-									<th scope="col" class="t-rt" style="width:66px">Amount</th>
+									<th scope="col" class="t-rt" lang="ko" style="width:66px">발주수량</th>
+									<th scope="col" class="t-rt" lang="ko" style="width:66px">공급수량</th>
 									<th scope="col" lang="ko" style="width:35px">납기</th>
 									<th scope="col" style="width:52px">Company</th>
 								<?}else{?>
@@ -131,7 +132,8 @@
 									<th scope="col" style="width: 36px;">RoHS</th>
 									<th scope="col" class="t-rt" style="width:66px">Q'ty</th>
 									<th scope="col" class="t-rt" style="width:62px">Unit Price</th>
-									<th scope="col" class="t-rt" style="width:66px">Amount</th>
+									<th scope="col" class="t-rt" lang="ko" style="width:66px">발주수량</th>
+									<th scope="col" class="t-rt" lang="ko" style="width:66px">공급수량</th>
 									<th scope="col" lang="ko" style="width:35px">납기</th>									
 								<?}?>								
 							</tr>
@@ -150,7 +152,7 @@
 						</thead>
 						<tbody id="orderlist">
 						<?//	for ($i = 1; $i<=6; $i++){
-							echo GET_RCD_DET_LIST($i , $odr_type, " and a.".($odr_type=="S"?"sell_":"")."mem_idx=$this_mem_idx AND a.odr_status NOT IN(0,1,2,8,16,18,19,20,31)", "S");
+							echo GET_RCD_DET_LIST($i , $odr_type, " and a.".($odr_type=="S"?"sell_":"")."mem_idx=$this_mem_idx AND a.odr_status NOT IN(0,1,2,3,8,16,18,19,20,31)", "S");
 						//}?>							
 						</tbody>
 					</table>
