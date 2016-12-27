@@ -639,8 +639,7 @@ switch($actty) {
 		*/
 		$actkind = str_replace(",","",$actkind);
 		$sql = "update odr_det set 
-				odr_quantity = '$actkind'
-				
+				odr_quantity = '$actkind' 
 				where odr_det_idx =$actidx";
 		//		echo $sql;
 		$result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());

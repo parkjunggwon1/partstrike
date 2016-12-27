@@ -119,8 +119,7 @@
 									<th scope="col" style="width: 36px;">RoHS</th>
 									<th scope="col" class="t-rt" style="width:66px">Q'ty</th>
 									<th scope="col" class="t-rt" style="width:62px">Unit Price</th>
-									<th scope="col" class="t-rt" lang="ko" style="width:66px">발주수량</th>
-									<th scope="col" class="t-rt" lang="ko" style="width:66px">공급수량</th>
+									<th scope="col" class="t-rt" style="width:66px">Amount</th>
 									<th scope="col" lang="ko" style="width:35px">납기</th>
 									<th scope="col" style="width:52px">Company</th>
 								<?}else{?>
@@ -132,8 +131,7 @@
 									<th scope="col" style="width: 36px;">RoHS</th>
 									<th scope="col" class="t-rt" style="width:66px">Q'ty</th>
 									<th scope="col" class="t-rt" style="width:62px">Unit Price</th>
-									<th scope="col" class="t-rt" lang="ko" style="width:66px">발주수량</th>
-									<th scope="col" class="t-rt" lang="ko" style="width:66px">공급수량</th>
+									<th scope="col" class="t-rt" style="width:66px">Amount</th>
 									<th scope="col" lang="ko" style="width:35px">납기</th>									
 								<?}?>								
 							</tr>

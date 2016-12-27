@@ -66,9 +66,6 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			$odr_quantity= replace_out($row2["odr_quantity"]);
 			$supply_quantity= replace_out($row2["supply_quantity"]);
 			$odr_stock= replace_out($row2["odr_stock"]);
-			$odr_price= replace_out($row2["odr_price"]);
-			$part_qty= replace_out($row2["part_stock"]);
-			$part_price= replace_out($row2["part_price"]);
 			
 			$com_idx = $rel_idx==0 ? $sell_mem_idx : $rel_idx;
 			$company_nm = get_any("member","mem_nm_en", "mem_idx=$com_idx"); 	
@@ -193,15 +190,6 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				$total_price_value = round_down($odr_quantity*$price,4);
 			}
 
-			if(strpos($part_price, ".") == false)  
-			{
-				$part_price_val= number_format($part_price,2);
-			}				
-			else
-			{
-				$part_price_val= $part_price;
-			}
-
 		?>
 		<tr class="criteria" criteria_idx="<?=$criteria_now_idx?>">
 			<td ><?$j = ($criteria_now_idx != $criteria_idx)? 1:$j;
@@ -213,12 +201,14 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			<td <?=$goJump?> ><?=$dc;?></td>
 			<td <?=$goJump?> ><?=$rhtype?></td>
 			<!--odr_stock으로 바꿈 2016-11-8-->
-
+			
 			<?if ($odr_status==0 || $odr_status==1 || $odr_status==2 || $odr_status==3 || $odr_status==8 || $odr_status==16 || $odr_status==18 || $odr_status==19 || $odr_status==20 || $odr_status==31){?>
 				<td  <?=$goJump?>  class="t-rt"><?=$odr_stock<=0?"":number_format($odr_stock)?></td>			
 			<?}else{?>
 				<td  <?=$goJump?>  class="t-rt"><?=$odr_quantity<=0?"":number_format($odr_quantity)?></td>
 			<?}?>
+			<!--바꿈 2016-11-8-->
+			<td  <?=$goJump?>  class="t-rt">$<?=$price_val?></td>
 			<?if ($fr == "S"){?>	
 				<?if ($odr_status==0 || $odr_status==1 || $odr_status==2 || $odr_status==3 || $odr_status==8 || $odr_status==16 || $odr_status==18 || $odr_status==19 || $odr_status==20 || $odr_status==31){?>
 					<td  <?=$goJump?> class="t-rt c-blue" ><?=$odr_quantity<=0?"":number_format($odr_quantity)?></td>			
@@ -747,14 +737,14 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 					$dc= replace_out($row2["dc"]);
 					$rhtype= replace_out($row2["rhtype"]);
 					$quantity= replace_out($row2["quantity"]);
-					$price= replace_out($row2["odr_price"]);
+					$price= replace_out($row2["price"]);
 					$period= replace_out($row2["period"]);
 					$rel_idx= replace_out($row2["rel_idx"]);
 					$odr_quantity= replace_out($row2["odr_quantity"]);
 					$reg_date= replace_out($row2["reg_date"]);
 					$supply_quantity= replace_out($row2["supply_quantity"]);
 					$com_idx = $rel_idx==0 ? $sell_mem_idx : $rel_idx;
-
+					
 					if( ($price == (int)$price) )
 					{					
 						$price_val = round_down($price,2);

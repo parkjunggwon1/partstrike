@@ -2,12 +2,82 @@
 <?php
 	include $_SERVER["DOCUMENT_ROOT"]."/include/class.upload.php";
 	include $_SERVER["DOCUMENT_ROOT"]."/include/common.php";
-
+	include $_SERVER["DOCUMENT_ROOT"]."/include/class/class.image.php";
 
 	// $query_name : input 이름
 	// $folder : 저장 폴더
 
 	function uploadProc( $query_name, $dir_dest, $maxSize) {
+		
+		//박정권 20161227 이미지 업로드 변경 -- class.image.php
+		$today = date("Ymdhis");
+		$dirRoot = $_SERVER["DOCUMENT_ROOT"];		
+
+		$ext = explode(".", strtolower($_FILES[$query_name]['name'])); 
+
+		$uploaddir = $dirRoot."/upload/file"; 
+		$uploadfile = $uploaddir ."/".$today."_".$_SESSION["MEM_IDX"].".".$ext[1]; //제품이미지1
+
+		if($_FILES[$query_name]['tmp_name'] != "")
+		{
+			if(($_FILES[$query_name]['error'] > 0) || ($_FILES[$query_name]['size'] <= 0)){ 
+				 // echo "파일 업로드에 실패하였습니다."; 
+			 } else { 
+				  // HTTP post로 전송된 것인지 체크합니다. 
+				  if(!is_uploaded_file($_FILES[$query_name]['tmp_name'])) { 
+						//echo "HTTP로 전송된 파일이 아닙니다."; 
+				  } else { 
+						// move_uploaded_file은 임시 저장되어 있는 파일을 ./uploads 디렉토리로 이동합니다. 
+						if (move_uploaded_file($_FILES[$query_name]['tmp_name'], $uploadfile)) { 
+						//	 echo "성공적으로 업로드 되었습니다.\n"; 
+							// uploads디렉토리에 파일을 업로드합니다. 
+							
+							if($ext[1]=="jpg" || $ext[1]=="jpeg")
+							{
+								$img = imagecreatefromjpeg($uploadfile);
+							}
+							else if($ext[1]=="gif")
+							{
+								$img = imagecreatefromgif($uploadfile);
+							}
+							else if($ext[1]=="png")
+							{
+								$img = imagecreatefrompng($uploadfile);
+							}
+							
+
+							//$width = imageSX($img);
+							//$height = imageSY($img);
+							// 이미지 사이즈 지정.. 아래 사이즈 보다 이미지가 작으면 나머지 공간은 검은색으로 모두 채움.
+						
+							
+							$image = new Image($uploadfile);
+							list($width,$height) = getimagesize($uploadfile);
+
+							if($width+$height > 1000)
+							{
+								if($width>$height)
+								{
+									$image->width(500);
+								}
+								else
+								{
+									$image->height(500);
+								}
+							}
+							
+							$image->save();
+
+							return $today."_".$_SESSION["MEM_IDX"].".".$ext[1];
+						} else { 
+							// echo "파일 업로드 실패입니다.\n"; 
+						} 
+				  } 
+			 } 
+		}
+
+		/*
+		
 		$handle = new Upload($_FILES[$query_name]);
 
 		if ($handle->uploaded) {
@@ -38,7 +108,9 @@
 		} else {
 			//popupMsg($handle->error);
 			return false;
-		}
+		}*/
+
+		
 	}
 		
 	function make_thumbnail($fileDic, $fileName, $w, $h, $q){

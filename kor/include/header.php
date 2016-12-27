@@ -52,6 +52,7 @@
 <body>
 <div id="partsWrap">
 <!-- header -->
+<button style="float:right" onclick="javascrpt:data_del();">주문목록 삭제</button>
 <header id="partsHeader" class="container">
 	<h1 class="top-logo"><a href="/"><img src="/kor/images/top_logo.png" alt=""></a></h1>
 	<nav id="gnb" class="gnb-wrap">

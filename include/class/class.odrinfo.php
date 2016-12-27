@@ -382,7 +382,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 												$file = $odr_his["file".$i];											
 											?>
 											<div class="img-cntrl-wrap">
-											<span class="img-wrap"><a href="<?=get_noimg($file_path,$file,"#")?>" <?if ($file){?>target="_blank"<?}?>><img <?=get_noimg_photo($file_path, $file, "/kor/images/file_pt.gif")?> alt=""></a></span>											
+											<span class="img-wrap"><a href="<?=get_noimg($file_path,$file,"#")?>" <?if ($file){?>target="_blank"<?}?>><img <?=get_noimg_photo($file_path, $file, "/kor/images/file_pt.gif")?> alt="" style="border: 1px solid #00759e;"></a></span>											
 											</div>
 											<?}?>
 										</td>
@@ -511,7 +511,6 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						else
 						{
 							$price_val= $price;
-							$part_price_val= $part_price;
 						}
 					?>
 					<td class="t-lt"><?=($per_cnt>0)? cut_len($part_no,22,"."):$part_no?></td>
@@ -521,7 +520,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td><?=$rhtype?></td>
 					<td class="t-rt"><input name="quantity[]" type="hidden" value="<?=$quantity;?>"> <?=$quantity==0?"":number_format($quantity)?></td>
 						<?if ($loadPage== "05_04"){?>
-							<td class="t-rt">$<?=$part_price_val?></td>
+							<td class="t-rt">$<?=$price_val?></td>
 						<?}else{?>
 							<td class="t-rt">$<?=$price_val?></td>
 						<?}?>
@@ -867,7 +866,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 										$sel_chk = "";
 									}
 									?>
-									<span class="img-wrap"><img alt="" id="fileimg<?=$odr_det_idx?>_<?=$i?>" <?=get_noimg_photo($file_path, $file, "/kor/images/file_pt.gif")?>  ></span>
+									<span class="img-wrap"><img alt="" id="fileimg<?=$odr_det_idx?>_<?=$i?>" <?=get_noimg_photo($file_path, $file, "/kor/images/file_pt.gif")?> style="border: 1px solid #00759e;" ></span>
 									<input name="file_o<?=$i?>" id="file_o<?=$i?>" type="hidden" value="<?=$fileonly?>">
 									<input name="file<?=$odr_det_idx?>_<?=$i?>" id="file<?=$odr_det_idx?>_<?=$i?>" f_number="<?=$i?>" type="file" style="width:1px;height:1px">
 									<a href="javascript:;" class="arrow_top <?=$plus_chk?>" style="<?=$display_b?>">+</a>
@@ -1383,12 +1382,12 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly=""){   //shee
 			//금액이 정수면 ,2 실수면 ,4 포멧 20161202 박정권
 			if( ($price == (int)$price) )
 			{					
-				$price_val = round_down($price,2);
-				$total_price = round_down($odr_quantity*$price,2);
+				$price_val = number_format($price,2);
+				$total_price = number_format($odr_quantity*$price,2);
 			}
 			else {			
 				$price_val = $price;
-				$total_price = round_down($odr_quantity*$price,2);
+				$total_price = $odr_quantity*$price;
 			}
 			
 			if ($loadPage!="12_07_v"){ //수정발주서 Sheet(Purchase Order Amendment)
