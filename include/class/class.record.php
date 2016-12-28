@@ -274,7 +274,7 @@ function GET_Order($odr_type,$this_mem_idx){
 	</table>
 <?}
 
-function GF_GET_REMIT_LIST($yr,$mon,$remit_ty,$page){
+function GF_GET_REMIT_LIST($yr,$mon,$remit_ty,$mem_id, $mem_nm, $charge_method, $invoice_no,$page){
 ?>
 <SCRIPT LANGUAGE="JavaScript">
 	$(document).ready(function(){
@@ -283,7 +283,15 @@ function GF_GET_REMIT_LIST($yr,$mon,$remit_ty,$page){
 				var yr = $("#fr #yr option:selected").val();
 				var mon = $("#mon option:selected").val();
 				var remit_ty = $("#remit_ty").val();
-				showajaxParam("#remitlist", "remitlist", "page="+$(this).attr("num")+"&yr="+yr+"&mon="+mon+"&remit_ty="+remit_ty); 
+				var mem_id = $("#remitlist #mem_id option:selected").val();
+				var mem_nm = $("#remitlist #mem_nm option:selected").val();
+				var charge_method = $("#remitlist #charge_method option:selected").val();
+				var invoice_no = $("#remitlist #invoice_no option:selected").val();
+
+				showajaxParam("#remitlist", "remitlist", "page="+$(this).attr("num")+"&yr="+yr+"&mon="+mon+"&remit_ty="+remit_ty+"&mem_id="+mem_id+"&mem_nm="+mem_nm+"&charge_method="+charge_method+"&invoice_no="+invoice_no); 
+		});
+		$("#remitlist select").change(function(){
+			$(".myrecord").click();
 		});
 	});
 </SCRIPT>
@@ -306,6 +314,21 @@ function GF_GET_REMIT_LIST($yr,$mon,$remit_ty,$page){
 	}elseif ($mon > 0){
 		$addClause = "and DATE_FORMAT(a.reg_date, '%m') = '$mon' ";
 	}
+
+
+	if ($mem_id){
+			$addClause .= "and mem_id = '$mem_id' ";
+	}
+	if ($mem_nm){
+			$addClause .= "and mem_nm = '$mem_nm' ";
+	}
+	if ($charge_method){
+			$addClause .= "and charge_method = '$charge_method' ";
+	}
+	if ($invoice_no){
+			$addClause .= "and invoice_no like '$invoice_no%' ";
+	}
+
 	//2016-06-02 : 아래 쿼리수정. MyBank 내역 쿼리조건이 전혀 맞지 않음 -ccolle
 	/** JSJ
 	$sql = "SELECT charge_type, mybank_idx, DATE_FORMAT(a.reg_date, '%Y년%m월%d일') reg_date, mem_id, case when b.rel_idx = 0 then mem_nm else concat(mem_nm,'/',pos_nm) end as mem_nm, case when charge_method = 1 then '신용카드' else '은행송금' end as charge_method_nm, charge_method, put_money_yn ,mybank_amt, invoice_no , charge_amt FROM mybank a left outer join member b 
@@ -317,19 +340,58 @@ function GF_GET_REMIT_LIST($yr,$mon,$remit_ty,$page){
 
 	$searchand ="and (a.mem_idx =$session_com_idx or a.rel_idx =$session_com_idx)
 			and mybank_yn = 'Y' and charge_amt !=0 ".$addClause;
-	$sql = "SELECT charge_type, mybank_idx, DATE_FORMAT(a.reg_date, '%Y년%m월%d일') reg_date, mem_id, case when b.rel_idx = 0 then mem_nm else concat(mem_nm,'/',pos_nm) end as mem_nm, case when charge_method = 1 then '신용카드' else '은행송금' end as charge_method_nm, charge_method, put_money_yn ,mybank_amt, invoice_no , charge_amt FROM mybank a left outer join member b 
+	$sql = "SELECT charge_type, mybank_idx, DATE_FORMAT(a.reg_date, '%Y %m %d') reg_date, mem_id, case when b.rel_idx = 0 then mem_nm else concat(mem_nm,'/',pos_nm) end as mem_nm, case when charge_method = 1 then '신용카드' else '은행송금' end as charge_method_nm, charge_method, put_money_yn ,mybank_amt, invoice_no , charge_amt FROM mybank a left outer join member b 
 			on a.mem_idx = b.mem_idx 
 			where 1=1 $searchand  
 			order by mybank_idx desc";	
 			
-	//echo $sql;	?>	<table class="stock-list-table">
+	?>	<table class="stock-list-table">
 			<thead>
-				<th scope="col" class="th2" lang="ko" style="width:91px">날짜<?=$page?></th>
-				<th scope="col" class="th2 t-lt">User ID</th>
-				<th scope="col" class="th2 t-lt" lang="ko">성명/직함</th>				
-				<th scope="col" class="th2" lang="ko">방법</th>
+				<th scope="col" class="th2" lang="ko" style="width:91px">날짜</th>
+				<th scope="col" class="th2 t-lt">
+					<div class="select type2 opt1" style="width: 75px;">
+						<label for="mem_id">User ID</label>
+						<select name="mem_id" id="mem_id">
+						<option value="" <?=$mem_id==""?"selected":""?>>User ID</option>
+						</select>
+					</div>
+</th>
+				<th scope="col" class="th2 t-lt" lang="ko">
+					<div class="select type2 opt1" style="width: 90px;">
+						<label for="mem_nm">성명/직함</label>
+						<select name="mem_nm" id="mem_nm">
+						<option value="" <?=$mem_nm==""?"selected":""?>>성명/직함</option>
+						</select>
+					</div>
+				</th>				
+				<th scope="col" class="th2" lang="ko">
+					<div class="select type2 opt1" style="width: 85px;">
+						<label for="charge_method">방법</label>
+						<select name="charge_method" id="charge_method">
+						<option value="" <?=$charge_method==""?"selected":""?>>방법</option>
+						<option value="1" <?=$charge_method=="1"?"selected":""?>>신용카드</option>
+						<option value="2" <?=$charge_method=="2"?"selected":""?>>은행송금</option>
+						</select>
+					</div></th>
 				<!--<th scope="col" class="th2" lang="ko">내역</th>-->
-				<th scope="col" class="th2">Invoice No.</th>
+				<th scope="col" class="th2">
+					<div class="select type2 opt1" style="width: 100px;">
+						<label for="invoice_no">Invoice No.</label>
+						<select name="invoice_no" id="invoice_no">
+						<option value="" <?=$invoice_no==""?"selected":""?>>Invoice No.</option>
+						<option value="DPI" <?=$invoice_no=="DPI"?"selected":""?>>Down Payment Invoice No. </option>
+						<option value="CMBI" <?=$invoice_no=="CMBI"?"selected":""?>>Charge My Bank Invoice No. </option>
+						<option value="EI" <?=$invoice_no=="EI"?"selected":""?>>Escrow Invoice No. </option>
+						<option value="DI" <?=$invoice_no=="DI"?"selected":""?>>Deposit Invoice No.</option>
+						<option value="RI" <?=$invoice_no=="RI"?"selected":""?>>Refund Invoice No.</option>
+						<option value="FI" <?=$invoice_no=="FI"?"selected":""?>>Fright Invoice No.</option>
+						<option value="WI" <?=$invoice_no=="WI"?"selected":""?>>Withdrawal Invoice No.</option>
+						<option value="RFI" <?=$invoice_no=="RFI"?"selected":""?>>Rework Fee Invoice No.</option>
+						<option value="CFI" <?=$invoice_no=="CFI"?"selected":""?>>Compensation Fee Invoice No.</option>
+						<option value="TFI" <?=$invoice_no=="TFI"?"selected":""?>>Test Fee Invoice No.</option>
+						<option value="MFI" <?=$invoice_no=="MFI"?"selected":""?>>Membership Fee Invoice No.</option>
+						</select>
+					</div></th>
 				<th scope="col" class="th2 t-rt" lang="ko">입금</th>
 				<th scope="col" class="th2 t-rt" lang="ko">출금</th>
 				<th scope="col" class="th2 t-rt" lang="ko">잔액</th>				
@@ -365,6 +427,13 @@ function GF_GET_REMIT_LIST($yr,$mon,$remit_ty,$page){
 			}else{
 				$bgcolor="#ffffff";
 			}
+			$inv =explode("-",$invoice_no);
+			$inv_real= preg_replace("/([0-9])+$/","",$inv[0]);
+			if ($inv_real=="WI"){
+				$layer_no ="23_23";
+			}elseif ($inv_real=="CMBI"){
+				$layer_no ="01_20";
+			}
 		?>
 		
 		<tr  style="background-color:<?=$bgcolor?>;">
@@ -374,12 +443,15 @@ function GF_GET_REMIT_LIST($yr,$mon,$remit_ty,$page){
 			
 				<!--<td class="t-rt"  lang="ko"><?=GF_Common_GetSingleList("MYBK",$charge_type)?></td>-->
 				<td ><?=$charge_method_nm?></td>
-				<td ><?=$invoice_no?></td>
+				<td class="c-blue2">
+				<?if ($layer_no){?><a href='javascript:openCommLayer("layer5","<?=$layer_no?>","?invoice_no=<?=$invoice_no?>&forread=Y")'><?=$invoice_no?></a>
+				<?}else{echo $invoice_no;}?>
+				</td>
 				<td class="c-blue2 t-rt"><?if ($charge_type =="1"){echo "$".number_format($charge_amt,2);}?></td>				
-				<td class="c-red2 t-rt"><?if ($charge_type !="1"){echo "$".number_format($charge_amt,2);}?></td>
+				<td class="c-red2 t-rt"><?if ($charge_type !="1"){echo "$-".number_format($charge_amt,2);}?></td>
 
 
-				<td class="c-purple t-rt"><?=number_format($mybank_amt,2)?></td>
+				<td class="c-purple t-rt">$<?=number_format($mybank_amt,2)?></td>
 			
 		</tr>
 		

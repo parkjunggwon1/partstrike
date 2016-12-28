@@ -217,8 +217,8 @@ $(document).ready(function(){
 			check_value(this);
 	 });
 
-	 $('.onlyEngNum').css("ime-mode","disabled").keydown(function(event){ 		//ENG, 숫자만 입력하게.(.도 포함) 	
-	  if (event.which && (event.which == 13 ||event.which == 190 || event.which == 110 || event.which > 45 && event.which < 58 || event.which == 8 || event.which > 64 && event.which < 91|| event.which > 95 && event.which < 123)) {			
+	  $('.onlyEngNum').css("ime-mode","disabled").keydown(function(event){ 		//ENG, 숫자만 입력하게.(.도 포함) 		 
+	  if (event.which && (event.which == 13 || event.which == 32 ||event.which == 189 ||event.which == 190 || event.which == 110 || event.which > 45 && event.which < 58 || event.which == 8 || event.which > 64 && event.which < 91|| event.which > 95 && event.which < 123)) {			
 	   } else { 
 	   event.preventDefault(); 
 	  } 
@@ -830,6 +830,19 @@ $(document).ready(function(){
 	//order sheet 실 발주 처리 [공지]화면의 '발주서 확인' 버튼 -----------------------
 	$("body").on("click",".btn-view-sheet",function(){		
 			var odr_idx = $(this).attr("odr_idx");
+			$.ajax({
+				url: "/kor/proc/odr_proc.php", 
+				//data: "typ=odrconfirm&odr_idx="+$("#odr_idx_30_05").val()+"&sell_mem_idx="+$("#sell_mem_idx").val(), //JSJ
+				data: "typ=odrconfirm2&odr_idx="+odr_idx+"&sell_mem_idx="+$("#session_mem_idx").val(), //2016-04-05 'odrconfirm2' 로 수정
+				encType:"multipart/form-data",
+				success: function (data) {	
+					if (trim(data) == "SUCCESS"){		
+						
+					}else{ //ajax 처리 후, error mesage
+						alert_msg(data);
+					}
+				}
+			});
 			$.ajax({ 
 				type: "GET", 
 				url: "/ajax/proc_ajax.php", 

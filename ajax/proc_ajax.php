@@ -137,7 +137,7 @@ switch($actty) {
 	   fnOdrlist($odr_type, $this_mem_idx);
    break;
    case "remitlist":
-   	   fnRemitList($yr,$mon,$remit_ty,$page);
+   	   fnRemitList($yr,$mon,$remit_ty,$mem_id, $mem_nm, $charge_method, $invoice_no,$page);
    break;
 
    case "SD":  //select Deposit 여부
@@ -1163,10 +1163,14 @@ switch($actty) {
 	case "COMPLE" :   //2016-04-13 : 판매자 송장화면(30_08->po_cancel)에서 선택 품목 취소 --------------------------------------------------------------------------
 	break;
     case "mainsrch":	 /******************************** 메인 검색 ***********************************************************************************************/
-	$top_qty = str_replace(",","",$top_qty);
-	  	if ($top_part_no){$searchand .= "and part_no like '%$top_part_no%' ";}
-		if ($top_manufacturer){$searchand .= "and manufacturer like '%$top_manufacturer%' ";}
+		$top_qty = str_replace(",","",$top_qty);
+		$top_part_no = preg_replace("/[ #\&\+\-%@=\/\\\:;,\.'\"\^`~\_|\!\?\*$#<>()\[\]\{\}]/i", "",$top_part_no);
+		$top_manufacturer = preg_replace("/[ #\&\+\-%@=\/\\\:;,\.'\"\^`~\_|\!\?\*$#<>()\[\]\{\}]/i", "",$top_manufacturer);
+	  	
+		if ($top_part_no){$searchand .= "and part_no like '%$top_part_no%' ";}
+		if ($top_manufacturer){$searchand .= "and replace(manufacturer,' ','') like '%$top_manufacturer%' ";}
 		
+		//echo $searchand;
 		if ($area=="on"){	// 근접지역 표시
 			$searchand .= "and nation = '".$_SESSION["NATION"]."' ";
 			$areaonsrch ="and dtl_par_code = '".$_SESSION["NATION"]."' ";
