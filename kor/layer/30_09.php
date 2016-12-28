@@ -15,7 +15,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 <script src="/include/function.js"></script>
 <?
 if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 위해 Sheet No.($sheets_no)를 넘겨준다.
-	$odr_idx = get_any("odr", "max(odr_idx)", "odr_status=99 AND doc_no='$sheets_no'");
+	//$odr_idx = get_any("odr", "max(odr_idx)", "odr_status=99 AND doc_no='$sheets_no'");
 }
 $result_odr = QRY_ODR_VIEW($odr_idx);    
 $row_odr = mysql_fetch_array($result_odr);

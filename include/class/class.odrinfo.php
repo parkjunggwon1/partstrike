@@ -267,7 +267,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<td><?=$rhtype?></td>
 						<td class="t-rt">
 							<?if ($loadPage == "30_22"){
-								echo $odr_quantity==0?"":number_format($odr_quantity);
+								echo $supply_quantity==0?"":number_format($supply_quantity);
 							}elseif($loadPage == "09_03"){	//What's New(판매자:수정발주서)
 								echo number_format($quantity + $odr_quantity);
 							}else{
@@ -297,8 +297,8 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							}
 					}?>
 					</td>					
-					<?}else{?>
-					<td class="c-blue t-rt">$<?=number_format($odr_quantity*$price,2)?></td>
+					<?}else{?>					
+					<td class="c-blue t-rt">$<?=number_format(round_down($supply_quantity*$price,4),4)?></td>
 					<?}?>
 					</tr>
 					<?if ($part_condition){?>
@@ -312,7 +312,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 										<th scope="row" style="width:70px">부품상태  : </th>
 										<td><span ><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span></td>
 										<th scope="row" style="width:70px">포장상태 : </th>
-										<td><span ><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span></td>
+										<td><span ><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> / <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span></td>
 									</tr>
 									<?if(strlen($memo) > 0){?>
 									<tr class="noinput">
@@ -797,7 +797,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								부품상태 :
 								<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span>&nbsp&nbsp
 								포장상태 : 
-								<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span>
+								<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> / <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span>
 							</td>
 						</tr>
 						<?if(strlen($memo)>0){?>
@@ -1062,6 +1062,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								?>
 									<td class="t-rt"><?=$odr_stock==0?"-":number_format($qty)?></td>	
 								<?}else{?>
+									<!--pjg0319-->
 									<td class="t-rt"><?=$supply_quantity==0?"-":number_format($supply_quantity)?></td>							
 								<?}?>
 							<?}?>
@@ -1078,7 +1079,18 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								elseif ($loadPage =="30_20" || $loadPage =="30_14")
 								{
 									$price_sum = $price*$supply_quantity;
-									echo "$".number_format($price_sum,2);
+
+									if(strpos($price_sum, ".") == false)  
+									{
+										$price_sum= round_down($price_sum,2);
+										$price_sum= number_format($price_sum,2);
+									}
+									else
+									{
+										$price_sum= round_down($price_sum,4);
+										$price_sum= number_format($price_sum,4);
+									}
+									echo "$".$price_sum;
 								}
 								else{
 									echo "<span class=\"c-blue\">".number_format($odr_quantity)."</span>";
@@ -1158,10 +1170,14 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 										<strong class="c-red"><span>라벨/부품사진 </span></strong>
 										<?					
 										for ($i = 1;$i <= 3; $i++ ){
-											$file = replace_out($row["file$i"]);				
+											$file = replace_out($row["file$i"]);		
+
+
 								?>
 										<div class="img-cntrl-wrap">
-										<span class="img-wrap" style="margin-top:10px;"><a href="<?=get_noimg($file_path,$file,"#")?>" <?if ($file){?>target="_blank"<?}?>><img <?=get_noimg_photo($file_path, $file, "/kor/images/file_pt.gif")?> alt=""></a></span>											
+										<?if ($file){?>
+										<span class="img-wrap" style="margin-top:10px;"><a href="<?=get_noimg($file_path,$file,"#")?>" <?if ($file){?>target="_blank"<?}?>><img <?=get_noimg_photo($file_path, $file, "/kor/images/file_pt.gif")?> alt=""></a></span>	
+										<?}?>										
 										</div>
 										<?}?>
 									</td>
@@ -2921,7 +2937,14 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 		}
 	//------------------------------------------------------------------------------------------------------------------------------------------------
 	function GET_ODR_DELIVERY_ADDR($delivery_addr_idx){
+		global $row_seller;
+
 		if ($delivery_addr_idx){
+			
+			$odr_idx = get_any("ship", "odr_idx", "delivery_addr_idx=".$delivery_addr_idx);			
+			$seller_idx = get_any("odr", "sell_mem_idx", "odr_idx=".$odr_idx);
+			$seller_nation = get_any("member", "nation", "mem_idx=".$seller_idx);
+
 			$result = QRY_DELIVERY_ADDR_VIEW($delivery_addr_idx);
 			$row = mysql_fetch_array($result);
 			if ($row){
@@ -2940,9 +2963,28 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 				$homepage = replace_out($row["homepage"]);
 				$zipcode = replace_out($row["zipcode"]);
 				$dosi = replace_out($row["dosi"]);
+				$nation = replace_out($row["nation"]);
 
 				$sigungu = replace_out($row["sigungu"]);
 				$addr = replace_out($row["addr"]);
+
+				$tel_nation = explode("-",$tel);
+				$fax_nation = explode("-",$fax);
+				$hp_nation = explode("-",$hp);
+				
+
+				if ($seller_nation==$nation)
+				{
+					$tel = str_replace($tel_nation[0]."-","0",$tel);
+					$fax = str_replace($fax_nation[0]."-","0",$fax);
+					$hp = str_replace($hp_nation[0]."-","0",$hp);
+				}
+				else
+				{
+					$tel = $delivery_addr["tel"];
+					$fax = $delivery_addr["fax"];
+					$hp = $delivery_addr["hp"];
+				}
 			}	
 		}
 		?>

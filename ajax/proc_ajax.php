@@ -305,7 +305,7 @@ switch($actty) {
 					$sql .= ",odr_det_idx = '$odr_det_idx' ";
 				}
 		$sql .= ",status = 15
-				,status_name = '종료'
+				,status_name = '완료'
 				,etc1 = ''
 				,sell_mem_idx = '$sell_mem_idx'
 				,buy_mem_idx = '$buy_mem_idx'
@@ -313,6 +313,7 @@ switch($actty) {
 				,confirm_yn = 'Y'
 				,reg_date = now()";
 		$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+		$odr_history_idx=mysql_insert_id();
 		
 		//2016-11-13 : 완료 처리(det 전체 일 경우)
 		if ($odr_det_idx<1) { //전체 일경우.
@@ -343,10 +344,14 @@ switch($actty) {
 				} //end while
 				
 				$vat_price = get_any("ship" ,"tax", "odr_idx=$odr_idx ");	//부가세
-				$vat_plus =  number_format($pay_amt*($vat_price/100));
-				$pay_amt = $pay_amt + $vat_plus;			
+				$vat_plus =  $pay_amt*($vat_price/100);
+				$pay_amt = number_format(round_down($pay_amt + $vat_plus,4),4);			
  
 			}
+			
+			$sql = "UPDATE odr_history SET etc2='$".$pay_amt."' WHERE odr_history_idx=$odr_history_idx";
+			$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+
 			//3-1. 판매자 MyBank 적립 ---------------------------------------------
 			$sql = "insert into mybank set
 					mem_idx = '$sell_mem_idx'

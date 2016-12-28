@@ -124,19 +124,19 @@ function pay2(){
 	<table class="price-table1" lang="en" align="center">
 		<tbody>
 			<tr>
-				<th scope="row"><span class="c-purple">My Bank</span> : </th>
+				<th scope="row"><span class="c-blue">My Bank</span> : </th>
 				<td><span class="c-blue">$ <?=number_format($summybank,4)?></span></td>
 			</tr>
 			<tr>
-				<th scope="row"><span class="c-red">(-)</span> Total : </th>
+				<th scope="row"><span class="c-red">(-) Total : </span></th>
 				<td><span class="c-red">-$ <?=number_format($tot_amt,4)?></span></td>
 			</tr>
 			<tr class="lst">
 				<td colspan="2"></td>
 			</tr>
 			<tr>
-				<th scope="row"><span class="c-red" lang="ko">잔액 : </span></th>
-				<td><span class="c-blue">$ <?=number_format($balance,4)?></span></td>
+				<th scope="row"><span class="c-purple" lang="ko">잔액 : </span></th>
+				<td><span class="c-purple">$ <?=number_format($balance,4)?></span></td>
 			</tr>
 		</tbody>
 	</table>

@@ -205,7 +205,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			<?if ($odr_status==0 || $odr_status==1 || $odr_status==2 || $odr_status==3 || $odr_status==8 || $odr_status==16 || $odr_status==18 || $odr_status==19 || $odr_status==20 || $odr_status==31){?>
 				<td  <?=$goJump?>  class="t-rt"><?=$odr_stock<=0?"":number_format($odr_stock)?></td>			
 			<?}else{?>
-				<td  <?=$goJump?>  class="t-rt"><?=$odr_quantity<=0?"":number_format($odr_quantity)?></td>
+				<td  <?=$goJump?>  class="t-rt"><?=$supply_quantity<=0?"":number_format($supply_quantity)?></td>
 			<?}?>
 			<!--바꿈 2016-11-8-->
 			<td  <?=$goJump?>  class="t-rt">$<?=$price_val?></td>
@@ -805,10 +805,14 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 						<td><?=$package?></td>
 						<td><?=$dc?></td>
 						<td><?=$rhtype?></td>						
-						<!--16년 12월 21일 발주수량 고정 대표님 요청사항-->
-						<td class="t-rt"><?=$odr_quantity==0?"":number_format($odr_quantity)?></td>										
+						<!--16년 12월 27일 취소 시 발주수량 나머지 공급수량 고정 대표님 요청사항-->
+						<?if ($cancel_odr=="Y"){?>
+							<td class="t-rt"><?=$odr_quantity==0?"":number_format($odr_quantity)?></td>	
+						<?}else{?>
+							<td class="t-rt"><?=$supply_quantity==0?"":number_format($supply_quantity)?></td>	
+						<?}?>									
 						<td class="t-rt">$<?=$price_val?></td>
-						<td class="t-rt">$<?=number_format(round_down($odr_quantity*$price,4),4)?></td>
+						<td class="t-rt">$<?=number_format(round_down($supply_quantity*$price,4),4)?></td>
 						<?if ($odr_type == "B"){?><td class="txt-r t-ct">
 						<?if ($end_yn=="Y"){?>
 						<div class="c-blue company_div" style="cursor:pointer;" onclick="side_company_info2(<?=$com_idx?>,'<?=$odr_type?>')">
@@ -924,13 +928,15 @@ function get_layer_step($odr_idx, $odr_det_idx, $his_ty){
 						if ($etc2=="직접 수령")
 						{	
 					?>
-						<span class="etc"><span ><?=$etc2?></span></span>
-					<?}else{?>
-						<span class="etc"><span ><?if ($etc2){echo openSheet($status, $etc2,$odr_idx,$etc_change);}?></span></span>
-					<?}?>
+							<span class="etc"><span ><?=$etc2?></span></span>
+						<?}else{?>
+							<span class="etc"><span ><?if ($etc2){echo openSheet($status, $etc2,$odr_idx,$etc_change);}?></span></span>
+						<?}?>
 					<?}else{?>
 						<span class="etc"><span ><?if ($etc1){echo openSheet($status, $etc1,$odr_idx,$etc_change);}?></span></span>
+						<?if ($status!=5){?>
 						<span class="etc"><span ><?if ($etc2){?><?=$etc2?><?}?></span></span>
+						<?}?>
 					<?}?>
 					
 				</li>

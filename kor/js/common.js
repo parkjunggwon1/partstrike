@@ -326,27 +326,47 @@ $(document).ready(function(){
 	});
 	//--P.O Sheet(30_05) 화면 : '확정 발주서' 클릭 --------------------------------------------
 	$("body").on("click",".orderConfirm",function(){
-		
-		if ($("#odr_idx_05_04").val() != $("#odr_idx_30_05").val())
-		{	
-			openLayer('layer3','05_04','?odr_idx='+$("#odr_idx_05_04").val());
-		}else{
-			//모두 닫기
-			closeCommLayer("layer3"); //발주서창(05_04))
-			//document.location.href="/kor/";
-		}
-		closeCommLayer("layer5");	//sheet
-		closeCommLayer("layer4"); //공지창(30_05)
-		if($(".layer-section").hasClass("open")){ //What's New 창 있으면 닫기
-			closeCommLayer("layer");
-		}
-		//좌우화면 모두 새로고침
-		if ($("input[name=top_part_no]").val().length>1){
-			main_srch();
-		} else{
-			showajaxParam('.col-right','side_order','');
-		}				
-			
+		//openLayer("layer","30_06","?mn=02");
+		$.ajax({
+				url: "/kor/proc/odr_proc.php", 
+				//data: "typ=odrconfirm&odr_idx="+$("#odr_idx_30_05").val()+"&sell_mem_idx="+$("#sell_mem_idx").val(), //JSJ
+				data: "typ=odrconfirm2&odr_idx="+$("#odr_idx_30_05").val()+"&sell_mem_idx="+$("#sell_mem_idx").val(), //2016-04-05 'odrconfirm2' 로 수정
+				encType:"multipart/form-data",
+				success: function (data) {	
+					if (trim(data) == "SUCCESS"){		
+						//alert_msg("판매자에게 확정 발주서를 전송했습니다.");
+						//alert($("#odr_idx_05_04").val()+"::::"+$("#odr_idx_30_05").val());
+						var addParam="";
+						//if ($("#odr_idx_05_04").val() != $("#odr_idx_30_05").val())
+						//{							
+						//	addParam = "index.php?odr_idx="+$("#odr_idx_05_04").val();
+						//}
+						//document.location.href="/kor/"+addParam;
+
+						if ($("#odr_idx_05_04").val() != $("#odr_idx_30_05").val())
+						{	
+							openLayer('layer3','05_04','?odr_idx='+$("#odr_idx_05_04").val());
+						}else{
+							//모두 닫기
+							closeCommLayer("layer3"); //발주서창(05_04))
+							//document.location.href="/kor/";
+						}
+						closeCommLayer("layer5");	//sheet
+						closeCommLayer("layer4"); //공지창(30_05)
+						if($(".layer-section").hasClass("open")){ //What's New 창 있으면 닫기
+							closeCommLayer("layer");
+						}
+						//좌우화면 모두 새로고침
+						if ($("input[name=top_part_no]").val().length>1){
+							main_srch();
+						} else{
+							showajaxParam('.col-right','side_order','');
+						}
+					}else{ //ajax 처리 후, error mesage
+						alert_msg(data);
+					}
+				}
+		});		
 	});	 
 	//수정발주서 Sheet(P.O Amendment) 12_07 '확정 발주서' 클릭
 	$("body").on("click",".odrAmendConfirm",function(){
@@ -810,19 +830,6 @@ $(document).ready(function(){
 	//order sheet 실 발주 처리 [공지]화면의 '발주서 확인' 버튼 -----------------------
 	$("body").on("click",".btn-view-sheet",function(){		
 			var odr_idx = $(this).attr("odr_idx");
-			$.ajax({
-				url: "/kor/proc/odr_proc.php", 
-				//data: "typ=odrconfirm&odr_idx="+$("#odr_idx_30_05").val()+"&sell_mem_idx="+$("#sell_mem_idx").val(), //JSJ
-				data: "typ=odrconfirm2&odr_idx="+odr_idx+"&sell_mem_idx="+$("#session_mem_idx").val(), //2016-04-05 'odrconfirm2' 로 수정
-				encType:"multipart/form-data",
-				success: function (data) {	
-					if (trim(data) == "SUCCESS"){		
-						
-					}else{ //ajax 처리 후, error mesage
-						alert_msg(data);
-					}
-				}
-			});
 			$.ajax({ 
 				type: "GET", 
 				url: "/ajax/proc_ajax.php", 
@@ -2780,7 +2787,6 @@ function chg_ship_info(obj){
 		}
 	
 }
-
 
 function data_del()
 {

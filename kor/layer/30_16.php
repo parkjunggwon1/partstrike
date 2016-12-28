@@ -383,6 +383,10 @@ if($ship[delivery_addr_idx] > 0){
 				<?	for ($i = 1; $i<=7; $i++){
 						echo GET_ODR_DET_LIST("30_16",$i," and odr_idx=$odr_idx ", $det_cnt);
 				}?>
+				<tr>
+					<td style="height:20px;border: 0;">
+					</td>
+				</tr>
 				<tr>					
 					<?=($det_cnt>=1)? "<td></td>":"";?>
 					

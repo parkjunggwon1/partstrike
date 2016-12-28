@@ -9,18 +9,17 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 
 $odr_his=get_odr_history2($odr_idx);
 $pay_type = $odr_his[etc1];
-$total_price = $odr_his[etc2];
+//$total_price = $odr_his[etc2];
 $buyer_idx = $odr_his[buy_mem_idx];
 $seller_idx = $odr_his[sell_mem_idx];
 
 $buyer_nation = get_any("member","nation","mem_idx=$buyer_idx");
 $seller_nation = get_any("member","nation","mem_idx=$seller_idx");
 
-
-$total_price = str_replace("$", "", $total_price);
+//$total_price = str_replace("$", "", $total_price);
 
 $ship_idx = get_any("ship","delivery_addr_idx","odr_idx='$odr_idx'");
-$sub_price = get_any("odr_det","sum(odr_quantity*odr_price)","odr_idx='$odr_idx'");
+$sub_price = get_any("odr_det","sum(supply_quantity*odr_price)","odr_idx='$odr_idx'");
 
 if($ship_idx == 0 || $ship_idx == "")
 {
@@ -40,6 +39,7 @@ if($vat_price==0)
 
 $vat_val = $vat_price/100;
 $vat_plus =  $sub_price*$vat_val;
+$total_price = $sub_price+$vat_plus;
 $vat_plus =  round_down($vat_plus,4);
 
 $sub_price = round_down($sub_price,4);
