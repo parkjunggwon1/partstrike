@@ -66,7 +66,7 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 		<?
 		if ($row_ship["ship_info"]==5)
 		{
-			$ship_via = "Another";
+			$ship_via = "Other";
 			$ship_address = "Address";
 		}
 		else if ($row_ship["ship_info"]==6)

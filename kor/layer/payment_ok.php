@@ -64,11 +64,11 @@ $total_price = round_down($total_price,4);
 	<!-- //form1 -->
 </form>
 
-<div class="layer-hd">
+<div class="layer-hd" style="background: #fff;border: 0px;color: red;">
 	<h1><span lang="en" ><?=$pay_type?></span></h1>
-	<a href="#" class="btn-close"><img src="/kor/images/btn_layer_close_w.png" alt="close"></a>
+	<a href="#" class="btn-close"><img src="/kor/images/btn_layer_close.png" alt="close"></a>
 </div>
-<div class="layer-content">
+<div class="layer-content" style="border-top:0">
 	
 	<table class="price-table1" lang="en" align="center">
 		<tbody>
@@ -97,7 +97,7 @@ $total_price = round_down($total_price,4);
 		</tbody>
 	</table>
 	<div class="btn-area t-rt">
-		<button class="btn-close" type="button"><img alt="확인" src="/kor/images/btn_ok.gif"></button>
+		
 	</div>
 </div>
 

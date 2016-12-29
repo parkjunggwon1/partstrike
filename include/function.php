@@ -1716,19 +1716,55 @@ function get_manager($nation){
 }
 
 //시작 금액 소수점 자리 절삭 시작
-function round_down($num,$d=0)
+function round_down($val,$d)
 {
-	return sgn($num)*p_floor(abs($num),$d);
-}
+	$re_price = str_replace("$","",$val);
 
-function p_floor($val,$d)
-{
-	return floor($val * pow(10,$d))/pow(10,$d);
-}
-
-function sgn($x)
-{
-	return $x ? ($x>0 ? 1 : -1) : 0;
+	
+	if (str_replace("$","",$val)==(int)str_replace("$","",$re_price))
+	{
+		
+		$price= $re_price;
+		
+	}
+	else
+	{
+		
+		$val_explode = explode('.', $val);
+		if ($val_explode[1] >=5)
+		{		
+			
+			$price = $val;
+			if ($d==4)
+			{
+				
+				$price_sosu = substr($val_explode[1],0,4);
+				$price = $val_explode[0].".".$price_sosu;
+			}
+			else
+			{
+				$price = substr_replace($price,'.',-4,0);
+				$price = substr($price,0,-2);
+			}
+		}
+		else
+		{		
+			$price = $val * pow(10,4);
+			if ($d==4)
+			{
+				$price = substr($price,0,4);
+				$price = substr_replace($price,'.',-4,0);
+			}
+			else
+			{
+				$price = substr_replace($price,'.',-4,0);
+				$price = substr($price,0,-2);
+			}
+		}
+	}
+	
+		
+	return $price;
 }
 //시작 금액 소수점 자리 절삭 끝
 ?>

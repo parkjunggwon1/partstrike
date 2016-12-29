@@ -15,6 +15,8 @@ $bottom_30_20 = "";
 //***************************************************** GET_ODR_DET_LIST *****************************************************************
 function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_history_idx=""){   //part_type별 odr list 출력 (05_04 ,30_06, 30_08,30_15등등 layer에서 사용)
 	global $file_path;
+	global $load_page;
+
 	$per_cnt = QRY_CNT("odr_det"," and odr_status=16 ".$searchand);
 	if ($part_type){
 		//$searchand .= " and b.part_type =$part_type "; //2016-03-23
@@ -441,7 +443,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td><?=$rhtype?></td>					
 					<?}?>
 					<td class="t-rt"><?=$quantity==0?$supply_quantity:number_format($quantity + $supply_quantity)?></td>
-					<td class="t-rt">$<?=$price==0?"":number_format($price,2)?></td>
+					<td class="t-rt">$<?=$price==0?"":$price_val?></td>
 					<td>
 						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" name="odr_quantity[]" odr_det_idx="<?=$odr_det_idx?>" supply_quantity="<?=$supply_quantity;?>" quantity="<?=$quantity + $supply_quantity;?>" amd_yn="Y" value="" style="width:56px;">
 					</td>
@@ -1130,7 +1132,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td colspan="12" style="padding:0;">
 						<table class="detail-table" style="margin:0;">
 							<tbody>
-								<?if ($loadPage != "05_04_1" && $loadPage != "08_02" && $loadPage !="10_02" && $loadPage!="10_04" && $loadPage != "13_04" && $loadPage != "13_04s" && $loadPage != "13_02s" && $loadPage != "03_02" && $loadPage != "19_1_06" ){?>
+								<?if ($loadPage != "05_04_1" && $loadPage != "08_02" && $loadPage !="10_02" && $loadPage!="10_04" && $loadPage != "13_04" && $loadPage != "13_04s" && $loadPage != "03_02" && $loadPage != "19_1_06" ){?>
 									<?if(strlen($part_condition)>0 && $part_condition>0){?>
 									<tr class="noinput">
 										<th scope="row" style="width:150px">&nbsp;부품상태&nbsp;:&nbsp;&nbsp;<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span></th>
@@ -1138,7 +1140,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 									</tr>
 									<?}?>
 								<?}?>
-								<?if ($loadPage != "03_02" && $loadPage!="05_04_1" && $loadPage!="13_04s" && $loadPage!="13_02s" && $loadPage != "19_1_06" && strlen($memo)>0){?>
+								<?if ($loadPage != "03_02" && $loadPage!="05_04_1" && $loadPage!="13_04s" && $loadPage != "19_1_06" && strlen($memo)>0){?>
 								<tr class="noinput">
 									<td colspan="2" ><strong class="c-black" >Memo : </strong><?=$memo;?> </td>
 								</tr>
@@ -2281,6 +2283,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						    break;
 							case "13_02s": //취소?>
 							<td class="company"><img src="/kor/images/nation_title_<?=$buy_com_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$buy_com_nation)?>"> <span class="name"><a href="javascript:layer_company_det('<?=$buy_com_idx?>');" class="c-blue"><?=$buy_com_name?></a></span></td>
+							<td class="c-red2 t-ct" style="font-size:15px;">송장이 도착했습니다.</td>
 					<td class="t-ct w100 c-red">&nbsp;</td>
 					</tr></tbody></table></div>		
 							<? echo layerInvListData($loadPage ,$odr_idx,$odr_det_idx,$odr_history_idx);

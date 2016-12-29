@@ -7,6 +7,9 @@
 	<input type="hidden" name="mem_type" id="mem_type" value="<?=$mem_type?>">
 	<input type="hidden" id="hid_nation" name="hid_nation" value="<?=get_any("member", "nation", "mem_idx =$rel_idx")?>">
 	<?
+	$nation_val = get_any("member", "nation", "mem_idx =$rel_idx");
+	$nation_number = get_any("code_group_detail","code_desc_mt", "grp_code ='NA' and code_depth =1 and use_yn='Y' and dtl_code='$nation_val'");
+
 	if ($idx){
 		$result = QRY_MEMBER_VIEW("idx",$idx);
 		$row = mysql_fetch_array($result);
@@ -47,7 +50,15 @@
 		$typ = "write";
 	}
 ?>
+<?			
+	$tel_nation = explode("-",$tel);
+	$fax_nation = explode("-",$fax);
+	$hp_nation = explode("-",$hp);
 
+	$tel_num = str_replace($tel_nation[0]."-","",$tel);
+	$fax_num = str_replace($fax_nation[0]."-","",$fax);
+	$hp_num = str_replace($hp_nation[0]."-","",$hp);
+?>
 <div class="box-top">
 	<span class="left-btn"><a href="javascript:showajaxParam('.col-left', 'joinus' , 'mode=edit&rel_idx=<?=$rel_idx?>');"><img src="/kor/images/btn_back.gif" alt="이전"></a></span>
 	<h2><?=get_variable_name($mem_type,"직원")?></h2>
@@ -99,21 +110,21 @@
 			<td class="t-ct">/</td>
 			<td><input type="text" class="i-txt3 c-blue" placeholder="모국어" lang="ko" name="depart_nm" value="<?=$depart_nm?>"></td>
 		</tr>
-		<tr>
+		<tr>			
 			<th scope="row"><strong class="c-red">*</strong> <span lang="en">Tel</span></th>
-			<td><input type="text" class="i-txt3 c-blue" name="tel" lang="en"  value="<?=$tel?>"></td>
+			<td><input type="text" class="i-txt3 c-blue" lang="en" name="nation_nm" style="width:37px;text-align:right;"  maxlength="5" value="+<?=$nation_number?>-" readonly>&nbsp<input type="text" class="i-txt3 c-blue" name="tel" lang="en" style="width:173px;" value="<?=$tel_num?>"></td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
 			<th scope="row"><span lang="en">Fax</span></th>
-			<td><input type="text" class="i-txt3 c-blue"  name="fax" lang="en"  value="<?=$fax?>"></td>
+			<td><input type="text" class="i-txt3 c-blue" lang="en" name="nation_nm" style="width:37px;text-align:right;"  maxlength="5" value="+<?=$nation_number?>-" readonly>&nbsp<input type="text" class="i-txt3 c-blue"  name="fax" style="width:173px;" lang="en"  value="<?=$fax_num?>"></td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
 			<th scope="row">휴대전화</th>
-			<td><input type="text" class="i-txt3 c-blue"  name="hp" lang="en" value="<?=$hp?>"></td>
+			<td><input type="text" class="i-txt3 c-blue" lang="en" name="nation_nm" style="width:37px;text-align:right;"  maxlength="5" value="+<?=$nation_number?>-" readonly>&nbsp<input type="text" class="i-txt3 c-blue"  name="hp" style="width:173px;" lang="en" value="<?=$hp_num?>"></td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 		</tr>

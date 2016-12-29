@@ -396,9 +396,9 @@
 				dataType : "html" ,
 				async : false ,
 				success: function(data){ 
-					$("input[name=tel]").val($("input[name=tel]").val()==""?data:$("input[name=tel]").val());
-					$("input[name=fax]").val($("input[name=fax]").val()==""?data:$("input[name=fax]").val());
-					$("input[name=hp]").val($("input[name=hp]").val()==""?data:$("input[name=hp]").val());
+					//$("input[name=tel]").val($("input[name=tel]").val()==""?data:$("input[name=tel]").val());
+					//$("input[name=fax]").val($("input[name=fax]").val()==""?data:$("input[name=fax]").val());
+					//$("input[name=hp]").val($("input[name=hp]").val()==""?data:$("input[name=hp]").val());
 				}
 			});		
 		}
