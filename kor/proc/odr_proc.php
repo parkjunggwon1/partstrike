@@ -1995,14 +1995,13 @@ if ($typ=="imgfileup" || $typ =="imgfiledel"){   //18R_21 에서 사용.
         echo $query_name.":::::::".$dir_dest;
         //exit;
 
-        if($_FILES[$query_name]) {            
+        if($_FILES[$query_name]) {
             $FILE_1         = RequestFile("file".$i);
             $FILE_1_size    = $FILE_1[size];
             $maxSize = '5242880'; //5mb, 파일 용량 제한
             $filename = uploadProc( $query_name, $dir_dest, $maxSize);
         }
     }
-   
     if(${"file_o".$i}){
         $old_file=${"file_o".$i};
         if(file_exists("$dir_dest/$old_file")){
@@ -2021,16 +2020,13 @@ if ($typ=="imgfileup" || $typ =="imgfiledel"){   //18R_21 에서 사용.
         $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
         if($result){
             if ($typ=="imgfileup"){
-
                 Page_ImgUpload($no, $filename);
-
                 exit;
             }else{
                 echo "SUCCESS";
                 exit;
             }
         }
-
     }else{   //거절이나, 수량 부족시 사진 정보 (odr_history 에 저장)
         if ($odr_history_idx==""){
             $sql = "insert into odr_history set

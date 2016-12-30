@@ -9,7 +9,9 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
  // chkLogin($session_mem_idx);
   if ($invoice_no==""){
 	 $invoice_no = get_auto_no("WI", "invoice" , "invoice_no");
-  }
+  }else{
+	$rqst_amt = get_any("mybank", "charge_amt","invoice_no='$invoice_no' and mybank_yn = 'Y'");
+}
 
  //인출 관련 sheet 
   $result_buyer = QRY_ODR_MEMBER_VIEW("","idx",($_SESSION["REL_IDX"]==0?$_SESSION["MEM_IDX"]:$_SESSION["REL_IDX"]),$invoice_no); //사는 회사 정보
@@ -89,7 +91,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 		<div class="info-wrap">
 			<ul class="company-info">
 				<li>
-					<span class="b1"><img src="/upload/file/<?=$row_seller["filelogo"]?>" width="46" height="17" alt=""></span>
+					<span class="b1"><img src="/upload/file/<?=$row_seller["filelogo"]?>" width="75"  height="18"  alt=""></span>
 					<span class="b2" lang="en"><?=$row_seller["mem_nm_en"]?></span>
 				</li>
 				<li>
@@ -120,7 +122,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 		<div class="info-wrap">
 			<ul class="company-info">
 				<li>
-					<span class="b1"><img src="/upload/file/<?=$row_seller["filelogo"]?>" width="46" height="17" alt=""></span>
+					<span class="b1"><img src="/upload/file/<?=$row_seller["filelogo"]?>" width="75"  height="18"  alt=""></span>
 					<span class="b2" lang="en"><?=$row_seller["mem_nm_en"]?></span>
 				</li>
 				<li>
@@ -176,7 +178,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 
 	<ul class="total-price">
 	<li class="sub"><strong>Sub Total  :</strong><span>$<?=number_format($rqst_amt,2)?>	</li>
-	<li class="sub  c-red"><strong>Escrow Fee :</strong><span>$<?=number_format($escrow,2)?>	</li>
+	<li class="sub  c-red"><strong>Escrow Fee :</strong><span><?=str_replace("-","-$",number_format($escrow,2))?>	</li>
 	<li class="total"><strong>Total :</strong><span>$<?=number_format($rqst_amt+$escrow,2)?></span></li>
 	</ul>
 	</div>
@@ -213,6 +215,6 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 	
 	<div class="btn-area">
 		<button type="button" class="f-lt"><img src="/kor/images/btn_print.gif" alt="인쇄"></button>
-		<button type="button" class="f-rt" onclick="withdrawal();"><img src="/kor/images/btn_request.gif" alt="요청"></button>
+		<?if ($forread==""){?><button type="button" class="f-rt" onclick="withdrawal();"><img src="/kor/images/btn_request.gif" alt="요청"></button><?}?>
 	</div>
 </div>

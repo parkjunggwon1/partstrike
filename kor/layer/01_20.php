@@ -10,6 +10,8 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/class/class.memfee.php";
 
  if ($invoice_no==""){
 	 $invoice_no=get_auto_no("CMBI", "mybank" , "invoice_no");
+}else{
+	$rqst_amt = get_any("mybank", "charge_amt","invoice_no='$invoice_no' and mybank_yn = 'N'");
 }
 
  $result_parts =  QRY_ODR_MEMBER_VIEW("","idx",get_any("member", "min(mem_idx)", "mem_type = 0"), $invoice_no); //사는 회사 정보
@@ -67,7 +69,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/class/class.memfee.php";
 		<div class="info-wrap">
 			<ul class="company-info">
 				<li>
-					<span class="b1"><img src="/upload/file/<?=$row_buyer["filelogo"]?>" width="46" height="17" alt=""></span>
+					<span class="b1"><img src="/upload/file/<?=$row_buyer["filelogo"]?>"width="75"  height="18"  alt=""></span>
 					<span class="b2" lang="en"><?=$row_buyer["mem_nm_en"]?></span>
 				</li>
 				<li>
@@ -89,7 +91,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/class/class.memfee.php";
 		<div class="info-wrap">
 			<ul class="company-info">
 				<li>
-					<span class="b1"><img src="/upload/file/<?=$row_buyer["filelogo"]?>" width="46" height="17" alt=""></span>
+					<span class="b1"><img src="/upload/file/<?=$row_buyer["filelogo"]?>" width="75"  height="18"  alt=""></span>
 					<span class="b2" lang="en"><?=$row_buyer["mem_nm_en"]?></span>
 				</li>
 				<li>
@@ -153,15 +155,17 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/class/class.memfee.php";
 			<p class="txt2">I hereby certify that I as a member is well-informed with the PARTStrike’s  Treatments mentioned on the pages also will not violate any items mentioned  in the Treatment of PARTStrike and agrees to pay the above lists without any  complaints or argument. </p>
 		</div>
 		<ul class="sign-area">
-			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_buyer["filesign"]?>" height="21" alt=""></strong></li>
-			<li><span>CEO : </span><strong><?=$row_buyer["pos_nm_en"]?></strong></li>
-			<li><span>Tel : </span><strong><?=$row_buyer["tel"]?></strong><span class="fax">Fax : </span><strong><?=$row_buyer["fax"]?></strong></li>
+			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_parts["filesign"]?>" height="21" alt=""></strong></li>
+			<li><span>CEO : </span><strong><?=$row_parts["pos_nm_en"]?></strong></li>
+			<li><span>Tel : </span><strong><?=$row_parts["tel"]?></strong><span class="fax">Fax : </span><strong><?=$row_parts["fax"]?></strong></li>
 		</ul>
 	</div>
 	
 	<div class="btn-area t-rt" odr_idx="" odr_det_idx="" fromLoadPage="" deposit_yn="" charge_type="1" tot_amt="<?=$rqst_amt?>">
 		<button type="button" class="f-lt"><img src="/kor/images/btn_print.gif" alt="인쇄"></button>
+		<?if ($forread==""){?>
 		<a href="#" class="btn-dialog-18-2-12"><img src="/kor/images/btn_card.gif" alt="신용카드"></a>&nbsp;<a href="#" class="f-rt btn-pop-3013"><img src="/kor/images/btn_remittance.gif" alt="은행송금"></a>
+		<?}?>
 	</div>
 
 	<?$typ = $typ==""?"pay":$typ;

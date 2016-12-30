@@ -15,8 +15,6 @@ if ($invoice_no==""){
 
  $result_buyer = QRY_ODR_MEMBER_VIEW("","idx",($_SESSION["REL_IDX"]==0?$_SESSION["MEM_IDX"]:$_SESSION["REL_IDX"]),$invoice_no); //사는 회사 정보
  $row_buyer = mysql_fetch_array($result_buyer);
- $row_ship = get_ship($row_odr_det["ship_idx"]);
-
 
 // $invoice_date = date("Y-m-d"); 
  $invoice_date = date("d,M,Y"); 

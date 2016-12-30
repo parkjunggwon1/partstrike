@@ -40,6 +40,7 @@
 		var tot_amt=f.tot_amt.value;
 		openCommLayer("layer4","30_12","?typ="+typ+"&memfee_id="+memfee_id+"&charge_type="+charge_type+"&tot_amt="+tot_amt);
 	}
+
 	function check3_asdf(){
 		var f = document.f5;
 		f.target = "proc";
@@ -48,6 +49,13 @@
 		f.encoding = "multipart/form-data";
 		f.submit();	
 	}
+
+	 function f_checkbox(str){
+		 alert("asfasf");
+		document.form.chkbox.checked = !str;
+	}
+
+
 
 //-->
 </script>

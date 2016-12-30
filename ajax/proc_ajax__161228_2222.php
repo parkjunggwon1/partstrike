@@ -901,77 +901,53 @@ switch($actty) {
    case "MRO" :   //Move To Real Order (임시 order에서 real order로 발주 들어가는 과정 ----------------------------------- MRO(실 발주) --------------------------------------------------/
 	// $actidx : odr_idx, $actkind : odr_det_idx
 	$remain_cnt = QRY_CNT("odr_det", "and odr_idx = $actidx and odr_det_idx not in ($actkind)");
-
 	//2016-12-28 : 가격변동 체크
-	$price_check = QRY_CNT_FLUC($actkind);
 
 	/**재고수량 처리 전에 현, 재고 먼저 체크
 	2016-09-13 : 지속적은 안전재고 체크 않함
 	2016-11-13 : 턴키도 안전재고 계산에서 제외 **/
 	$safe_stock = QRY_CNT_STOCK($actkind);
-	//2016-12-29 : 가격 또는 재고 변동 시 odr_det 정보 Update
-	$searchand = " and a.odr_det_idx IN($actkind)";
-	$result =QRY_ODR_DET_LIST(0,$searchand,0,"","asc");
-	while($row = mysql_fetch_array($result)){
-		$_det_idx = replace_out($row["odr_det_idx"]);
-		$_quantity = replace_out($row["quantity"]);
-		$_odr_stock = replace_out($row["odr_stock"]);
-		$_odr_quantity = replace_out($row["odr_quantity"]);
-		$_part_price = replace_out($row["price"]);
-		$_odr_price = replace_out($row["odr_price"]);
-		//재고수량정보Update
-		//if($_quantity != $_odr_stock){	//변경되었을 경우 무조건..
-		if(($_quantity - $_odr_quantity)<0){	//변경된 수량이 발주 수량보다 작을 경우
-			update_val("odr_det","odr_quantity",$_quantity, "odr_det_idx", $_det_idx);
-		}
-		//단가정보Update
-		if($_part_price != $_odr_price){	//Unit Price 가 변경되었을 경우..
-			update_val("odr_det","odr_price",$_part_price, "odr_det_idx", $_det_idx);
-		}
+
+	if ($delivery_addr_idx == "0" && $delivery_save_yn != "Y")
+	{
+		$sql = "insert into delivery_addr set 
+						mem_idx = '$session_mem_idx'
+						,save_yn = 'Y'
+						,nation = '$nation'
+						,com_name='$com_name'
+						,manager= '$manager'
+						,pos_nm = '$pos_nm'
+						,depart_nm = '$depart_nm'
+						,com_type = '$com_type'
+						,tel = '$tel'
+						,fax = '$fax'
+						,hp = '$hp'
+						,email = '$email'
+						,homepage = '$homepage'
+						,zipcode = '$zipcode'
+						,dosi = '$dosi'
+						,dositxt = '$dositxt'
+						,sigungu = '$sigungu'
+						,addr_det = '$addr_det'
+						,addr = '$addr'
+						,reg_date = '$log_date'
+						,reg_ip = '$log_ip'
+						";
+		$result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
+		//echo $sql;
+		$delivery_addr_idx_val=mysql_insert_id(); 
+
+		$sql = "update ship set 
+			delivery_addr_idx = '$delivery_addr_idx_val'			
+			where odr_idx = $actidx and ship_type = '1'
+			";
+		//	echo $sql;
+		$result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
 	}
 
-	if($price_check>0){	//-- 가격 변동 -----
-		echo "PRICE";
-	}elseif($safe_stock>0){ //-- 재고 부족 -------------------------------------------------
+	if($safe_stock>0){ //-- 재고 부족 -------------------------------------------------
 		echo "ERR";
 	}else{
-		//-- 배송지 변경-------------
-		if ($delivery_addr_idx == "0" && $delivery_save_yn != "Y")
-		{
-			$sql = "insert into delivery_addr set 
-							mem_idx = '$session_mem_idx'
-							,save_yn = 'Y'
-							,nation = '$nation'
-							,com_name='$com_name'
-							,manager= '$manager'
-							,pos_nm = '$pos_nm'
-							,depart_nm = '$depart_nm'
-							,com_type = '$com_type'
-							,tel = '$tel'
-							,fax = '$fax'
-							,hp = '$hp'
-							,email = '$email'
-							,homepage = '$homepage'
-							,zipcode = '$zipcode'
-							,dosi = '$dosi'
-							,dositxt = '$dositxt'
-							,sigungu = '$sigungu'
-							,addr_det = '$addr_det'
-							,addr = '$addr'
-							,reg_date = '$log_date'
-							,reg_ip = '$log_ip'
-							";
-			$result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
-			//echo $sql;
-			$delivery_addr_idx_val=mysql_insert_id(); 
-
-			$sql = "update ship set 
-				delivery_addr_idx = '$delivery_addr_idx_val'			
-				where odr_idx = $actidx and ship_type = '1'
-				";
-			//	echo $sql;
-			$result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
-		}
 		
 		//-- 재고수량 처리 2016-04-01--------------------------------------------------
 		//-- 2016-09-18 : 지속적....은 재고 없으므로 빼지 않기. 

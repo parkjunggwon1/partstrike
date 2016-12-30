@@ -269,7 +269,7 @@ function lab(){
 }
 function contact(){
 	showajax(".col-left", "contact");	
-	showajax(".col-right", mem_idx==""?"side":"side_order");
+//	showajax(".col-right", mem_idx==""?"side":"side_order");
 	setMenu(6, 5);
 }
 

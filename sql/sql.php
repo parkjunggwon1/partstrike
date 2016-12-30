@@ -1,8 +1,7 @@
 <?
 function dbconn(){
-	$conn=mysql_connect("localhost","root","wjdrnjs1");  // 서버 /ID/pw
-	mysql_select_db("pjg0319", $conn); // DB 명 수정
-	mysql_query("SET NAMES UTF8");
+	$conn=mysql_connect("localhost","evictor23","whgdmstodrkr2710");  // 서버 /ID/pw
+	mysql_select_db("evictor23", $conn); // DB 명 수정
 	return $conn;
 }
 
@@ -82,6 +81,22 @@ function QRY_CNT_STOCK($arrDet){
 			WHERE a.part_type NOT IN('2','7') AND b.odr_det_idx IN($arrDet) AND (a.quantity - b.odr_quantity) < 0
 		";
 		mysql_query( "SET NAMES utf8");
+	$result=mysql_query($sql,$conn) or die ("SQL ERROR(QRY_CNT) : ".mysql_error());
+	$row=mysql_fetch_array($result);
+	$total=$row[CNT];
+	return $total;
+}
+
+//2016-12-28 : 주문서에서 '가격변동'이 있는 품목 카운트
+Function QRY_CNT_FLUC($arrDet){
+	$conn = dbconn();	
+	$sql="
+			SELECT COUNT(a.part_idx) AS CNT FROM part AS a
+			LEFT JOIN odr_det AS b
+			ON(a.part_idx = b.part_idx)
+			WHERE b.odr_det_idx IN($arrDet) AND a.price != b.odr_price
+		";
+	mysql_query( "SET NAMES utf8");
 	$result=mysql_query($sql,$conn) or die ("SQL ERROR(QRY_CNT) : ".mysql_error());
 	$row=mysql_fetch_array($result);
 	$total=$row[CNT];

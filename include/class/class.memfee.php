@@ -95,10 +95,10 @@ function GF_GET_MEMFEE_LIST1(){
 				<td class="t-rt" style="width:85px">$<?=number_format($amount,2)?></td>
 				<td>
 				<label class="ipt-chk chk2">&nbsp;&nbsp;
-				<? if($amount_chk=="1"){ ?><input name="mem_idx[]" type="checkbox" value="<?=$mem_idx?>"><span></span>
-				<? }else if($amount_chk=="2"){ ?><!--<img src="/kor/images/icon_v.png">--><!--<input name='tmp' class='checked' type='checkbox'>--><span><font color="red">가입</font></span>
+				<? if($amount_chk=="1"){ ?><input name="mem_idx[]" type="checkbox" value="<?=$mem_idx?>" ><span></span>
+				<? }else if($amount_chk=="2"){ ?><!--<img src="/kor/images/icon_v.png">--><!--<input name='tmp' class='checked' type='checkbox'>--><span><font color="red">가입완료</font></span>
 				<? }else if($amount_chk=="3"){ ?><!--<img src="/kor/images/icon_vbox.png">--><input name='tmp' class='checked' type='checkbox'><span></span>
-				<? }else if($amount_chk=="4"){ ?><!--<img src="/kor/images/icon_v.png">--><!--<input name='tmp' class='checked' type='checkbox'>--><span><font color="red">가입</font></span>
+				<? }else if($amount_chk=="4"){ ?><!--<img src="/kor/images/icon_v.png">--><!--<input name='tmp' class='checked' type='checkbox'>--><span><font color="red">가입완료</font></span>
 				<? }?>
 				</label>
 				</td>
@@ -160,7 +160,7 @@ function GF_GET_MEMFEE_LIST2($page){
 			$cnt = QRY_CNT2("DISTINCT(invoice_no) "," mybank "," and (com_idx='".$_SESSION["REL_IDX"]."' or com_idx='".$_SESSION["MEM_IDX"]."') and charge_type='14'" );
 			$totalpage = QRY_TOTALPAGE($cnt,$recordcnt);
 			$searchand=" and (a.com_idx='".$_SESSION["REL_IDX"]."' or a.com_idx='".$_SESSION["MEM_IDX"]."')  and a.charge_type='14' and a.mem_idx=b.mem_idx ";
-			$result =QRY_C_LIST_GROUP("a.*, b.mem_id,b.mem_nm_en,b.pos_nm_en"," mybank a, member b ",$recordcnt,$page,$searchand," a.invoice_no  order by a.mem_idx");
+			$result =QRY_C_LIST_GROUP("a.*, b.mem_id,b.mem_nm_en,b.pos_nm_en"," mybank a, member b ",$recordcnt,$page,$searchand," a.invoice_no  order by a.mybank_idx desc");
 			?>
 			<?
 			$ListNO=$cnt-(($page-1)*$recordcnt);

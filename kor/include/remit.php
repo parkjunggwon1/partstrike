@@ -6,7 +6,16 @@
 				var yr = $("#fr #yr option:selected").val();
 				var mon = $("#mon option:selected").val();
 				var remit_ty = $("#remit_ty").val();
-				showajaxParam("#remitlist", "remitlist", "yr="+yr+"&mon="+mon+"&remit_ty="+remit_ty+"&page=1"); 
+				var mem_id = $("#remitlist #mem_id option:selected").val();
+				var mem_nm = $("#remitlist #mem_nm option:selected").val();
+				var charge_method = $("#remitlist #charge_method option:selected").val();
+				var invoice_no = $("#remitlist #invoice_no option:selected").val();
+
+				showajaxParam("#remitlist", "remitlist", "yr="+yr+"&mon="+mon+"&remit_ty="+remit_ty+"&mem_id="+mem_id+"&mem_nm="+mem_nm+"&charge_method="+charge_method+"&invoice_no="+invoice_no+"&page=1"); 
+
+				$("label").each(function(){
+					$(this).html($(this).next().find("option:selected").text());
+				});
 		});
 
 		
@@ -71,7 +80,7 @@ if ($remit_ty == ""){$remit_ty ="C";}?>
 					<h2><span lang="en">My Bank</span></h2>
 				</div>
 				<div  id="remitlist">
-					<?=GF_GET_REMIT_LIST($yr=="N/A"?"":$yr,$mon=="N/A"?"":$mon,$remit_ty,$page);?>			
+					<?=GF_GET_REMIT_LIST($yr=="N/A"?"":$yr,$mon=="N/A"?"":$mon,$remit_ty,$mem_id, $mem_nm, $charge_method, $invoice_no,$page);?>			
 			    </div>
 			</section>
 			<!--// mybankTable -->
