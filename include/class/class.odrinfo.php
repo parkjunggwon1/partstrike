@@ -175,6 +175,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					$dc = "NEW";
 					$quantity="";
 				}
+
 			if ($i == 1){
 			?>
 				<tbody id="tbd_<?=$part_type?>">
@@ -441,7 +442,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td><?=$rhtype?></td>					
 					<?}?>
 					<td class="t-rt"><?=$quantity==0?$supply_quantity:number_format($quantity + $supply_quantity)?></td>
-					<td class="t-rt">$<?=$price==0?"":number_format($price,2)?></td>
+					<td class="t-rt">$<?=$price==0?"":$price_val?></td>
 					<td>
 						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" name="odr_quantity[]" odr_det_idx="<?=$odr_det_idx?>" supply_quantity="<?=$supply_quantity;?>" quantity="<?=$quantity + $supply_quantity;?>" amd_yn="Y" value="" style="width:56px;">
 					</td>
@@ -637,7 +638,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td class="t-rt" style="width:66px;"><span class="c-blue"><?=$odr_quantity==0?"":number_format($odr_quantity)?></span></td>
 					<!--공급수량-->
 					<td class="t-rt">
-						<input type="text" name="supply_quantity[]" class="i-txt4 c-red2 onlynum numfmt t-rt" value="<?=($supply_quantity>0)? number_format($supply_quantity):""?>" maxlength="10" style="width:58px" origin_qty="<?=$origin_qty;?>" part_type="<?=$part_type;?>">
+						<input type="text" name="supply_quantity[]" class="i-txt4 c-red2 onlynum numfmt t-rt" value="" maxlength="10" style="width:58px" origin_qty="<?=$origin_qty;?>" part_type="<?=$part_type;?>">
 					</td>
 					<?=($period)?"<td class='c-red'>".$period:(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
 					<??>
@@ -694,7 +695,10 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<?}?>
 					<td class="t-rt">$<?=$price_val?></td>					
 					<td class="t-rt"><span class="c-blue"><?=$odr_quantity==0?"":number_format($odr_quantity)?></span></td>
-					<?if($sell_mem_idx != $_SESSION['MEM_IDX']){?>
+					<?
+					global $load_page;					
+					?>
+					<?if($sell_mem_idx != $_SESSION['MEM_IDX'] || $load_page=="30_08"){?>
 					<td class="t-rt"><span class="c-red"><?=$supply_quantity==""?"0":number_format($supply_quantity)?></span></td>		
 					<?}?>			
 					<?=($period)?"<td class='c-red'>".$period:(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
@@ -717,14 +721,14 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								포장상태 : 
 								<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> / <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span>
 							</td>
-						</tr>
-						<?if(strlen($memo)>0){?>
+						</tr>						
+					<?}?>		
+					<?if(strlen($memo)>0){?>
 						<tr class="noinput" >
 							<td></td>
 							<td colspan="10" style="text-align:left;"><strong class="c-black" >Memo : </strong><font color="#00759e"><?=$memo?></font> </td>
 						</tr>	
-						<?}?>
-					<?}?>					
+					<?}?>			
 					<tr>
 						<td></td>
 						<td colspan="15" style="padding:0">
@@ -1056,7 +1060,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<td><?=$rhtype?></td>
 
 							<?if($loadPage != "18R_19" && $loadPage!="19_1_05" && $loadPage!="19_1_06" && $loadPage!="30_14"){?>
-								<?if($loadPage == "30_10" || $loadPage == "13_04s"){	//What'sNew(구매자:송장)
+								<?if($loadPage == "30_10" || $loadPage == "13_04s" || $loadPage == "13_02s"){	//What'sNew(구매자:송장)
 									//2016-12-25 : 수정발주서가 있는 경우에는 '실수량+공급수량
 									$poa_cnt = QRY_CNT("odr_history", "and odr_idx=$odr_idx and status='3'");
 									$qty = ($poa_cnt>0)? $quantity+$supply_quantity : $odr_stock;
@@ -1096,6 +1100,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								else{
 									echo "<span class=\"c-blue\">".number_format($odr_quantity)."</span>";
 								}?>
+
 						<!--//발주수량-->
 						</td>
 						<?if ($loadPage !="21_04" || $loadPage !="30_20" || $loadPage =="30_14" ){?>
@@ -1131,11 +1136,11 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td colspan="12" style="padding:0;">
 						<table class="detail-table" style="margin:0;">
 							<tbody>
-								<?if ($loadPage != "05_04_1" && $loadPage != "08_02" && $loadPage !="10_02" && $loadPage!="10_04" && $loadPage != "13_04" && $loadPage != "13_04s" && $loadPage != "13_02s" && $loadPage != "03_02" && $loadPage != "19_1_06" ){?>
+								<?if ($loadPage != "05_04_1" && $loadPage != "08_02" && $loadPage !="10_02" && $loadPage!="10_04" && $loadPage != "13_04"  && $loadPage != "13_02s" && $loadPage != "03_02" && $loadPage != "19_1_06" ){?>
 									<?if(strlen($part_condition)>0 && $part_condition>0){?>
 									<tr class="noinput">
-										<th scope="row" style="width:150px">&nbsp;부품상태&nbsp;:&nbsp;&nbsp;<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span></th>
-										<th scope="row" style="width:193px">포장상태&nbsp;:&nbsp;&nbsp;<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> / <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span></th>
+										<th scope="row" colspan=2>&nbsp;부품상태&nbsp;:&nbsp;&nbsp;<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span>
+										&nbsp;&nbsp;&nbsp;포장상태&nbsp;:&nbsp;&nbsp;<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> / <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span></th>
 									</tr>
 									<?}?>
 								<?}?>
@@ -1166,6 +1171,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 									</td>
 								</tr>
 								<?}elseif ( $loadPage == "19_06" || $loadPage =="19_08"  ||$loadPage =="18R_08" || $loadPage =="18R_19" || $loadPage =="18R_16"  ||$loadPage == "18R_06" || $loadPage == "18R_05" || $loadPage == "30_20" || $loadPage == "18_1_04" || $loadPage == "30_14"){?>
+								<?if ($row["file1"]){?>
 								<tr>
 									<td colspan="2"  class="img-cntrl-list">
 										<strong class="c-red"><span>라벨/부품사진 </span></strong>
@@ -1183,6 +1189,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 										<?}?>
 									</td>
 								</tr>
+								<?}?>
 													
 								<?}?>
 								<?if ($loadPage == "30_15"){?>
@@ -1785,7 +1792,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 				if ($status == "3"){
 					$startmodi = true;  //수정발주서 일때 표시 조건
 					$red=" red";
-					$etc_change = "change_img";	//직접수령,다른운송업체 제외하고 이미지 출력 위한 변수
+					//$etc_change = "change_img";	//직접수령,다른운송업체 제외하고 이미지 출력 위한 변수
 				}
 				
 				$cls = "class='$red'";
@@ -2939,11 +2946,12 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 	//------------------------------------------------------------------------------------------------------------------------------------------------
 	function GET_ODR_DELIVERY_ADDR($delivery_addr_idx){
 		global $row_seller;
+		global $odr_idx;
 
 		if ($delivery_addr_idx){
 			
-			$odr_idx = get_any("ship", "odr_idx", "delivery_addr_idx=".$delivery_addr_idx);			
-			$seller_idx = get_any("odr", "sell_mem_idx", "odr_idx=".$odr_idx);
+			$odr_idx_val = get_any("ship", "odr_idx", "delivery_addr_idx=".$delivery_addr_idx." and odr_idx='".$odr_idx."' limit 1");			
+			$seller_idx = get_any("odr", "sell_mem_idx", "odr_idx=".$odr_idx_val);
 			$seller_nation = get_any("member", "nation", "mem_idx=".$seller_idx);
 
 			$result = QRY_DELIVERY_ADDR_VIEW($delivery_addr_idx);
@@ -2972,20 +2980,13 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 				$tel_nation = explode("-",$tel);
 				$fax_nation = explode("-",$fax);
 				$hp_nation = explode("-",$hp);
-				
-
+	
 				if ($seller_nation==$nation)
-				{
+				{					
 					$tel = str_replace($tel_nation[0]."-","0",$tel);
 					$fax = str_replace($fax_nation[0]."-","0",$fax);
 					$hp = str_replace($hp_nation[0]."-","0",$hp);
-				}
-				else
-				{
-					$tel = $delivery_addr["tel"];
-					$fax = $delivery_addr["fax"];
-					$hp = $delivery_addr["hp"];
-				}
+				}				
 			}	
 		}
 		?>

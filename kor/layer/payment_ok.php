@@ -46,23 +46,7 @@ $sub_price = round_down($sub_price,4);
 $total_price = round_down($total_price,4);
 	
 ?>
-<form name="f" id="f">
-	<!-- form1 -->
-	<input type="hidden" name="typ" id="typ" value="<?=$typ?>">
-	<input type="hidden" name="memfee_id" id="memfee_id" value="<?=$memfee_id?>">
-	<input type="hidden" name="mem_idx" id="mem_idx" value="<?=$mem_idx?>">
-	<input type="hidden" name="rel_idx" id="rel_idx" value="<?=$rel_idx?>">	
-	<input type="hidden" name="tot_amt" id="tot_amt" value="<?=$tot_amt?>">		
-	<input type="hidden" name="sell_mem_idx" id="sell_mem_idx" value="<?=$session_mem_idx?>">		
-	<input type="hidden" name="sell_rel_idx" id="sell_mem_idx" value="<?=$session_rel_idx?>">		
-	<input type="hidden" name="odr_idx" id="odr_idx" value="<?=$odr_idx?>">		
-	<input type="hidden" name="odr_det_idx" id="odr_det_idx" value="<?=$odr_det_idx?>">		
-	<input type="hidden" name="charge_method" id="charge_method" value="MyBank">		
-	<input type="hidden" name="alert_msg" id="alert_msg" value="결제가 완료되었습니다.">		
 
-	
-	<!-- //form1 -->
-</form>
 
 <div class="layer-hd" style="background: #fff;border: 0px;color: red;">
 	<h1><span lang="en" ><?=$pay_type?></span></h1>

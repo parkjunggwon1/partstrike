@@ -158,7 +158,8 @@ $(document).ready(function(){
 			<table>
 				<tbody>
 					<tr>
-						<td class="company"><img src="/kor/images/nation_title_<?=$b_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$b_nation)?>"> <span class="name">&nbsp&nbsp<?=$b_mem[mem_nm_en]?></span></td>
+						<td class="company"><img src="/kor/images/nation_title_<?=$b_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$b_nation)?>"> 
+						<span class="name c-blue"><a href="javascript:layer_company_det('<?=$buy_com_idx?>');" class="c-blue"><?=$b_mem[mem_nm_en]?></a></span></td>					
 					</tr>
 				</tbody>
 			</table>

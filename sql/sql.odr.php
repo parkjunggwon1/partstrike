@@ -25,10 +25,10 @@ Function QRY_ODR_DET_LIST($recordcnt,$searchand,$page,$ord='odr_det_idx',$odrby=
 
 	switch($ord){
 		case "odr_det_idx":
-			$s_ord=" order by odr_det_idx $odrby";
+			$s_ord=" order by  b.part_type asc, odr_det_idx $odrby";
 			break;
 		default:
-			$s_ord=" order by odr_det_idx $odrby";
+			$s_ord=" order by  b.part_type asc, odr_det_idx $odrby";
 			break;
 	}
 

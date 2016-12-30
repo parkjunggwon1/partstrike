@@ -169,7 +169,7 @@ $(document).ready(function(){
 	$("section[class^='layer']").on("click",".btn-close",function(){
 		
 		if (!$(this).hasClass("btn-order-periodconfirm"))
-		{
+		{			
 			$(this).parents("section[class^='layer']").removeClass("open");
 			$("body").removeClass("open-layer");
 			if($(this).parents("section[class^='layer']").hasClass("layer7-section")==true){
@@ -830,19 +830,6 @@ $(document).ready(function(){
 	//order sheet 실 발주 처리 [공지]화면의 '발주서 확인' 버튼 -----------------------
 	$("body").on("click",".btn-view-sheet",function(){		
 			var odr_idx = $(this).attr("odr_idx");
-			$.ajax({
-				url: "/kor/proc/odr_proc.php", 
-				//data: "typ=odrconfirm&odr_idx="+$("#odr_idx_30_05").val()+"&sell_mem_idx="+$("#sell_mem_idx").val(), //JSJ
-				data: "typ=odrconfirm2&odr_idx="+odr_idx+"&sell_mem_idx="+$("#session_mem_idx").val(), //2016-04-05 'odrconfirm2' 로 수정
-				encType:"multipart/form-data",
-				success: function (data) {	
-					if (trim(data) == "SUCCESS"){		
-						
-					}else{ //ajax 처리 후, error mesage
-						alert_msg(data);
-					}
-				}
-			});
 			$.ajax({ 
 				type: "GET", 
 				url: "/ajax/proc_ajax.php", 

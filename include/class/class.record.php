@@ -172,9 +172,9 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 					$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$status.":".$sell_mem_idx.":odr:Y:".$page_val."')\" ";
 				}else{
 					if ($odr_type =="B" && $save_yn =="Y"){
-						$goJump = "title=\"저장\" style='cursor:pointer;padding:0;' onclick=\"javascript:openCommLayer('layer3','05_04', '?odr_idx=".$odr_idx."')\" ";	
+						$goJump = "title=\"저장\" style='cursor:pointer;padding:0;' onclick=\"javascript:openCommLayer('layer3','05_04', '?odr_idx=".$odr_idx."')\" ";
 					}else{
-						$goJump = "title=\"".GF_Common_GetSingleList("ORD",$status)."\" ";
+						$goJump = "title=\"".GF_Common_GetSingleList("ORD",$status)."\" ";						
 					}
 				} 
 			}
@@ -182,14 +182,22 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			if(strpos($price, ".") == false)  
 			{
 				$price_val= number_format($price,2);
-				$total_price_value = round_down($odr_quantity*$price,4);
 			}				
 			else
 			{
 				$price_val= $price;
-				$total_price_value = round_down($odr_quantity*$price,4);
+			}
+			if ($odr_status==0 || $odr_status==1 || $odr_status==2 || $odr_status==3 || $odr_status==8 || $odr_status==16 || $odr_status==18 || $odr_status==19 || $odr_status==20 || $odr_status==31)
+			{
+				$total_price_value = round_down($odr_quantity*$price,4);				
+			}
+			else
+			{
+				$total_price_value = round_down($supply_quantity*$price,4);
+				
 			}
 
+			
 		?>
 		<tr class="criteria" criteria_idx="<?=$criteria_now_idx?>">
 			<td ><?$j = ($criteria_now_idx != $criteria_idx)? 1:$j;
@@ -693,8 +701,7 @@ $colspan = $odr_type == "B"? "5" : "4";
 				<?}
 					$k++;		
 					}
-				}
-					
+				}								
 			}
 		?>
 		
@@ -831,6 +838,7 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 					
 						$end_yn = QRY_CNT("odr_history", "and odr_idx = $odr_idx  and status in (6,15)") > 0 ? "Y": "N";  //종료까지 무사히 왔는지 여부
 						$cancel_odr = QRY_CNT("odr_history", "and odr_idx = $odr_idx  and status in (8)") > 0 ? "Y": "N";  //취소주문인지 확인
+						$cancel_in_odr = QRY_CNT("odr_history", "and odr_idx = $odr_idx  and status in (18)") > 0 ? "Y": "N";  //판매자 취소인지 구매자 취소인지 확인
 
 						$fty_exist_yn =  QRY_CNT("fty_history", "and odr_idx = $odr_idx and odr_det_idx = $odr_det_idx") > 0 ?"Y":"N";  //불량 통보에 대한 절차가 기존에 진행 된 적이 있는지 여부
 						
@@ -872,19 +880,49 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 						<tr  style="background-color:#ffffff;">
 						<td><?=$y?></td>
 						<?if ($odr_type == "B"){?><td><img src="/kor/images/nation_title<?=($odr_type=="B"?"2":"")?>_<?=$nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$nation)?>"></td><?}?>
-						<td class="t-lt"><?=$part_no?></td>
-						<td class="t-lt"><?=$manufacturer?></td>
+						<td class="t-lt"><?=get_cut($part_no,"21",".")?></td>
+						<td class="t-lt"><?=get_cut($manufacturer,"13",".")?></td>
 						<td><?=$package?></td>
 						<td><?=$dc?></td>
 						<td><?=$rhtype?></td>						
 						<!--16년 12월 27일 취소 시 발주수량 나머지 공급수량 고정 대표님 요청사항-->
-						<?if ($cancel_odr=="Y"){?>
+						<?if ($cancel_odr=="Y" && $cancel_in_odr=="N"){?>
 							<td class="t-rt"><?=$odr_quantity==0?"":number_format($odr_quantity)?></td>	
 						<?}else{?>
 							<td class="t-rt"><?=$supply_quantity==0?"":number_format($supply_quantity)?></td>	
 						<?}?>									
 						<td class="t-rt">$<?=$price_val?></td>
-						<td class="t-rt">$<?=number_format(round_down($supply_quantity*$price,4),4)?></td>
+						<?if ($cancel_odr=="Y"){?>
+							<?
+
+							if ($cancel_in_odr=="Y")
+							{
+								$total_price_val = $supply_quantity*$price;
+							}
+							else
+							{
+								$total_price_val = $odr_quantity*$price;
+							}							
+							
+							if ($total_price_val==(int)$total_price_val){								
+								$total_price_val = number_format($total_price_val,2);
+							}else{
+								$total_price_val = number_format(round_down($total_price_val,4),4);
+							}
+							?>
+							<td class="t-rt">$<?=$total_price_val?></td>
+						<?}else{?>
+							<?
+							$total_price_val = $supply_quantity*$price;
+							if ($total_price_val==(int)$total_price_val){								
+								$total_price_val = number_format($total_price_val,2);
+							}else{
+								$total_price_val = number_format(round_down($total_price_val,4),4);
+							}
+							?>
+							<td class="t-rt">$<?=$total_price_val?></td>
+						<?}?>	
+						
 						<?if ($odr_type == "B"){?><td class="txt-r t-ct">
 						<?if ($end_yn=="Y"){?>
 						<div class="c-blue company_div" style="cursor:pointer;" onclick="side_company_info2(<?=$com_idx?>,'<?=$odr_type?>')">
