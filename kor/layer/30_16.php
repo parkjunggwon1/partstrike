@@ -390,7 +390,7 @@ if($ship[delivery_addr_idx] > 0){
 				<tr>					
 					<?=($det_cnt>=1)? "<td></td>":"";?>
 					
-					<td colspan="2" style="text-align:left;" bgcolor="#FFFFCC">				
+					<td colspan="6" style="text-align:left;" bgcolor="#FFFFCC">				
 						<strong class="c-red2">선적정보 : </strong> 
 						<?							
 							if($ship[ship_info]==5)
@@ -414,7 +414,7 @@ if($ship[delivery_addr_idx] > 0){
 							}
 						?>
 					</td>
-					<td colspan="8">
+					<td colspan="6">
 					</td>
 				</tr>
 				<!--<tr>
@@ -429,8 +429,8 @@ if($ship[delivery_addr_idx] > 0){
 				if(strlen($ship[memo])>0){?>
 				<tr>
 					<td></td>
-					<td colspan="2" style="text-align:left;" bgcolor="#FFFFCC"><strong class="c-black ">Memo :&nbsp;&nbsp;</strong> <span class="c-blue"><?=$ship[memo]?></span></td>
-					<td colspan="8">
+					<td colspan="6" style="text-align:left;" bgcolor="#FFFFCC"><strong class="c-black ">Memo :&nbsp;&nbsp;</strong> <span class="c-blue"><?=$ship[memo]?></span></td>
+					<td colspan="6">
 					</td>
 				</tr>
 				<?}?>
@@ -445,7 +445,7 @@ if($ship[delivery_addr_idx] > 0){
 				}
 				?>				<tr>
 					<td></td>
-					<td class="c-black" colspan="2" bgcolor="#FFFFCC" style="text-align:left;margin-bottom:1px;">
+					<td class="c-black" colspan="6" bgcolor="#FFFFCC" style="text-align:left;margin-bottom:1px;">
 						운송보험 :&nbsp;&nbsp;<span class="c-red" lang="en"><?=$ship_insur?></span>
 					</td>
 					<td colspan="8">
@@ -455,13 +455,13 @@ if($ship[delivery_addr_idx] > 0){
 				<?if($ship[delivery_addr_idx] > 0){?>
 				<tr>
 					<td></td>
-					<td scope="row" colspan="2" bgcolor="#FFFFCC" style="text-align:left;">배송지 변경</td>
-					<td colspan="8">
+					<td scope="row" colspan="6" bgcolor="#FFFFCC" style="text-align:left;">배송지 변경</td>
+					<td colspan="6">
 					</td>
 				</tr>
 				<tr>
 					<td></td>
-					<td lang="ko" colspan="2" bgcolor="#FFFFCC" style="text-align:left;">
+					<td lang="ko" colspan="6" bgcolor="#FFFFCC" style="text-align:left;">
 						<?=GET_ODR_DELIVERY_ADDR($ship[delivery_addr_idx]);?>
 						<!--
 						<table class="table-type1-1" lang="ko">

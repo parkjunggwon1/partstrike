@@ -1731,28 +1731,30 @@ function round_down($val,$d)
 	{
 		
 		$val_explode = explode('.', $val);
-		if ($val_explode[1] >=5)
-		{		
-			
+		
+		if (strlen($val_explode[1]) >=5)
+		{				
+
 			$price = $val;
 			if ($d==4)
-			{
-				
+			{		
 				$price_sosu = substr($val_explode[1],0,4);
 				$price = $val_explode[0].".".$price_sosu;
-			}
+			}			
 			else
 			{
-				$price = substr_replace($price,'.',-4,0);
 				$price = substr($price,0,-2);
 			}
 		}
 		else
 		{		
+
 			$price = $val * pow(10,4);
+
 			if ($d==4)
 			{
-				$price = substr($price,0,4);
+
+				$price_sosu = substr($val_explode[1],0,4);			
 				$price = substr_replace($price,'.',-4,0);
 			}
 			else

@@ -310,10 +310,12 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<table class="detail-table" >
 								<tbody>
 									<tr class="noinput">
-										<th scope="row" style="width:70px">부품상태  : </th>
-										<td><span ><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span></td>
-										<th scope="row" style="width:70px">포장상태 : </th>
-										<td><span ><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> / <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span></td>
+										<td class="c-red" colspan="10" style="text-align:left;">	
+											부품상태 : 
+											<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span>&nbsp&nbsp
+											포장상태 : 
+											<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> / <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span>
+										</td>
 									</tr>
 									<?if(strlen($memo) > 0){?>
 									<tr class="noinput">
@@ -466,8 +468,14 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								<tbody>
 									<?if ($loadPage != "05_04_1" && $loadPage != "08_02" && $loadPage !="10_02" && $loadPage!="10_04" && $loadPage != "13_04" && $loadPage != "13_04s" && $loadPage != "03_02"){?>
 									<tr class="noinput">
-										<th scope="row" style="width:170px">&nbsp;부품상태&nbsp;:&nbsp;&nbsp;<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span></th>
-										<th scope="row" style="width:193px">포장상태&nbsp;:&nbsp;&nbsp;<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> / <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span></th>
+										<td class="c-red" colspan="10" style="text-align:left;">	
+											부품상태 : 
+											<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span>&nbsp&nbsp
+											포장상태 : 
+											<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> / <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span>
+										</td>
+										<!--<th scope="row" style="width:170px">&nbsp;부품상태&nbsp;:&nbsp;&nbsp;<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span></th>
+										<th scope="row" style="width:193px">포장상태&nbsp;:&nbsp;&nbsp;<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> / <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span></th>-->
 									</tr>
 									<?}?>
 									<?if ($loadPage != "03_02" && $loadPage!="05_04_1" && $loadPage!="13_04s" && strlen($memo)>0){?>
@@ -798,7 +806,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<tr class="bg-none">				
 					<?if ($loadPage == "30_16"){?>
 							<td><input type="hidden" name="odr_det_idx[]" value="<?=$odr_det_idx;?>"></td>
-							<td class="c-red" colspan="10" style="text-align:left;">	
+							<td class="c-red" colspan="2" style="text-align:left;">	
 								부품상태 :
 								<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span>&nbsp&nbsp
 								포장상태 : 
@@ -1136,7 +1144,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td colspan="12" style="padding:0;">
 						<table class="detail-table" style="margin:0;">
 							<tbody>
-								<?if ($loadPage != "05_04_1" && $loadPage != "08_02" && $loadPage !="10_02" && $loadPage!="10_04" && $loadPage != "13_04"  && $loadPage != "13_02s" && $loadPage != "03_02" && $loadPage != "19_1_06" ){?>
+								<?if ($loadPage != "05_04_1" && $loadPage != "08_02" && $loadPage !="10_02" && $loadPage!="10_04" && $loadPage != "13_04"   && $loadPage != "03_02" && $loadPage != "19_1_06" ){?>
 									<?if(strlen($part_condition)>0 && $part_condition>0){?>
 									<tr class="noinput">
 										<th scope="row" colspan=2>&nbsp;부품상태&nbsp;:&nbsp;&nbsp;<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span>
@@ -1144,7 +1152,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 									</tr>
 									<?}?>
 								<?}?>
-								<?if ($loadPage != "03_02" && $loadPage!="05_04_1" && $loadPage!="13_04s" && $loadPage!="13_02s" && $loadPage != "19_1_06" && strlen($memo)>0){?>
+								<?if ($loadPage != "03_02" && $loadPage!="05_04_1" && $loadPage!="13_04s"  && $loadPage != "19_1_06" && strlen($memo)>0){?>
 								<tr class="noinput">
 									<td colspan="2" ><strong class="c-black" >Memo : </strong><?=$memo;?> </td>
 								</tr>
@@ -1485,9 +1493,10 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly=""){   //shee
 					</tr>
 				<?}else{ //---------- 공통(턴키 아니고, 30_17 아닌것) ------------
 					//2016-09-04 : 판매자 송장(Invoice) 30_09 에서 Quantity는 발주수량이 아닌, '공급수량'
+					$total_price = number_format(round_down($odr_quantity*$price,2),2);
 					if($loadPage != "12_07"){//수정 발주서 Sheet(Purchase Order Amendment)
 						$odr_quantity = ($supply_quantity)? $supply_quantity : $odr_quantity;
-						$total_price = round_down($odr_quantity*$price,2);
+						//$total_price = number_format(round_down($odr_quantity*$price,2),2);
 					}
 
 					if ($loadPage=="30_05")
@@ -1507,7 +1516,8 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly=""){   //shee
 						<td class="t-rt">
 							<?//2016-10-02 : 지속적... 계약금에서는 'Amount' 표시 무.
 							if ($loadPage!="18_2_09" && !($loadPage=="30_09" && $part_type=="2" && $pay_cnt<2) ){
-								echo "$".number_format($total_price,2);
+								echo "$".$total_price;
+
 							}
 							?>
 						</td>
@@ -2288,8 +2298,9 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 							<? echo layerInvListData($loadPage ,$odr_idx,$odr_det_idx,$odr_history_idx);
 						    break;
 							case "13_02s": //취소?>
-							<td class="company"><img src="/kor/images/nation_title_<?=$buy_com_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$buy_com_nation)?>"> <span class="name"><a href="javascript:layer_company_det('<?=$buy_com_idx?>');" class="c-blue"><?=$buy_com_name?></a></span></td>
-					<td class="t-ct w100 c-red">&nbsp;</td>
+							<td class="company" style="width:33%;"><img src="/kor/images/nation_title_<?=$buy_com_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$buy_com_nation)?>"> <span class="name"><a href="javascript:layer_company_det('<?=$buy_com_idx?>');" class="c-blue"><?=$buy_com_name?></a></span></td>
+					<td class="c-red2" style="width:33%;text-align:center;font-size:15px;">구매자가 품목을 취소하였습니다.</td>	
+					<td style="width:33%;"></td>
 					</tr></tbody></table></div>		
 							<? echo layerInvListData($loadPage ,$odr_idx,$odr_det_idx,$odr_history_idx);
 						    break;
