@@ -399,8 +399,8 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<?}?>
 				<?}elseif ($loadPage== "31_05"){ //------------------------------------------------------------------------------------------------------?>
 					<td><?=$i?><input type="hidden" name="odr_det_idx[]" value="<?=$odr_det_idx?>"></td>
-					<td class="t-lt"><input type="text" class="i-txt4" id="part_no" value="<?=$part_no?>" maxlength="30" style="ime-mode:disabled; width:184px" ></td>
-					<td class="t-lt"><input type="text" class="i-txt4" id="manufacturer" value="<?=$manufacturer?>" maxlength="20" style="width:146px" ></td>
+					<td class="t-lt"><input type="text" class="i-txt4" id="part_no" value="<?=$part_no?>" maxlength="30" style="ime-mode:disabled; width:100%" ></td>
+					<td class="t-lt"><input type="text" class="i-txt4" id="manufacturer" value="<?=$manufacturer?>" maxlength="20" style="width:100%" ></td>
 					<td><input type="text" class="i-txt4 t-ct" id="package" value="<?=$package?>" maxlength="10" style="width:83px" ></td>
 					<td><input type="text" class="i-txt4 t-ct" id="dc" value="<?=$dc?>" style="width:38px" maxlength="4" ></td>
 					<td>
@@ -2112,11 +2112,11 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						   echo layerInvListData($loadPage ,$odr_idx);
 						   break;
 					case "31_04":?>
-					<td class="company">
+					<td class="company" style="width:33%;">
 						<img src="/kor/images/nation_title_<?=$buy_com_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$buy_com_nation)?>"> <span class="name"><!--<?=$buy_com_name?>--></span>
 					</td>
-					<td class="c-red2 w100 t-ct" style="font-size:13px;">납기 확인 바랍니다.</td>
-					<td class="company">&nbsp;</td>
+					<td class="c-red2  t-ct" style="width:33%;font-size:14px;">납기 확인 바랍니다.</td>
+					<td class="c-red2  t-ct" style="width:33%;"></td>	
 					</tr></tbody></table></div>	
 					<?
 						   echo layerOrdListData($loadPage ,$odr_idx, $odr_det_idx);
