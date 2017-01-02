@@ -420,7 +420,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td class="t-rt">$<?=$price_val?></td>
 					<td class="c-blue t-rt"><?=number_format($odr_quantity)?></td>
 					<td><input type="text" id = "supply_quantity" name="supply_quantity" class="i-txt4 c-red2 onlynum numfmt t-rt" maxlength="10" value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:58px"></td>
-					<td><input type="text" class="i-txt4 c-red2 t-ct" id = "period" name="period" value="" style="width:38px" maxlength="4" readonly> <span><?if ($part_type=="2"){echo "WK";}else{echo "Days";}?></span></td>
+					<td><input type="text" class="i-txt4 c-red2 t-ct" id = "period" name="period" value="" style="width:38px" maxlength="4" readonly> <span class="c-red2"><?if ($part_type=="2"){echo "WK";}else{echo "Days";}?></span></td>
 					<?
 				}elseif ($loadPage== "09_01"){  //-------------------------------------- 09_01 : 수정 발주서 2016-04-14------------------------------------?>
 					<?if($det_cnt>1){?>
@@ -706,7 +706,10 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<?
 					global $load_page;					
 					?>
-					<?if($sell_mem_idx != $_SESSION['MEM_IDX'] || $load_page=="30_08"){?>
+					<?
+						$modify_in_odr = QRY_CNT("odr_history", "and odr_idx = $odr_idx  and status in (3)") > 0 ? "Y": "N";  //판매자 취소인지 구매자 취소인지 확인
+					?>
+					<?if($sell_mem_idx != $_SESSION['MEM_IDX'] || ($load_page=="30_08" && $modify_in_odr=="Y")){?>
 					<td class="t-rt"><span class="c-red"><?=$supply_quantity==""?"0":number_format($supply_quantity)?></span></td>		
 					<?}?>			
 					<?=($period)?"<td class='c-red'>".$period:(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
@@ -1415,7 +1418,8 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly=""){   //shee
 			if( ($price == (int)$price) )
 			{					
 				$price_val = number_format($price,2);
-				$total_price = number_format($odr_quantity*$price,2);
+				$total_price = number_format(round_down($odr_quantity*$price,2),2);
+
 			}
 			else {			
 				$price_val = $price;
@@ -1493,10 +1497,10 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly=""){   //shee
 					</tr>
 				<?}else{ //---------- 공통(턴키 아니고, 30_17 아닌것) ------------
 					//2016-09-04 : 판매자 송장(Invoice) 30_09 에서 Quantity는 발주수량이 아닌, '공급수량'
-					$total_price = number_format(round_down($odr_quantity*$price,2),2);
+					
 					if($loadPage != "12_07"){//수정 발주서 Sheet(Purchase Order Amendment)
 						$odr_quantity = ($supply_quantity)? $supply_quantity : $odr_quantity;
-						//$total_price = number_format(round_down($odr_quantity*$price,2),2);
+						$total_price = number_format(round_down($odr_quantity*$price,2),2);
 					}
 
 					if ($loadPage=="30_05")
@@ -1855,7 +1859,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 		global  $pay;
 		?>
 	<!-- layer-file -->
-	<div class="layer-file" id="file_<?=$loadPage?>">
+	<div class="layer-file" id="file_<?=$loadPage?>" style="border-top:0">
 		<table>
 			<tbody>
 				<tr><?
@@ -2111,7 +2115,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 					<td class="company">
 						<img src="/kor/images/nation_title_<?=$buy_com_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$buy_com_nation)?>"> <span class="name"><!--<?=$buy_com_name?>--></span>
 					</td>
-					<td class="c-red2 w100 t-ct">납기 확인 바랍니다.</td>
+					<td class="c-red2 w100 t-ct" style="font-size:13px;">납기 확인 바랍니다.</td>
 					<td class="company">&nbsp;</td>
 					</tr></tbody></table></div>	
 					<?

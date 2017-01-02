@@ -140,6 +140,7 @@ $(document).ready(function(){
   $s_nation = $s_mem[nation];
 
   $turnkey_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and part_type=7 ");  //턴키
+  
 ?>
 <div class="layer-hd">
 	<h1>송장(3008)-<?=$odr_idx;?></h1>
@@ -182,8 +183,8 @@ $(document).ready(function(){
 						<th scope="col" class="t-oty">O'ty</th>
 						<?if($turnkey_cnt<1){?>
 						<th scope="col" class="t-unitprice">Unit Price</th>
-						<th scope="col" lang="ko" class="t-orderoty" >발주수량</th>
-						<th scope="col" lang="ko" class="t-supplyoty" Style="whdth:66px;">공급수량</th>
+						<th scope="col" lang="ko" class="t-orderoty" >발주수량</th>							
+						<th scope="col" lang="ko" class="t-supplyoty" Style="whdth:66px;">공급수량</th>						
 						<?}?>
 						<th scope="col" lang="ko" class="t-period">납기</th>
 					</tr>

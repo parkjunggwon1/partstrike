@@ -1005,7 +1005,7 @@ function checkActive(){
 				<th scope="col" class="t-no">No. </th>
 				<th scope="col" class="t-nation">Nation</th>
 				<th scope="col" class="t-partno" Style="width:<?=$partno_width;?>px;"><?=($turnkey_cnt==0)?"Part No.":"Title"?></th>
-				<th scope="col" class="t-Manufacturer"><?=($turnkey_cnt==0)?"Manufacturer No.":""?></th>
+				<th scope="col" class="t-Manufacturer"><?=($turnkey_cnt==0)?"Manufacturer":""?></th>
 				<th scope="col" class="t-Package"><?=($turnkey_cnt==0)?"Package":""?></th>
 				<th scope="col" class="t-dc"><?=($turnkey_cnt==0)?"D/C":""?></th>
 				<th scope="col" class="t-rohs"><?=($turnkey_cnt==0)?"RoHS":""?></th>

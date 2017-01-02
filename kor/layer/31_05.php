@@ -67,7 +67,7 @@ $("input[name=supply_quantity]").keyup(function(e){
 				<tbody>
 					<tr>
 						<td class="company"><img src="/kor/images/nation_title_<?=$buy_com_nation?>1.png" alt="<?=GF_Common_GetSingleList("NA",$buy_com_nation)?>"> <span class="name"><?=$buy_com_name?></span></td>
-						<td class="w100 t-ct c-red">결제 완료 시점부터 선적 완료까지</td>
+						<td class="w100 t-ct c-red" style="font-size:13px;">결제 완료 시점부터 선적 완료까지</td>
 					</tr>
 				</tbody>
 			</table>
@@ -82,9 +82,9 @@ $("input[name=supply_quantity]").keyup(function(e){
 				<li class="navi-prev"><a href="#"><img src="/kor/images/nav_btn_down.png" alt="prev"></a></li>
 				<?for ($i = 1; $i <20 ; $i++) { 
 						if($i<3){
-							echo "<li class='pagingli bk'><a href='#'>$i</a></li>";
+							echo "<li class='pagingli bk' style='padding:3px;'><a href='#'>$i</a></li>";
 						}else{
-							echo "<li class='pagingli'><a href='#'>$i</a></li>";
+							echo "<li class='pagingli' style='padding:3px;'><a href='#'>$i</a></li>";
 						}
 					}
 				?>
@@ -95,10 +95,10 @@ $("input[name=supply_quantity]").keyup(function(e){
 		</div>
 		<?}else{	//-- 그 외-----------?>
 		<!-- layer-pagination -->
-		<div class="layer-pagination bk">
+		<div class="layer-pagination bk" style="text-align: right;">
 			<ul>
 			<?for ($i = 1; $i <=7 ; $i++) {  
-					echo "<li class='pagingli'><a href='#'>$i</a></li>";
+					echo "<li class='pagingli' style='padding:3px;'><a href='#'>$i</a></li>";
 				}
 			?>
 				<li class="c-red2" lang="en">Days</li>

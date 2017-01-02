@@ -244,7 +244,7 @@ switch($actty) {
        // 또는 삭제/ 취소후 완료 버튼을 눌렀을 때 actidx = odr_history_idx
 	   //1. odr_status 변경 : 종료로.
 	   $odr_idx = get_any("odr_history" , "odr_idx", "odr_history_idx= $actidx");
-   	   $odr_det_idx = get_any("odr_history" , "odr_idx", "odr_history_idx= $actidx");
+   	   $odr_det_idx_val = get_any("odr_det" , "odr_det_idx", "odr_det_idx= $actidx");
 	   $buy_mem_idx = get_any("odr", "mem_idx" , "odr_idx = $odr_idx");
 	   $sell_mem_idx = get_any("odr", "sell_mem_idx" , "odr_idx = $odr_idx");
 	   $part_idx = get_any("odr_det", "part_idx" , "odr_det_idx = $actidx");
@@ -253,7 +253,7 @@ switch($actty) {
 
 	   $sql = "insert into odr_history set 
 				odr_idx = '$odr_idx'
-				,odr_det_idx = '$odr_det_idx'
+				
 				,status = 15
 				,status_name = '완료'
 				,etc1 = ''
@@ -262,7 +262,7 @@ switch($actty) {
 				,reg_mem_idx = '$session_mem_idx'
 				,confirm_yn = 'Y'
 				,reg_date = now()";
-		//echo $sql;
+		
 		$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 
 		$det_cnt = QRY_CNT("odr_det", "and odr_idx= $odr_idx");

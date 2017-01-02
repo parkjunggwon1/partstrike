@@ -32,7 +32,7 @@ $searchand .= "and sell_mem_idx = ".$_SESSION["MEM_IDX"]." and status = $status 
 $cnt = QRY_CNT("odr_history",$searchand);				
 
 if ($cnt == 0 ){?>
-<div class="layer-file">
+<div class="layer-file" style="border-top:0">
 		<table>
 			<tbody>
 				<tr>		
