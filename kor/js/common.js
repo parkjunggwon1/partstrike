@@ -1249,7 +1249,7 @@ $(document).ready(function(){
 				//2016-04-18 : 송장번호 생성 및 저장
 				$.ajax({
 						url: "/kor/proc/odr_proc.php", 
-						data: "typ=poano&odr_idx="+odr_idx+"&ship_info="+$("#ship_info").val()+"&ship_account_no="+$("#ship_account_no").val()+"&memo="+$("#memo").val()+"&insur_yn="+insur_chk+"&delivery_addr_idx="+$("#delivery_addr_idx").val(),
+						data: "typ=poano&odr_idx="+odr_idx+"&ship_info="+$("#ship_info").val()+"&ship_account_no="+$("#ship_account_no").val()+"&memo="+encodeURI($("#memo").val())+"&insur_yn="+insur_chk+"&delivery_addr_idx="+$("#delivery_addr_idx").val(),
 						encType:"multipart/form-data",
 						success: function (data) {	
 							if (trim(data) == "SUCCESS"){						

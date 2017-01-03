@@ -784,6 +784,7 @@ if($typ == "poano"){ //------------- 2016-04-18 : 수정발주서 번호 생성
     $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
 
     $ship_sql = "update ship set ship_info = '".$ship_info."', ship_account_no = '".$ship_account_no."', memo = '".$memo."',insur_yn='".$insur_yn."',delivery_addr_idx='".$delivery_addr_idx."'  where odr_idx=".$odr_idx;   
+   
     $ship_result = mysql_query($ship_sql,$conn) or die ("SQL Error : ". mysql_error());
 
     if($result){
@@ -1791,6 +1792,7 @@ if ($typ =="periodcfrm"){
     $sql = "update part set part_no = '$part_no',
             manufacturer = '$manufacturer',
             package= '$package',
+            invreg_chk = 1,
             dc = '$dc'
             where part_idx = $part_idx";
     $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());

@@ -302,13 +302,14 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td class="c-blue t-rt">$<?=number_format(round_down($supply_quantity*$price,4),4)?></td>
 					<?}?>
 					</tr>
-					<?if ($part_condition){?>
+					
 					<tr class="bg-none">
 						<td></td>
 						<td colspan="13" style="padding:0">
 							<!-- 부품상태 ---------------->
 							<table class="detail-table" >
 								<tbody>
+									<?if ($part_condition){?>
 									<tr class="noinput">
 										<td class="c-red" colspan="10" style="text-align:left;">	
 											부품상태 : 
@@ -317,6 +318,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 											<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> / <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span>
 										</td>
 									</tr>
+									<?}?>
 									<?if(strlen($memo) > 0){?>
 									<tr class="noinput">
 										<td colspan="4" ><strong class="c-black" >Memo : </strong><?=$memo?> </td>
@@ -327,7 +329,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<!-- //부품상태 ---------------->
 						</td>
 					</tr>
-					<?}?>
+					
 				<?}elseif ($loadPage== "30_20_F" || $loadPage== "30_21_F"  || $loadPage== "30_22_F"){ //--------------------------- 선적(Fault), 수령(fault)-POP -----------------------------------------------------------
 						$com_idx = $rel_idx==0 ? $sell_mem_idx : $rel_idx;
 						$company_nm = get_any("member","mem_nm_en", "mem_idx=$com_idx");
@@ -404,8 +406,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td><input type="text" class="i-txt4 t-ct" id="package" value="<?=$package?>" maxlength="10" style="width:83px" ></td>
 					<td><input type="text" class="i-txt4 t-ct" id="dc" value="<?=$dc?>" style="width:38px" maxlength="4" ></td>
 					<td>
-						<?=$rhtype?>
-						<!--
+						
 						<div class="select type4" lang="en" style="width:60px">
 							<label><?=$rhtype==""?"None":$rhtype?></label>
 							<select name="mod_rhtype[]">
@@ -414,12 +415,12 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								<option lang="en" <?if($rhtype=="HF"){echo "selected";}?>>HF</option>
 							</select>
 						</div>
-						-->
+						
 					</td>
 					<td class="t-rt"><?=$quantity==0?"":number_format($quantity)?><input type="hidden" name="qty" id="31_05_qty" value="<?=$quantity;?>"></td>
 					<td class="t-rt">$<?=$price_val?></td>
 					<td class="c-blue t-rt"><?=number_format($odr_quantity)?></td>
-					<td><input type="text" id = "supply_quantity" name="supply_quantity" class="i-txt4 c-red2 onlynum numfmt t-rt" maxlength="10" value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:58px"></td>
+					<td><input type="text" id = "supply_quantity" name="supply_quantity" class="i-txt4 c-red2 onlynum numfmt t-rt" maxlength="10" value="" style="width:58px"></td>
 					<td><input type="text" class="i-txt4 c-red2 t-ct" id = "period" name="period" value="" style="width:38px" maxlength="4" readonly> <span class="c-red2"><?if ($part_type=="2"){echo "WK";}else{echo "Days";}?></span></td>
 					<?
 				}elseif ($loadPage== "09_01"){  //-------------------------------------- 09_01 : 수정 발주서 2016-04-14------------------------------------?>
@@ -430,7 +431,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						</label>
 					</td>
 					<?}else{?>
-							<input type="checkbox" name="odr_det_idx[]" odr_status="<?=$odr_status;?>" quantity="<?=$quantity;?>" amend_yn="<?=$amend_yn?>" class="<?=($part_type=="2" && $period*1> 2 && QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")<=0) ? "endure":"stock"?>" value="<?=$odr_det_idx?>" part_type="<?=$part_type?>">
+							<input type="checkbox" style="margin-right: 0" name="odr_det_idx[]" odr_status="<?=$odr_status;?>" quantity="<?=$quantity;?>" amend_yn="<?=$amend_yn?>" class="<?=($part_type=="2" && $period*1> 2 && QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")<=0) ? "endure":"stock"?>" value="<?=$odr_det_idx?>" part_type="<?=$part_type?>">
 					<?}?>
 					<td><?=$i?></td>
 					<td><img src="/kor/images/nation_title2_<?=$nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$nation)?>"></td>
@@ -494,12 +495,12 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					}elseif ($loadPage== "05_04" || $loadPage=="04_01"){  //구매자 페이지에서 보여지는 내용 (05_04, 09_01:기존에 여기 있었으나 위에 별도로 뺌 )?>
 					<!--05_04----------------->
 					<?if($loadPage== "05_04" && $det_cnt==1){?>
-								<input type="hidden" name="odr_det_idx[]" odr_status="<?=$odr_status;?>" quantity="<?=$quantity;?>" amend_yn="<?=$amend_yn?>" class="<?=($part_type=="2" && $period*1> 2 && QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")<=0) ? "endure":"stock"?>" value="<?=$odr_det_idx?>" <?if(($part_type=="2"||$part_type=="5"||$part_type=="6") && $period ==""){?>disabled<?}?> part_type="<?=$part_type?>"><span></span>
+								<input type="hidden" name="odr_det_idx[]" odr_status="<?=$odr_status;?>" quantity="<?=$quantity;?>" amend_yn="<?=$amend_yn?>" class="<?=($part_type=="2" && $period*1> 2 && QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")<=0) ? "endure":"stock"?>" value="<?=$odr_det_idx?>" <?if(($part_type=="2"||$part_type=="5"||$part_type=="6") && $period ==""){?>disabled<?}?> part_type="<?=$part_type?>"><span style="margin-right:0"></span>
 							</label>
 					<?}else{?>
 						<td>
 							<label class="ipt-chk chk2">
-								<input type="<?=($det_cnt>1)? "checkbox":"hidden";?>" name="odr_det_idx[]" odr_status="<?=$odr_status;?>" quantity="<?=$quantity;?>" amend_yn="<?=$amend_yn?>" class="<?=($part_type=="2" && $period*1> 2 && QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")<=0) ? "endure":"stock"?>" value="<?=$odr_det_idx?>" <?if(($part_type=="2"||$part_type=="5"||$part_type=="6") && $period ==""){?>disabled<?}?> part_type="<?=$part_type?>"><span></span>
+								<input type="<?=($det_cnt>1)? "checkbox":"hidden";?>" style="margin-right:0" name="odr_det_idx[]" odr_status="<?=$odr_status;?>" quantity="<?=$quantity;?>" amend_yn="<?=$amend_yn?>" class="<?=($part_type=="2" && $period*1> 2 && QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")<=0) ? "endure":"stock"?>" value="<?=$odr_det_idx?>" <?if(($part_type=="2"||$part_type=="5"||$part_type=="6") && $period ==""){?>disabled<?}?> part_type="<?=$part_type?>"><span  style="margin-right:0"></span>
 							</label>
 						</td>
 					<?}?>
@@ -1186,6 +1187,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								<tr>
 									<td colspan="2"  class="img-cntrl-list">
 										<strong class="c-red"><span>라벨/부품사진 </span></strong>
+										<strong class="c-blue"><span>Part No. </span></strong>
 										<?					
 										for ($i = 1;$i <= 3; $i++ ){
 											$file = replace_out($row["file$i"]);		
@@ -2047,7 +2049,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 							<img src="/kor/images/icon_<?=strtolower(GF_Common_GetSingleList("DLVR",$ship_info))?>.gif" height="20" alt="" style="margin-bottom:2px;">
 						<?}?>
 						<?if ($ship_info!="6") {?>
-						&nbsp;&nbsp;&nbsp;운송장번호 : <span lang="en" class="c-blue"><?=$delivery_no?></span></td>
+						&nbsp;&nbsp;&nbsp;<span lang="ko">운송장번호</span> : <span lang="en" class="c-blue"><?=$delivery_no?></span></td>
 						<?}?>
 					<?}else{?>
 						<td class="c-red2" style="font-size:14px;"><span><?=$other_shop?></span>
@@ -2870,10 +2872,10 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 			<tr class="bg-none">
                 <td></td>
 				<?=($det_cnt>1)? "<td></td>":"";?>
-				<td colspan="10" style="padding:0;padding-top:20px;">		
+				<td colspan="10" style="padding:0;">		
 				 <div class="txt_option" style="display:none;margin-left:-580px;"><img src="/kor/images/txt_option.gif" alt="선적Option을 선택하여 발주서를 각각 발행할 수 있습니다.발주서 기준 최종 납기 제품과 일괄 배송됩니다." /></div>
    
-					<table class="detail-table" style="margin-top:0;">
+					<table class="detail-table" style="margin-top:0;padding-top:20px;">
 						<tbody>
 							<?if ($loadPage == "05_04_1"){?>
 							<tr>
@@ -3328,15 +3330,15 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 			?>
 			<tr>
 				<th scope="row"><strong class="c-red" id="mst_tel">*</strong> <span lang="en">Tel</span></th>
-				<td colspan="2"><input type="text" class="i-txt3 c-blue" lang="en" name="nation_nm" style="width:37px;text-align:right;"  maxlength="5" value="+<?=$nation_number?>-" readonly>&nbsp<input class="i-txt3 c-blue" name="tel" type="text" maxlength="15" lang='en' style="width:175px" value="<?=$tel_num?>"></td>
+				<td colspan="2"><input type="text" class="i-txt3 c-blue" lang="en" name="nation_nm" style="width:37px;text-align:right;"  maxlength="5" value="<?=$tel_nation[0]?>-" readonly>&nbsp<input class="i-txt3 c-blue" name="tel" type="text" maxlength="15" lang='en' style="width:175px" value="<?=$tel_num?>"></td>
 			</tr>
 			<tr>
 				<th scope="row"><strong class="c-red"></strong> <span lang="en">Fax</span></th>
-				<td colspan="2"><input type="text" class="i-txt3 c-blue" lang="en" name="nation_nm" style="width:37px;text-align:right;"  maxlength="5" value="+<?=$nation_number?>-" readonly>&nbsp<input class="i-txt3 c-blue" name="fax"  type="text" maxlength="15" lang='en' style="width:175px" value="<?=$fax_num?>"></td>
+				<td colspan="2"><input type="text" class="i-txt3 c-blue" lang="en" name="nation_nm" style="width:37px;text-align:right;"  maxlength="5" value="<?=$fax_nation[0]?>-" readonly>&nbsp<input class="i-txt3 c-blue" name="fax"  type="text" maxlength="15" lang='en' style="width:175px" value="<?=$fax_num?>"></td>
 			</tr>
 			<tr>
 				<th scope="row"><strong class="c-red">*</strong> 휴대전화</th>
-				<td colspan="2"><input type="text" class="i-txt3 c-blue" lang="en" name="nation_nm" style="width:37px;text-align:right;"  maxlength="5" value="+<?=$nation_number?>-" readonly>&nbsp<input class="i-txt3 c-blue" name="hp" type="text" maxlength="15" lang='en' style="width:175px" value="<?=$hp_num?>"></td>
+				<td colspan="2"><input type="text" class="i-txt3 c-blue" lang="en" name="nation_nm" style="width:37px;text-align:right;"  maxlength="5" value="<?=$hp_nation[0]?>-" readonly>&nbsp<input class="i-txt3 c-blue" name="hp" type="text" maxlength="15" lang='en' style="width:175px" value="<?=$hp_num?>"></td>
 			</tr>
 			<tr>
 				<th scope="row"><strong class="c-red">*</strong> 우편번호</th>

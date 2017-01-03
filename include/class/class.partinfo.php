@@ -671,6 +671,18 @@ function GET_ADDPART_LIST($part_type,$searchand){
 						$dc = "NEW";
 						$quantity="";
 				}
+
+				if( ($price == (int)$price) )
+				{					
+
+					$price_val = round_down($price,2);
+					$price_val = number_format($price,2);
+				}
+				else {			
+					$price_val = $price;
+					$price_val = $price;
+				}
+
 				//지속적 공급가능 품목외에 모든 품목은 수량 있는 것만 노출 - 2016-04-08
 				if($part_type == "2" || ($part_type != "2" && $quantity>0)){
 					$i++;
@@ -683,7 +695,7 @@ function GET_ADDPART_LIST($part_type,$searchand){
 						<td><?=$dc?></td>
 						<td><?=$rhtype?></td>
 						<td class="t-rt"><?=$quantity=="" || $quantity==0 ?"-":number_format($quantity)?></td>
-						<td class="t-rt">$<?=number_format($price,2)?></td>
+						<td class="t-rt">$<?=$price_val?></td>
 						<td style="width:60px;">
 							<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" name="odr_quantity"  id="odr_quantity" stock_qty="<?=$quantity;?>" value="" style="width:58px;" maxlength="10">
 							<input type="hidden" class="i-txt2 c-blue onlynum t-rt" name="quantity" value="<?=$quantity?>" maxlength="10">

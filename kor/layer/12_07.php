@@ -288,24 +288,24 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 	<div class="etc-info2">
 		<div class="txt-area">
 			<strong>CERTIFICATION and CONFIRMATION of PURCHASE ORDER</strong>
-			<p class="txt2">I hereby certify that I buyer will not violate any items that are mentioned in the Treatment of PARTStrike and is willing to make the Purchase Order perfectly accomplished by not making any cancellation without reason</p>
+			<p class="txt2" style="margin:0">I hereby certify that I buyer will not violate any items that are mentioned in the Treatment of PARTStrike and is willing to make the Purchase Order perfectly accomplished by not making any cancellation without reason</p>
 		</div>
 		<ul class="sign-area">
-			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_seller["filesign"]?>" height="21" width="180" alt=""></strong></li>
+			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_buyer["filesign"]?>" height="21" width="180" alt=""></strong></li>
 			<?
 			//나라가 같을경우
 			if ($row_seller["nation"]==$row_buyer["nation"])
 			{								
 			?>
-				<li><span>CEO : </span><strong><?=$row_seller["pos_nm"]?></strong></li>
-				<li><span>Tel : </span><strong><?=preg_replace('/\+.+\-/', "0",$row_seller["tel"])?></strong><span class="fax">Fax : </span><strong><?=preg_replace('/\+.+\-/', "0",$row_seller["fax"])?></strong></li>
+				<li><span>CEO : </span><strong><?=$row_buyer["pos_nm"]?></strong></li>
+				<li><span>Tel : </span><strong><?=preg_replace('/\+.+\-/', "0",$row_buyer["tel"])?></strong><span class="fax">Fax : </span><strong><?=preg_replace('/\+.+\-/', "0",$row_buyer["fax"])?></strong></li>
 			<?
 			}
 			else
 			{								
 			?>
-				<li><span>CEO : </span><strong><?=$row_seller["pos_nm_en"]?></strong></li>
-				<li><span>Tel : </span><strong><?=$row_seller["tel"]?></strong><span class="fax">Fax : </span><strong><?=$row_seller["fax"]?></strong></li>
+				<li><span>CEO : </span><strong><?=$row_buyer["pos_nm_en"]?></strong></li>
+				<li><span>Tel : </span><strong><?=$row_buyer["tel"]?></strong><span class="fax">Fax : </span><strong><?=$row_buyer["fax"]?></strong></li>
 			<?
 			}
 			?>
