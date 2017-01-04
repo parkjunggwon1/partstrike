@@ -1078,8 +1078,9 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 									$qty = ($poa_cnt>0)? $quantity+$supply_quantity : $odr_stock;
 								?>
 									<td class="t-rt"><?=$odr_stock==0?"-":number_format($qty)?></td>	
-								<?}else{?>
-									<!--pjg0319-->
+								<?}else if($loadPage == "02_02"){?>									
+									<td class="t-rt"><?=$odr_stock==0?"-":number_format($odr_stock)?></td>	
+								<?}else{?>									
 									<td class="t-rt"><?=$supply_quantity==0?"-":number_format($supply_quantity)?></td>							
 								<?}?>
 							<?}?>
@@ -1659,6 +1660,7 @@ if ($for_readonly != "P") {?>
 			<?}
 		}else{
 			$tax_name = get_any("tax", "tax_name", "nation=$row_seller[nation]");
+
 		?>			
 						
 			<?
@@ -1670,7 +1672,7 @@ if ($for_readonly != "P") {?>
 			<?
 			}
 			else
-			{
+			{				
 			?>
 				<li class="sub"><strong>Sub Total :</strong><span id="sub_total">$<?=$tot?></span></li>	
 			<?			
@@ -1859,9 +1861,14 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 }//------------------------------------------------------------------- //GET_ODR_HISTORY_LIST ----------------------------------------------------------------------------------------/
 	function layerFile($loadPage,$reg_mem_idx , $reg_rel_idx , $odr_idx, $odr_history_idx){ // 상태 메세지...
 		global  $pay;
+		if ($loadPage == "31_04" || $loadPage == "31_06")
+		{
+			$style_css="style='border-top:0'";
+		}
+
 		?>
 	<!-- layer-file -->
-	<div class="layer-file" id="file_<?=$loadPage?>" style="border-top:0">
+	<div class="layer-file" id="file_<?=$loadPage?>" <?=$style_css?>>
 		<table>
 			<tbody>
 				<tr><?
@@ -1891,6 +1898,12 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 					   
 					switch ($loadPage) {
 						case "02_02":
+					?>
+						<td class="t-ct">사유 : <span class="c-red2">판매자가 품목을 삭제하였습니다.</span></td>
+						</tr></tbody></table></div>
+					<?
+						echo layerOrdListData($loadPage ,$odr_idx,$odr_det_idx);
+						   break;
 						case "06_02":							
 						?>				
 						<td class="t-ct">사유 : <span class="c-red2"><?=$memo?></span></td>
@@ -2049,7 +2062,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 							<img src="/kor/images/icon_<?=strtolower(GF_Common_GetSingleList("DLVR",$ship_info))?>.gif" height="20" alt="" style="margin-bottom:2px;">
 						<?}?>
 						<?if ($ship_info!="6") {?>
-						&nbsp;&nbsp;&nbsp;<span lang="ko">운송장번호</span> : <span lang="en" class="c-blue"><?=$delivery_no?></span></td>
+						&nbsp;&nbsp;&nbsp;<span >운송장번호</span> : <span class="c-blue"><?=$delivery_no?></span></td>
 						<?}?>
 					<?}else{?>
 						<td class="c-red2" style="font-size:14px;"><span><?=$other_shop?></span>
@@ -2124,7 +2137,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						   echo layerOrdListData($loadPage ,$odr_idx, $odr_det_idx);
 						   break;
 						   case "31_06":?><!----------------------------------------------------- 구매자 : 납기확인 완료 ----------------------------------------------------->
-					<td class="c-red2 w100 t-ct">납기 확인이 완료되었습니다.</td>
+					<td class="c-red2 w100 t-ct" style="font-size:14px;">납기 확인이 완료되었습니다.</td>
 					</tr></tbody></table></div>	
 					<?
 						   echo layerInvListData($loadPage ,$odr_idx);

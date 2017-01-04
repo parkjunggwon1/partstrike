@@ -78,7 +78,7 @@ $("input[name=supply_quantity]").keyup(function(e){
 		
 		<!-- 지속적... -->
 		<?if ($part_type == "2"){?>
-		<div class="layer-pagination red">
+		<div class="layer-pagination red" style="text-align: right;">
 			<ul>
 				<li class="navi-prev"><a href="#"><img src="/kor/images/nav_btn_down.png" alt="prev"></a></li>
 				<?for ($i = 1; $i <20 ; $i++) { 

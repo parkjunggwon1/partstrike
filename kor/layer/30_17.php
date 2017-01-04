@@ -31,17 +31,19 @@ function calcu_amount(){
 
 		amount = ord_qty * unit_price;
 		am_sum += amount;
+
 		$("#amount_"+num).val(amount);
 		$("#amount_"+num).maskMoney({prefix:'$', allowNegative: false, thousands:',', decimal:'.', affixesStay: true});
 		$("#amount_"+num).focus();
 		//$("#amount_"+num).number(true,2);
 	});
 	//Sub Total
-	$("#sub_total").html("<input type='text' class='i-txt0 t-rt' id='ip_subtot' value='"+am_sum+"'>");
+	//$("#sub_total").html("<input type='text' class='i-txt0 t-rt' id='ip_subtot' value='"+am_sum+"'>");
 	$("#ip_subtot").maskMoney({prefix:'$', allowNegative: false, thousands:',', decimal:'.', affixesStay: true});
 	$("#ip_subtot").focus();
 	//Total
-	$("#g_total").html("<input type='text' class='i-txt99 t-rt' id='ip_gtot' value='"+am_sum+"'>");
+	//17년 1월 4일 변경 처리
+	$("#g_total").html("<input type='text' class='i-txt99 t-rt' value='"+$("#sub_total").html()+"'>");
 	$("#ip_gtot").maskMoney({prefix:'$', allowNegative: false, thousands:',', decimal:'.', affixesStay: true});
 	$("#ip_gtot").focus();
 
@@ -145,7 +147,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 			</li>
 		</ul>
 		<ul class="contact-info" style="width:370px;">
-			<li><?=$row_seller["addr_det_en"]?> <?=$row_seller["addr_en"]?></li>
+			<li> <?=$row_seller["addr_en"]?></li>
 			<li><span class="tel">Tel : <?=$row_seller["tel"]?></span>Fax : <?=$row_seller["fax"]?> </li>
 			<li><span class="tel">Contact : <?=$row_odr["rel_idx"]==0?$row_seller["pos_nm_en"]:get_any("member", "mem_nm_en", "mem_idx=".$row_odr["mem_idx"])?> / <?=$row_odr["rel_idx"]==0?"CEO":get_any("member", "pos_nm_en", "mem_idx=".$row_odr["mem_idx"])?></li>
 		</ul>
@@ -206,26 +208,27 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 	<div class="buyer-info ship-info" style="margin-top:6px">
 		<h2><img src="/kor/images/txt_shipto.gif" alt="ship to"></h2>
 		<div class="info-wrap">
+			<?$delivery_addr=get_delivery_addr($row_ship["delivery_addr_idx"]);?>
 			<ul class="company-info">
 				<li>
 					<span class="b1"><img src="/upload/file/<?=$row_buyer["filelogo"]?>" width="75" height="18" alt=""></span>
 					<span class="b2" lang="en"><?=$row_buyer["mem_nm_en"]?></span>
 				</li>
 				<li>
-					<span class="b1"><img src="/kor/images/nation_title_<?=$row_buyer["nation"]?>.png" alt="<?=GF_Common_GetSingleList("NA",$row_buyer["nation"])?>"></span>
-					<span lang="en"><?=$row_buyer["homepage"]?></span>
+					<span class="b1"><img src="/kor/images/nation_title_<?=$delivery_addr["nation"]?>.png" alt="<?=GF_Common_GetSingleList("NA",$delivery_addr["nation"])?>"></span>
+					<span lang="en"><?=$delivery_addr["homepage"]?></span>
 				</li>
 			</ul>
-			<ul class="contact-info">
+			<ul class="contact-info" style="color:#00759e;">
 			<?if ($row_ship["delivery_addr_idx"]){// 배송지 변경한 건
-			$delivery_addr=get_delivery_addr($row_ship["delivery_addr_idx"]);
+			
 			?>
 				<li><?=$delivery_addr["addr"]?></li>
 				<li><span class="tel">Tel : <?=$delivery_addr["tel"]?></span>Fax : <?=$delivery_addr["fax"]?></li>
 				<li>Contact : <?=$delivery_addr["manager"]?> / <?=$delivery_addr["pos_nm"]?></li>
 				<li><?=$delivery_addr["email"]?></li>
 			<?}else{?>
-				<li><?=$row_buyer["addr_det_en"]?> <?=$row_buyer["addr_en"]?></li>
+				<li><?=$row_buyer["addr_en"]?></li>
 				<li><span class="tel">Tel : <?=$row_buyer["tel"]?></span>Fax : <?=$row_buyer["fax"]?></li>
 				<li>Contact : <?=$row_odr["sell_rel_idx"]==0?$row_buyer["pos_nm_en"]:get_any("member", "mem_nm_en", "mem_idx=".$row_odr["sell_mem_idx"])?> / <?=$row_odr["sell_rel_idx"]==0?"CEO":get_any("member", "pos_nm_en", "mem_idx=".$row_odr["sell_mem_idx"])?></li>
 				<li><?=$row_buyer["email"]?></li>
@@ -248,7 +251,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 				</li>
 			</ul>
 			<ul class="contact-info">
-				<li><?=$row_buyer["addr_det_en"]?> <?=$row_buyer["addr_en"]?></li>
+				<li> <?=$row_buyer["addr_en"]?></li>
 				<li><span class="tel">Tel : <?=$row_buyer["tel"]?></span>Fax : <?=$row_buyer["fax"]?></li>
 				<li>Contact : <?=$row_odr["sell_rel_idx"]==0?$row_buyer["pos_nm_en"]:get_any("member", "mem_nm_en", "mem_idx=".$row_odr["sell_mem_idx"])?> / <?=$row_odr["sell_rel_idx"]==0?"CEO":get_any("member", "pos_nm_en", "mem_idx=".$row_odr["sell_mem_idx"])?></li>
 				<li><?=$row_buyer["email"]?></li>
@@ -286,7 +289,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 									<li><?=$delivery_addr["email"]?></li>
 								<?}else{?>
 									<li><?=$row_buyer["mem_nm_en"]?></li>
-									<li><?=$row_buyer["addr_det_en"]?> <?=$row_buyer["addr_en"]?></li>
+									<li><?=$row_buyer["addr_en"]?></li>
 									<li><span class="tel">Tel : <?=$row_buyer["tel"]?></span>Fax : <?=$row_buyer["fax"]?></li>
 									<li>Contact : <?=$row_odr["rel_idx"]==0?$row_buyer["pos_nm_en"]:get_any("member", "mem_nm_en", "mem_idx=".$row_odr["mem_idx"])?> / <?=$row_odr["rel_idx"]==0?"CEO":get_any("member", "pos_nm_en", "mem_idx=".$row_odr["mem_idx"])?></li>
 									<li><?=$row_buyer["email"]?></li>
@@ -299,7 +302,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 						<td>
 							<ul class="contact-info">
 								<li><?=$row_buyer["mem_nm_en"]?></li>
-								<li><?=$row_buyer["addr_det_en"]?> <?=$row_buyer["addr_en"]?></li>
+								<li><?=$row_buyer["addr_en"]?></li>
 								<li><span class="tel">Tel : <?=$row_buyer["tel"]?></span>Fax : <?=$row_buyer["fax"]?></li>
 								<li>Contact : <?=$row_odr["rel_idx"]==0?$row_buyer["pos_nm_en"]:get_any("member", "mem_nm_en", "mem_idx=".$row_odr["mem_idx"])?> / <?=$row_odr["rel_idx"]==0?"CEO":get_any("member", "pos_nm_en", "mem_idx=".$row_odr["mem_idx"])?></li>
 								<li><?=$row_buyer["email"]?></li>
@@ -326,7 +329,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 				</li>
 			</ul>
 			<ul class="contact-info">
-				<li><?=$row_seller["addr_det_en"]?> <?=$row_seller["addr_en"]?></li>
+				<li><?=$row_seller["addr_en"]?></li>
 				<li><span class="tel">Tel : <?=$row_seller["tel"]?></span>Fax : <?=$row_seller["fax"]?> </li>
 				<li>Contact : <?=$row_odr["sell_rel_idx"]==0?$row_seller["pos_nm_en"]:get_any("member", "mem_nm_en", "mem_idx=".$row_odr["sell_mem_idx"])?> / <?=$row_odr["sell_rel_idx"]==0?"CEO":get_any("member", "pos_nm_en", "mem_idx=".$row_odr["sell_mem_idx"])?> </li>
 				<li><?=$row_seller["email"]?></li>
@@ -373,14 +376,14 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 	</div>
 	
 	<div class="etc-info2">
-		<?if ($for_readonly!="P"){?>
+		<?if ($for_readonly!="P" && $for_readonly!="Y"){?>
 		<div class="txt-area">
 			<strong>CERTIFICATION and APPROVAL of INVOICE</strong>
 			<p class="txt2">I hereby certify that I as a member is well-informed with the PARTStrike’s  Treatments mentioned on the pages also will not violate any items mentioned  in the Treatment of PARTStrike and agrees to pay the above lists without any  complaints or argument. </p>
 		</div>
 		<?}?>
 		<ul class="sign-area">
-			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_buyer["filesign"]?>" height="21" alt=""></strong></li>
+			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_buyer["filesign"]?>" height="21" width="180" alt=""></strong></li>
 			<li><span>CEO : </span><strong><?=$row_buyer["pos_nm_en"]?></strong></li>
 			<li><span>Tel : </span><strong><?=$row_buyer["tel"]?></strong><span class="fax">Fax : </span><strong><?=$row_buyer["fax"]?></strong></li>
 		</ul>

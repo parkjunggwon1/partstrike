@@ -919,11 +919,16 @@ switch($actty) {
 		$_odr_quantity = replace_out($row["odr_quantity"]);
 		$_part_price = replace_out($row["price"]);
 		$_odr_price = replace_out($row["odr_price"]);
+		$_part_type = replace_out($row["part_type"]);
+		
 		//재고수량정보Update
 		//if($_quantity != $_odr_stock){	//변경되었을 경우 무조건..
-		if(($_quantity - $_odr_quantity)<0){	//변경된 수량이 발주 수량보다 작을 경우
-			update_val("odr_det","odr_quantity",$_quantity, "odr_det_idx", $_det_idx);
-		}
+		//if ($_part_type!=2)
+		//{
+			if(($_quantity - $_odr_quantity)<0){	//변경된 수량이 발주 수량보다 작을 경우
+				update_val("odr_det","odr_quantity",$_quantity, "odr_det_idx", $_det_idx);
+			}
+		//}
 		//단가정보Update
 		if($_part_price != $_odr_price){	//Unit Price 가 변경되었을 경우..
 			update_val("odr_det","odr_price",$_part_price, "odr_det_idx", $_det_idx);

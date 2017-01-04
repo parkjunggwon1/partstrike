@@ -76,7 +76,7 @@ function change_select()
 						<tbody>
 						<?
 							$recordcnt = 17;
-							$searchand .= "and mem_idx = ".$_SESSION["MEM_IDX"]." and rel_idx = ".$_SESSION["REL_IDX"]." and part_type =$part_type "; 
+							$searchand .= "and mem_idx = ".$_SESSION["MEM_IDX"]." and rel_idx = ".$_SESSION["REL_IDX"]." and part_type =$part_type and del_yn = 'N' "; 
 							if ($part_no){
 								$searchand .= "and part_no like '%$part_no%'";
 							}

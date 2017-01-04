@@ -1743,7 +1743,8 @@ function round_down($val,$d)
 			}			
 			else
 			{
-				$price = substr($price,0,-2);
+				$price_sosu = substr($val_explode[1],0,2);
+				$price = $val_explode[0].".".$price_sosu;
 			}
 		}
 		else
