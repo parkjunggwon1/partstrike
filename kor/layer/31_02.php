@@ -67,8 +67,18 @@ $("#odr_quantity").keyup(function(e){
 				$rel_idx = get_any("part","case when rel_idx = 0 then mem_idx else rel_idx end ","part_idx = $part_idx");
 				if ($part_type =="2"){
 					$dc = "NEW";
-					$quantity="";
+					$quantity="I";
 				}
+
+				if( ($price == (int)$price) )
+				{					
+					$price_val = round_down($price,2);
+					$price_val = number_format($price,2);
+				}
+				else {			
+					$price_val = $price;
+				}
+
 				?>
 				<tr>
 					<td colspan="11" class="title-box first">
@@ -83,8 +93,8 @@ $("#odr_quantity").keyup(function(e){
 					<td><?=$package?></td>
 					<td><?=$dc?></td>
 					<td><?=$rhtype?></td>
-					<td class="t-rt"><?=$quantity==0?"":number_format($quantity)?><input type="hidden" name="quantity" id = "quantity"  value="<?=$quantity?>"></td>
-					<td class="t-rt">$<?=number_format($price,2)?></td>
+					<td class="t-rt">I<input type="hidden" name="quantity" id = "quantity"  value="<?=$quantity?>"></td>
+					<td class="t-rt">$<?=$price_val?></td>
 					<td>
 						<input type="hidden" name="quantity" id="quantity" value="<?=$quantity;?>">
 						<input type="hidden" name="part_idx" id = "part_idx"  value="<?=$part_idx?>">
