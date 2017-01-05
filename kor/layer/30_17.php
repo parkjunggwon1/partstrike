@@ -7,45 +7,73 @@
 include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";
 include  $_SERVER["DOCUMENT_ROOT"]."/include/class/class.odrinfo.php";
 include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
+
+$today = date("d, M, Y",time());
+
 ?>
 <script src="/kor/js/jquery-1.11.3.min.js"></script>
 <script src="/kor/js/jquery.maskMoney.js"></script>
 <script src="/kor/js/print-div-jquery.js"></script>
 <script src="/include/function.js"></script>
-<script src="/kor/js/common.js"></script>
 <link rel="stylesheet" href="/kor/css/site.css">
 <SCRIPT LANGUAGE="JavaScript">
 //-- Amount 계산
 function calcu_amount(){
 	//maskoff();
 	var odr_det_idx = $("input[name^=odr_det_3017]");
-	var num, ord_qty, unit_price, am_sum=0;
+	var num, ord_qty, unit_price
+	var am_sum="";
 	//반복....
 	odr_det_idx.each(function(e){
 		num = $(this).val();
 
-		$("#unit_price_"+num).maskMoney({prefix:'$', allowNegative: false, thousands:',', decimal:'.', affixesStay: true});
+		//$("#unit_price_"+num).maskMoney({prefix:'$', allowNegative: false, thousands:',', decimal:'.', affixesStay: true});
 
 		ord_qty = $("#odr_qty_"+num).val().replace(/,/gi,"");
 		unit_price = $("#unit_price_"+num).val().replace("$","").replace(/,/gi,"");
 
-		amount = ord_qty * unit_price;
-		am_sum += amount;
+		amount = parseFloat(ord_qty * unit_price).toFixed(4);
 
-		$("#amount_"+num).val(amount);
-		$("#amount_"+num).maskMoney({prefix:'$', allowNegative: false, thousands:',', decimal:'.', affixesStay: true});
-		$("#amount_"+num).focus();
+		am_sum = (Number(am_sum) + Number(parseFloat(amount))).toFixed(4);
+	
+		amount = String(amount);
+
+		var strArray = amount.split('.');	
+		
+		if (strArray[1] == undefined)
+		{
+			amount = strArray[0]+".00"; 
+		}
+		else
+		{
+			if (strArray[1].length >1)
+			{
+				amount = strArray[0]+"."+strArray[1].substring(0,2); 
+			}
+			else
+			{
+				amount = strArray[0]+"."+strArray[1]+"0"; 
+			}
+			
+		}
+		
+
+		$("#amount_"+num).val("$"+amount);
+		$("#unit_price_"+num).val("$"+unit_price);
+
+		//$("#amount_"+num).maskMoney({prefix:'$', allowNegative: false, thousands:',', decimal:'.', affixesStay: true});
+	//	$("#amount_"+num).focus();
 		//$("#amount_"+num).number(true,2);
 	});
 	//Sub Total
-	//$("#sub_total").html("<input type='text' class='i-txt0 t-rt' id='ip_subtot' value='"+am_sum+"'>");
-	$("#ip_subtot").maskMoney({prefix:'$', allowNegative: false, thousands:',', decimal:'.', affixesStay: true});
-	$("#ip_subtot").focus();
+	$("#sub_total").html("<input type='text' class='i-txt0 t-rt' id='ip_subtot' value='$"+am_sum+"'>");
+	//$("#ip_subtot").maskMoney({prefix:'$', allowNegative: false, thousands:',', decimal:'.', affixesStay: true});
+	//$("#ip_subtot").focus();
 	//Total
 	//17년 1월 4일 변경 처리
-	$("#g_total").html("<input type='text' class='i-txt99 t-rt' value='"+$("#sub_total").html()+"'>");
-	$("#ip_gtot").maskMoney({prefix:'$', allowNegative: false, thousands:',', decimal:'.', affixesStay: true});
-	$("#ip_gtot").focus();
+	$("#g_total").html("<input type='text' class='i-txt99 t-rt' value='$"+am_sum+"'>");
+	//$("#ip_gtot").maskMoney({prefix:'$', allowNegative: false, thousands:',', decimal:'.', affixesStay: true});
+	//$("#ip_gtot").focus();
 
 	$(".order-table").focus();
 }
@@ -53,6 +81,14 @@ $(document).ready(function(){
 	$('.numprice').css("ime-mode","disabled").blur( function(event){   // 숫자 입력 하면 ,로 단위 끊어 표시하게.
 		calcu_amount();
 	});
+	$('.numfmt').css("ime-mode","disabled").keyup( function(event){   // 숫자 입력 하면 ,로 단위 끊어 표시하게.
+		check_value(this);
+	});
+	$('input[name^=unit_price]').css("ime-mode","disabled").keyup( function(event){   // 숫자 입력 하면 ,로 단위 끊어 표시하게.
+		calcu_amount();
+
+	});
+	
 	$("#print_3017").click(function(){
 		var num;
 		$("input[name^=odr_det_3017]").each(function(e){
@@ -147,9 +183,10 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 			</li>
 		</ul>
 		<ul class="contact-info" style="width:370px;">
-			<li> <?=$row_seller["addr_en"]?></li>
+			<li> <?=$row_seller["addr"]?></li>
 			<li><span class="tel">Tel : <?=$row_seller["tel"]?></span>Fax : <?=$row_seller["fax"]?> </li>
 			<li><span class="tel">Contact : <?=$row_odr["rel_idx"]==0?$row_seller["pos_nm_en"]:get_any("member", "mem_nm_en", "mem_idx=".$row_odr["mem_idx"])?> / <?=$row_odr["rel_idx"]==0?"CEO":get_any("member", "pos_nm_en", "mem_idx=".$row_odr["mem_idx"])?></li>
+			<li><?=$row_seller["email"]?></li>
 		</ul>
 	<?}?>
 	</div>
@@ -167,7 +204,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 				$chr =  "EI";
 			}
 			?> No.</strong><span><?=$sheets_no?></span></li>
-			<li class="b2"><strong>Date</strong><span><?=$row_odr["reg_date_fmt"]?></span></li>
+			<li class="b2"><strong>Date</strong><span><?=$today?></span></li>
 			<li><strong>Page</strong><span>1</span></li>
 		</ul>
 		<ul>
@@ -209,14 +246,14 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 		<h2><img src="/kor/images/txt_shipto.gif" alt="ship to"></h2>
 		<div class="info-wrap">
 			<?$delivery_addr=get_delivery_addr($row_ship["delivery_addr_idx"]);?>
-			<ul class="company-info">
+			<ul class="company-info" >
 				<li>
-					<span class="b1"><img src="/upload/file/<?=$row_buyer["filelogo"]?>" width="75" height="18" alt=""></span>
-					<span class="b2" lang="en"><?=$row_buyer["mem_nm_en"]?></span>
+					<span class="b1"><img src="/kor/images/new_ship_logo.png" width="75" height="18" alt=""></span>
+					<span class="b2" style="color:#00759e;"><?=$delivery_addr["com_name"]?></span>
 				</li>
 				<li>
 					<span class="b1"><img src="/kor/images/nation_title_<?=$delivery_addr["nation"]?>.png" alt="<?=GF_Common_GetSingleList("NA",$delivery_addr["nation"])?>"></span>
-					<span lang="en"><?=$delivery_addr["homepage"]?></span>
+					<span style="color:#00759e;"><?=$delivery_addr["homepage"]?></span>
 				</li>
 			</ul>
 			<ul class="contact-info" style="color:#00759e;">
@@ -383,9 +420,9 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 		</div>
 		<?}?>
 		<ul class="sign-area">
-			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_buyer["filesign"]?>" height="21" width="180" alt=""></strong></li>
-			<li><span>CEO : </span><strong><?=$row_buyer["pos_nm_en"]?></strong></li>
-			<li><span>Tel : </span><strong><?=$row_buyer["tel"]?></strong><span class="fax">Fax : </span><strong><?=$row_buyer["fax"]?></strong></li>
+			<li><span>By :</span><strong class="sign"><img src="/upload/file/<?=$row_seller["filesign"]?>" height="21" width="180" alt=""></strong></li>
+			<li><span>CEO : </span><strong><?=$row_seller["pos_nm_en"]?></strong></li>
+			<li><span>Tel : </span><strong><?=$row_seller["tel"]?></strong><span class="fax">Fax : </span><strong><?=$row_seller["fax"]?></strong></li>
 		</ul>
 	</div>
 		<input type="hidden" name="odr_idx" id="odr_idx_30_09" value="<?=$odr_idx?>">

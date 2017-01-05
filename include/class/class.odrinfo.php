@@ -1488,10 +1488,10 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly=""){   //shee
 						<td class="t-lt"><?=$part_no?></td>
 						<td class="t-lt"><?=$manufacturer?>, <?=$package?>, <?=$dc?>, <?=$rhtype?><?=$extra?></td>
 						<td class="t-rt">
-							<input type="text" class="i-txt2 onlynum numfmt t-rt" maxlength="10" name="odr_quantity[]" id="odr_qty_<?=$odr_det_idx;?>" value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" onblur="calcu_amount();" style="width:50px; ">
+							<input type="text" class="i-txt2 onlynum numfmt t-rt" maxlength="10" name="odr_quantity[]" id="odr_qty_<?=$odr_det_idx;?>" value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" onblur="calcu_amount();" style="width:100%; ">
 						</td>
 						<td class="t-rt">
-							<input type="text" class="i-txt2 numprice t-rt" maxlength="10" name="unit_price[]" id="unit_price_<?=$odr_det_idx;?>" value="<?=$price==0?"":"$".$price_val?>" style="width:65px;">
+							<input type="text" class="i-txt2 t-rt" maxlength="8" name="unit_price[]" id="unit_price_<?=$odr_det_idx;?>" value="<?=$price==0?"":"$".$price_val?>" style="width:100%;">
 						</td>
 						<td><?=($period)?( QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"Stock":$period):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>
 						<td class="t-rt">

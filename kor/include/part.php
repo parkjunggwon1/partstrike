@@ -14,7 +14,7 @@
 		}
 	}
 	
-	function check(){
+	function check(){		
 		var f =  document.f2;
 		if (nullchk(f.part_no,"Part No를 입력하세요.")== false) return ;		
 		if (nullchk(f.manufacturer,"Manufacturer를 입력하세요.")== false) return ;		

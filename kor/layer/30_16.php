@@ -350,7 +350,7 @@ if($ship[delivery_addr_idx] > 0){
 							$btn_img2 = "btn_packing_list";
 						}
 						?>
-						<td class="c-red2 t-rt" style="font-size: 14px;"><?=$ship_nation?>선적서류<span lang="en"><!--Download--></span>&nbsp;&nbsp;<a href="#" class="<?=$delivery_shop_val?>" for_readonly="Y"><img src="/kor/images/<?=$btn_img1?>.gif" alt="Commercial Invoice"></a> 
+						<td class="c-red2 t-rt" style="font-size: 14px;">선적서류<span lang="en"><!--Download--></span>&nbsp;&nbsp;<a href="#" class="<?=$delivery_shop_val?>" for_readonly="Y"><img src="/kor/images/<?=$btn_img1?>.gif" alt="Commercial Invoice"></a> 
 						<a href="#" class="<?=$paking_val?>"><img src="/kor/images/<?=$btn_img2?>.gif" alt="Packing List"></a></td>
 					</tr>
 					<?}?>
