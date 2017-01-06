@@ -112,14 +112,14 @@ $("input[name=supply_quantity]").keyup(function(e){
 				<thead>
 					<tr>
 						<th scope="col" class="t-no">No.</th>
-						<th scope="col" class="t-lt">Part No.</th>
+						<th scope="col" class="t-lt" style="width:210px;">Part No.</th>
 						<th scope="col" class="t-lt">Manufacturer</th>
 						<th scope="col" class="t-Package">Package</th>
 						<th scope="col" class="t-dc">D/C</th>
 						<th scope="col" class="t-rohs">RoHS</th>
-						<th scope="col" class="t-oty">O'ty</th>
+						<th scope="col" class="t-oty" style="width:60px;">O'ty</th>
 						<th scope="col" class="t-unitprice">Unit Price</th>
-						<th scope="col" class="delivery t-orderoty" lang="ko">발주수량</th>
+						<th scope="col" class="delivery t-orderoty" lang="ko" style="width:60px;">발주수량</th>
 						<th scope="col" lang="ko" class="t-supplyoty">공급수량</th>
 						<th scope="col" lang="ko">납기</th>
 					</tr>

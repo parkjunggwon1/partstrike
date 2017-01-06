@@ -35,7 +35,7 @@ if (!$_SESSION["MEM_IDX"]){ReopenLayer("layer6","alert","?alert=sessionend");exi
 	}
 
 
-$("input[name^=odr_det_idx]").click(function(e){
+$("input[name^=odr_det_idx]").click(function(e){	
 		if($(this).hasClass("checked")==false){  //누르는 순간 체크 됨.
 			//check 됐을때.
 			if ($("#chked_cnt").val() == 0)
@@ -336,6 +336,8 @@ $(document).ready(function(){
 		$("#del_1_"+$input.val()).show();
 		$("#del_"+$input.val()).hide();		
 	}
+	
+	
 
 	//1개일때는 Company 뒷부분 th 아예 빼버리기
 	/**
@@ -368,6 +370,49 @@ $(document).ready(function(){
 	});
 
 	checkActive();
+
+	$("input:checkbox[name^=odr_det_idx]").click(function(){	
+		var amend_yn;
+		amend_yn = "";
+		$("input:checkbox[name^=odr_det_idx]").each(function(e){ //선택유무와 무관
+			
+			var chk_val;
+
+			chk_val = $(this).is(":checked")
+			if (chk_val==true)
+			{
+				amend_yn = amend_yn + $(this).attr("amend_yn");
+				if (amend_yn.indexOf("Y"))
+				{		
+					if(amend_yn == "N")
+					{
+						$("#btn_cancel_09_01").css("cursor","pointer").addClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel.gif");
+					}
+					else
+					{
+						$("#btn_del_09_01").css("cursor","").attr("onclick","").attr("src","/kor/images/btn_delete2_1.gif");
+						$("#btn_cancel_09_01").css("cursor","").removeClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel_1.gif");	
+					}						
+					
+				}
+				else
+				{				
+					$("#btn_del_09_01").css("cursor","pointer").attr("onclick","del_sel();").attr("src","/kor/images/btn_delete2.gif");	
+					$("#btn_cancel_09_01").css("cursor","").removeClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel_1.gif");
+				}
+			}
+			else
+			{
+				$("#btn_del_09_01").css("cursor","").attr("onclick","del_sel();").attr("src","/kor/images/btn_delete2_1.gif");	
+
+			}
+			
+
+		});
+		
+	});
+
+	
 }); //end of ready
 
 function checkActive(){
@@ -448,6 +493,48 @@ function checkActive(){
 	**/
 }
 
+function del_sel()
+{
+
+	var amend_yn;
+	var odr_det_idx_val;
+	amend_yn = "";
+	$("input:checkbox[name^=odr_det_idx]").each(function(e){ //선택유무와 무관
+		
+		var chk_val;
+
+		chk_val = $(this).is(":checked");
+		odr_det_idx_val = $(this).attr("odr_det_idx2");
+		part_type = $(this).attr("part_type");
+
+		if (chk_val==true)
+		{
+			amend_yn = $(this).attr("amend_yn");
+			
+			if (amend_yn == "Y")
+			{		
+				$.ajax({ 
+				type: "GET", 
+				url: "/ajax/proc_ajax.php", 
+				data: { actty : "RMAS2", //Remove amend data						
+						odr_det_idx : $(this).attr("odr_det_idx2")
+				},
+					dataType : "html" ,
+					async : false ,
+					success: function(data){ 
+
+						closeCommLayer("layer3"); //발주창
+						openCommLayer("layer3","09_01","?odr_idx="+$("#odr_idx_09_01").val());
+						
+					}
+				});
+			}
+			
+		}
+		
+	});
+}
+
 //-->
 </SCRIPT>
 
@@ -522,6 +609,7 @@ $det_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx ");  //odr_det 수량
 		<img src="/kor/images/btn_order_add.gif" alt="발주 추가" style="cursor:pointer"  class="btn-dialog-0501-from_0901">
 		<img src="/kor/images/btn_order_confirm.gif" alt="발주서 확인" odr_idx="<?=$odr_idx?>" class="btn-view-sheet-1207">
 		<img src="/kor/images/btn_cancel_1.gif" id="btn_cancel_09_01" alt="취소">
+		<img src="/kor/images/btn_delete2_1.gif" alt="삭제" id="btn_del_09_01">
 	</div>
 </div>
 

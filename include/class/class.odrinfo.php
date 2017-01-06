@@ -401,13 +401,13 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<?}?>
 				<?}elseif ($loadPage== "31_05"){ //------------------------------------------------------------------------------------------------------?>
 					<td><?=$i?><input type="hidden" name="odr_det_idx[]" value="<?=$odr_det_idx?>"></td>
-					<td class="t-lt"><input type="text" class="i-txt4" id="part_no" value="<?=$part_no?>" maxlength="30" style="ime-mode:disabled; width:100%" ></td>
+					<td class="t-lt"><input type="text" class="i-txt4" id="part_no" value="<?=$part_no?>" maxlength="24" style="ime-mode:disabled; width:100%" ></td>
 					<td class="t-lt"><input type="text" class="i-txt4" id="manufacturer" value="<?=$manufacturer?>" maxlength="20" style="width:100%" ></td>
 					<td><input type="text" class="i-txt4 t-ct" id="package" value="<?=$package?>" maxlength="10" style="width:83px" ></td>
 					<td><input type="text" class="i-txt4 t-ct" id="dc" value="<?=$dc?>" style="width:38px" maxlength="4" ></td>
 					<td>
 						
-						<div class="select type4" lang="en" style="width:60px">
+						<div class="select type4" lang="en" style="border-color: #00759e;width:60px;">
 							<label><?=$rhtype==""?"None":$rhtype?></label>
 							<select name="mod_rhtype[]">
 							<option lang="en" <?if($rhtype==""){echo "selected";}?>>None</option>
@@ -427,7 +427,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<?if($det_cnt>1){?>
 					<td>
 						<label class="ipt-chk chk2">
-							<input type="checkbox" name="odr_det_idx[]" odr_status="<?=$odr_status;?>" quantity="<?=$quantity;?>" amend_yn="<?=$amend_yn?>" class="<?=($part_type=="2" && $period*1> 2 && QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")<=0) ? "endure":"stock"?>" value="<?=$odr_det_idx?>" part_type="<?=$part_type?>"><span></span>
+							<input type="checkbox" name="odr_det_idx[]" odr_det_idx2 ="<?=$odr_det_idx?>" odr_status="<?=$odr_status;?>" quantity="<?=$quantity;?>" amend_yn="<?=$amend_yn?>" class="<?=($part_type=="2" && $period*1> 2 && QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")<=0) ? "endure":"stock"?>" value="<?=$odr_det_idx?>" part_type="<?=$part_type?>"><span></span>
 						</label>
 					</td>
 					<?}else{?>
@@ -447,7 +447,13 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td class="t-rt"><?=$quantity==0?$supply_quantity:number_format($quantity + $supply_quantity)?></td>
 					<td class="t-rt">$<?=$price==0?"":$price_val?></td>
 					<td>
-						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" name="odr_quantity[]" odr_det_idx="<?=$odr_det_idx?>" supply_quantity="<?=$supply_quantity;?>" quantity="<?=$quantity + $supply_quantity;?>" amd_yn="Y" value="" style="width:56px;">
+						<?
+						if ($amend_yn=="Y")
+						{
+							$odr_amend_qty = number_format($odr_quantity);
+						}
+						?>
+						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" name="odr_quantity[]" odr_det_idx="<?=$odr_det_idx?>" supply_quantity="<?=$supply_quantity;?>" quantity="<?=$quantity + $supply_quantity;?>" amd_yn="Y" value="<?=$odr_amend_qty?>" style="width:56px;">
 					</td>
 					<td class="c-red t-rt"><?=$supply_quantity==0?"":number_format($supply_quantity)?></td>
 					<?=($period)?"<td class='c-red'>".(QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"Stock":$period):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
@@ -458,6 +464,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td class="c-blue"><a href="javascript:layer_company_det('<?=$com_idx?>');" style="color:#00759e;"><?=cut_len($company_nm,8,".")?></a></td>
 					<!-- 복사해온거 시작-->
 					</tr>
+					<?if ($amend_yn=="N"){?>
 					<tr class="bg-none">
 						<td>
 
@@ -489,6 +496,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<!-- //부품상태 ---------------->
 						</td>
 					</tr>
+					<?}?>
 					<!-- 복사해온거 끝-->
 
 					<?//-----------------------------------------------------------------------------------------------------------------------------------------------
@@ -1379,9 +1387,11 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly=""){   //shee
 			<th scope="col" class="t-lt" width="194px">Part No.</th>
 			<th scope="col" class="t-lt" width="300px">Description</th>
 			<th scope="col" class="t-rt" width="66px">Quantity</th>
+			<?if ($for_readonly != "P"){?>
 			<th scope="col" class="t-rt" width="66px">Unit Price</th>
 			<th scope="col">Lead Time</th>
 			<th scope="col" class="t-rt" width="73px">Amount</th>
+			<?}?>
 		</tr>
 	</thead>
 	<tbody>
@@ -1517,17 +1527,24 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly=""){   //shee
 						<td><?=$i?></td>
 						<td class="t-lt"><?=$part_no?></td>
 						<td class="t-lt"><?=$manufacturer?>, <?=$package?>, <?=$dc?>, <?=$rhtype?><?=$extra?></td>
-						<td class="t-rt"><?=number_format($odr_quantity)?></td>
-						<td class="t-rt">$<?=$price_val?></td>
-						<td><?=($period)?( QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"Stock":$period):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>
+						
+						<?if ($for_readonly == "P"){?>
 						<td class="t-rt">
-							<?//2016-10-02 : 지속적... 계약금에서는 'Amount' 표시 무.
-							if ($loadPage!="18_2_09" && !($loadPage=="30_09" && $part_type=="2" && $pay_cnt<2) ){
-								echo "$".$total_price;
-
-							}
-							?>
+							<input type="text" class="i-txt2 onlynum numfmt t-rt" maxlength="10" name="odr_quantity[]" id="odr_qty_<?=$odr_det_idx;?>" value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>"  style="width:100%; ">
 						</td>
+						<?}else{?>
+							<td class="t-rt"><?=number_format($odr_quantity)?></td>
+							<td class="t-rt">$<?=$price_val?></td>
+							<td><?=($period)?( QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"Stock":$period):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>
+							<td class="t-rt">
+								<?//2016-10-02 : 지속적... 계약금에서는 'Amount' 표시 무.
+								if ($loadPage!="18_2_09" && !($loadPage=="30_09" && $part_type=="2" && $pay_cnt<2) ){
+									echo "$".$total_price;
+
+								}
+								?>
+							</td>
+						<?}?>
 					</tr>
 				<?}//end if($loadPage == "30_17")?>
 			<? //end of 턴키

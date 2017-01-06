@@ -70,6 +70,7 @@ $dlvr_cnt = QRY_CNT("freight_charge"," and trade_type=$trade_type and rel_idx = 
 
 	//-- 선택 삭제----------------------------------------------------------------------------------------------------------
 	function del_sel(){
+		
 		var det_cnt = $("#det_cnt").val();
 		var sel_box, part_type, det_idx, del_cnt=0, delv_cnt=0;
 		var err = false;

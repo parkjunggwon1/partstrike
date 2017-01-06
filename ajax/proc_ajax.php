@@ -186,6 +186,14 @@ switch($actty) {
 			//echo $sql;
 			$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 		}
+	   break;
+	case "RMAS2":	    
+
+		if ($odr_det_idx){
+			$sql = "delete from odr_det where odr_det_idx = $odr_det_idx and amend_yn ='Y'";
+			echo $sql;
+			$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+		}
 	   break;	
 	case "RMS": //Save Data 중 '납기' 품목 제외한 amend Data 모두 삭제 2016-04-03
 	    $odr_idx = $actidx;

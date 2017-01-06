@@ -67,7 +67,7 @@ $("#odr_quantity").keyup(function(e){
 				$rel_idx = get_any("part","case when rel_idx = 0 then mem_idx else rel_idx end ","part_idx = $part_idx");
 				if ($part_type =="2"){
 					$dc = "NEW";
-					$quantity="I";
+					$quantity="I";				
 				}
 
 				if( ($price == (int)$price) )
@@ -93,7 +93,7 @@ $("#odr_quantity").keyup(function(e){
 					<td><?=$package?></td>
 					<td><?=$dc?></td>
 					<td><?=$rhtype?></td>
-					<td class="t-rt">I<input type="hidden" name="quantity" id = "quantity"  value="<?=$quantity?>"></td>
+					<td class="t-rt"><?=$quantity?><input type="hidden" name="quantity" id = "quantity"  value="<?=$quantity?>"></td>
 					<td class="t-rt">$<?=$price_val?></td>
 					<td>
 						<input type="hidden" name="quantity" id="quantity" value="<?=$quantity;?>">
