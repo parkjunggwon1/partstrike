@@ -3259,8 +3259,10 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 			});
 			$(".company-info-wrap input").keyup(function(){
 				if(MustChk() == true){
+
 					$("#save_deact").hide();
 					$(".delivery_save").show();
+					checkActive();
 				}else{
 					$("#save_deact").show();
 					$(".delivery_save").hide();

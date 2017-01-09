@@ -520,9 +520,8 @@ function dlvr_click(obj){
 	});		
 }
 $(document).ready(function(){
-	
-	
 
+	var delivery_chg=$("input:checkbox[id='delivery_chg']").is(":checked");
 	var select = $("select");
 	select.change(function(){
 		var select_name = $(this).children("option:selected").text();
@@ -582,6 +581,10 @@ $(document).ready(function(){
 		
 		}
 	});
+
+	
+alert(checkActive());
+
 
 	if($("#ship_info").attr("disabled")!="disabled"){
 		$("#ship_info option:gt(4)").attr("lang","ko");
@@ -690,6 +693,18 @@ $(document).ready(function(){
 	});
 
 	checkActive();
+
+	$("input[name=delivery_chg]").click(function(){
+		
+		if($(this).hasClass("checked") && MustChk()==true){
+			$("#layerPop3 #btn-confirm").css("cursor","pointer").addClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm.gif");
+			
+		}else{
+			
+			$("#layerPop3 #btn-confirm").css("cursor","").removeClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm_1.gif");
+		}
+	});	
+	
 }); //end of Ready
 //------------ 버튼 활성 or 비활성 ------------------------------------------------------------------
 function checkActive(){
@@ -698,6 +713,7 @@ function checkActive(){
 		var det_cnt = $("#det_cnt").val();
 		var dlvr_cnt = $("#dlvr_cnt").val();
 		var turnkey_cnt = $("#turnkey_cnt").val();
+		var chk_val=$("input:checkbox[id='delivery_chg']").is(":checked");
 		$("#layerPop3 .btn-area :eq(2)").css("cursor","pointer").addClass("btn-dialog-save").attr("src","/kor/images/btn_order_save.gif"); //저장버튼
 		//2016-03-30 ccolle-------------------------------------------------------------------
 		if(det_cnt>1){ //-- 여러개 일때 --------------------------
@@ -743,9 +759,10 @@ function checkActive(){
 		}else{		//선불 배송정보 있을 시...
 			//선불.착불 선택에 따라...
 			var sel_adv = $("input:radio[name=dlvr_adv]:checked").val();
+			
 			if(sel_adv=="Y"){	//선불
 				var dlvr_corp = $("input:radio[name='dlvr_corp']:checked").val();
-				var chk_val=$("input:checkbox[id='delivery_chg']").is(":checked");
+				
 				if(!(dlvr_corp && ($("#dlvr_acc").val() || chk_val))){
 					ErchkCnt = false; 
 				}
@@ -757,6 +774,8 @@ function checkActive(){
 				ErchkCnt = false;
 			}
 		}
+		
+
 
 		if(det_cnt==1){
 			if($("input[name^=odr_det_idx]").attr("odr_status") == 1) {
@@ -767,9 +786,26 @@ function checkActive(){
 		}
 		//-- 발주확인 버튼-------------------------
 		if (Erchkbox==true && ErchkCnt == true && FailCnt==0 )
-		{
-			$("#layerPop3 #btn-confirm").css("cursor","pointer").addClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm.gif");
-			//$("#layerPop3 .btn-area :eq(1)").css("cursor","pointer").addClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm.gif");
+		{			
+			if (chk_val==true)
+			{
+				if (MustChk()==true)
+				{
+
+					$("#layerPop3 #btn-confirm").css("cursor","pointer").addClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm.gif");
+				}
+				else
+				{
+					$("#layerPop3 #btn-confirm").css("cursor","").removeClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm_1.gif");
+				}
+				
+			}
+			else
+			{
+				$("#layerPop3 #btn-confirm").css("cursor","pointer").addClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm.gif");
+				//$("#layerPop3 .btn-area :eq(1)").css("cursor","pointer").addClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm.gif");
+			}
+			
 		}else{
 			$("#layerPop3 #btn-confirm").css("cursor","").removeClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm_1.gif");
 			//$("#layerPop3 .btn-area :eq(1)").css("cursor","").removeClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm_1.gif");
@@ -781,6 +817,7 @@ function checkActive(){
 		}else{
 			$("#btn_del_0504").css("cursor","").attr("onclick","").attr("src","/kor/images/btn_delete2_1.gif");
 		}
+		
 	}	//end of checkActive()
 	
 	function no_post(str)
