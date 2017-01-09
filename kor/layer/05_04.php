@@ -521,6 +521,7 @@ function dlvr_click(obj){
 }
 $(document).ready(function(){
 	
+	
 
 	var select = $("select");
 	select.change(function(){
@@ -692,6 +693,7 @@ $(document).ready(function(){
 }); //end of Ready
 //------------ 버튼 활성 or 비활성 ------------------------------------------------------------------
 function checkActive(){
+
 		var Erchkbox = false , ErchkCnt = true, FailCnt = 0;
 		var det_cnt = $("#det_cnt").val();
 		var dlvr_cnt = $("#dlvr_cnt").val();
@@ -764,7 +766,7 @@ function checkActive(){
 			}
 		}
 		//-- 발주확인 버튼-------------------------
-		if (Erchkbox==true && ErchkCnt == true && FailCnt==0)
+		if (Erchkbox==true && ErchkCnt == true && FailCnt==0 )
 		{
 			$("#layerPop3 #btn-confirm").css("cursor","pointer").addClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm.gif");
 			//$("#layerPop3 .btn-area :eq(1)").css("cursor","pointer").addClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm.gif");
@@ -913,6 +915,7 @@ function checkActive(){
 		$(".company-info-wrap select:eq(0)").attr("disabled",false);
 		$("#ship_info").attr("disabled",false);	
 		$(".company-info-wrap select:eq(1)").attr("disabled",true);
+		$("#layerPop3 #btn-confirm").css("cursor","").removeClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm_1.gif");
 	}
 
 	function add_change_sel()

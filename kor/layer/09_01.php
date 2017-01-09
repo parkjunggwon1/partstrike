@@ -36,6 +36,7 @@ if (!$_SESSION["MEM_IDX"]){ReopenLayer("layer6","alert","?alert=sessionend");exi
 
 
 $("input[name^=odr_det_idx]").click(function(e){	
+	
 		if($(this).hasClass("checked")==false){  //누르는 순간 체크 됨.
 			//check 됐을때.
 			if ($("#chked_cnt").val() == 0)
@@ -369,6 +370,14 @@ $(document).ready(function(){
 		checkActive();
 	});
 
+	
+	//옵션 갯수에 따른 선택 안내 메세지
+	var det_cnt = $("#det_cnt_0901").val();
+	if(det_cnt = $("#det_cnt_0901").val()>1){
+		$(".txt_option").show();
+		$(".txt_option").css("margin-left","-470px");
+	}
+
 	checkActive();
 
 	$("input:checkbox[name^=odr_det_idx]").click(function(){	
@@ -455,17 +464,18 @@ function checkActive(){
 		ErchkCnt = false;	
 	}
 	//발주서 확인 버튼 활성
-	if(okCnt == det_cnt && ErchkCnt && selCnt == det_cnt && supp_qty <= odr_qty){
+
+	if(okCnt > 0 && ErchkCnt && selCnt > 0 && supp_qty <= odr_qty){
 		$("#layerPop3 .btn-area :eq(1)").css("cursor","pointer").addClass("btn-view-sheet-1207").attr("src","/kor/images/btn_order_confirm.gif");
 	}else{
 		$("#layerPop3 .btn-area :eq(1)").css("cursor","").removeClass("btn-view-sheet-1207").attr("src","/kor/images/btn_order_confirm_1.gif");
 	}
 	//취소버튼 활성
-	if(selCnt>0){
+	/*if(selCnt>0){
 		$("#btn_cancel_09_01").css("cursor","pointer").addClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel.gif");
 	}else{
 		$("#btn_cancel_09_01").css("cursor","").removeClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel_1.gif");
-	}
+	}*/
 
 	/**
 	$("#layerPop3 .stock-list-table").find("tr[id^=tr]").each(function(e){
@@ -584,8 +594,8 @@ $det_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx ");  //odr_det 수량
 				<?}?>
 				<th scope="col" class="t-no">No. </th>
 				<th scope="col" class="t-nation">Nation</th>
-				<th scope="col" class="t-partno" style="width:180px;">Part No.</th>
-				<th scope="col" class="t-Manufacturer">Manufacturer</th>
+				<th scope="col" class="t-partno" style="width:120px;">Part No.</th>
+				<th scope="col" class="t-Manufacturer" style="width:80px;">Manufacturer</th>
 				<th scope="col" class="t-Package">Package</th>
 				<th scope="col" class="t-dc">D/C</th>
 				<th scope="col" class="t-rohs">RoHS</th>

@@ -183,7 +183,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 			</li>
 		</ul>
 		<ul class="contact-info" style="width:370px;">
-			<li> <?=$row_seller["addr"]?></li>
+			<li> <?=$row_seller["addr_en"]?></li>
 			<li><span class="tel">Tel : <?=$row_seller["tel"]?></span>Fax : <?=$row_seller["fax"]?> </li>
 			<li><span class="tel">Contact : <?=$row_odr["rel_idx"]==0?$row_seller["pos_nm_en"]:get_any("member", "mem_nm_en", "mem_idx=".$row_odr["mem_idx"])?> / <?=$row_odr["rel_idx"]==0?"CEO":get_any("member", "pos_nm_en", "mem_idx=".$row_odr["mem_idx"])?></li>
 			<li><?=$row_seller["email"]?></li>

@@ -2527,8 +2527,10 @@ $(document).ready(function(){
 function updateQty(){
 	var err = false;
 	var qty, amd_yn, quantity;
+	
 	//-- Row 수량만큼 반복--------------------
 	$("input[name^=odr_quantity]").each(function(){
+		
 		if($(this).val()==""){
 			qty = 0;
 		}else{

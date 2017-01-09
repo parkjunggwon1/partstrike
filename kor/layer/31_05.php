@@ -121,7 +121,7 @@ $("input[name=supply_quantity]").keyup(function(e){
 						<th scope="col" class="t-unitprice">Unit Price</th>
 						<th scope="col" class="delivery t-orderoty" lang="ko" style="width:60px;">발주수량</th>
 						<th scope="col" lang="ko" class="t-supplyoty">공급수량</th>
-						<th scope="col" lang="ko">납기</th>
+						<th scope="col" lang="ko" style="width:75px;">납기</th>
 					</tr>
 				</thead>
 				<?echo GET_ODR_DET_LIST("31_05",$part_type," and odr_det_idx=$odr_det_idx ");?>

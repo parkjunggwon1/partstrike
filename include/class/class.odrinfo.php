@@ -426,7 +426,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 				}elseif ($loadPage== "09_01"){  //-------------------------------------- 09_01 : 수정 발주서 2016-04-14------------------------------------?>
 					<?if($det_cnt>1){?>
 					<td>
-						<label class="ipt-chk chk2">
+						<label class="ipt-chk chk2" style="padding-right: 0;">
 							<input type="checkbox" name="odr_det_idx[]" odr_det_idx2 ="<?=$odr_det_idx?>" odr_status="<?=$odr_status;?>" quantity="<?=$quantity;?>" amend_yn="<?=$amend_yn?>" class="<?=($part_type=="2" && $period*1> 2 && QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")<=0) ? "endure":"stock"?>" value="<?=$odr_det_idx?>" part_type="<?=$part_type?>"><span></span>
 						</label>
 					</td>
@@ -438,8 +438,8 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<?if ($part_type=="7"){?>
 						<td colspan="6"><input type="text" class="i-txt4" value="<?=$part_no?>" style="width:560px; ime-mode:disabled" readonly></td>					
 					<?}else{?>
-					<td class="t-lt"><?=$part_no?></td>
-					<td class="t-lt"><?=$manufacturer?></td>
+					<td class="t-lt"><?=get_cut($part_no,20,".")?></td>
+					<td class="t-lt"><?=get_cut($manufacturer,12,".")?></td>
 					<td><?=get_cut($package,10,".")?></td>
 					<td><?=$dc?></td>
 					<td><?=$rhtype?></td>					
@@ -507,7 +507,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							</label>
 					<?}else{?>
 						<td>
-							<label class="ipt-chk chk2">
+							<label class="ipt-chk chk2" >
 								<input type="<?=($det_cnt>1)? "checkbox":"hidden";?>" style="margin-right:0" name="odr_det_idx[]" odr_status="<?=$odr_status;?>" quantity="<?=$quantity;?>" amend_yn="<?=$amend_yn?>" class="<?=($part_type=="2" && $period*1> 2 && QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")<=0) ? "endure":"stock"?>" value="<?=$odr_det_idx?>" <?if(($part_type=="2"||$part_type=="5"||$part_type=="6") && $period ==""){?>disabled<?}?> part_type="<?=$part_type?>"><span  style="margin-right:0"></span>
 							</label>
 						</td>
@@ -2851,6 +2851,8 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 				$buyer_assign_no = get_any("impship", "account_no", "rel_idx = $buy_com_idx and company_idx = $assign_idx");
 			}
 			$det_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx ");  //odr_det 수량
+
+			
 		}
 
 		if ($loadPage=="09_03" && $delivery_addr_idx){	//------------------------- 09_03(수정발주서) -------------------------------------------------?>
