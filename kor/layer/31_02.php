@@ -10,7 +10,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.part.php";
 $("#odr_quantity").keyup(function(e){
 	maskoff();
 	var $this = $(this).parent().next();
-	var stock_qty = parseInt($("#quantity").val());
+	var stock_qty = parseInt($("#quantity").val().replace(/,/g, ''));
 	if($(this).val()==""){
 		$this.find("button").hide();
 		$this.find("span").show();
@@ -68,6 +68,10 @@ $("#odr_quantity").keyup(function(e){
 				if ($part_type =="2"){
 					$dc = "NEW";
 					$quantity="I";				
+				}
+				else
+				{
+					$quantity= $quantity==0?"":number_format($quantity);
 				}
 
 				if( ($price == (int)$price) )

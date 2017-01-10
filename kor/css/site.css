@@ -683,6 +683,22 @@ body.open-layer{overflow:hidden}
 .layer-pagination.red>ul>li.bk>a{background:#1c1c1c; border-color: #1c1c1c;}
 .layer-pagination.red>ul>li.bk.current>a{background:#fff; color:#1c1c1c}
 
+/* layer-pagination2 */
+.layer-pagination2{text-align:center}
+.layer-pagination2>ul{padding-bottom:1px; white-space:nowrap}
+.layer-pagination2>ul>li{display:inline-block; position:relative; font-family:"Times New Roman", serif; vertical-align:middle}
+.layer-pagination2>ul>li>a,
+.layer-pagination2>ul>li>span{display:block; font-weight:bold; background:#1c1c1c; border:1px solid #1c1c1c; color:#fff; text-align:center; width:38px; height:26px; line-height:26px; text-decoration:none; vertical-align:middle}
+.layer-pagination2>ul>li>span{background-color:#bebebe; border:#e9e9e9}
+.layer-pagination2>ul>li.current>a{background:#fff; color:#1c1c1c}
+.layer-pagination2>ul>li[class^="navi"]>a{background:none; border:0 none; position:relative; top:-2px; width:auto}
+.layer-pagination2>ul>li.navi-prev{margin:0}
+.layer-pagination2.red>ul>li>a{border-color:#ff0000; color:#fff; background:#ff0000}
+.layer-pagination2.red>ul>li.current>a{color:#ff0000; background:#fff}
+.layer-pagination2.red>ul>li>span{background-color:#FECBD2; border:#e9e9e9}
+.layer-pagination2.red>ul>li.bk>a{background:#1c1c1c; border-color: #1c1c1c;}
+.layer-pagination2.red>ul>li.bk.current>a{background:#fff; color:#1c1c1c}
+
 
 
 /* layer-step */

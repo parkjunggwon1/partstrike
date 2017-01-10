@@ -8,8 +8,8 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/class/class.odrinfo.php";?>
 <script>
 ready();
 $("#layerPop3 .stock-list-table tbody:eq(0) tr:eq(0) td").addClass("first");
-$(".layer-pagination.red li, .layer-pagination.bk li").click(function(){
-	var prevPage =$(".layer-pagination.red .current a").text();	
+$(".layer-pagination2.red li, .layer-pagination2.bk li").click(function(){
+	var prevPage =$(".layer-pagination2.red .current a").text();	
 	var thisPage="";
 	
 	if ($(this).find("a").text() !="")
@@ -26,11 +26,11 @@ $(".layer-pagination.red li, .layer-pagination.bk li").click(function(){
 	if (thisPage <20 && thisPage > 0)
 	{
 		//지속적..
-		if ($(".layer-pagination.red .current a, .layer-pagination.bk .current a").text()!="")
+		if ($(".layer-pagination2.red .current a, .layer-pagination2.bk .current a").text()!="")
 		{
-			$(".layer-pagination li").removeClass("current");		
+			$(".layer-pagination2 li").removeClass("current");		
 		}
-		$(".pagingli:eq("+(thisPage-1)+")").addClass("current");
+		$(".pagingli_1:eq("+(thisPage-1)+")").addClass("current");
 		$("#period").val(thisPage);
 		$(".btn-area span").hide();
 		//$(".btn-area button:eq(0)").show();
@@ -42,7 +42,8 @@ $(".layer-pagination.red li, .layer-pagination.bk li").click(function(){
 $("input[name=supply_quantity]").keyup(function(e){
 	maskoff();
 	var supp = parseInt($(this).val());
-	var qty = parseInt($("#31_05_qty").val());
+	var qty = parseInt($("#31_05_qty").val().replace(/,/g, ''));
+
 	if(supp > qty){
 		$(this).val("");
 	}
@@ -79,14 +80,14 @@ $("input[name=supply_quantity]").keyup(function(e){
 		
 		<!-- 지속적... -->
 		<?if ($part_type == "2"){?>
-		<div class="layer-pagination red" style="text-align: right;">
+		<div class="layer-pagination2 red" style="text-align: right;">
 			<ul>
 				<li class="navi-prev"><a href="#"><img src="/kor/images/nav_btn_down.png" alt="prev"></a></li>
 				<?for ($i = 1; $i <20 ; $i++) { 
 						if($i<3){
-							echo "<li class='pagingli bk' style='padding:1px;'><a href='#'>$i</a></li>";
+							echo "<li class='pagingli_1 bk' style='padding:1px;'><a href='#'>$i</a></li>";
 						}else{
-							echo "<li class='pagingli' style='padding:1px;'><a href='#'>$i</a></li>";
+							echo "<li class='pagingli_1' style='padding:1px;'><a href='#'>$i</a></li>";
 						}
 					}
 				?>
@@ -96,17 +97,17 @@ $("input[name=supply_quantity]").keyup(function(e){
 			
 		</div>
 		<?}else{	//-- 그 외-----------?>
-		<!-- layer-pagination -->
-		<div class="layer-pagination bk" style="text-align: right;">
+		<!-- layer-pagination2 -->
+		<div class="layer-pagination2 bk" style="text-align: right;">
 			<ul>
 			<?for ($i = 1; $i <=7 ; $i++) {  
-					echo "<li class='pagingli' style='padding:1px;'><a href='#'>$i</a></li>";
+					echo "<li class='pagingli_1' style='padding:1px;'><a href='#'>$i</a></li>";
 				}
 			?>
 				<li class="c-red2" lang="en"><font style="font-size:14px">Days</font></li>
 			</ul>
 		</div>
-		<!-- //layer-pagination -->		
+		<!-- //layer-pagination2 -->		
 		<?}?>
 		<div class="layer-data">
 			<table class="stock-list-table">
@@ -120,7 +121,7 @@ $("input[name=supply_quantity]").keyup(function(e){
 						<th scope="col" class="t-rohs">RoHS</th>
 						<th scope="col" class="t-oty" style="width:60px;">O'ty</th>
 						<th scope="col" class="t-unitprice">Unit Price</th>
-						<th scope="col" class="delivery t-orderoty" lang="ko" style="width:60px;">발주수량</th>
+						<!--<th scope="col" class="delivery t-orderoty" lang="ko" style="width:60px;">발주수량</th>-->
 						<th scope="col" lang="ko" class="t-supplyoty">공급수량</th>
 						<th scope="col" lang="ko" style="width:75px;">납기</th>
 					</tr>
