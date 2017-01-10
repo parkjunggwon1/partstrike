@@ -780,17 +780,41 @@ if ($typ =="odramendconfirm2"){ //구매자: 수정발주서(P.O Amendment)12_07
 }
 
 if($typ == "poano"){ //------------- 2016-04-18 : 수정발주서 번호 생성
-    $sql = "update odr set amend_no = '".get_auto_no("POA", "odr" , "amend_no")."', amend_date = now()  where odr_idx=".$odr_idx;
-    $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
+	//2017-01-03 : 재고수량과 단가 체크
+	$quantity_cnt = 0;
+	$price_cnt = 0;
+	$result =QRY_ODR_DET_LIST(0," and a.odr_idx=$odr_idx",0,"","asc");
+	while($row = mysql_fetch_array($result)){
+		$_det_idx = replace_out($row["odr_det_idx"]);
+		$_quantity = replace_out($row["quantity"]);
+		$_odr_stock = replace_out($row["odr_stock"]);
+		$_odr_quantity = replace_out($row["odr_quantity"]);
+		$_supp_quantity = replace_out($row["supply_quantity"]);
+		$_part_price = replace_out($row["price"]);
+		$_odr_price = replace_out($row["odr_price"]);
+		if(($_quantity+$_supp_quantity)<$_odr_quantity) $quantity_cnt++;
+		if($_part_price != $_odr_price){
+			$price_cnt++;
+			//det 테이블의 구매가격 Update
+			update_val("odr_det","odr_price",$_part_price, "odr_det_idx", $_det_idx);
+		}
+	}
+	if($price_cnt>0){
+		echo "PRICE";
+	}elseif($quantity_cnt>0){
+		echo "STOCK";
+	}else{
+		$sql = "update odr set amend_no = '".get_auto_no("POA", "odr" , "amend_no")."', amend_date = now()  where odr_idx=".$odr_idx;
+		$result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
 
-    $ship_sql = "update ship set ship_info = '".$ship_info."', ship_account_no = '".$ship_account_no."', memo = '".$memo."',insur_yn='".$insur_yn."',delivery_addr_idx='".$delivery_addr_idx."'  where odr_idx=".$odr_idx;   
+		$ship_sql = "update ship set ship_info = '".$ship_info."', ship_account_no = '".$ship_account_no."', memo = '".$memo."',insur_yn='".$insur_yn."',delivery_addr_idx='".$delivery_addr_idx."'  where odr_idx=".$odr_idx;   
+		$ship_result = mysql_query($ship_sql,$conn) or die ("SQL Error : ". mysql_error());
 
-    $ship_result = mysql_query($ship_sql,$conn) or die ("SQL Error : ". mysql_error());
-
-    if($result){
-        echo "SUCCESS";
-        exit;
-    }
+		if($result){
+			echo "SUCCESS";
+			exit;
+		}
+	}
 }
 
 if($typ =="chmybank"){  //--------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1792,7 +1816,6 @@ if ($typ =="periodcfrm"){
     $sql = "update part set part_no = '$part_no',
             manufacturer = '$manufacturer',
             package= '$package',
-            invreg_chk = 1,
             dc = '$dc'
             where part_idx = $part_idx";
     $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());

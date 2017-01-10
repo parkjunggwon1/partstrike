@@ -261,7 +261,7 @@ switch($actty) {
 
 	   $sql = "insert into odr_history set 
 				odr_idx = '$odr_idx'
-				
+				//,odr_det_idx = '$odr_det_idx'
 				,status = 15
 				,status_name = '완료'
 				,etc1 = ''
@@ -1463,6 +1463,35 @@ switch($actty) {
 	fnSelectArea($actkind, $actidx,$lang);  
 	break;
 
+	//2017-01-09 : odr_det 테이블의 데이터를 Invoice 데이터로 Update
+	case "DIU":
+		$invoice_no = get_any("odr", "invoice_no", "odr_idx=$odr_idx");
+		$invo_idx = get_any("odr", "odr_idx", "odr_status='99' and doc_no='$invoice_no'");
+
+		$qry =QRY_ODR_DET_LIST(0," and a.odr_idx=$invo_idx",0,"","asc");
+		while($row = mysql_fetch_array($qry)){
+			$part_idx = replace_out($row["part_idx"]);
+			$odr_stock = replace_out($row["odr_stock"]);
+			$odr_quantity = replace_out($row["odr_quantity"]);
+			$odr_price = replace_out($row["odr_price"]);
+
+			$sql = "UPDATE odr_det  SET 
+					odr_stock = $odr_stock,
+					odr_quantity = $odr_quantity,
+					odr_price = $odr_price 
+					WHERE odr_idx = $odr_idx AND part_idx=$part_idx";
+			$result=mysql_query($sql);
+		}
+		if($result){
+			$data["err"] = "OK";
+		}else{
+			$data["err"] = $result;
+		}
+		//json
+		$output = json_encode($data);
+		echo $output;
+	break;
+
 
 
 }
@@ -1490,8 +1519,8 @@ function fnOdrlist($odr_type, $this_mem_idx){
 		}
 }
 
-function fnRemitList($yr,$mon,$remit_ty,$page){
-	echo GF_GET_REMIT_LIST($yr,$mon,$remit_ty,$page);
+function fnRemitList($yr,$mon,$remit_ty,$mem_id, $mem_nm, $charge_method, $invoice_no,$page){
+	echo GF_GET_REMIT_LIST($yr,$mon,$remit_ty,$mem_id, $mem_nm, $charge_method, $invoice_no,$page);
 }
 function fnmain_list($actkind, $actidx){
 	

@@ -52,7 +52,7 @@ if ($cnt == 0 ){?>
 	$result =QRY_ODR_HISTORY_LIST($recordcnt, $searchand, $page, "odr_history_idx desc");
 	if($result){
 		$row = mysql_fetch_array($result);
-		$odr_idx= replace_out($row["odr_idx"]);	
+		$odr_idx= replace_out($row["odr_idx"]);
 	}
 	?>
 	<!-- //layer-left-menu -->
@@ -68,7 +68,11 @@ if ($cnt == 0 ){?>
 				include $_SERVER["DOCUMENT_ROOT"]."/include/paging3.php"; ?>								
 		</div>
 		<!-- //layer-pagination -->
-		<?=GET_ODR_HISTORY_LIST("30_10",$odr_idx)?>
+		<?
+			//invoice log 
+			Update_Invoce_Data($odr_idx);
+			echo GET_ODR_HISTORY_LIST("30_10",$odr_idx)
+		?>
 	</div>
 	<!-- //layer-content -->
 <?}?>

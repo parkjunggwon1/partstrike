@@ -1770,4 +1770,27 @@ function round_down($val,$d)
 	return $price;
 }
 //시작 금액 소수점 자리 절삭 끝
+
+/********************************************************************************************************************
+*** 2017-01-09 : odr_idx 를 받아와서 odr_det 테이블의 데이터를 '송장' Log의 데이터로 Update
+********************************************************************************************************************/
+function Update_Invoce_Data($odr_idx){
+	$invoice_no = get_any("odr", "invoice_no", "odr_idx=$odr_idx");
+	$invo_idx = get_any("odr", "odr_idx", "odr_status='99' and doc_no='$invoice_no'");
+
+	$qry =QRY_ODR_DET_LIST(0," and a.odr_idx=$invo_idx",0,"","asc");
+	while($row = mysql_fetch_array($qry)){
+		$part_idx = replace_out($row["part_idx"]);
+		$odr_stock = replace_out($row["odr_stock"]);
+		$odr_quantity = replace_out($row["odr_quantity"]);
+		$odr_price = replace_out($row["odr_price"]);
+
+		$sql = "UPDATE odr_det  SET 
+				odr_stock = $odr_stock,
+				odr_quantity = $odr_quantity,
+				odr_price = $odr_price 
+				WHERE odr_idx = $odr_idx AND part_idx=$part_idx";
+		$result=mysql_query($sql);
+	}
+}
 ?>

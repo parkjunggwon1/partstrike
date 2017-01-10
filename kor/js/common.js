@@ -1249,12 +1249,29 @@ $(document).ready(function(){
 				//2016-04-18 : 송장번호 생성 및 저장
 				$.ajax({
 						url: "/kor/proc/odr_proc.php", 
-						data: "typ=poano&odr_idx="+odr_idx+"&ship_info="+$("#ship_info").val()+"&ship_account_no="+$("#ship_account_no").val()+"&memo="+encodeURI($("#memo").val())+"&insur_yn="+insur_chk+"&delivery_addr_idx="+$("#delivery_addr_idx").val(),
+						data: "typ=poano&odr_idx="+odr_idx+"&ship_info="+$("#ship_info").val()+"&ship_account_no="+$("#ship_account_no").val()+"&memo="+$("#memo").val()+"&insur_yn="+insur_chk+"&delivery_addr_idx="+$("#delivery_addr_idx").val(),
 						encType:"multipart/form-data",
-						success: function (data) {	
+						success: function (data) {
+							if($.trim(data)=="PRICE"){	//가격변동 경고!!
+									closeCommLayer("layer3");
+									closeCommLayer("layer4");
+									openCommLayer('layer3','09_01','?odr_idx='+odr_idx);
+									openLayer('layer4','alarm2','?odr_idx='+odr_idx);	//가격변동 경고창
+							}else{
+								if($.trim(data)=="STOCK"){
+									//alert("재고수량 변경 경고!!");
+									closeCommLayer("layer4");
+									openLayer('layer3','09_01','?odr_idx='+odr_idx);
+									openLayer('layer4','alarm','?odr_idx='+odr_idx);
+								}else{
+									openLayer("layer5","12_07","?odr_idx="+odr_idx); //12_07에서의 번호생성은 삭제
+								}
+							}
+							/**
 							if (trim(data) == "SUCCESS"){						
 								openLayer("layer5","12_07","?odr_idx="+odr_idx); //12_07에서의 번호생성은 삭제
 							}
+							**/
 						}
 				});
 			}
@@ -1975,8 +1992,24 @@ $(document).ready(function(){
 		openLayer("layer4","23_21");
 	});	
 
-	//결제 팝업 (Black Ver)
+	//결제 팝업 (Black Ver) : Invoice 서류에서 [결재] --------------------------------------------
 	$("body").on("click",".btn-pop-3012",function(){
+		//2017-01-09 : odr_det 테이블의 데이터를 Invoice 데이터로 Update
+		$.ajax({ 
+			type: "GET", 
+			url: "/ajax/proc_ajax.php", 
+			data: { actty : "DIU",
+				odr_idx : $(this).attr("odr_idx")
+			},
+			dataType : "json" ,
+			async : false ,
+			success: function(data){
+				if(data.err == "OK"){
+				}else{
+					alert(data.err);
+				}
+			}
+		});
 
 		if ($(this).attr("tot_amt")=="")
 		{
@@ -1984,11 +2017,11 @@ $(document).ready(function(){
 			$(this).attr("tot_amt",$("#tot_"+$(this).attr("odr_idx")).val());
 		}
 		openLayer("layer4","30_12","?odr_idx="+$(this).attr("odr_idx")+"&odr_det_idx="+$(this).attr("odr_det_idx")+"&tot_amt="+$(this).attr("tot_amt")+"&fromLoadPage="+$(this).attr("fromLoadPage")+"&deposit_yn="+$(this).attr("deposit_yn")+"&charge_type="+$(this).attr("charge_type"));
-	});	
-	//결제 팝업 (Red Ver)
+	});
+	//결제 팝업 (Red Ver) --------------------------------------------------------------------
 	$("body").on("click",".btn-pop-21-1-11",function(){		
 		openLayer("layer4","21_1_11","?odr_idx="+$(this).attr("odr_idx")+"&odr_det_idx="+$(this).attr("odr_det_idx")+"&tot_amt="+$("#tot_"+$(this).attr("odr_det_idx")).val()+"&fromLoadPage="+$(this).attr("fromLoadPage")+"&charge_type="+$(this).attr("charge_type"));
-	});	
+	});
 
 	//결제창에서 Mybank 클릭시 (Black ver)
 	$("body").on("click",".btn-pop-18-2-11",function(){

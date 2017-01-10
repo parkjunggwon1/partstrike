@@ -185,8 +185,8 @@ function GF_GET_MEMFEE_LIST2($page){
 			?>
 			<tr style="<?=$bgcolor?>">
 				<td><?=$ListNO?></td>
-				<td class="c-red2" lang="en" style="letter-spacing:0"><?=substr($reg_date,0,4)?><span lang="ko">년</span> <?=substr($reg_date,5,2)?><span lang="ko">월</span> <?=substr($reg_date,8,2)?>일 ~ 
-				<?=substr($end_date,0,4)?><span lang="ko">년</span> <?=substr($end_date,5,2)?><span lang="ko">월</span> <?=substr($reg_date,8,2)?><span lang="ko">일</span></td>
+				<td class="c-red2" lang="en" style="letter-spacing:0"><?=substr($reg_date,0,4)?>  <?=substr($reg_date,5,2)?>  <?=substr($reg_date,8,2)?> ~ 
+				<?=substr($end_date,0,4)?>  <?=substr($end_date,5,2)?>  <?=substr($reg_date,8,2)?> </td>
 				<td class="t-lt" style="width:85px"><?=$mem_id?></td>
 				<td class="t-lt"><?=$mem_nm_en?>/<?=$pos_nm_en?></td>
 				<td class="t-rt pd-0"><a href="javascript: memfee_det(<?=$mybank_idx?>);"><img src="/kor/images/btn_record3.gif" alt="기록"></a></td>

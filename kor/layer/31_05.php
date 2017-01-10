@@ -33,7 +33,8 @@ $(".layer-pagination.red li, .layer-pagination.bk li").click(function(){
 		$(".pagingli:eq("+(thisPage-1)+")").addClass("current");
 		$("#period").val(thisPage);
 		$(".btn-area span").hide();
-		$(".btn-area button:eq(0)").show();
+		//$(".btn-area button:eq(0)").show();
+		$("#31-05-smt").show();
 	}
 
 });
@@ -131,7 +132,7 @@ $("input[name=supply_quantity]").keyup(function(e){
 		
 		<div class="btn-area t-rt">
 			<span><img src="/kor/images/btn_transmit_1.gif" alt="전송"></span>
-			<button type="button" class="sell-mn01-3106" style="display:none;"><img src="/kor/images/btn_transmit.gif" alt="전송"></button>
+			<button type="button" id="31-05-smt" class="sell-mn01-3106" style="display:none;"><img src="/kor/images/btn_transmit.gif" alt="전송"></button>
 			<button type="button" class="btn-pop-0201"><img src="/kor/images/btn_delete2.gif" alt="삭제"></button>
 		</div>
 	</form>

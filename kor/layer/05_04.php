@@ -583,7 +583,6 @@ $(document).ready(function(){
 	});
 
 	
-alert(checkActive());
 
 
 	if($("#ship_info").attr("disabled")!="disabled"){

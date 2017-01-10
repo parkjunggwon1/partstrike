@@ -530,7 +530,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 			?>
 		</ul>
 	</div>
-		<input type="hidden" name="odr_idx" id="odr_idx_30_09" value="<?=$odr_idx?>">
+		<input type="hidden" name="odr_idx" id="odr_idx_30_09" value="<?=$row_odr["odr_idx"]?>">
 		<input type="hidden" name="sell_mem_idx" id="sell_mem_idx_30_09" value="<?=$row_odr["sell_mem_idx"]?>">
 		<input type="hidden" name="part_type" id="part_type" value="<?=$row_odr_det["part_type"]?>">
 		
@@ -544,7 +544,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 			if (!$charge_type) { $charge_type = "3";}			
 			if(QRY_CNT("mybank", "and odr_idx = $odr_idx and charge_type ='".$charge_type."' and charge_method = '2' and put_money_yn is null")==0){?>
 				<?if($row_odr_det["part_type"]!="7"){?>
-					<button type="button" class="btn-dialog-0901"><img src="/kor/images/btn_order_edit.gif" alt="발주서 수정"></button>
+					<button type="button" class="btn-dialog-0901" now_idx="<?=$now_idx;?>"><img src="/kor/images/btn_order_edit.gif" alt="발주서 수정"></button>
 				<?}?>
 				<!--<button type="button" class="btn-dialog-18-2-14"><img src="/kor/images/btn_refund.gif" alt="환불"></button>-->
 				<button type="button" class="btn-pop-3012" odr_idx="<?=$row_odr["odr_idx"]?>" odr_det_idx="<?=$row_odr["odr_det_idx"]?>" tot_amt="<?=$tot_amt?>" fromLoadPage="<?=$LoadPage?>"  deposit_yn="<?=$_SESSION["DEPOSIT"]=="N"?"Y":""?>" charge_type="<?=$charge_type?>"><img src="/kor/images/btn_payment.gif" alt="결제"></button>

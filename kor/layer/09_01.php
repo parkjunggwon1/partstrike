@@ -379,49 +379,6 @@ $(document).ready(function(){
 	}
 
 	checkActive();
-
-	$("input:checkbox[name^=odr_det_idx]").click(function(){	
-		var amend_yn;
-		amend_yn = "";
-		$("input:checkbox[name^=odr_det_idx]").each(function(e){ //선택유무와 무관
-			
-			var chk_val;
-
-			chk_val = $(this).is(":checked")
-			if (chk_val==true)
-			{
-				amend_yn = amend_yn + $(this).attr("amend_yn");
-				if (amend_yn.indexOf("Y"))
-				{		
-					if(amend_yn == "N")
-					{
-						$("#btn_cancel_09_01").css("cursor","pointer").addClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel.gif");
-					}
-					else
-					{
-						$("#btn_del_09_01").css("cursor","").attr("onclick","").attr("src","/kor/images/btn_delete2_1.gif");
-						$("#btn_cancel_09_01").css("cursor","").removeClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel_1.gif");	
-					}						
-					
-				}
-				else
-				{				
-					$("#btn_del_09_01").css("cursor","pointer").attr("onclick","del_sel();").attr("src","/kor/images/btn_delete2.gif");	
-					$("#btn_cancel_09_01").css("cursor","").removeClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel_1.gif");
-				}
-			}
-			else
-			{
-				$("#btn_del_09_01").css("cursor","").attr("onclick","del_sel();").attr("src","/kor/images/btn_delete2_1.gif");	
-
-			}
-			
-
-		});
-		
-	});
-
-	
 }); //end of ready
 
 function checkActive(){

@@ -30,8 +30,8 @@ $invoice_no = get_want("mybank","invoice_no"," and mybank_idx='$idx'");
 		</thead>
 		<tbody>
 		<?
-		$searchand .= " AND invoice_no='$invoice_no' and a.mem_idx=b.mem_idx"; 
-		$result =QRY_LIST(" mybank a, member b ","all","1",$searchand," a.mem_idx ");
+		$searchand .= " AND invoice_no='$invoice_no' and a.mem_idx=b.mem_idx "; 
+		$result =QRY_C_LIST("a.*,b.mem_id,b.mem_nm_en, b.pos_nm_en"," mybank a, member b ","all","1",$searchand," a.mem_idx ");
 
 		
 		$i=0;
@@ -40,10 +40,12 @@ $invoice_no = get_want("mybank","invoice_no"," and mybank_idx='$idx'");
 			$reg_date= substr(replace_out($row["reg_date"]),0,10);
 			$mem_id= cutbyte(replace_out($row["mem_id"]),15);
 			$invoice_no= replace_out($row["invoice_no"]);
+			$rel_idx= replace_out($row["rel_idx"]);
 			$mem_nm_en= replace_out($row["mem_nm_en"]);
 			$pos_nm_en= replace_out($row["pos_nm_en"]);
 			$charge_method= replace_out($row["charge_method"]);
 			$charge_amt= replace_out($row["charge_amt"]);
+			$mybank_idx= replace_out($row["mybank_idx"]);
 			$tot =$tot+$charge_amt;
 
 			if ($charge_method=="1"){
@@ -55,15 +57,19 @@ $invoice_no = get_want("mybank","invoice_no"," and mybank_idx='$idx'");
 			if ($charge_method=="mybank"){
 				$charge_method=$charge_method;
 			}
+			if ($rel_idx=="0")
+			{
+				$mem_nm_en=$pos_nm_en;
+				$pos_nm_en="CEO";
+
+			}
 			?>
-			
-			
 			<tr>
 				<td style="padding:5px 0;"><?=$i?></td>
-				<td><?=substr($reg_date,0,4)?><span lang="ko">년</span> <?=substr($reg_date,5,2)?><span lang="ko">월</span> <?=substr($reg_date,8,2)?><span lang="ko">일</span></td>
+				<td lang="en"><?=substr($reg_date,0,4)?> <?=substr($reg_date,5,2)?> <?=substr($reg_date,8,2)?></td>
 				<td class="t-lt" style="padding-left:5px;"><?=$mem_id?></td>
-				<td class="t-lt"><?=$mem_nm_en?>/<?=$pos_nm_en?></td>
-				<td><span class="c-blue"><?=$invoice_no?></span></td>
+				<td class="t-lt"><?=$mem_nm_en?> / <?=$pos_nm_en?></td>
+				<td><span class="c-blue"><a href='javascript:openCommLayer("layer5","23_77_forread","?mybank_idx=<?=$mybank_idx?>&forread=Y")'><u><?=$invoice_no?></u></a></span></td>
 				<td><?=$charge_method?></td>
 				<td class="t-rt" style="padding-right:5px;">$<?=number_format($charge_amt,2)?></td>				
 			</tr>

@@ -223,6 +223,6 @@ if ($invoice_no==""){
 	
 	<div class="btn-area">
 		<button type="button" class="f-lt"><img src="/kor/images/btn_print.gif" alt="인쇄"></button>
-		<button type="button" class="f-rt" onclick="check3();"><img src="/kor/images/btn_payment.gif" alt="결제"></button>
+		<?if ($forread==""){?><button type="button" class="f-rt" onclick="check3();"><img src="/kor/images/btn_payment.gif" alt="결제"></button><?}?>
 	</div>
 </div>
