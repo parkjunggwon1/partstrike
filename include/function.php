@@ -1565,8 +1565,9 @@ function GET_WhatsNew($ty,$viewty){
 
 
 
-function openSheet($status, $etc1, $odr_idx,$etc_change){
+function openSheet($status, $etc1, $odr_idx,$etc_change,$odr_history_idx=""){
 	
+		
 
 	if ($etc_change)
 	{
@@ -1582,7 +1583,7 @@ function openSheet($status, $etc1, $odr_idx,$etc_change){
 			 break;
 			case "5":  //결제완료
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"12_07\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>"; //JSJ
-			 $return_val = "<a style='color:#00759e;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"payment_ok\",\"?odr_idx=".$odr_idx."\")'>".$etc1."</a>"; //2016-04-18
+			 $return_val = "<a style='color:#00759e;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"payment_ok\",\"?odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."\")'>".$etc1."</a>"; //2016-04-18
 			 break;
 		   case "18": //송장
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>";  //JSJ
@@ -1623,7 +1624,7 @@ function openSheet($status, $etc1, $odr_idx,$etc_change){
 			 break;
 			case "5":  //결제완료
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"12_07\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>"; //JSJ
-			 $return_val = "<a style='color:#000;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"payment_ok\",\"?odr_idx=".$odr_idx."\")'>".$etc1."</a>"; //2016-04-18
+			 $return_val = "<a style='color:#000;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"payment_ok\",\"?odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."\")'>".$etc1."</a>"; //2016-04-18
 			 break;
 		   case "18": //송장		   
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>";  //JSJ

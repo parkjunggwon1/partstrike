@@ -1907,7 +1907,7 @@ $(document).ready(function(){
 					});
 					$("#new_odr_idx").val(new_odr_idx);
 				var formData = $("#f_05_04").serialize(); 
-				openCommLayer("layer4","30_04","?odr_idx="+$("#odr_idx_05_04").val()+"&new_odr_idx="+new_odr_idx+"&whole_part_type="+$("#whole_part_type").val()+formData);
+				openCommLayer("layer4","30_04","?"+formData+"&odr_idx="+$("#odr_idx_05_04").val()+"&new_odr_idx="+new_odr_idx+"&whole_part_type="+$("#whole_part_type").val());
 			}
 		}		
 	});

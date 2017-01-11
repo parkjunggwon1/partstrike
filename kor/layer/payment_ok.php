@@ -13,6 +13,12 @@ $pay_type = $odr_his[etc1];
 $buyer_idx = $odr_his[buy_mem_idx];
 $seller_idx = $odr_his[sell_mem_idx];
 
+
+$odr_his2=get_odr_history($odr_history_idx);
+
+$charge_ty = $odr_his2[charge_ty];
+$etc2_val = $odr_his2[etc2];
+
 $buyer_nation = get_any("member","nation","mem_idx=$buyer_idx");
 $seller_nation = get_any("member","nation","mem_idx=$seller_idx");
 
@@ -20,6 +26,8 @@ $seller_nation = get_any("member","nation","mem_idx=$seller_idx");
 
 $ship_idx = get_any("ship","delivery_addr_idx","odr_idx='$odr_idx'");
 $sub_price = get_any("odr_det","sum(supply_quantity*odr_price)","odr_idx='$odr_idx'");
+
+$part_type = get_any("odr_det","max(part_type)","odr_idx='$odr_idx'");
 
 if($ship_idx == 0 || $ship_idx == "")
 {
@@ -40,10 +48,12 @@ if($vat_price==0)
 $vat_val = $vat_price/100;
 $vat_plus =  $sub_price*$vat_val;
 $total_price = $sub_price+$vat_plus;
+$first_price = $total_price/10;
 $vat_plus =  round_down($vat_plus,4);
 
 $sub_price = round_down($sub_price,4);
 $total_price = round_down($total_price,4);
+$first_price = round_down($first_price,4);
 	
 ?>
 
@@ -57,27 +67,74 @@ $total_price = round_down($total_price,4);
 	<table class="price-table1" lang="en" align="center">
 		<tbody>
 			<?
-			if ($buyer_nation == $seller_nation)
+			if ($charge_ty=="F")
+			{
+
+				//지속적(납기3주이상)--------------------------------------
+				if ($part_type == 2) 
+				{ 
+				?>
+					<tr>
+						<th scope="row"><span >Total</span> : </th>
+						<td><span >$<?=number_format($total_price,4)?></span></td>
+					</tr>
+					<tr>
+						<th scope="row"><span >Down Payment</span> : </th>
+						<td><span >$<?=number_format($first_price,4)?></span></td>
+					</tr>
+					<tr class="lst">
+						<td colspan="2"></td>
+					</tr>
+					<tr>
+						<th scope="row"><span class="c-blue">Total : </span></th>
+						<td><span class="c-blue"><?=$etc2_val?></span></td>
+					</tr>
+					
+				<?
+				}
+				else
+				{
+					if ($buyer_nation == $seller_nation)
+					{
+					?>
+						<tr>
+							<th scope="row"><span >Sub Total</span> : </th>
+							<td><span >$<?=number_format($sub_price,4)?></span></td>
+						</tr>
+						<tr>
+							<th scope="row"><span ></span> VAT : </th>
+							<td><span >$<?=number_format($vat_plus,4)?></span></td>
+						</tr>
+						<tr class="lst">
+							<td colspan="2"></td>
+						</tr>
+					<?
+					}
+				?>
+					<tr>
+						<th scope="row"><span class="c-blue">Total : </span></th>
+						<td><span class="c-blue">$<?=number_format($total_price,4)?></span></td>
+					</tr>
+				<?
+				}
+				
+			}
+			else
 			{
 			?>
 				<tr>
-					<th scope="row"><span >Sub Total</span> : </th>
-					<td><span >$<?=number_format($sub_price,4)?></span></td>
+					<th scope="row"><span >Down Payment</span> : </th>
+					<td><span ><?=$etc2_val?></span></td>
 				</tr>
 				<tr>
-					<th scope="row"><span ></span> VAT : </th>
-					<td><span >$<?=number_format($vat_plus,4)?></span></td>
+					<th scope="row"><span ></span> Total : </th>
+					<td><span ><?=$etc2_val?></span></td>
 				</tr>
-				<tr class="lst">
-					<td colspan="2"></td>
-				</tr>
+				
 			<?
 			}
 			?>			
-			<tr>
-				<th scope="row"><span class="c-blue">Total : </span></th>
-				<td><span class="c-blue">$<?=number_format($total_price,4)?></span></td>
-			</tr>
+			
 		</tbody>
 	</table>
 	<div class="btn-area t-rt">

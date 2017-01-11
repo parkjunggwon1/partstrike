@@ -63,7 +63,9 @@ function checkActive(){
 	});
 	//alert("selCnt:"+selCnt);
 	//송장확인 버튼
+
 	if(selCnt == det_cnt && opCond==det_cnt && opCond1==det_cnt && opCond2==det_cnt && sqty==det_cnt) btnConfirm = true;
+
 	if(btnConfirm){
 		$("#btn_confirm_3008").css("cursor","pointer").addClass("btn-view-sheet-3009").attr("src","/kor/images/btn_invoice_confirm.gif");
 	}else{
@@ -257,7 +259,7 @@ $(document).ready(function(){
 									<tr <?=$part_type=="2"?"disabled":""?>>
 										<th scope="row" style="width:230px">
 											&nbsp;부품상태&nbsp;&nbsp;<div class="select type4" lang="en" style="width:150px">
-											<label  class="c-blue"><?=($part_condition)?GF_Common_GetSingleList("PARTCOND",$part_condition):""?></label>
+											<label  class="c-blue" ><?=($part_condition)?GF_Common_GetSingleList("PARTCOND",$part_condition):""?></label>
 											<?=GF_Common_SetComboList("part_condition[]", "PARTCOND", "", 1, "True",  "", $part_condition , "", "", "part_condition");?>
 											</div>
 										</th>

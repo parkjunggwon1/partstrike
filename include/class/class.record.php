@@ -211,7 +211,11 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			<!--odr_stock으로 바꿈 2016-11-8-->
 			
 			<?if ($odr_status==0 || $odr_status==1 || $odr_status==2 || $odr_status==3 || $odr_status==8 || $odr_status==16 || $odr_status==18 || $odr_status==19 || $odr_status==20 || $odr_status==31){?>
-				<td  <?=$goJump?>  class="t-rt"><?=$odr_stock<=0?"":number_format($odr_stock)?></td>			
+				<?if ($part_type==2){?>
+					<td  <?=$goJump?>  class="t-rt">I</td>
+				<?}else{?>
+					<td  <?=$goJump?>  class="t-rt"><?=$odr_stock<=0?"":number_format($odr_stock)?></td>
+				<?}?>			
 			<?}else{?>
 				<td  <?=$goJump?>  class="t-rt"><?=$supply_quantity<=0?"":number_format($supply_quantity)?></td>
 			<?}?>
@@ -226,6 +230,12 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				<?}?>		
 			
 			<?}?>
+			<?
+				if($period !="stock")
+				{
+					$period = $period."WK";
+				}
+			?>
 			<td class="delivery" <?=$goJump?>><?=($period)?"<span class='c-red'>".$period."</span>":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>
 			<?if ($odr_type == "B") {  //--구매자 화면일경우?>
 				<?//if ((($part_type=="2"||$part_type=="5"||$part_type=="6") && $period=="") || ($save_yn=="Y")){?>
