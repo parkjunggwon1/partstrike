@@ -169,7 +169,7 @@ $(document).ready(function(){
 	$("section[class^='layer']").on("click",".btn-close",function(){
 		
 		if (!$(this).hasClass("btn-order-periodconfirm"))
-		{			
+		{
 			$(this).parents("section[class^='layer']").removeClass("open");
 			$("body").removeClass("open-layer");
 			if($(this).parents("section[class^='layer']").hasClass("layer7-section")==true){
@@ -1035,7 +1035,7 @@ $(document).ready(function(){
 			//openLayer("layer5","30_11");
 			if ($("#for_downpay_fr_seller").val()=="Y"){extraVal = "&for_downpay_fr_seller=Y";}
 			if ($(this).attr("for_readonly")!=""){extraVal = extraVal+"&for_readonly="+$(this).attr("for_readonly");}
-			if ($("#odr_idx_30_10").val()>0)
+			if ($("#odr_idx_30_10").val()>0)	//What's New : 송장(구매자)
 			{
 				odr_idx = $("#odr_idx_30_10").val();	
 			}else if($("#odr_idx_01_37").val()>0){
@@ -1249,7 +1249,7 @@ $(document).ready(function(){
 				//2016-04-18 : 송장번호 생성 및 저장
 				$.ajax({
 						url: "/kor/proc/odr_proc.php", 
-						data: "typ=poano&odr_idx="+odr_idx+"&ship_info="+$("#ship_info").val()+"&ship_account_no="+$("#ship_account_no").val()+"&memo="+encodeURIComponent($("#memo").val())+"&insur_yn="+insur_chk+"&delivery_addr_idx="+$("#delivery_addr_idx").val(),
+						data: "typ=poano&odr_idx="+odr_idx+"&ship_info="+$("#ship_info").val()+"&ship_account_no="+$("#ship_account_no").val()+"&memo="+$("#memo").val()+"&insur_yn="+insur_chk+"&delivery_addr_idx="+$("#delivery_addr_idx").val(),
 						encType:"multipart/form-data",
 						success: function (data) {
 							if($.trim(data)=="PRICE"){	//가격변동 경고!!
@@ -1264,13 +1264,14 @@ $(document).ready(function(){
 									openLayer('layer3','09_01','?odr_idx='+odr_idx);
 									openLayer('layer4','alarm','?odr_idx='+odr_idx);
 								}else{
-									if($.trim(data)=="SUCCESS"){
-										openLayer("layer5","12_07","?odr_idx="+odr_idx); //12_07에서의 번호생성은 삭제
-									}else{
-										alert($.trim(data));
-									}
+									openLayer("layer5","12_07","?odr_idx="+odr_idx); //12_07에서의 번호생성은 삭제
 								}
 							}
+							/**
+							if (trim(data) == "SUCCESS"){						
+								openLayer("layer5","12_07","?odr_idx="+odr_idx); //12_07에서의 번호생성은 삭제
+							}
+							**/
 						}
 				});
 			}
@@ -1782,11 +1783,11 @@ $(document).ready(function(){
 		delivery_save();
 	});
 
-	
+	//30_09(Invoice)에서 [발주서 수정] 버튼 ----------------------------
 	$("body").on("click",".btn-dialog-0901",function(){
 		var odr_idx =  $(this).parent().attr("odr_idx");
+		//var odr_idx =  $(this).attr("now_idx");
 		var odr_det_idx =  $(this).parent().attr("odr_det_idx");
-
 		
 		$.ajax({ 
 		type: "GET", 
@@ -1802,6 +1803,7 @@ $(document).ready(function(){
 			}
 		});
 	});
+	//--------------------------------------------------------------------------------
 	$("body").on("click",".btn-dialog-1219",function(){
 		openLayer("layer3","12_19");
 	});
@@ -1993,22 +1995,6 @@ $(document).ready(function(){
 
 	//결제 팝업 (Black Ver) : Invoice 서류에서 [결재] --------------------------------------------
 	$("body").on("click",".btn-pop-3012",function(){
-		//2017-01-09 : odr_det 테이블의 데이터를 Invoice 데이터로 Update
-		$.ajax({ 
-			type: "GET", 
-			url: "/ajax/proc_ajax.php", 
-			data: { actty : "DIU",
-				odr_idx : $(this).attr("odr_idx")
-			},
-			dataType : "json" ,
-			async : false ,
-			success: function(data){
-				if(data.err == "OK"){
-				}else{
-					alert(data.err);
-				}
-			}
-		});
 
 		if ($(this).attr("tot_amt")=="")
 		{
@@ -2020,7 +2006,7 @@ $(document).ready(function(){
 	//결제 팝업 (Red Ver) --------------------------------------------------------------------
 	$("body").on("click",".btn-pop-21-1-11",function(){		
 		openLayer("layer4","21_1_11","?odr_idx="+$(this).attr("odr_idx")+"&odr_det_idx="+$(this).attr("odr_det_idx")+"&tot_amt="+$("#tot_"+$(this).attr("odr_det_idx")).val()+"&fromLoadPage="+$(this).attr("fromLoadPage")+"&charge_type="+$(this).attr("charge_type"));
-	});
+	});	
 
 	//결제창에서 Mybank 클릭시 (Black ver)
 	$("body").on("click",".btn-pop-18-2-11",function(){
@@ -2559,10 +2545,8 @@ $(document).ready(function(){
 function updateQty(){
 	var err = false;
 	var qty, amd_yn, quantity;
-	
 	//-- Row 수량만큼 반복--------------------
 	$("input[name^=odr_quantity]").each(function(){
-		
 		if($(this).val()==""){
 			qty = 0;
 		}else{

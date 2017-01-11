@@ -723,6 +723,20 @@ if ($typ =="odramendconfirm"){ // 확정 발주서(P.O Amendment)12_07 처리 --
 }
 
 if ($typ =="odramendconfirm2"){ //구매자: 수정발주서(P.O Amendment)12_07 처리 / 2016-04-15 : Log 기록 -------------------------------------------------------------
+		//2017-01-10 : ship 정보를 임시테이블에서 복사
+		$sql = "
+				UPDATE evictor23.ship AS a
+					JOIN evictor23.ship_temp AS b
+						ON a.odr_idx=b.odr_idx
+				SET a.ship_info = b.ship_info,
+					a.ship_account_no = b.ship_account_no,
+					a.memo = b.memo,
+					a.insur_yn = b.insur_yn,
+					a.delivery_addr_idx = b.delivery_addr_idx
+				WHERE a.odr_idx=$odr_idx
+				";
+		$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+
         //2016-12-06 : 재고 UPDATE('UQ'에서 Upate 것을 여기서 Update) - ccolle
         $result =QRY_ODR_DET_LIST(0," and odr_idx=$odr_idx ",0,"","asc");
         while($row = mysql_fetch_array($result)){
@@ -779,7 +793,8 @@ if ($typ =="odramendconfirm2"){ //구매자: 수정발주서(P.O Amendment)12_07
         }
 }
 
-if($typ == "poano"){ //------------- 2016-04-18 : 수정발주서 번호 생성
+/** 수정발주서(09_01) 에서 '발주서 확인' 클릭 시 처리 *****************************/
+if($typ == "poano"){
 	//2017-01-03 : 재고수량과 단가 체크
 	$quantity_cnt = 0;
 	$price_cnt = 0;
@@ -806,12 +821,23 @@ if($typ == "poano"){ //------------- 2016-04-18 : 수정발주서 번호 생성
 	}else{
 		$sql = "update odr set amend_no = '".get_auto_no("POA", "odr" , "amend_no")."', amend_date = now()  where odr_idx=".$odr_idx;
 		$result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
-
-		$ship_sql = "update ship set ship_info = '".$ship_info."', ship_account_no = '".$ship_account_no."', memo = '".$memo."',insur_yn='".$insur_yn."',delivery_addr_idx='".$delivery_addr_idx."'  where odr_idx=".$odr_idx;   
+		/** 2017-01-10 : ship 정보를 임시 테이블에 저장 했다가, '확정발주' 시 ship에 복사
+		$ship_sql = "update ship set ship_info = '".$ship_info."', ship_account_no = '".$ship_account_no."', memo = '".$memo."',insur_yn='".$insur_yn."',delivery_addr_idx='".$delivery_addr_idx."'  where odr_idx=".$odr_idx; 
+		**/
+		//임시테이블에 데이터 존재여부
+		$ship_idx = get_any("ship_temp", "ship_idx", "odr_idx=$odr_idx");
+		if($ship_idx>0){
+			$ship_sql = "update ship_temp set ship_info = '".$ship_info."', ship_account_no = '".$ship_account_no."', memo = '".$memo."',insur_yn='".$insur_yn."',delivery_addr_idx='".$delivery_addr_idx."'  where ship_idx=".$ship_idx;
+		}else{
+			$ship_sql = "insert into ship_temp set ship_info = '".$ship_info."', ship_account_no = '".$ship_account_no."', memo = '".$memo."',insur_yn='".$insur_yn."',delivery_addr_idx='".$delivery_addr_idx."', odr_idx=".$odr_idx.", reg_date=now()";
+		}
 		$ship_result = mysql_query($ship_sql,$conn) or die ("SQL Error : ". mysql_error());
 
 		if($result){
 			echo "SUCCESS";
+			exit;
+		}else{
+			echo $result;
 			exit;
 		}
 	}
