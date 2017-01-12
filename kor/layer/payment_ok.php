@@ -47,6 +47,7 @@ if($vat_price==0)
 
 $vat_val = $vat_price/100;
 $vat_plus =  $sub_price*$vat_val;
+$down_payment =  $sub_price*0.1;
 $total_price = $sub_price+$vat_plus;
 $first_price = $total_price/10;
 $vat_plus =  round_down($vat_plus,4);
@@ -55,6 +56,7 @@ $sub_price = round_down($sub_price,4);
 $total_price = round_down($total_price,4);
 $first_price = round_down($first_price,4);
 	
+$tax_name = get_any("tax", "tax_name", "nation=$seller_nation");
 ?>
 
 
@@ -75,12 +77,16 @@ $first_price = round_down($first_price,4);
 				{ 
 				?>
 					<tr>
-						<th scope="row"><span >Total</span> : </th>
-						<td><span >$<?=number_format($total_price,4)?></span></td>
+						<th scope="row"><span >Sub Total</span> : </th>
+						<td><span ><?=$etc2_val?></span></td>
 					</tr>
 					<tr>
 						<th scope="row"><span >Down Payment</span> : </th>
-						<td><span >$<?=number_format($first_price,4)?></span></td>
+						<td><span class="c-red">-$<?=number_format($down_payment,4)?></span></td>
+					</tr>
+					<tr>
+						<th scope="row"><span ><?=$tax_name?></span> : </th>
+						<td><span >$<?=number_format($vat_plus,4)?></span></td>
 					</tr>
 					<tr class="lst">
 						<td colspan="2"></td>

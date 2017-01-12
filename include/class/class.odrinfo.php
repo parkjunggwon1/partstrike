@@ -1570,7 +1570,8 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly=""){   //shee
 					</tr>
 				<?}else{ //---------- 공통(턴키 아니고, 30_17 아닌것) ------------
 					//2016-09-04 : 판매자 송장(Invoice) 30_09 에서 Quantity는 발주수량이 아닌, '공급수량'
-					
+					global $pay_invoice;
+
 					if($loadPage != "12_07"){//수정 발주서 Sheet(Purchase Order Amendment)
 						$odr_quantity = ($supply_quantity)? $supply_quantity : $odr_quantity;
 						$total_price = number_format(round_down($odr_quantity*$price,2),2);
@@ -1581,13 +1582,16 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly=""){   //shee
 						$extra = "";
 						$odr_quantity = (replace_out($row["odr_quantity"]))? replace_out($row["odr_quantity"]) : $odr_quantity;
 					}
-
+					
 				?>
 					<tr>
 						<td><?=$i?></td>
 						<td class="t-lt"><?=$part_no?></td>
-						<td class="t-lt"><?=$manufacturer?>, <?=$package?>, <?=$dc?>, <?=$rhtype?><?=$extra?></td>
-						
+						<?if ($pay_invoice=="D"){?>
+							<td class="t-lt"><?=$manufacturer?>, <?=$package?>, <?=$dc?></td>
+						<?}else{?>
+							<td class="t-lt"><?=$manufacturer?>, <?=$package?>, <?=$dc?>, <?=$rhtype?><?=$extra?></td>
+						<?}?>
 						<?if ($for_readonly == "P"){?>
 						<td class="t-rt">
 							<input type="text" class="i-txt2 onlynum numfmt t-rt" maxlength="10" name="odr_quantity[]" id="odr_qty_<?=$odr_det_idx;?>" value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>"  style="width:100%; ">
@@ -1598,7 +1602,7 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly=""){   //shee
 							<td><?=($period)?( QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"Stock":$period):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>
 							<td class="t-rt">
 								<?//2016-10-02 : 지속적... 계약금에서는 'Amount' 표시 무.
-								if ($loadPage!="18_2_09" && !($loadPage=="30_09" && $part_type=="2" && $pay_cnt<2) ){
+								if ($loadPage!="18_2_09" && !($loadPage=="30_09" && $part_type=="2" && $pay_invoice=="D") ){
 									echo "$".$total_price;
 
 								}
@@ -1645,6 +1649,8 @@ if ($for_readonly != "P") {?>
 		<?
 		global $row_buyer;
 		global $row_seller;
+		global $pay_invoice;	//뒤순서가 어떤 결제완료인지 파악 D:10%, F:90%
+
 
 		$buyer_idx = $row_buyer['mem_idx'];
 
@@ -1660,8 +1666,23 @@ if ($for_readonly != "P") {?>
 			$ship_nation = get_any("delivery_addr","nation","delivery_addr_idx=$ship_idx");
 		}	
 		//echo $ship_nation."ASDFASDFASDFASDFASDFASDF";
-		$pay_cnt =QRY_CNT("odr_history", "and odr_idx = $odr_idx and status = 5");  // 기존에 이 odr로 pay 2번 한 적이 있는지. 있다면 지속에다가 + 수정 발주 들어간 것.
 		
+		//히스토리 부분 송장클릭시 잘못나옴 
+		$pay_cnt =QRY_CNT("odr_history", "and odr_idx = $odr_idx and status = 5");  // 기존에 이 odr로 pay 2번 한 적이 있는지. 있다면 지속에다가 + 수정 발주 들어간 것.
+
+		if (!$pay_invoice)
+		{
+			if ($pay_cnt ==2)
+			{
+				$pay_invoice = "F";
+			}
+			else
+			{
+				$pay_invoice = "D";
+			}
+		}
+
+
 		if ((($row_buyer["nation"] == 1 && $row_seller["nation"] ==1) || ($row_seller["nation"]==$ship_nation)) && $loadPage=="30_09")
 		{	
 			$tot_vat_minus = $tot;
@@ -1719,20 +1740,25 @@ if ($for_readonly != "P") {?>
 		//지속적(납기3주이상)--------------------------------------
 		if ($part_type == 2 && $period*1 > 2 && $for_readonly=="" && $loadPage != "30_05"&& $loadPage != "12_07") { 
 			
-			if ($pay_cnt ==2){	//잔금 계산-----?>
-				<li class="sub"><strong>Sub Total :</strong><span>$<?=$tot?>	</li>
+			if ($pay_invoice =="F"){	//잔금 계산-----
+				
+			?>
+				<li class="sub"><strong>Sub Total :</strong><span>$<?=$tot_vat_minus?>	</li>
 			<?
 				$word ="Rest Amount(90%)";
 				// tot의 90%를 무조건 하면 안되고, 수정 발주 된 내역이 있을 가능성도 있기 때문에 mybank에서 실제로 지불한 10%값을 가져와서  tot- 지불값 한 금액이 실제 지불해야 할 금액이다.
 				$down = get_any("mybank" ,"charge_amt", "odr_idx=$odr_idx and mem_idx=".$_SESSION["MEM_IDX"]." and rel_idx = ".$_SESSION["REL_IDX"]);	
-				
+
 				$tot = round_down($tot,4) + round_down($down,4);   //더하기. ( 왜냐하면 down 자체가 마이너스 값이니까)
+
+				$tax_name = get_any("tax", "tax_name", "nation=$row_seller[nation]");
 				
 			?>
 				
-				<li class="sub  c-red"><strong>Down Payment :</strong><span>$<?=round_down($down,4)?>	</li>					
+				<li class="sub  c-red"><strong>Down Payment :</strong><span>-$<?=round_down(str_replace("-","",$down),4)?>	</li>	
+				<li class="sub"><strong><?=$tax_name?> :</strong><span>$<?=$vat_plus?></span></li>			
 			<?}else{	//계약금 계산-------
-				$tot = $tot / 10;
+				$tot = ($tot / 10) - ($vat_plus/10);
 				$tot = round_down($tot,4);
 				$charge_type = "2";
 				

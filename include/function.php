@@ -1587,7 +1587,7 @@ function openSheet($status, $etc1, $odr_idx,$etc_change,$odr_history_idx=""){
 			 break;
 		   case "18": //송장
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>";  //JSJ
-			 $return_val = "<a style='color:#00759e !important;text-decoration:underline;' href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?sheets_no=".$etc1."&odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>";
+			 $return_val = "<a style='color:#00759e !important;text-decoration:underline;' href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?sheets_no=".$etc1."&odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."&forread=Y\")'>".$etc1."</a>";
 			 break;
 		   case "21": //선적
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>";  //JSJ
@@ -1628,7 +1628,7 @@ function openSheet($status, $etc1, $odr_idx,$etc_change,$odr_history_idx=""){
 			 break;
 		   case "18": //송장		   
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>";  //JSJ
-			 $return_val = "<a style='color:#000;text-decoration:underline;' href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?sheets_no=".$etc1."&odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>";
+			 $return_val = "<a style='color:#000;text-decoration:underline;' href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?sheets_no=".$etc1."&odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."&forread=Y\")'>".$etc1."</a>";
 			 break;
 		   case "21": //선적
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>";  //JSJ
