@@ -1756,8 +1756,15 @@ function round_down($val,$d)
 			if ($d==4)
 			{
 
+				if (strlen($price)<=4)
+				{
+					$price = "0".$price;
+				}
+
 				$price_sosu = substr($val_explode[1],0,4);			
 				$price = substr_replace($price,'.',-4,0);
+
+				
 			}
 			else
 			{

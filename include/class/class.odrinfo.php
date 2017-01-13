@@ -1686,9 +1686,9 @@ if ($for_readonly != "P") {?>
 		if ((($row_buyer["nation"] == 1 && $row_seller["nation"] ==1) || ($row_seller["nation"]==$ship_nation)) && $loadPage=="30_09")
 		{	
 			$tot_vat_minus = $tot;
-			$vat_price = get_any("ship" ,"tax", "odr_idx=$odr_idx ");	//부가세
 
-			//echo $vat_price."AAAAAAAAAAA";
+			$vat_price = get_any("ship" ,"tax", "odr_idx=$odr_idx limit 1");	//부가세
+
 			if($vat_price==0)
 			{
 				$vat_price = get_any("tax" ,"tax_percent", "nation=$ship_nation ");	//부가세
@@ -1696,8 +1696,7 @@ if ($for_readonly != "P") {?>
 			//echo $vat_price."BBBBB";
 
 			$vat_val = $vat_price/100;
-			$vat_plus =  $tot*$vat_val;
-			//echo $vat_plus ."AAAAAAAAAA";
+			$vat_plus =  $tot*$vat_val;			
 			$tot = $tot + $vat_plus;
 			$tot_val = $tot + $vat_plus;
 

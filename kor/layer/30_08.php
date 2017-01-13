@@ -292,7 +292,7 @@ $(document).ready(function(){
 
 				
 				<tbody >
-					<tr <?if (QRY_CNT("odr_det", "and odr_idx = $odr_idx and part_type =2") > 0){echo "disabled";}?>  class="bg-none">
+					<tr <?if (QRY_CNT("odr_det", "and odr_idx = $odr_idx and part_type =2") > 0){echo "";}?>  class="bg-none">
 						<td></td>
 						<td colspan="11" style="padding:0">
 							<table class="detail-table mr-t0">

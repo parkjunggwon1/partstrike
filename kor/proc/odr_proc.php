@@ -403,6 +403,7 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
 	$ary_memo = $_POST[memo];
 
 
+
 	if($turnkey_cnt>0){
 		echo "TURNKEY~<br>";
 		for ($j = 0 ; $j<count($ary_part_idx); $j++){
