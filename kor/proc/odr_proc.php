@@ -402,7 +402,7 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
 	$ary_rhtype = $_POST[rhtype];
 	$ary_memo = $_POST[memo];
 
-
+    
 
 	if($turnkey_cnt>0){
 		echo "TURNKEY~<br>";
@@ -726,8 +726,8 @@ if ($typ =="odramendconfirm"){ // 확정 발주서(P.O Amendment)12_07 처리 --
 if ($typ =="odramendconfirm2"){ //구매자: 수정발주서(P.O Amendment)12_07 처리 / 2016-04-15 : Log 기록 -------------------------------------------------------------
 		//2017-01-10 : ship 정보를 임시테이블에서 복사
 		$sql = "
-				UPDATE evictor23.ship AS a
-					JOIN evictor23.ship_temp AS b
+				UPDATE ship AS a
+					JOIN ship_temp AS b
 						ON a.odr_idx=b.odr_idx
 				SET a.ship_info = b.ship_info,
 					a.ship_account_no = b.ship_account_no,
@@ -921,7 +921,7 @@ if ($typ == "pay"){
                 ,odr_idx = '$odr_idx'
                 ,reg_date = now()
                 ,reg_ip= '$log_ip'";
-        //echo $sql;
+        
         $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
         //2. MyBank 일 경우 - 구매자 예치금 처리 ---------------- MyBank Log--
         if($charge_method=="MyBank"){

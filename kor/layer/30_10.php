@@ -31,6 +31,7 @@ $(document).ready(function(){
 <!-- //layer-left-menu -->
 
 <?
+$_SESSION["DEPOSIT"] = get_deposit_yn($_SESSION["MEM_IDX"]);
 $recordcnt = 1;
 if ($status==""){$status="18";}
 $searchand .= "and buy_mem_idx = ".$_SESSION["MEM_IDX"]." and status = $status and confirm_yn='N'"; 			

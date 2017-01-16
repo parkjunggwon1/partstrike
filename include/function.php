@@ -1332,7 +1332,8 @@ function SumBankHold($mem_idx, $rel_idx, $ty=2){
 
 function GetDeposit($mem_idx, $rel_idx, $charge_type){
 	$com_idx = ($rel_idx ==0 ? $mem_idx : $rel_idx);
-	$pay = get_any("mybank" ,"sum( charge_amt )", "(mem_idx =$com_idx or rel_idx =$com_idx) and charge_type in ($charge_type)");
+	$pay = get_any("mybank" ,"sum( charge_amt )", "(mem_idx =$com_idx or rel_idx =$com_idx) and charge_type in ($charge_type) and mybank_yn='Y'");
+	
 	return number_format(round_down(abs($pay),4),4);
 }
 

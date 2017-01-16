@@ -231,9 +231,9 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			
 			<?}?>
 			<?
-				if($period !="stock")
+				if($part_type =="2")
 				{
-					$period = $period."WK";
+					$period = str_replace("WK","",$period)."WK";
 				}
 			?>
 			<td class="delivery" <?=$goJump?>><?=($period)?"<span class='c-red'>".$period."</span>":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>

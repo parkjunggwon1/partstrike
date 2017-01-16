@@ -126,7 +126,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 			}elseif ($for_readonly=="P"){?>Packing List<?
 				$chr =  "PL";
 			}
-			elseif ($pay_invoice =="D" || $pay_cnt < 3){?>Down Payment Invoice<?
+			elseif (($pay_invoice =="D" || $pay_cnt < 3) && $row_odr_det["part_type"]==2){?>Down Payment Invoice<?
 				$chr = "DPI";
 				$invoice_no = $row_odr["invoice_no"]==""?str_replace("EI", $chr, get_auto_no("EI", "odr" , "invoice_no")):str_replace("EI", $chr,$row_odr["invoice_no"]);
 			}else{?>Escrow Invoice<?
