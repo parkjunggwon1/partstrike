@@ -191,7 +191,7 @@ switch($actty) {
 
 		if ($odr_det_idx){
 			$sql = "delete from odr_det where odr_det_idx = $odr_det_idx and amend_yn ='Y'";
-			echo $sql;
+		//	echo $sql;
 			$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 		}
 	   break;	
@@ -199,7 +199,7 @@ switch($actty) {
 	    $odr_idx = $actidx;
 		if ($odr_idx){
 			$sql = "delete from odr_det where odr_idx = $odr_idx and amend_yn ='Y' AND part_type NOT IN(2,5,6)";
-			echo $sql;
+		//	echo $sql;
 			$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 		}
 	   break;
@@ -247,6 +247,99 @@ switch($actty) {
 
 
 	   break;
+	 case "13_04_CF":
+	   //구매자가 수령했다는 내용을 판매자가 확인 하고, 완료 버튼을 눌렀을 때.
+       // 또는 삭제/ 취소후 완료 버튼을 눌렀을 때 actidx = odr_history_idx
+	   //1. odr_status 변경 : 종료로.
+	   $odr_idx = get_any("odr_history" , "odr_idx", "odr_history_idx= $actidx");
+   	   $odr_det_idx_val = get_any("odr_det" , "odr_det_idx", "odr_det_idx= $actidx");
+	   $buy_mem_idx = get_any("odr", "mem_idx" , "odr_idx = $odr_idx");
+	   $sell_mem_idx = get_any("odr", "sell_mem_idx" , "odr_idx = $odr_idx");
+	   $part_idx = get_any("odr_det", "part_idx" , "odr_det_idx = $actidx");
+
+	   update_val("odr_history","confirm_yn","Y", "odr_history_idx", $actidx);
+
+	   $sql = "insert into odr_history set 
+				odr_idx = '$odr_idx'			
+				,status = 32
+				,status_name = '수락'
+				,etc1 = '종료'
+				,sell_mem_idx = '$sell_mem_idx'
+				,buy_mem_idx = '$buy_mem_idx'
+				,reg_mem_idx = '$session_mem_idx'
+				,confirm_yn = 'Y'
+				,reg_date = now()";
+		
+		$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+
+	
+
+		//판매자가 취소할때만 주문이 한 건도 없을때 파트 삭제 2016-12-12 박정권						
+/*
+		if ($buy_mem_idx == $_SESSION["MEM_IDX"])
+		{			
+			$odr_cnt_check = QRY_CNT("odr_det","and part_idx ='".$part_idx."' and odr_idx <> ".$odr_idx." and (odr_status <> 0 and odr_status <> 99)") ;
+
+			if ($odr_cnt_check == "0")
+			{	
+				$sql = "delete from part where part_idx ='".$part_idx."' ";					
+
+				$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+			}
+		}		
+*/		
+		break;
+	case "13_04_OK":
+	 
+	   $odr_idx = get_any("odr_history" , "odr_idx", "odr_history_idx= $actidx");
+   	   $odr_det_idx_val = get_any("odr_det" , "odr_det_idx", "odr_det_idx= $actidx");
+	   $buy_mem_idx = get_any("odr", "mem_idx" , "odr_idx = $odr_idx");
+	   $sell_mem_idx = get_any("odr", "sell_mem_idx" , "odr_idx = $odr_idx");
+	   $part_idx = get_any("odr_det", "part_idx" , "odr_det_idx = $actidx");
+
+	   $sql = "insert into mybank set
+				mem_idx = '$buy_mem_idx'
+				,rel_idx = '0'
+				,mybank_yn = 'Y'
+				,charge_type = '2'
+				,charge_amt = '$pay_amt'
+				,mybank_hold = '-$pay_amt'
+				,charge_method = '0'
+				,odr_idx = '$odr_idx'";				
+		$sql .= ",reg_date = now()
+				,reg_ip= '$log_ip'";
+		$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+
+		$sql = "insert into mybank set
+				mem_idx = '$sell_mem_idx'
+				,rel_idx = '0'
+				,mybank_yn = 'Y'
+				,charge_type = '2'
+				,charge_amt = '$pay_amt'
+				,mybank_hold = '-$pay_amt'
+				,invoice_no = '$invoice_no'
+				,charge_method = '0'
+				,odr_idx = '$odr_idx'";				
+		$sql .= ",reg_date = now()
+				,reg_ip= '$log_ip'";
+		$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+
+	   update_val("odr_history","confirm_yn","Y", "odr_history_idx", $actidx);
+
+	   $sql = "insert into odr_history set 
+				odr_idx = '$odr_idx'			
+				,status = 15
+				,status_name = '완료'
+				,etc1 = '입금'
+				,sell_mem_idx = '$sell_mem_idx'
+				,buy_mem_idx = '$buy_mem_idx'
+				,reg_mem_idx = '$session_mem_idx'
+				,confirm_yn = 'Y'
+				,reg_date = now()";
+		
+		$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+	
+		break;
    case "CF":
 	   //구매자가 수령했다는 내용을 판매자가 확인 하고, 완료 버튼을 눌렀을 때.
        // 또는 삭제/ 취소후 완료 버튼을 눌렀을 때 actidx = odr_history_idx
@@ -260,8 +353,7 @@ switch($actty) {
 	   update_val("odr_history","confirm_yn","Y", "odr_history_idx", $actidx);
 
 	   $sql = "insert into odr_history set 
-				odr_idx = '$odr_idx'
-			
+				odr_idx = '$odr_idx'			
 				,status = 15
 				,status_name = '완료'
 				,etc1 = ''

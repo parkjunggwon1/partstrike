@@ -121,6 +121,9 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 	   break;	 
 		case "po_cancel":
 		   $colspan="15";
+	   break;	
+	   case "1304_accept":
+		   $colspan="15";
 	   break;	 
 	 }
 	
@@ -1012,6 +1015,66 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<!-- //부품상태 ---------------->
 						</td>
 					</tr>
+					<!-- 부가내용 종료-->
+					<?}elseif ($loadPage == "1304_accept"){ //------------------------------- 30_15  What's New : 결제 완료-------------------------------------------------------------------------------------
+
+
+					?>
+						<td><?=$i?></td>
+						<td class="t-lt"><img src="/kor/images/nation_title2_<?=$nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$nation)?>"></td>
+						<?if($part_type=="7"){?>
+							<td class="t-lt" colspan="5"><?=$part_no?></td>
+						<?}else{?>
+							<td class="t-lt"><?=$part_no?></td>
+							<td class="t-lt"><?=$manufacturer?></td>
+							<td><?=$package?></td>
+							<td><?=$dc?></td>
+							<td><?=$rhtype?></td>
+						<?}?>
+						<td class="t-rt"><?=$supply_quantity==0?"-":number_format($supply_quantity); //수량?></td>
+						<td class="t-rt">$<?=$price_val?></td>
+						
+						<td class="t-rt c-blue"><?=$odr_quantity==0?"":number_format($odr_quantity); //발주수량?></td>
+						<td class="t-rt c-red"><?=number_format($supply_quantity) //공급수량?></td>
+						<?
+						if ($part_type=="2")
+						{
+							$day_val = "WK";
+						}
+						?>
+						<td class="c-red"><?=($period)? str_replace("WK","",$period).$day_val."":"Stock";?></td>	
+					<!-- 부가내용 시작-->
+						<td >
+						<?
+						$com_idx = $rel_idx==0 ? $sell_mem_idx : $rel_idx;
+						$company_nm = get_any("member","mem_nm_en", "mem_idx=$com_idx"); 	
+						?>
+						<a class="c-blue" href="javascript:layer_company_det('<?=$com_idx?>');"><?=cut_len($company_nm,8,".")?></a>
+						</td>
+					</tr>
+					<!-- 변경 작업 2016.10.17 시작-->
+					<tr class="bg-none">
+						<td></td>
+						<td colspan="13" style="text-align:left;">
+							<!-- 부품상태 ---------------->							
+								<?if(strlen($part_condition)>0 && $part_condition>0){?>									
+									<span class="c-red">부품상태  : </span><span style="color:#00759e;"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?> </span>&nbsp&nbsp					
+									<span class="c-red">포장상태 : </span><span style="color:#00759e;"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> / <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span>	
+								<?}?>							
+							<!-- //부품상태 ---------------->
+						</td>
+					</tr>
+					<?if(strlen($memo)>0){?>
+					<tr class="bg-none">
+						<td></td>
+						<td colspan="13" style="text-align:left;">
+							<strong class="c-black">Memo : </strong><span style="color:#00759e;"><?=$memo?> </span>		
+						</td>
+					</tr>
+					<?}?>
+					<!-- 변경 작업 2016.10.17 끝-->
+			
+					<!-- 부가내용 끝-->
 					<!-- 부가내용 종료-->
 					<?}elseif ($loadPage == "30_15"){ //------------------------------- 30_15  What's New : 결제 완료-------------------------------------------------------------------------------------
 					?>
@@ -2476,14 +2539,22 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 							</tr></tbody></table></div>		
 						<?	echo layerInvListData($loadPage ,$odr_idx,$odr_det_idx,$odr_history_idx);
 						   break;
+					case "1304_accept": //수락?>
+							<td class="company"></td>
+							</tr></tbody></table></div>		
+						<?	echo layerInvListData($loadPage ,$odr_idx,$odr_det_idx,$odr_history_idx);
+						   break;
 					   }?>
 		
 	
 	<!-- //layer-file -->
 	<?}
+
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
 	function layerOrdListData($loadPage ,$odr_idx , $odr_det_idx=""){ // History 목록에서의 odr_det 내역
 		$turnkey_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and part_type=7 ");  //턴키
+
+		
 	?>
 		<!-- layer-data -->
 	<input type="hidden" name="odr_idx" id="odr_idx_<?=$loadPage?>" value="<?=$odr_idx?>">
@@ -2676,7 +2747,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						<th scope="col" style="width:50px">Option</th>
 						<?}?>
 					<?}?>
-					<th scope="col" class="t-no" >No.</th>
+					<th scope="col" class="t-no"  >No.</th>
 					<?if ($loadPage!="18R_06" && $loadPage!="30_15" && $loadPage!="13_02s"){?><th scope="col" style="width:80px">Nation</th><?}?>
 					<?
 					if ($loadPage=="21_04" ){
@@ -2951,7 +3022,11 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 	<?}elseif($loadPage =="13_04"){?>
 	<a href="#" class="btn-pop-1305"><img src="/kor/images/btn_ok.gif" alt="확인"></a>
 	<?}elseif($loadPage =="13_04s"){ //------------------------------ 13_04s -----------------------------------------?>
-	<a href="#" class="btn-confirm-1304s" odr_history_idx="<?=$odr_history_idx?>"><img src="/kor/images/btn_complete.gif" alt="완료"></a>
+	<a href="#" class="btn-confirm-1304s" odr_history_idx="<?=$odr_history_idx?>"><img src="/kor/images/btn_complete.gif" alt="완료"></a>	
+	<?}elseif($loadPage =="1304_accept"){ //------------------------------ 13_04s -----------------------------------------
+		$down_payment = get_any("odr_history", " etc2", "odr_idx=".$odr_idx." and charge_ty='D' limit 1");		
+	?>
+	<a href="#" class="btn-confirm-1304_accept" odr_idx="<?=$odr_idx?>" odr_history_idx="<?=$odr_history_idx?>" down_payment="<?=$down_payment?>"><img src="/kor/images/btn_deposit3.gif" alt="입금"></a>
 	<?}?>
 	</div>
 <?	

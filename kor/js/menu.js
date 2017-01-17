@@ -579,6 +579,10 @@ function goMenuJump(data){
 	case("9"): //거절(구매자탭)
 		openCommLayer('layer','18R_06','?mn=0'+splData[0]+'&status='+splData[0]+'&page='+page+'&validyn='+splData[3]);
 	break; 
+	case("32"): //수락(구매자 탭)
+		openCommLayer("layer","1304_accept",'?mn=32&status='+splData[0]+'&page='+page+'&validyn='+splData[3]);
+		
+	break; 
 	default:					
 	break;
 	} 

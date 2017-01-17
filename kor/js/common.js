@@ -888,9 +888,11 @@ $(document).ready(function(){
 	$("body").on("click",".btn-view-amend-sheet-forread",function(){
 		openLayer("layer5","12_07","?odr_idx="+$(this).attr("odr_idx"));
 	});
-	//What's New(구매자) 취소(13_04)화면 '완료' 버튼------
+	
+	//What's New(구매자) 취소(13_04)화면 '수락' 버튼------
 	$("body").on("click",".btn-confirm-1304s",function(){ //실제 취소 처리(DB)
-		$.ajax({ 
+		
+		/*$.ajax({ 
 		type: "GET", 
 		url: "/ajax/proc_ajax.php", 
 		data: { actty : "CF", //ConFirm
@@ -903,9 +905,66 @@ $(document).ready(function(){
 				closeCommLayer("layer");
 				Refresh_Right();
 			}
-		});
+		});*/
+
+		openCommLayer("layer4","13_04_1","?&actidx="+$(this).attr("odr_history_idx"));
+		
+
 	});
 
+	//What's New(구매자) 취소(13_04_1)화면 '종료' 버튼------
+	$("body").on("click",".btn-confirm-1304_1s",function(){ //실제 취소 처리(DB)
+		
+		$.ajax({ 
+		type: "GET", 
+		url: "/ajax/proc_ajax.php", 
+		data: { actty : "13_04_CF", //ConFirm
+				actidx : $(this).attr("odr_history_idx")
+		},
+			dataType : "html" ,
+			async : false ,
+			success: function(data){ 
+				//document.location.href="/kor/";
+				closeCommLayer("layer");
+				Refresh_Right();
+			}
+		});
+		
+
+	});
+
+	//What's New(구매자) (1304_accept)계약금 재 입금화면 '입금' 버튼------
+	$("body").on("click",".btn-confirm-1304_accept",function(){ //실제 취소 처리(DB)
+		
+		openCommLayer("layer4","13_04_2","?&actidx="+$(this).attr("odr_history_idx")+"&down_payment="+$(this).attr("down_payment"));
+		
+
+	});
+
+	//What's New(구매자) 판매자 구매자 계약금 복구화면 '수락' 버튼------
+	$("body").on("click",".btn-confirm-1304_2_ok",function(){ //실제 취소 처리(DB)
+		
+		$.ajax({ 
+		type: "GET", 
+		url: "/ajax/proc_ajax.php", 
+		data: { actty : "13_04_OK", //ConFirm
+				actidx : $(this).attr("odr_history_idx"),
+				pay_amt : $(this).attr("pay_amt")
+		},
+			dataType : "html" ,
+			async : false ,
+			success: function(data){ 
+				//document.location.href="/kor/";
+				closeCommLayer("layer");
+				closeCommLayer("layer4");
+				Refresh_Right();
+				document.location.href="/kor/";			
+			}
+		});
+			
+	});
+
+	
 	//판매자 송장화면(30_08), 수정발주서(09_01)에서 품목 선택 후 취소 버튼-> '취소'(po_cancel.php, odr_cancel.php)화면에서 '종료'버튼
 	$("body").on("click",".btn-po-cancel",function(){ //실제 취소 처리(DB)
 		var f = document.f_pocancel;
