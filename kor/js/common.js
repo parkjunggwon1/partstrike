@@ -825,6 +825,9 @@ $(document).ready(function(){
 	$("body").on("click",".buy-mn25",function(){
 		openLayer("layer","21_16","?mn=25&status=30");
 	});	
+	$("body").on("click",".buy-mn32",function(){
+		openLayer("layer","1304_accept","?mn=32&status=32");
+	});	
 	
 	////////////////////////* sheet *///////////////////////////////////
 	//order sheet 실 발주 처리 [공지]화면의 '발주서 확인' 버튼 -----------------------
