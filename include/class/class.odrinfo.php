@@ -220,6 +220,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 											$odr_det_idx2 = replace_out($row2["odr_det_idx"]);
 											$etc12= replace_out($row2["etc1"]);
 											$etc22= replace_out($row2["etc2"]);	
+
 											if ($status2 == "3"){	$amend_start =true;}
 											if (($amend_yn == "Y" && ($odr_det_idx2 =="" || $odr_det_idx2 =="0")) || ($amend_start ==true && $odr_det_idx2=="")){
 
@@ -231,7 +232,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 											}
 											if ($amend_start==true){$red=" red";}
 											$cls2 = "class='$red'";
-											
+
 											if ($session_mem_idx != $reg_mem_idx2){$cls2 = "class='c1$red'";}											
 											if ($status2== "9" || $status2== "10" || $status2== "22" || $status2 =="11"|| $status2 =="24"){
 												$cls2 = "class='c2$red'";
@@ -425,23 +426,45 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<!-- 복사해온거 끝-->
 					<?}?>
 				<?}elseif ($loadPage== "31_05"){ //------------------------------------------------------------------------------------------------------?>
+					<?
+					$part_inv_chk =QRY_CNT("part", "and invreg_chk <> 1 and part_no='$part_no'"); 		
+					// $part_inv_chk==0 시작
+					if($part_inv_chk =='0')
+					{
+						$no_modify = "readonly";
+						$no_modify_border = "border:0;";
+					}
+					?>
 					<td><?=$i?><input type="hidden" name="odr_det_idx[]" value="<?=$odr_det_idx?>"></td>
-					<td class="t-lt"><input type="text" class="i-txt4" id="part_no" value="<?=$part_no?>" maxlength="24" style="ime-mode:disabled; width:100%" ></td>
-					<td class="t-lt"><input type="text" class="i-txt4" id="manufacturer" value="<?=$manufacturer?>" maxlength="20" style="width:100%" ></td>
-					<td><input type="text" class="i-txt4 t-ct" id="package" value="<?=$package?>" maxlength="10" style="width:83px" ></td>
-					<td><input type="text" class="i-txt4 t-ct" id="dc" value="<?=$dc?>" style="width:38px" maxlength="4" ></td>
+					<td class="t-lt"><input type="text" class="i-txt4" id="part_no"  value="<?=$part_no?>" maxlength="24" style="<?=$no_modify_border?>ime-mode:disabled; width:100%" <?=$no_modify?>></td>
+					<td class="t-lt"><input type="text" class="i-txt4" id="manufacturer" value="<?=$manufacturer?>" maxlength="20" style="<?=$no_modify_border?>width:100%" <?=$no_modify?>></td>
+					<td><input type="text" class="i-txt4 t-ct" id="package" value="<?=$package?>" maxlength="10" style="<?=$no_modify_border?>width:83px" <?=$no_modify?>></td>
+					<?if ($part_type==2){?>
+						<td><?=$dc?></td>
+					<?}else{?>
+						<td><input type="text" class="i-txt4 t-ct" id="dc" value="<?=$dc?>" style="<?=$no_modify_border?>width:38px" maxlength="4" <?=$no_modify?>></td>
+					<?}?>					
+					<?if ($no_modify !="readonly"){?>
 					<td>
-						
-						<div class="select type4" lang="en" style="border-color: #00759e;width:60px;">
-							<label><?=$rhtype==""?"None":$rhtype?></label>
-							<select name="mod_rhtype[]">
-							<option lang="en" <?if($rhtype==""){echo "selected";}?>>None</option>
+						<div class="select type6" lang="en" style="width:60px; padding:0;" >
+							<label style="padding:0;padding-left:2px;padding-top:2px;"><?=$rhtype==""?"":$rhtype?></label>
+							<select name="rhtype[]">
+								<option lang="en" <?if($rhtype==""){echo "selected";}?>></option>
 								<option lang="en" <?if($rhtype=="RoHS"){echo "selected";}?>>RoHS</option>
 								<option lang="en" <?if($rhtype=="HF"){echo "selected";}?>>HF</option>
 							</select>
 						</div>
-						
 					</td>
+					<?
+					}
+					else
+					{
+					?>
+					<td class="t-lt">
+						<?=$rhtype?>
+						<input type="hidden" name="rhtype[]" value="<?=$rhtype?>" />
+					</td>
+					<?}?>
 					<?
 					if ($part_type =="2"){
 						$dc = "NEW";
@@ -454,7 +477,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					?>
 					<td class="t-rt"><?=$quantity?><input type="hidden" name="qty" id="31_05_qty" value="<?=$quantity;?>"></td>
 					<td class="t-rt">$<?=$price_val?></td>
-					<!--<td class="c-blue t-rt"><?=number_format($odr_quantity)?></td>-->
+					<td class="c-blue t-rt"><?=number_format($odr_quantity)?></td>
 					<td><input type="text" id = "supply_quantity" name="supply_quantity" class="i-txt4 c-red2 onlynum numfmt t-rt" maxlength="10" value="" style="width:58px"></td>
 					<td><input type="text" class="i-txt4 c-red2 t-ct" id = "period" name="period" value="" style="width:38px" maxlength="4" readonly> <span class="c-red2"><?if ($part_type=="2"){echo "WK";}else{echo "Days";}?></span></td>
 					<?
@@ -1221,8 +1244,12 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 									
 								<?}else if($loadPage == "02_02"){?>									
 									<td class="t-rt"><?=$odr_stock==0?"-":number_format($odr_stock)?></td>	
-								<?}else if($loadPage == "31_06"){?>									
-									<td class="t-rt">I</td>	
+								<?}else if($loadPage == "31_06"){?>			
+									<?if ($part_type=="2"){?>
+										<td class="t-rt">I</td>	
+									<?}else{?>
+										<td class="t-rt"><?=$odr_stock==0?"-":number_format($odr_stock)?></td>
+									<?}?>
 								<?}else{?>									
 									<td class="t-rt"><?=$supply_quantity==0?"-":number_format($supply_quantity)?></td>							
 								<?}?>

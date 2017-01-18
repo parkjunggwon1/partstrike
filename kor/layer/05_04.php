@@ -33,12 +33,19 @@ if (!$_SESSION["MEM_IDX"]){ReopenLayer("layer6","alert","?alert=sessionend");exi
 	$memo= $odr[memo];
 	$imsi_odr_no = $odr[imsi_odr_no];
 	$save_yn = $odr[save_yn];
+
 	
 	$s_nation = get_any("member","nation", "mem_idx=$sell_mem_idx");
 	$b_nation = get_any("member","nation", "mem_idx=$session_mem_idx");
 	$det_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx ");  //odr_det 수량
 	$per_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and odr_status=16 ");  //납기 받은 품목 수
 	$turnkey_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and part_type=7 ");  //턴키
+
+	$part2_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and (part_type=2 or part_type=5 or part_type=6)");  //턴키
+	
+	if ($part2_cnt>0){
+		$part_type="256";
+	}
 }
 //국제 배송비 관련
 $trade_type = ($s_nation == $b_nation)? 1:0;
@@ -620,9 +627,11 @@ $(document).ready(function(){
 	$("#layerPop3 .stock-list-table input[name^=odr_quantity]").keyup(function(e){
 		maskoff();	
 		var quantity = $(this).parent().parent().find("input[name^=quantity]").val();
-		//alert(quantity);
-		if(parseInt($(this).val()) > parseInt(quantity)){
-			$(this).val("");
+		var part_type = $(this).attr("part_type");
+		if (part_type != 2){
+			if(parseInt($(this).val()) > parseInt(quantity.replace(",", ""))){
+				$(this).val("");
+			}
 		}
 		maskon();
 	});
@@ -1001,7 +1010,7 @@ function checkActive(){
 
 <div class="layer-hd">
 	<h1>발주서</h1>
-	<a href="#" class="btn-close<?=($save_yn =="Y")? " save":" odr";?>" odr_idx="<?=$odr_idx;?>" odr_status="<?=$odr_status;?>" imsi_odr_no="<?=$imsi_odr_no?>"><img src="/kor/images/btn_layer_close_w.png" alt="close"></a>
+	<a href="#" class="btn-close<?=($save_yn =="Y")? " save":" odr";?>" odr_idx="<?=$odr_idx;?>" odr_status="<?=$odr_status;?>" imsi_odr_no="<?=$imsi_odr_no?>" part_type="<?=$part_type?>"><img src="/kor/images/btn_layer_close_w.png" alt="close"></a>
 </div>
 <div class="layer-content">
 

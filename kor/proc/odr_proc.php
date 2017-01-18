@@ -1847,6 +1847,12 @@ if ($typ =="periodcfrm"){
             where part_idx = $part_idx";
     $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 
+    $sql = "update part set 
+            invreg_chk = '1'
+            where part_idx = $part_idx";
+   
+    $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+
     //이게 저장 Data에 있는지 여부 체크------------
     $save_cnt = QRY_CNT("odr a LEFT JOIN odr_det b ON(a.odr_idx=b.odr_idx)", " and b.rel_det_idx = $odr_det_idx AND a.save_yn = 'Y'");
 

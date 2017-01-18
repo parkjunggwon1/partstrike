@@ -271,23 +271,7 @@ switch($actty) {
 				,reg_date = now()";
 		
 		$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
-
 	
-
-		//판매자가 취소할때만 주문이 한 건도 없을때 파트 삭제 2016-12-12 박정권						
-/*
-		if ($buy_mem_idx == $_SESSION["MEM_IDX"])
-		{			
-			$odr_cnt_check = QRY_CNT("odr_det","and part_idx ='".$part_idx."' and odr_idx <> ".$odr_idx." and (odr_status <> 0 and odr_status <> 99)") ;
-
-			if ($odr_cnt_check == "0")
-			{	
-				$sql = "delete from part where part_idx ='".$part_idx."' ";					
-
-				$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
-			}
-		}		
-*/		
 		break;
 	case "13_04_OK":
 	 

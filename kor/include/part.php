@@ -172,7 +172,7 @@
 								<div class="select type4" lang="en" style="width:60px">
 									<label>None</label>
 									<select id="rhtype" name="rhtype">
-										<option lang="en" value="">None</option>
+										<option lang="en" value="None">None</option>
 										<option lang="en" value="RoHS">RoHS</option>
 										<option lang="en" value="HF">HF</option>
 									</select>

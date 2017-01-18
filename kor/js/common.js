@@ -115,8 +115,16 @@ $(document).ready(function(){
 	$("section[class^='layer']").on("click",".btn-close",function(){
 		if($(this).hasClass("odr")){
 			if($(".layer-section").hasClass("open")){
-				closeCommLayer("layer");
-				Refresh_Right();
+				if ($(this).attr("part_type") == "256")
+				{
+					closeCommLayer("layer4");
+				}
+				else
+				{
+					closeCommLayer("layer");
+					Refresh_Right();
+				}
+				
 			}
 			//기존 데이터 사라지게.(단, 납기 확인 중인 데이터 제외하고.)
 				$.ajax({ 
@@ -538,6 +546,7 @@ $(document).ready(function(){
 	
 		//납기품목 납기(일자)선택 '전송'--------------------- from:31_05
 	$("body").on("click",".sell-mn01-3106",function(){
+		
 		if($("#period").val()==""){
 			alert_msg("납기 기간을 선택해 주세요.");
 			$("#period").focus();

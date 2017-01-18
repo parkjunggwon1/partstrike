@@ -7,11 +7,14 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/class/class.odrinfo.php";?>
 <script src="/include/function.js"></script>
 <script>
 ready();
+var date_sel = "";
 $("#layerPop3 .stock-list-table tbody:eq(0) tr:eq(0) td").addClass("first");
 $(".layer-pagination2.red li, .layer-pagination2.bk li").click(function(){
 	var prevPage =$(".layer-pagination2.red .current a").text();	
 	var thisPage="";
-	
+	var supp = parseInt($("#supply_quantity").val());
+	var qty = parseInt($("#31_05_qty").val().replace(/,/g, ''));
+	date_sel="true";
 	if ($(this).find("a").text() !="")
 	{
 		$(this).addClass("current");
@@ -32,9 +35,19 @@ $(".layer-pagination2.red li, .layer-pagination2.bk li").click(function(){
 		}
 		$(".pagingli_1:eq("+(thisPage-1)+")").addClass("current");
 		$("#period").val(thisPage);
-		$(".btn-area span").hide();
-		//$(".btn-area button:eq(0)").show();
-		$("#31-05-smt").show();
+		if(supp > 0)
+		{
+			$(".btn-area span").hide();
+			//$(".btn-area button:eq(0)").show();
+			$("#31-05-smt").show();			
+		}
+		else
+		{						
+			$(".btn-area span").show();
+			//$(".btn-area button:eq(0)").show();
+			$("#31-05-smt").hide();
+		}
+		
 	}
 
 });
@@ -44,9 +57,52 @@ $("input[name=supply_quantity]").keyup(function(e){
 	var supp = parseInt($(this).val());
 	var qty = parseInt($("#31_05_qty").val().replace(/,/g, ''));
 
-	if(supp > qty){
-		$(this).val("");
+	if (date_sel=="true")
+	{
+		if ($("#31_05_qty").val()!="I")
+		{
+
+			if ($(this).val() !="")
+			{
+				if(supp > qty)
+				{
+					$(this).val("");	
+					$(".btn-area span").show();
+					//$(".btn-area button:eq(0)").show();
+					$("#31-05-smt").hide();					
+				}
+				else
+				{
+					$(".btn-area span").hide();
+					//$(".btn-area button:eq(0)").show();
+					$("#31-05-smt").show();								
+				}
+			}
+			else
+			{
+				$(".btn-area span").show();
+				//$(".btn-area button:eq(0)").show();
+				$("#31-05-smt").hide();		
+			}
+			
+		}
+		else
+		{
+			if(supp > 0)
+			{
+				$(".btn-area span").hide();
+				//$(".btn-area button:eq(0)").show();
+				$("#31-05-smt").show();	
+			}
+			else
+			{
+				$(".btn-area span").show();
+				//$(".btn-area button:eq(0)").show();
+				$("#31-05-smt").hide();	
+			}
+		}
 	}
+	
 	maskon();
 });
 
@@ -83,7 +139,7 @@ $("input[name=supply_quantity]").keyup(function(e){
 		<div class="layer-pagination2 red" style="text-align: right;">
 			<ul>
 				<li class="navi-prev"><a href="#"><img src="/kor/images/nav_btn_down.png" alt="prev"></a></li>
-				<?for ($i = 1; $i <20 ; $i++) { 
+				<?for ($i = 1; $i <19 ; $i++) { 
 						if($i<3){
 							echo "<li class='pagingli_1 bk' style='padding:1px;'><a href='#'>$i</a></li>";
 						}else{
@@ -121,7 +177,7 @@ $("input[name=supply_quantity]").keyup(function(e){
 						<th scope="col" class="t-rohs">RoHS</th>
 						<th scope="col" class="t-oty" style="width:60px;">O'ty</th>
 						<th scope="col" class="t-unitprice">Unit Price</th>
-						<!--<th scope="col" class="delivery t-orderoty" lang="ko" style="width:60px;">발주수량</th>-->
+						<th scope="col" class="delivery t-orderoty" lang="ko" style="width:60px;">발주수량</th>
 						<th scope="col" lang="ko" class="t-supplyoty">공급수량</th>
 						<th scope="col" lang="ko" style="width:75px;">납기</th>
 					</tr>
