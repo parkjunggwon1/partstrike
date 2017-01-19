@@ -26,11 +26,19 @@ $row_odr_det = mysql_fetch_array($result_odr_det);
 $row_ship = get_ship($row_odr["ship_idx"]);
 $pay_cnt =QRY_CNT("odr_history", "and odr_idx = $odr_idx and status = 5"); 
 
+$part_type=$row_odr_det["part_type"];
+
 //재수정
 if ($odr_history_idx)
 {
 	$pay_invoice =get_any("odr_history","charge_ty"," status='5' and odr_history_idx > '$odr_history_idx' and odr_idx = '$odr_idx' order by odr_history_idx asc limit 1");
 }
+else
+{
+	$pay_invoice =QRY_CNT("odr_history"," and status='5'  and odr_idx = '$odr_idx' order by odr_history_idx asc limit 1")==2?"F":"D";	
+}
+
+
 
 if ($sheets_no==""){
 	if ($for_readonly=="Y"){
@@ -120,17 +128,18 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 	</div>
 	<div class="order-info">
 		<ul>
-			<li class="b1"><strong>
+			<li class="b1"><strong>			
 			<?if ($for_readonly=="Y"){?>Commercial Invoice<?
 			 $chr =  "CI";
 			}elseif ($for_readonly=="P"){?>Packing List<?
 				$chr =  "PL";
 			}
-			elseif (($pay_invoice =="D" || $pay_cnt < 3) && $row_odr_det["part_type"]==2){?>Down Payment Invoice<?
+			elseif (($pay_invoice =="D") && $row_odr_det["part_type"]==2){?>Down Payment Invoice<?
 				$chr = "DPI";
-				$invoice_no = $row_odr["invoice_no"]==""?str_replace("EI", $chr, get_auto_no("EI", "odr" , "invoice_no")):str_replace("EI", $chr,$row_odr["invoice_no"]);
+				$invoice_no = str_replace("EI", $chr, get_auto_no("EI", "odr" , "invoice_no"));
 			}else{?>Escrow Invoice<?
 				$chr =  "EI";
+				$invoice_no = str_replace("DPI", $chr,$row_odr["invoice_no"]);
 			}
 			?> No.</strong><span>
 

@@ -1154,6 +1154,7 @@ function get_odr_det_no($ty){  //agreement no
 
 function get_auto_no($ty, $table, $column){  // 통합 no 생성
 	global $odr_idx;
+	global $part_type;
 
 	if ($ty == "TFI"){
 		//$addCl = " or testB_invoice like '".$ty.date("y")."%'"; //error에의한 주석처리.아래도 수정 2016-10-16
@@ -1167,12 +1168,20 @@ function get_auto_no($ty, $table, $column){  // 통합 no 생성
 		$odr_no_cnt = QRY_CNT("odr","and ($column like '".$ty.date("y")."%'".$addCl.") and odr_idx = '".$odr_idx."' ");
 		$cnt = get_any("odr","IFNULL(CAST(SUBSTR(MAX($column),$cut_bit,5) AS UNSIGNED),0)", "odr_status NOT IN(8,99) AND ($column like '".$ty.date("y")."%'".$addCl.")");
 		if ($odr_no_cnt)
-		{
+		{		
 			$result_value = $ty.date("y")."-PS".str_pad(fmod($cnt,99999),5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
 		}
 		else
-		{
-			$result_value = $ty.date("y")."-PS".str_pad(fmod($cnt,99999)+1,5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
+		{	
+			if ($part_type==2)
+			{				
+				$result_value = $ty.date("y")."-PS".str_pad(fmod($cnt,99999)+2,5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
+			}
+			else
+			{
+				$result_value = $ty.date("y")."-PS".str_pad(fmod($cnt,99999)+1,5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
+			}			
+			
 		}
 		
 	}else{

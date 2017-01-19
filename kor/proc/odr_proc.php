@@ -994,6 +994,7 @@ if ($typ == "pay_jisok2"){
     $sell_mem_idx = $odr[sell_mem_idx];
     $sell_rel_idx = $odr[sell_rel_idx];
     $inv_no = $odr[invoice_no];
+    $part_type = "2";
 
     $prt_method = $charge_method=="1" ? "신용카드" : ($charge_method=="2"?"은행송금":"My Bank");
 
@@ -1074,12 +1075,15 @@ if ($typ == "pay_jisok2"){
     $tot_amt = "$".$tot_amt;
     //6-1. 송장(판매자)
     if($pay_mem_idx == $sell_mem_idx){
+        $chr = "DPI";
+        $inv_no_new = str_replace("EI", $chr,  get_auto_no("EI", "odr" , "invoice_no"));
+
         //송장번호 가져오자
         $sql = "insert into odr_history set
                 odr_idx = '$odr_idx'
                 ,status = 18
                 ,status_name = '송장'
-                ,etc1 = '$inv_no'
+                ,etc1 = '$inv_no_new'
                 ,sell_mem_idx = '$sell_mem_idx'
                 ,buy_mem_idx = '$buy_mem_idx'
                 ,reg_mem_idx = '$buy_mem_idx'

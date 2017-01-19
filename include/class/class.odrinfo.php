@@ -290,7 +290,8 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								}
 								else
 								{
-									$quantity= $quantity==0?"":number_format($quantity);
+									$odr_stock= $odr_stock==0?"":number_format($odr_stock);
+									echo $odr_stock;
 								}
 								
 							}
@@ -449,7 +450,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<div class="select type6" lang="en" style="width:60px; padding:0;" >
 							<label style="padding:0;padding-left:2px;padding-top:2px;"><?=$rhtype==""?"":$rhtype?></label>
 							<select name="rhtype[]">
-								<option lang="en" <?if($rhtype==""){echo "selected";}?>></option>
+								<option lang="en" <?if($rhtype=="None"){echo "selected";}?>></option>
 								<option lang="en" <?if($rhtype=="RoHS"){echo "selected";}?>>RoHS</option>
 								<option lang="en" <?if($rhtype=="HF"){echo "selected";}?>>HF</option>
 							</select>
@@ -699,7 +700,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<div class="select type6" lang="en" style="width:60px; padding:0;" >
 							<label style="padding:0;padding-left:2px;padding-top:2px;"><?=$rhtype==""?"":$rhtype?></label>
 							<select name="rhtype[]">
-								<option lang="en" <?if($rhtype==""){echo "selected";}?>></option>
+								<option lang="en" <?if($rhtype=="None"){echo "selected";}?>></option>
 								<option lang="en" <?if($rhtype=="RoHS"){echo "selected";}?>>RoHS</option>
 								<option lang="en" <?if($rhtype=="HF"){echo "selected";}?>>HF</option>
 							</select>
@@ -995,7 +996,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<div class="select type6" lang="en" style="width:60px">
 								<label><?=$rhtype==""?"":$rhtype?></label>
 								<select name="rhtype[]">
-									<option lang="en" <?if($rhtype==""){echo "selected";}?>></option>
+									<option lang="en" <?if($rhtype=="None"){echo "selected";}?>></option>
 									<option lang="en" <?if($rhtype=="RoHS"){echo "selected";}?>>RoHS</option>
 									<option lang="en" <?if($rhtype=="HF"){echo "selected";}?>>HF</option>
 								</select>

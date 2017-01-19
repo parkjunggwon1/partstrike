@@ -1010,12 +1010,17 @@ switch($actty) {
 		if ($_part_type!=2)
 		{
 			if(($_quantity - $_odr_quantity)<0){	//변경된 수량이 발주 수량보다 작을 경우
-				update_val("odr_det","odr_quantity",$_quantity, "odr_det_idx", $_det_idx);
+				update_val("odr_det","odr_quantity",$_quantity, "odr_det_idx", $_det_idx);				
 			}
 		}
 		//단가정보Update
 		if($_part_price != $_odr_price){	//Unit Price 가 변경되었을 경우..
 			update_val("odr_det","odr_price",$_part_price, "odr_det_idx", $_det_idx);
+		}
+
+		//part 재고정보Update
+		if($_odr_stock != $_quantity){	
+			update_val("odr_det","odr_stock",$_quantity, "odr_det_idx", $_det_idx);
 		}
 	}
 

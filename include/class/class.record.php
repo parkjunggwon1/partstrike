@@ -62,6 +62,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			$quantity= replace_out($row2["quantity"]);
 			$period= replace_out($row2["period"]);
 			$price= replace_out($row2["price"]);
+			$odr_price= replace_out($row2["odr_price"]);
 			$rel_idx= replace_out($row2["rel_idx"]);
 			$odr_quantity= replace_out($row2["odr_quantity"]);
 			$supply_quantity= replace_out($row2["supply_quantity"]);
@@ -179,21 +180,21 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				} 
 			}
 
-			if(strpos($price, ".") == false)  
+			if(strpos($odr_price, ".") == false)  
 			{
-				$price_val= number_format($price,2);
+				$price_val= number_format($odr_price,2);
 			}				
 			else
 			{
-				$price_val= $price;
+				$price_val= $odr_price;
 			}
 			if ($odr_status==0 || $odr_status==1 || $odr_status==2 || $odr_status==3 || $odr_status==8 || $odr_status==16 || $odr_status==18 || $odr_status==19 || $odr_status==20 || $odr_status==31)
 			{
-				$total_price_value = round_down($odr_quantity*$price,4);				
+				$total_price_value = round_down($odr_quantity*$odr_price,4);				
 			}
 			else
 			{
-				$total_price_value = round_down($supply_quantity*$price,4);
+				$total_price_value = round_down($supply_quantity*$odr_price,4);
 				
 			}
 

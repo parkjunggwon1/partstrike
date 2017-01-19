@@ -6,107 +6,175 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/class/class.odrinfo.php";?>
 <script src="/kor/js/jquery-1.11.3.min.js"></script>
 <script src="/include/function.js"></script>
 <script>
-ready();
-var date_sel = "";
-$("#layerPop3 .stock-list-table tbody:eq(0) tr:eq(0) td").addClass("first");
-$(".layer-pagination2.red li, .layer-pagination2.bk li").click(function(){
-	var prevPage =$(".layer-pagination2.red .current a").text();	
-	var thisPage="";
-	var supp = parseInt($("#supply_quantity").val());
-	var qty = parseInt($("#31_05_qty").val().replace(/,/g, ''));
-	date_sel="true";
-	if ($(this).find("a").text() !="")
-	{
-		$(this).addClass("current");
-		thisPage =$(this).find("a").text();
-	}else{
-		if($(this).hasClass("navi-prev")){
-			thisPage = prevPage =="" ? 19: parseInt(prevPage) - 1;
-		}else{
-			thisPage = prevPage =="" ? 1: parseInt(prevPage) + 1;
-		}		
-	}
-	if (thisPage <20 && thisPage > 0)
-	{
-		//지속적..
-		if ($(".layer-pagination2.red .current a, .layer-pagination2.bk .current a").text()!="")
-		{
-			$(".layer-pagination2 li").removeClass("current");		
-		}
-		$(".pagingli_1:eq("+(thisPage-1)+")").addClass("current");
-		$("#period").val(thisPage);
-		if(supp > 0)
-		{
-			$(".btn-area span").hide();
-			//$(".btn-area button:eq(0)").show();
-			$("#31-05-smt").show();			
-		}
-		else
-		{						
-			$(".btn-area span").show();
-			//$(".btn-area button:eq(0)").show();
-			$("#31-05-smt").hide();
-		}
+$(document).ready(function() {
+	ready();
+	var date_sel = "";
+	$("#layerPop3 .stock-list-table tbody:eq(0) tr:eq(0) td").addClass("first");
+	
+	$("body").on("click",".layer-pagination2.red li, .layer-pagination2.bk li",function(){
+		var prevPage =$(".layer-pagination2.red .current a").text();	
+		var thisPage="";
+		var supp = parseInt($("#supply_quantity").val());
+		var qty = parseInt($("#31_05_qty").val().replace(/,/g, ''));
+		date_sel="true";
+
 		
-	}
+		if ($(this).find("a").text() !="")
+		{
+			$(this).addClass("current");
+			thisPage =$(this).find("a").text();
+		}else{
 
-});
+			if($(this).hasClass("navi-prev")){
 
-$("input[name=supply_quantity]").keyup(function(e){
-	maskoff();
-	var supp = parseInt($(this).val());
-	var qty = parseInt($("#31_05_qty").val().replace(/,/g, ''));
+				var min_val = $(this).attr("min");
+				var max_val = $(this).attr("max");
+				var new_min_val= parseInt(min_val)-parseInt(1);
+				var new_max_val= parseInt(max_val)-parseInt(1);
+				if (min_val==1)
+				{
+					return;
+				}
+				$(".week_sel").html("");
+				$(".week_sel").append("<li class='navi-prev' min='"+new_min_val+"' max='"+new_max_val+"'><a href='#''><img src='/kor/images/nav_btn_down.png' alt='prev'></a></li>");
+				for(var i=parseInt(min_val)-1; i<=parseInt(max_val)-1;i++)
+				{
+					if (i<3)
+					{
+						$(".week_sel").append("<li class='pagingli_1 bk' style='padding:1px;'><a href='#'>"+i+"</a></li>");
+					}
+					else
+					{
+						$(".week_sel").append("<li class='pagingli_1' style='padding:1px;'><a href='#'>"+i+"</a></li>");					
+					}
+				}				
+						
+				$(".week_sel").append("<li class='navi-next' min='"+new_min_val+"' max='"+new_max_val+"'><a href='#'><img src='/kor/images/nav_btn_up.png' alt='next'></a></li>");
+				$(".week_sel").append("<li class='c-red2' lang='en'>WK</li>");
+			}else{
+				var min_val = $(this).attr("min");
+				var max_val = $(this).attr("max");
+				var new_min_val= parseInt(min_val)+parseInt(1);
+				var new_max_val= parseInt(max_val)+parseInt(1);
 
-	if (date_sel=="true")
-	{
-		if ($("#31_05_qty").val()!="I")
+
+				$(".week_sel").html("");
+				$(".week_sel").append("<li class='navi-prev' min='"+new_min_val+"' max='"+new_max_val+"'><a href='#''><img src='/kor/images/nav_btn_down.png' alt='prev'></a></li>");
+				for(var i=parseInt(min_val)+1; i<=parseInt(max_val)+1;i++)
+				{
+					if (i<3)
+					{
+						$(".week_sel").append("<li class='pagingli_1 bk' style='padding:1px;'><a href='#'>"+i+"</a></li>");
+					}
+					else
+					{
+						$(".week_sel").append("<li class='pagingli_1' style='padding:1px;'><a href='#'>"+i+"</a></li>");					
+					}
+				}				
+						
+				$(".week_sel").append("<li class='navi-next' min='"+new_min_val+"' max='"+new_max_val+"'><a href='#'><img src='/kor/images/nav_btn_up.png' alt='next'></a></li>");
+				$(".week_sel").append("<li class='c-red2' lang='en'>WK</li>");
+			}
+			
+				
+					
+		}
+		var index = $(".pagingli_1").index(this);
+		var li_length = $(".pagingli_1").length;
+
+		if (li_length <19 && li_length > 0)
 		{
 
-			if ($(this).val() !="")
+			//지속적..
+			if ($(".layer-pagination2.red .current a, .layer-pagination2.bk .current a").text()!="")
 			{
-				if(supp > qty)
-				{
-					$(this).val("");	
-					$(".btn-area span").show();
-					//$(".btn-area button:eq(0)").show();
-					$("#31-05-smt").hide();					
-				}
-				else
+				$(".layer-pagination2 li").removeClass("current");		
+			}
+			if (index != "-1")
+			{
+				$(".pagingli_1:eq("+(index)+")").addClass("current");
+				$("#period").val(thisPage);
+				if(supp > 0)
 				{
 					$(".btn-area span").hide();
 					//$(".btn-area button:eq(0)").show();
-					$("#31-05-smt").show();								
+					$("#31-05-smt").show();			
 				}
+				else
+				{						
+					$(".btn-area span").show();
+					//$(".btn-area button:eq(0)").show();
+					$("#31-05-smt").hide();
+				}
+			}
+			
+			
+		}
+
+	});
+
+	$("input[name=supply_quantity]").keyup(function(e){
+		maskoff();
+		var supp = parseInt($(this).val());
+		var qty = parseInt($("#31_05_qty").val().replace(/,/g, ''));
+
+		if (date_sel=="true")
+		{
+			if ($("#31_05_qty").val()!="I")
+			{
+
+				if ($(this).val() !="")
+				{
+					if(supp > qty)
+					{
+						$(this).val("");	
+						$(".btn-area span").show();
+						//$(".btn-area button:eq(0)").show();
+						$("#31-05-smt").hide();					
+					}
+					else
+					{
+						$(".btn-area span").hide();
+						//$(".btn-area button:eq(0)").show();
+						$("#31-05-smt").show();								
+					}
+				}
+				else
+				{
+					$(".btn-area span").show();
+					//$(".btn-area button:eq(0)").show();
+					$("#31-05-smt").hide();		
+				}
+				
 			}
 			else
 			{
-				$(".btn-area span").show();
-				//$(".btn-area button:eq(0)").show();
-				$("#31-05-smt").hide();		
+				if(supp > 0)
+				{
+					$(".btn-area span").hide();
+					//$(".btn-area button:eq(0)").show();
+					$("#31-05-smt").show();	
+				}
+				else
+				{
+					$(".btn-area span").show();
+					//$(".btn-area button:eq(0)").show();
+					$("#31-05-smt").hide();	
+				}
 			}
-			
 		}
 		else
 		{
-			if(supp > 0)
+			if(supp > qty)
 			{
-				$(".btn-area span").hide();
-				//$(".btn-area button:eq(0)").show();
-				$("#31-05-smt").show();	
-			}
-			else
-			{
-				$(".btn-area span").show();
-				//$(".btn-area button:eq(0)").show();
-				$("#31-05-smt").hide();	
+				$(this).val("");
 			}
 		}
-	}
-	
-	maskon();
+		
+		maskon();
+	});
+
 });
-
-
 </script>
 
 <div class="layer-hd">
@@ -137,8 +205,8 @@ $("input[name=supply_quantity]").keyup(function(e){
 		<!-- 지속적... -->
 		<?if ($part_type == "2"){?>
 		<div class="layer-pagination2 red" style="text-align: right;">
-			<ul>
-				<li class="navi-prev"><a href="#"><img src="/kor/images/nav_btn_down.png" alt="prev"></a></li>
+			<ul class="week_sel">
+				<li class="navi-prev" min="1" max="18"><a href="#"><img src="/kor/images/nav_btn_down.png" alt="prev"></a></li>
 				<?for ($i = 1; $i <19 ; $i++) { 
 						if($i<3){
 							echo "<li class='pagingli_1 bk' style='padding:1px;'><a href='#'>$i</a></li>";
@@ -147,7 +215,7 @@ $("input[name=supply_quantity]").keyup(function(e){
 						}
 					}
 				?>
-				<li class="navi-next"><a href="#"><img src="/kor/images/nav_btn_up.png" alt="next"></a></li>
+				<li class="navi-next" min="1" max="18"><a href="#"><img src="/kor/images/nav_btn_up.png" alt="next"></a></li>
 				<li class="c-red2" lang="en">WK</li>
 			</ul>
 			
