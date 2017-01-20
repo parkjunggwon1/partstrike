@@ -46,6 +46,39 @@ Function QRY_ODR_DET_LIST($recordcnt,$searchand,$page,$ord='odr_det_idx',$odrby=
 	return $result;
 }
 
+//2017-01-18 : 임시테이블 part 정보 가져오기 위해.
+Function QRY_ODR_DET_LIST_TEMP($recordcnt,$searchand,$page,$ord='odr_det_idx',$odrby='desc'){
+	$conn = dbconn();	
+	if ($recordcnt > 0) {  //$recordcnt가 넘어오면 그만큼씩 끊어서 페이징 처리. recordcnt가 0으로 넘어오면 전체 다 출력 하겠다는 의미 (엑셀 다운로드 등에서 쓰임)
+		$startno = ($page-1) * $recordcnt;
+		$limit = "LIMIT $startno,$recordcnt";
+	}else{
+		$limit = "";
+	}
+
+	switch($ord){
+		case "odr_det_idx":
+			$s_ord=" order by  a.part_type asc, a.odr_det_idx $odrby";
+			break;
+		default:
+			$s_ord=" order by  a.part_type asc, a.odr_det_idx $odrby";
+			break;
+	}
+
+	$sql = "
+			SELECT *,b.quantity as part_stock,a.odr_price as odr_price FROM odr_det a
+			left outer join part_temp b on a.part_idx = b.part_idx 
+			WHERE
+				1=1 $searchand
+			$s_ord
+			$limit
+			";
+	mysql_query( "SET NAMES utf8");	
+	//echo $sql;
+	$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+	return $result;
+}
+
 Function QRY_ODR_VIEW($idx){
 
 	$conn = dbconn();	

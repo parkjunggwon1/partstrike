@@ -1545,7 +1545,7 @@ function GET_ODR_DET_LIST_VT($loadPage, $part_type, $searchand){   //part_type�
 	}//end if($cnt>0)
 }
 //***************************************************** //GET_ODR_DET_LIST_V2 *****************************************************************
-function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly=""){   //sheet용
+function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=0){   //sheet용
 	global $charge_type;
 	global $session_mem_idx;
 ?>
@@ -1573,12 +1573,20 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly=""){   //shee
 			$part_idx= replace_out($row["part_idx"]);
 			$part_type= replace_out($row["part_type"]);
 			$odr_idx= replace_out($row["odr_idx"]);
-			$part_no= replace_out($row["part_no"]);
+			if($temp_yn){ //2017-01-18 : '송장'(30_08) 작성단계에서 'INVOICE'에 임시테이블 데이터 보여주기
+				$part_no= get_any("part_temp", "part_no", "odr_idx=$odr_idx and part_idx=$part_idx");
+				$manufacturer= get_any("part_temp", "manufacturer", "odr_idx=$odr_idx and part_idx=$part_idx");
+				$package= get_any("part_temp", "package", "odr_idx=$odr_idx and part_idx=$part_idx");
+				$dc= get_any("part_temp", "dc", "odr_idx=$odr_idx and part_idx=$part_idx");
+				$rhtype= get_any("part_temp", "rhtype", "odr_idx=$odr_idx and part_idx=$part_idx");
+			}else{
+				$part_no= replace_out($row["part_no"]);
+				$manufacturer= replace_out($row["manufacturer"]);
+				$package= replace_out($row["package"]);
+				$dc= replace_out($row["dc"]);
+				$rhtype= replace_out($row["rhtype"]);
+			}
 			$nation= replace_out($row["nation"]);
-			$manufacturer= replace_out($row["manufacturer"]);
-			$package= replace_out($row["package"]);
-			$dc= replace_out($row["dc"]);
-			$rhtype= replace_out($row["rhtype"]);
 			$quantity= replace_out($row["quantity"]);
 			$odr_quantity= replace_out($row["odr_quantity"]);
 			$supply_quantity= replace_out($row["supply_quantity"]);

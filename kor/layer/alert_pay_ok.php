@@ -19,6 +19,23 @@ if ($alert =="sessionend"){
 				encType:"multipart/form-data",
 				success: function (data) {	
 				
+					//var splData = data.split(":");
+					if (trim(data) == "SUCCESS"){			
+						<?if ($typ=="pay_access"){?>
+							openCommLayer("layer3","18_2_12","?odr_idx=<?=$odr_idx?>&odr_det_idx=<?=$odr_det_idx?>&tot_amt=<?=$tot_amt?>");
+						<?}else{?>
+							//alert_msg("결제가 완료되었습니다.");
+							location.href='/kor/';						
+						<?}?>
+						
+					}else if (trim(data) == "SUCCESS-Deposit")
+					{	
+						closeCommLayer("layer4");
+						closeCommLayer("layer5");
+						openCommLayer("layer","17_16","?mn=05&odr_idx=<?=$odr_idx?>");
+					}else{
+						alert(data);
+					}
 				}
 		});		
 	}

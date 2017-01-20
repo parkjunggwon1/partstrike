@@ -467,8 +467,9 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 	<div class="order-table">
 		<h2><img src="/kor/images/st_tit_<?if ($for_readonly=="Y"){?>commercial_invoice<?}elseif($for_readonly=="P"){?>packing_list<?}else{?>invoice<?}?>.gif" alt="Invoice"></h2>
 		<span class="currency">( Currency : US$ )</span>
-		<?	//echo GET_ODR_DET_LIST_V2(" and odr_idx=$odr_idx ",$loadPage, $for_readonly); 
-			echo GET_ODR_DET_LIST_V2(" and odr_idx=$odr_idx ","30_09", $for_readonly); 
+		<?	//echo GET_ODR_DET_LIST_V2(" and odr_idx=$odr_idx ",$loadPage, $for_readonly);
+			$temp_bit = ($loadPage=="30_08")? 1:0; //2017-01-18 : '송장' 작성단계 시 '임시테이블'데이터 보여주기 위하여
+			echo GET_ODR_DET_LIST_V2(" and odr_idx=$odr_idx ","30_09", $for_readonly, $temp_bit); 
 		?>
 	</div>
 	<!-- //order-table -->
