@@ -92,7 +92,7 @@
 						</thead>
 						<tbody id="orderlist">
 						<?//	for ($i = 1; $i<=6; $i++){
-							echo GET_RCD_DET_LIST($i , $odr_type, " and a.".($odr_type=="S"?"sell_":"")."mem_idx=$this_mem_idx AND (a.odr_status IN(1,2,3,8,16,18,19,20,31) or a.odr_status=0 and imsi_odr_no <> '') ", "S");
+							echo GET_RCD_DET_LIST($i , $odr_type, " and a.".($odr_type=="S"?"sell_":"")."mem_idx=$this_mem_idx AND (a.odr_status IN(1,2,3,7,8,16,18,19,20,31) or a.odr_status=0 and imsi_odr_no <> '') ", "S");
 						//}?>							
 						</tbody>
 					</table>
@@ -150,7 +150,7 @@
 						</thead>
 						<tbody id="orderlist">
 						<?//	for ($i = 1; $i<=6; $i++){
-							echo GET_RCD_DET_LIST($i , $odr_type, " and a.".($odr_type=="S"?"sell_":"")."mem_idx=$this_mem_idx AND a.odr_status NOT IN(0,1,2,3,8,16,18,19,20,31)", "S");
+							echo GET_RCD_DET_LIST($i , $odr_type, " and a.".($odr_type=="S"?"sell_":"")."mem_idx=$this_mem_idx AND a.odr_status NOT IN(0,1,2,3,7,8,16,18,19,20,31)", "S");
 						//}?>							
 						</tbody>
 					</table>

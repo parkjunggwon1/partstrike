@@ -10,9 +10,27 @@ function GF_GET_PART_LIST($page, $part_type,$part_no){
 		$(".pagination a.link").click(function(){
 				showajaxParam("#f3 #partlist", "partlist", "page="+$(this).attr("num")+"&part_type="+$("#part_type").val()+"&part_no="+document.f3.srch_part_no.value);
 		});
-		$("#partlist input:text").keyup(function(){				
-			$("#partlist .save span").hide();
-			$("#partlist .save button").show();
+		$("#partlist input:text").keyup(function(){		
+			if ($(this).attr("name")=="mod_package[]" || $(this).attr("name")=="mod_dc[]")
+			{
+				$("#partlist .save span").hide();
+				$("#partlist .save button").show();
+			}
+			else
+			{
+				if ($(this).val())
+				{				
+					$("#partlist .save span").hide();
+					$("#partlist .save button").show();
+				}		
+				else
+				{
+					$("#partlist .save span").show();
+					$("#partlist .save button").hide();	
+				}
+			}
+			
+			
 		});
 		
 		$("#partlist input[name^=delchk]").click(function(e){

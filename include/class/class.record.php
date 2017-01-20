@@ -217,6 +217,8 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				<?}else{?>
 					<td  <?=$goJump?>  class="t-rt"><?=$odr_stock<=0?"":number_format($odr_stock)?></td>
 				<?}?>			
+			<?}else if ($odr_status==7){?>
+				<td  <?=$goJump?>  class="t-rt"><?=$odr_stock<=0?"":number_format($odr_stock)?></td>
 			<?}else{?>
 				<td  <?=$goJump?>  class="t-rt"><?=$supply_quantity<=0?"":number_format($supply_quantity)?></td>
 			<?}?>
@@ -226,11 +228,15 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				<?if ($odr_status==0 || $odr_status==1 || $odr_status==2 || $odr_status==3 || $odr_status==8 || $odr_status==16 || $odr_status==18 || $odr_status==19 || $odr_status==20 || $odr_status==31){?>
 					<td  <?=$goJump?> class="t-rt c-blue" ><?=$odr_quantity<=0?"":number_format($odr_quantity)?></td>			
 					<td  <?=$goJump?> class="t-rt c-red" ><?=$supply_quantity<=0?"":number_format($supply_quantity)?></td>
+				<?}else if ($odr_status==7){?>
+					<td  <?=$goJump?>  class="t-rt"><?=$odr_quantity<=0?"":number_format($odr_quantity)?></td>
+					<td  <?=$goJump?> class="t-rt c-red" ><?=$supply_quantity<=0?"":number_format($supply_quantity)?></td>
 				<?}else{?>
-					<td  <?=$goJump?> class="t-rt" >$<?=number_format($total_price_value,4)?></td>
+					<!--<td  <?=$goJump?> class="t-rt" >$<?=number_format($total_price_value,4)?></td>-->
 				<?}?>		
 			
 			<?}?>
+
 			<?
 				if($part_type =="2")
 				{

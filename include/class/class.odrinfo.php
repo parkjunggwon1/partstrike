@@ -450,7 +450,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<div class="select type6" lang="en" style="width:60px; padding:0;" >
 							<label style="padding:0;padding-left:2px;padding-top:2px;"><?=$rhtype==""?"":$rhtype?></label>
 							<select name="rhtype[]">
-								<option lang="en" <?if($rhtype=="None"){echo "selected";}?>></option>
+								<option lang="en" <?if($rhtype=="None"){echo "selected";}?>>None</option>
 								<option lang="en" <?if($rhtype=="RoHS"){echo "selected";}?>>RoHS</option>
 								<option lang="en" <?if($rhtype=="HF"){echo "selected";}?>>HF</option>
 							</select>
@@ -1587,6 +1587,10 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 				$rhtype= replace_out($row["rhtype"]);
 			}
 			$nation= replace_out($row["nation"]);
+			$manufacturer= replace_out($row["manufacturer"]);
+			$package= replace_out($row["package"]);
+			$dc= replace_out($row["dc"]);
+			$rhtype= replace_out($row["rhtype"]);
 			$quantity= replace_out($row["quantity"]);
 			$odr_quantity= replace_out($row["odr_quantity"]);
 			$supply_quantity= replace_out($row["supply_quantity"]);
@@ -1996,7 +2000,9 @@ if ($for_readonly != "P") {?>
 function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 	global $session_mem_idx;
 	global  $pay;
-	$searchand = "and odr_idx = '$odr_idx'";
+	global $status;
+
+	$searchand = "and odr_idx = '$odr_idx' ";
 	if ($odr_det_idx !=""){ //개별 History가 있다면....
 		$searchand .= " and (odr_det_idx = '$odr_det_idx' or odr_det_idx = 0 or odr_det_idx is null) ";
 	}
@@ -2036,9 +2042,10 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 	<input type="hidden" name="odr_status" id="odr_status_<?=$loadPage?>" value="<?=$odr_status?>">
 	<input type="hidden" name="loadPage" id="loadPage" value="<?=$loadPage?>">
 	<?if ($loadPage!="31_04" && $loadPage!="31_06"  && $loadPage!="19_1_05"){ //납기확인 전까지는 history 필요없댐, 환불완료 메시지창?>
+	<?if ($status != 7){?>
 	<div class="layer-step">
 		<ol>
-		<?		
+		<?					
 			while($row = mysql_fetch_array($result)){
 				$i++;				
 				$odr_history_idx = replace_out($row["odr_history_idx"]);
@@ -2098,9 +2105,11 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						
 					</li>
 			<?}
-		}  //end of while?>
+			}  //end of while
+			?>
 		</ol>
 	</div>
+	<?}?>
 	<?} //end if($loadPage != "31_04") ?>
 	<!-- //layer-step -->
 	<?echo layerFile($loadPage,$reg_mem_idx , $reg_rel_idx , $odr_idx ,$odr_history_idx);
@@ -2108,7 +2117,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 }//------------------------------------------------------------------- //GET_ODR_HISTORY_LIST ----------------------------------------------------------------------------------------/
 	function layerFile($loadPage,$reg_mem_idx , $reg_rel_idx , $odr_idx, $odr_history_idx){ // 상태 메세지...
 		global  $pay;
-		if ($loadPage == "31_04" || $loadPage == "31_06")
+		if ($loadPage == "31_04" || $loadPage == "31_06" || $loadPage == "02_02")
 		{
 			$style_css="style='border-top:0'";
 		}
@@ -2146,7 +2155,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 					switch ($loadPage) {
 						case "02_02":
 					?>
-						<td class="t-ct">사유 : <span class="c-red2">판매자가 품목을 삭제하였습니다.</span></td>
+						<td class="t-ct" style="font-size:14px;">사유 : <span class="c-red2" >판매자가 품목을 삭제하였습니다.</span></td>
 						</tr></tbody></table></div>
 					<?
 						echo layerOrdListData($loadPage ,$odr_idx,$odr_det_idx);
