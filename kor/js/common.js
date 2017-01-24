@@ -2462,7 +2462,16 @@ $(document).ready(function(){
 	$("body").on("click",".btn-pop-1904",function(){
 		var $chked_odr_det = $("input[name^=odr_det_idx]:checked");
 		if($chked_odr_det.length==0){
-			alert_msg("제품을 선택해 주세요.");
+			
+			if ($("input[name^=odr_det_idx]").length > 0)
+			{				
+				openLayer("layer4","19_04", "?det_cnt=1&odr_det_idx="+$("input[name^=odr_det_idx]").val()+"&fault_method="+$(this).attr("fault_method"));
+			}
+			else
+			{			
+				alert_msg("제품을 선택해 주세요.");
+			}
+			
 		}else{
 			var ch_odr_det_idx = [];
 			$chked_odr_det.each(function(e){

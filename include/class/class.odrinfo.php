@@ -1186,6 +1186,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<input type="checkbox" name="odr_det_idx[]" class="<?=($part_type=="2" && $period*1> 2) ? "endure":"stock"?>" value="<?=$odr_det_idx?>" part_type="<?=$part_type?>">
 						<?}else if($loadPage=="30_20" &&$chkbox_visible=="Y"){ //2016-04-24 : 품목 1개일때는 옵션 숨기기
 							$det_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx ");  //odr_det 수량
+
 						?>
 						
 							<input type="<?=($det_cnt>1)? "checkbox":"hidden";?>" name="odr_det_idx[]" class="stock" odr_quantity="<?=$odr_quantity;?>" value="<?=$odr_det_idx?>">
@@ -1223,7 +1224,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<td colspan="8" class="t-lt"><?=get_cut($part_no,80,"..")?></td>
 						<?}else{?>
 						<?if($loadPage !="31_06"){?>
-						<input type="hidden" name="odr_det_idx" value="<?=$odr_det_idx?>"/>
+						<!--<input type="hidden" name="odr_det_idx" value="<?=$odr_det_idx?>"/>-->
 						<?}?>
 							<td class="t-lt"><?=cut_len($part_no,24,".");?></td>
 							<td class="t-lt"><?=cut_len($manufacturer,20,".");?></td>
@@ -1939,7 +1940,6 @@ if ($for_readonly != "P") {?>
 			}
 		}
 
-
 		//보증금..
 		$deposit_cnt = QRY_CNT("odr_history" , "and odr_idx=$odr_idx and (sell_mem_idx=".$_SESSION["MEM_IDX"]." or buy_mem_idx=".$_SESSION["MEM_IDX"].") and status_name = '송장'");	
 		?>
@@ -1947,17 +1947,22 @@ if ($for_readonly != "P") {?>
 			<!-- 대표님 요청으로 display:none -->
 			<li class="sub"><strong>Deposit :</strong><span>$1,000.00	</li>
 		<?
+			$deposit_val = (double)"1000";
 
+			
 			if ($pay_invoice=="D")
 			{
-				$tot = (double)$tot + (double)$shipping_charge+1000;
+
+				$tot = str_replace(",","",$tot);
+				$tot = $tot+1000 + $shipping_charge  ;
+
 			}
 			else
-			{
-				$tot = (double)$total_val + (double)$shipping_charge+1000;
+			{				
+				$tot = $total_val + (double)$shipping_charge + 1000;
 			}
 			
-		
+
 			if( ($tot == (int)$tot) )
 				{
 					$tot = number_format($tot,2);

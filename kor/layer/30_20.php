@@ -121,7 +121,9 @@ if ($cnt == 0 ){?>
 		</div>
 		<!-- //layer-pagination -->
 		<?
+		
 		if($fault_yn == 'Y'){
+
 			//echo "/FAULT=Y";
 			echo GET_ODR_HISTORY_LIST("30_20_F", $odr_idx, $odr_det_idx);
 		}else{

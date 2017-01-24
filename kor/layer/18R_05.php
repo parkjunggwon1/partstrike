@@ -144,7 +144,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 		f.action = "/kor/proc/odr_proc.php";
 		f.submit();	
 		alert_msg("<?=$sell_mem_idx == $session_mem_idx?"회신":($refuse_num==0?"회신요청":"답변");?> 하였습니다.");
-		location.href="/kor/";
+		//location.href="/kor/";
 		/**
 		var formData = $("#f6").serialize(); 
 		alert(formData);

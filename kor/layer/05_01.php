@@ -15,6 +15,7 @@ if (!$_SESSION["MEM_IDX"]){ReopenLayer("layer6","alert","?alert=sessionend");exi
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 $(document).ready(function(){
+	
 	$("#addsearch_part_no").focus();
 	if($("#addsearch_part_no").val()){
 		var ary = new Array();

@@ -1189,6 +1189,7 @@ function get_auto_no($ty, $table, $column){  // 통합 no 생성
 		$result_value = $ty.date("y")."-PS".str_pad(fmod($cnt,99999)+1,5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
 	}
 	return $result_value;
+
 }
 
 function get_memfee_no($ty, $table, $column){     //memfee no
@@ -1341,7 +1342,7 @@ function SumBankHold($mem_idx, $rel_idx, $ty=2){
 
 function GetDeposit($mem_idx, $rel_idx, $charge_type){
 	$com_idx = ($rel_idx ==0 ? $mem_idx : $rel_idx);
-	$pay = get_any("mybank" ,"sum( charge_amt )", "(mem_idx =$com_idx or rel_idx =$com_idx) and charge_type in ($charge_type) and mybank_yn='Y'");
+	$pay = get_any("mybank" ,"sum( charge_amt )", "(mem_idx =$com_idx or rel_idx =$com_idx) and charge_type in ($charge_type) ");
 	
 	return number_format(round_down(abs($pay),4),4);
 }
