@@ -1258,6 +1258,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<?}?>
 						<?}?>
 						<td class="t-rt">$<?=$price_val?></td>
+						<?if ($loadPage !="19_08" && $loadPage !="18R_05" && $loadPage !="19_06"){?>
 						<td class="t-rt ">
 						<!-- 발주수량/반품수량-->
 							<?if($loadPage == "18_1_04"){?>
@@ -1281,15 +1282,16 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 										$price_sum= number_format($price_sum,4);
 									}
 									echo "$".$price_sum;
-								}
+								}								
 								else{
 									echo "<span class=\"c-blue\">".number_format($odr_quantity)."</span>";
 								}?>
 
 						<!--//발주수량-->
 						</td>
+						<?}?>
 						<?if ($loadPage !="21_04" || $loadPage !="30_20" || $loadPage =="30_14" ){?>
-								<?if($loadPage!="02_02"&& $loadPage !="05_04_1" && $loadPage !="30_20" && $loadPage !="30_14"  && $loadPage !="13_04s"){?>
+								<?if($loadPage!="02_02"&& $loadPage !="05_04_1" && $loadPage !="30_20" && $loadPage !="30_14"  && $loadPage !="13_04s" && $loadPage !="19_08" && $loadPage !="18R_05" && $loadPage !="19_06"){?>
 									<td class="t-rt c-red">
 										<?if($part_type=="7"){?>
 										$<?=number_format($price,2);?>
@@ -2093,7 +2095,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						<span class="date"><?=$reg_date_fmt?></span>
 						<strong class="status"><?=$status_name?></strong>
 						<?
-						if (($loadPage=="30_20" || $loadPage=="30_22" || $loadPage=="30_23") && $status_name=="선적완료"){
+						if (($loadPage=="30_20" || $loadPage=="30_22" || $loadPage=="30_23" || $loadPage=="19_08") && $status_name=="선적완료"){
 							if ($etc2=="직접 수령")
 							{	
 						?>
@@ -2102,10 +2104,12 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 							<span class="etc"><span ><?if ($etc2){echo openSheet($status, $etc2,$odr_idx,$etc_change,$odr_history_idx);}?></span></span>
 						<?}?>
 						<?}else{?>
-							<span class="etc"><span ><?if ($etc1){echo openSheet($status, $etc1,$odr_idx,$etc_change,$odr_history_idx);}?></span></span>
-							<?if ($status!="5"){?>
-								<span class="etc"><span ><?if ($etc2){?><?=$etc2?><?}?></span></span>
-							<?}?>
+							<span class="etc"><span ><?if ($etc1){echo openSheet($status, $etc1,$odr_idx,$etc_change,$odr_history_idx);}?>
+								<?if ($status=="10"){?>							
+									-<?if ($etc2){?><?=$etc2?><?}?>
+								<?}?>
+							</span></span>
+
 						<?}?>
 						
 					</li>
@@ -2455,7 +2459,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 								<td class="company">
 									<img src="/kor/images/nation_title_<?=$buy_com_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$buy_com_nation)?>"> <span class="name c-blue"><a href="javascript:layer_company_det('<?=$buy_com_idx?>');" class="c-blue"><?=$buy_com_name?></a></span>
 								</td>
-								<td class="c-red2 w100 t-ct">
+								<td class="c-red2 w100 t-ct" style="font-size:14px;">
 									<?if(strlen($fault_select)>0){?><?=($loadPage=="19_06")? "구매자":"판매자";?>가 <?=($fault_select=="3")? "추가선적":"환불";?>을 <?=($fault_accept=='Y')? "승인":"요청";?>하였습니다.<?}?>
 								</td>
 								<td class="t-rt">
@@ -2822,6 +2826,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						<?}?>
 
 					<?}else{?>
+						<?if ($loadPage != "19_08" && $loadPage !="18R_05" && $loadPage !="19_06"){?>
 						<th scope="col" lang="ko" class="t-orderoty">
 							<?if($loadPage == "18_1_04" || $loadPage == "18R_19" || $loadPage=="19_1_05" || $loadPage == "30_14"){?>반품수량
 							<?}elseif($loadPage=="19_1_06"){?>환불수량
@@ -2831,7 +2836,8 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 							?>
 							<?}else{?>발주수량<?}?>
 						</th>
-						<?if($loadPage!="30_20_F" && $loadPage!="30_22_F" && $loadPage!="13_04s"){?><th scope="col" lang="ko" class="t-supplyoty">공급수량</th><?}?>
+						<?}?>
+						<?if($loadPage!="30_20_F" && $loadPage!="30_22_F" && $loadPage!="13_04s" && $loadPage != "19_08" && $loadPage !="18R_05" && $loadPage !="19_06"){?><th scope="col" lang="ko" class="t-supplyoty">공급수량</th><?}?>
 						<?if($loadPage=="19_1_05" || $loadPage=="19_1_06"){?><th scope="col" lang="en" class="t-amount">Amount</th>
 						<?}else{?><th scope="col" lang="ko" class="t-period">납기</th>
 						<?}?>
@@ -2902,12 +2908,12 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 									<?}?>
 									<span class="box-num"><?=$num;?></span>
 									<span class="c-red"><?if($fault_select>0){?>(<?=$etc2?>)<?}?></span>
-									<span style="cursor:pointer;" OnClick="show_msg(<?=$msg_history_idx;?>);"><?=$msg_reason_title?></span>
+									<span style="cursor:pointer;color:#00759e;" OnClick="show_msg(<?=$msg_history_idx;?>);"><?=$msg_reason_title?></span>
 									<?if(($fault_select=='3' || $fault_select=='4') && $fault_quantity > 0){?>
 										<span class="c-red">[부족수량 : <?=$fault_quantity;?>EA]</span>
 									<?}?>
 								</td>
-								<td class="t-rt" lang="en" Style="width:100px; padding-right:5px;"><?=date("j F Y");?></td>
+								<td class="t-rt" lang="en" Style="width:100px; padding-right:5px;color:#00759e;"><?=date("j M Y");?></td>
 							</tr>
 							<tr id="msg_cont_<?=$msg_history_idx;?>" Style="display:none;">
 								<td colspan="2" class="t-lt" lang="ko"><?=$msg_reason;?></td>

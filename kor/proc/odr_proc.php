@@ -837,54 +837,17 @@ if ($typ =="odramendconfirm2"){ //구매자: 수정발주서(P.O Amendment)12_07
         }
 }
 
-/** 수정발주서(09_01) 에서 '발주서 확인' 클릭 시 처리 *****************************/
-if($typ == "poano"){
-	//2017-01-03 : 재고수량과 단가 체크
-	$quantity_cnt = 0;
-	$price_cnt = 0;
-	$result =QRY_ODR_DET_LIST(0," and a.odr_idx=$odr_idx",0,"","asc");
-	while($row = mysql_fetch_array($result)){
-		$_det_idx = replace_out($row["odr_det_idx"]);
-		$_quantity = replace_out($row["quantity"]);
-		$_odr_stock = replace_out($row["odr_stock"]);
-		$_odr_quantity = replace_out($row["odr_quantity"]);
-		$_supp_quantity = replace_out($row["supply_quantity"]);
-		$_part_price = replace_out($row["price"]);
-		$_odr_price = replace_out($row["odr_price"]);
-		if(($_quantity+$_supp_quantity)<$_odr_quantity) $quantity_cnt++;
-		if($_part_price != $_odr_price){
-			$price_cnt++;
-			//det 테이블의 구매가격 Update
-			update_val("odr_det","odr_price",$_part_price, "odr_det_idx", $_det_idx);
-		}
-	}
-	if($price_cnt>0){
-		echo "PRICE";
-	}elseif($quantity_cnt>0){
-		echo "STOCK";
-	}else{
-		$sql = "update odr set amend_no = '".get_auto_no("POA", "odr" , "amend_no")."', amend_date = now()  where odr_idx=".$odr_idx;
-		$result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
-		/** 2017-01-10 : ship 정보를 임시 테이블에 저장 했다가, '확정발주' 시 ship에 복사
-		$ship_sql = "update ship set ship_info = '".$ship_info."', ship_account_no = '".$ship_account_no."', memo = '".$memo."',insur_yn='".$insur_yn."',delivery_addr_idx='".$delivery_addr_idx."'  where odr_idx=".$odr_idx; 
-		**/
-		//임시테이블에 데이터 존재여부
-		$ship_idx = get_any("ship_temp", "ship_idx", "odr_idx=$odr_idx");
-		if($ship_idx>0){
-			$ship_sql = "update ship_temp set ship_info = '".$ship_info."', ship_account_no = '".$ship_account_no."', memo = '".$memo."',insur_yn='".$insur_yn."',delivery_addr_idx='".$delivery_addr_idx."'  where ship_idx=".$ship_idx;
-		}else{
-			$ship_sql = "insert into ship_temp set ship_info = '".$ship_info."', ship_account_no = '".$ship_account_no."', memo = '".$memo."',insur_yn='".$insur_yn."',delivery_addr_idx='".$delivery_addr_idx."', odr_idx=".$odr_idx.", reg_date=now()";
-		}
-		$ship_result = mysql_query($ship_sql,$conn) or die ("SQL Error : ". mysql_error());
+if($typ == "poano"){ //------------- 2016-04-18 : 수정발주서 번호 생성
+    $sql = "update odr set amend_no = '".get_auto_no("POA", "odr" , "amend_no")."', amend_date = now()  where odr_idx=".$odr_idx;
+    $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
 
-		if($result){
-			echo "SUCCESS";
-			exit;
-		}else{
-			echo $result;
-			exit;
-		}
-	}
+    $ship_sql = "update ship set ship_info = '".$ship_info."', ship_account_no = '".$ship_account_no."', memo = '".$memo."',insur_yn='".$insur_yn."',delivery_addr_idx='".$delivery_addr_idx."'  where odr_idx=".$odr_idx;   
+    $ship_result = mysql_query($ship_sql,$conn) or die ("SQL Error : ". mysql_error());
+
+    if($result){
+        echo "SUCCESS";
+        exit;
+    }
 }
 
 if($typ =="chmybank"){  //--------------------------------------------------------------------------------------------------------------------------------------------------
