@@ -69,34 +69,49 @@ $tax_name = get_any("tax", "tax_name", "nation=$seller_nation");
 	<table class="price-table1" lang="en" align="center">
 		<tbody>
 			<?
-			if ($charge_ty=="F")
-			{
-
+			
 				//지속적(납기3주이상)--------------------------------------
 				if ($part_type == 2) 
 				{ 
+					if ($charge_ty=="F")
+					{
+
 				?>
-					<tr>
-						<th scope="row"><span >Sub Total</span> : </th>
-						<td><span ><?=$etc2_val?></span></td>
-					</tr>
-					<tr>
-						<th scope="row"><span >Down Payment</span> : </th>
-						<td><span class="c-red">-$<?=number_format($down_payment,4)?></span></td>
-					</tr>
-					<tr>
-						<th scope="row"><span ><?=$tax_name?></span> : </th>
-						<td><span >$<?=number_format($vat_plus,4)?></span></td>
-					</tr>
-					<tr class="lst">
-						<td colspan="2"></td>
-					</tr>
-					<tr>
-						<th scope="row"><span class="c-blue">Total : </span></th>
-						<td><span class="c-blue"><?=$etc2_val?></span></td>
-					</tr>
+						<tr>
+							<th scope="row"><span >Sub Total</span> : </th>
+							<td><span ><?=$etc2_val?></span></td>
+						</tr>
+						<tr>
+							<th scope="row"><span >Down Payment</span> : </th>
+							<td><span class="c-red">-$<?=number_format($down_payment,4)?></span></td>
+						</tr>
+						<tr>
+							<th scope="row"><span ><?=$tax_name?></span> : </th>
+							<td><span >$<?=number_format($vat_plus,4)?></span></td>
+						</tr>
+						<tr class="lst">
+							<td colspan="2"></td>
+						</tr>
+						<tr>
+							<th scope="row"><span class="c-blue">Total : </span></th>
+							<td><span class="c-blue"><?=$etc2_val?></span></td>
+						</tr>
 					
 				<?
+					}
+					else
+					{
+				?>
+						<tr>
+							<th scope="row"><span >Down Payment</span> : </th>
+							<td><span ><?=$etc2_val?></span></td>
+						</tr>
+						<tr>
+							<th scope="row"><span ></span> Total : </th>
+							<td><span ><?=$etc2_val?></span></td>
+						</tr>
+				<?
+					}
 				}
 				else
 				{
@@ -123,24 +138,7 @@ $tax_name = get_any("tax", "tax_name", "nation=$seller_nation");
 					</tr>
 				<?
 				}
-				
-			}
-			else
-			{
-			?>
-				<tr>
-					<th scope="row"><span >Down Payment</span> : </th>
-					<td><span ><?=$etc2_val?></span></td>
-				</tr>
-				<tr>
-					<th scope="row"><span ></span> Total : </th>
-					<td><span ><?=$etc2_val?></span></td>
-				</tr>
-				
-			<?
-			}
-			?>			
-			
+				?>
 		</tbody>
 	</table>
 	<div class="btn-area t-rt">

@@ -1317,15 +1317,24 @@ $(document).ready(function(){
 			//err = true;
 			if (err == false)
 			{
-				//2016-04-18 : 송장번호 생성 및 저장 -> 2017-01-24 : 다시 되돌림
+				//2016-04-18 : 송장번호 생성 및 저장
 				$.ajax({
 						url: "/kor/proc/odr_proc.php", 
-						data: "typ=poano&odr_idx="+odr_idx+"&ship_info="+$("#ship_info").val()+"&ship_account_no="+$("#ship_account_no").val()+"&memo="+$("#memo").val()+"&insur_yn="+insur_chk+"&delivery_addr_idx="+$("#delivery_addr_idx").val(),
+						data: "typ=poano&odr_idx="+odr_idx+"&ship_info="+$("#ship_info").val()+"&ship_account_no="+$("#ship_account_no").val()+"&memo="+encodeURIComponent($("#memo").val())+"&insur_yn="+insur_chk+"&delivery_addr_idx="+$("#delivery_addr_idx").val(),
 						encType:"multipart/form-data",
-						success: function (data) {	
-							if (trim(data) == "SUCCESS"){						
-								openLayer("layer5","12_07","?odr_idx="+odr_idx); //12_07에서의 번호생성은 삭제
-							}
+						success: function (data) {							
+							if($.trim(data)=="STOCK"){
+								//alert("재고수량 변경 경고!!");
+								closeCommLayer("layer4");
+								openLayer('layer3','09_01','?odr_idx='+odr_idx);
+								openLayer('layer4','alarm','?odr_idx='+odr_idx);
+							}else{
+								if($.trim(data)=="SUCCESS"){
+									openLayer("layer5","12_07","?odr_idx="+odr_idx); //12_07에서의 번호생성은 삭제
+								}else{
+									alert($.trim(data));
+								}
+							}							
 						}
 				});
 			}
