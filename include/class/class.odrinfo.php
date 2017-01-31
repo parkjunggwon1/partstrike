@@ -311,7 +311,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							$day_val = "WK";
 						}
 					?>
-					<td class="c-red"><?=($period)?"".str_replace("WK","",$period).$day_val."":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>					
+					<td class=""><?=($period)?"".str_replace("WK","",$period).$day_val."":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>					
 					<?}elseif ($loadPage == "31_04"){?>
 					<td class="c-blue t-rt"><?=number_format($odr_quantity)?></td>
 					<td class="t-rt"<?=($period)? "":"style=\"padding-right:0px;\"";?>>
@@ -515,7 +515,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" name="odr_quantity[]" odr_det_idx="<?=$odr_det_idx?>" supply_quantity="<?=$supply_quantity;?>" quantity="<?=$quantity + $supply_quantity;?>" amd_yn="Y" value="<?=$odr_amend_qty?>" style="width:56px;">
 					</td>
 					<td class="c-red t-rt"><?=$supply_quantity==0?"":number_format($supply_quantity)?></td>
-					<?=($period)?"<td class='c-red'>".(QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"Stock":$period):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
+					<?=($period)?"<td class=''>".(QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"Stock":$period):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
 					<?
 					$com_idx = ($rel_idx)? $rel_idx : $sell_mem_idx;
 					$company_nm = get_any("member","mem_nm_en", "mem_idx=$com_idx"); 	
@@ -632,7 +632,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						$day_val = "WK";
 					}
 					?>
-					<?=($period)?"<td class='c-red'>".(QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"Stock":str_replace("WK","",$period).$day_val.""):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
+					<?=($period)?"<td class=''>".(QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"Stock":str_replace("WK","",$period).$day_val.""):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
 					<?if ($loadPage=="09_01") {
 					$com_idx = $rel_idx==0 ? $sell_mem_idx : $rel_idx;
 					$company_nm = get_any("member","mem_nm_en", "mem_idx=$com_idx"); 	
@@ -741,7 +741,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							$day_val = "WK";
 						}
 					?>
-					<?=($period)?"<td class='c-red'>".str_replace("WK","",$period).$day_val."":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
+					<?=($period)?"<td class=''>".str_replace("WK","",$period).$day_val."":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
 					<??>
 					</tr>
 					<tr>
@@ -757,17 +757,17 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 									<tr <?=$part_type=="2"?"style='display:none;'":""?>>
 										<th scope="row" style="width:230px">
 											&nbsp;부품상태&nbsp;&nbsp;<div class="select type4" lang="en" style="width:150px">
-											<label  class="c-blue"><?=($part_condition)?GF_Common_GetSingleList("PARTCOND",$part_condition):""?></label>
-											<?=GF_Common_SetComboList("part_condition[]", "PARTCOND", "", 1, "True",  "", $part_condition , "", "", "part_condition");?>
+											<label  class="c-blue"><?=($part_condition)?GF_Common_GetSingleList("PARTCOND",""):""?></label>
+											<?=GF_Common_SetComboList("part_condition[]", "PARTCOND", "", 1, "True",  "", "" , "", "", "part_condition");?>
 											</div>
 										</th>
 										<th scope="row">
 											&nbsp;포장상태&nbsp;&nbsp;<div class="select type4" lang="en" style="width:77px">
-											<label  class="c-blue"><?=($pack_condition1)?GF_Common_GetSingleList("PACKCOND1",$pack_condition1):""?></label>
-											<?=GF_Common_SetComboList("pack_condition1[]", "PACKCOND1", "", 1, "True",  "", $pack_condition1 , "");?></div>
+											<label  class="c-blue"><?=($pack_condition1)?GF_Common_GetSingleList("PACKCOND1",""):""?></label>
+											<?=GF_Common_SetComboList("pack_condition1[]", "PACKCOND1", "", 1, "True",  "", "" , "");?></div>
 											<div class="select type4" lang="en" style="width:90px">
-											<label  class="c-blue"><?=($pack_condition2)?GF_Common_GetSingleList("PACKCOND2",$pack_condition2):""?></label>
-											<?=GF_Common_SetComboList("pack_condition2[]", "PACKCOND2", "", 1, "True",  "", $pack_condition2 , "");?></div>
+											<label  class="c-blue"><?=($pack_condition2)?GF_Common_GetSingleList("PACKCOND2",""):""?></label>
+											<?=GF_Common_SetComboList("pack_condition2[]", "PACKCOND2", "", 1, "True",  "", "" , "");?></div>
 										</th>
 									</tr>
 									<tr>
@@ -805,7 +805,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<?if($sell_mem_idx != $_SESSION['MEM_IDX'] || ($load_page=="30_08" && $modify_in_odr=="Y")){?>
 					<td class="t-rt"><span class="c-red"><?=$supply_quantity==""?"0":number_format($supply_quantity)?></span></td>		
 					<?}?>			
-					<?=($period)?"<td class='c-red'>".$period:(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
+					<?=($period)?"<td class=''>".$period:(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
 					<?if($sell_mem_idx != $_SESSION['MEM_IDX']){?>
 					<td >
 					<?
@@ -816,23 +816,26 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					</td>
 					<?}?>
 					</tr>	
-					<?if($part_condition!=""){?>
-						<tr class="bg-none">
-							<td></td>
-							<td class="c-red" colspan="10" style="text-align:left;">	
-								부품상태 : 
-								<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span>&nbsp&nbsp
-								포장상태 : 
-								<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> / <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span>
-							</td>
-						</tr>						
+					<?$invoice_cnt = QRY_CNT("odr_history", "and odr_idx = $odr_idx  and status =18") > 0 ? "1": "0";  //첫번째 송장여부?>
+					<?if ($invoice_cnt > 0){?>
+						<?if($part_condition!=""){?>
+							<tr class="bg-none">
+								<td></td>
+								<td class="c-red" colspan="10" style="text-align:left;">	
+									부품상태<?=$odr_idx?> : 
+									<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span>&nbsp&nbsp
+									포장상태 : 
+									<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> / <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span>
+								</td>
+							</tr>						
+						<?}?>		
+						<?if(strlen($memo)>0){?>
+							<tr class="noinput" >
+								<td></td>
+								<td colspan="10" style="text-align:left;"><strong class="c-black" >Memo : </strong><font color="#00759e"><?=$memo?></font> </td>
+							</tr>	
+						<?}?>	
 					<?}?>		
-					<?if(strlen($memo)>0){?>
-						<tr class="noinput" >
-							<td></td>
-							<td colspan="10" style="text-align:left;"><strong class="c-black" >Memo : </strong><font color="#00759e"><?=$memo?></font> </td>
-						</tr>	
-					<?}?>			
 					<tr>
 						<td></td>
 						<td colspan="15" style="padding:0">
@@ -892,11 +895,21 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<?}else{?>
 							<? 
 								$price_sum = $price*$supply_quantity;
+
+								if(strpos($price_sum, ".") == false || strpos($price_sum, ".") == false)  
+								{
+									$price_sum= round_down($price_sum,2);
+									$price_sum= number_format($price_sum,2);
+								}
+								else
+								{
+									$price_sum= round_down($price_sum,4);
+								}
 							?>
 							<td class="t-rt">$<?=$price_val?></td>
-							<td class="t-rt">$<?=number_format($price_sum,2)?></td>
+							<td class="t-rt">$<?=$price_sum?></td>
 						<?}?>
-						<?=($period)?"<td class='c-red'>".$period:(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
+						<?=($period)?"<td class=''>".$period:(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
 						
 						<!--<?=($det_cnt>1)? "<td></td>":"";?>-->
 						<tr class="bg-none">				
@@ -1006,7 +1019,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<td class="t-rt">$<?=$price_val?></td>
 						<td class="t-rt c-blue"><?=$odr_quantity==0?"":number_format($odr_quantity); //발주수량?></td>
 						<td class="t-rt c-red"><?=number_format($supply_quantity) //공급수량?></td>
-						<td class="t-ct c-red"><?=($period)? $period:"Stock";?></td>	
+						<td class="t-ct "><?=($period)? $period:"Stock";?></td>	
 					<!-- 부가내용 시작-->
 					</tr>
 					<tr class="bg-none">
@@ -1066,7 +1079,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							$day_val = "WK";
 						}
 						?>
-						<td class="c-red"><?=($period)? str_replace("WK","",$period).$day_val."":"Stock";?></td>	
+						<td class=""><?=($period)? str_replace("WK","",$period).$day_val."":"Stock";?></td>	
 					<!-- 부가내용 시작-->
 						<td >
 						<?
@@ -1127,7 +1140,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							$day_val = "WK";
 						}
 						?>
-						<td class="c-red"><?=($period)? str_replace("WK","",$period).$day_val."":"Stock";?></td>	
+						<td class=""><?=($period)? str_replace("WK","",$period).$day_val."":"Stock";?></td>	
 					<!-- 부가내용 시작-->
 					</tr>
 					<!-- 변경 작업 2016.10.17 시작-->
@@ -1307,7 +1320,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 									$day_val = "WK";
 								}
 								?>
-								<?=($period)?(QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"<td>Stock":"<td class='c-red'>".str_replace("WK","",$period).$day_val.""):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
+								<?=($period)?(QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"<td>Stock":"<td class=''>".str_replace("WK","",$period).$day_val.""):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
 								<?}?>
 						<?}?>
 						<?if($loadPage=="19_1_05" || $loadPage=="19_1_06" ){
