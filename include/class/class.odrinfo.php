@@ -619,7 +619,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							$<?=$price==0?"":$price_val?>
 							<input type="hidden" name="odr_quantity[]" value="1">
 						<?}else{?>
-						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:58px;ime-mode:disabled;">
+						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$supply_quantity?>"  value="" style="width:58px;ime-mode:disabled;">
 						<?}?>
 					</td>
 					<?if($loadPage== "05_04" && $per_cnt>0){ //-- 공급수량?>
@@ -1381,7 +1381,6 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								<tr>
 									<td colspan="2"  class="img-cntrl-list">
 										<strong class="c-red"><span>라벨/부품사진 </span></strong>
-										<strong class="c-blue"><span>Part No. </span></strong>
 										<?					
 										for ($i = 1;$i <= 3; $i++ ){
 											$file = replace_out($row["file$i"]);		
@@ -1635,6 +1634,7 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 				$price_val = $price;
 				$total_price = $odr_quantity*$price;
 			}
+
 			
 			if ($loadPage!="12_07_v"){ //수정발주서 Sheet(Purchase Order Amendment)
 				$extra = "";
@@ -1712,12 +1712,15 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 					if($loadPage != "12_07"){//수정 발주서 Sheet(Purchase Order Amendment)
 						$odr_quantity = ($supply_quantity)? $supply_quantity : $odr_quantity;
 						$total_price = number_format(round_down($odr_quantity*$price,2),2);
+
 					}
 
 					if ($loadPage=="30_05")
 					{
 						$extra = "";
 						$odr_quantity = (replace_out($row["odr_quantity"]))? replace_out($row["odr_quantity"]) : $odr_quantity;
+						$total_price = number_format(round_down($row["odr_quantity"]*$price,2),2);
+
 					}
 					
 				?>
@@ -1903,6 +1906,10 @@ if ($for_readonly != "P") {?>
 				$tot = ($tot / 10) - ($vat_plus/10);
 				$tot = round_down($tot,4);
 				$charge_type = "2";
+				if( ($tot == (int)$tot) )
+				{
+					$tot = number_format($tot,2);
+				}
 				
 				?>
 				<li class="sub"><strong>Down Payment :</strong><span>$<?=$tot?>	</li>							

@@ -109,7 +109,7 @@
 		var f =  document.f2;
 		//var f =  $("#f2");
 		//if (f.part_no.value!="" &&f.manufacturer.value!="" &&f.package.value!="" &&f.dc.value!="" &&f.price.value!="")
-		if (f.part_no.value != "" && f.manufacturer.value != "" && f.price.value != "" && f.price.value!=0)
+		if (f.part_no.value != "" && f.manufacturer.value != "" && f.package.value != "" && f.dc.value != "" && f.price.value != "" && f.price.value!=0)
 		{
 			$("#f2 .reg span").hide();
 			$("#f2 .reg button").show();

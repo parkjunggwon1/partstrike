@@ -78,7 +78,31 @@ else
 	if ($etc2=="DHL" || $etc2=="UPS" || $etc2=="Fedex" || $etc2=="TNT")
 	{	
 	?>	
-		<span><img src="/kor/images/icon_<?=strtolower($etc2)?>.gif" height="15">-<a href="#" style="color:#00759e;cursor: default;"><?=$etc1?></a></span>		
+		<span><img src="/kor/images/icon_<?=strtolower($etc2)?>.gif" height="15">-<a href="#" style="color:#00759e;cursor: default;"><?=$etc1?></a></span><br>		
+		<?
+		$result =QRY_ODR_DET_LIST(0,"and odr_idx=".$odr_idx."",0,"","asc");
+		while($row = mysql_fetch_array($result))
+		{
+
+		?>
+		<div>Part No. - 
+		<?					
+				for ($i = 1;$i <= 3; $i++ ){
+					$file = replace_out($row["file$i"]);		
+
+				if ($file){
+		?>
+				<span><img <?=get_noimg_photo($file_path, $file, "/kor/images/file_pt.gif")?> height="15"></span>
+				
+				
+		<?
+				}
+			}
+		?>
+		</div> 
+		<?
+		}
+		?>	
 	<?}else{?>
 		<span><?=$etc2?>-<a href="#" style="color:#00759e;cursor: default;"><?=$etc1?></a></span>
 	<?}?>

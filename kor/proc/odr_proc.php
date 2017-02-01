@@ -521,6 +521,8 @@ if($typ =="invconfirm"){ //-------------------------------------- 송장 확정:
 
 if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : 송장 확정2:30_09 (Invoice) 2016-04-15 ----------------------------------------
     //1. status변경
+    $part_type = get_any("odr_det", "part_type" , "odr_idx = $odr_idx");
+    
     update_val("odr","odr_status","18", "odr_idx", $odr_idx);
     update_val("odr","status_edit_mem_idx",$session_mem_idx, "odr_idx", $odr_idx);
     update_val("odr","invoice_no",$inv_no, "odr_idx", $odr_idx);    //invoice sheet(30_09)에서 가져온 $inv_no
@@ -533,16 +535,19 @@ if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : �
         $supp_qty = replace_out($row["supply_quantity"]);
         $real_stock = $stock_qty + $odr_qty;    //공급 가능수량(실재고+발주수량)
         //2016-12-11 : 재고수량보다 공급수량이 클 경우 BACK!!
-        if($real_stock < $supp_qty){
-            echo "ERR";
-            exit;
-        }else{
-            if($odr_qty < $supp_qty){   //공급 수량이 발주 수량보다 클 경우
-                $up_qty = $stock_qty - ($supp_qty - $odr_qty);
-                update_val("part","quantity", $up_qty, "part_idx", $part_idx);
-            }else if($odr_qty > $supp_qty){ //공급 수량이 발주 수량보다 작을 경우
-                $up_qty = $stock_qty + ($odr_qty - $supp_qty);
-                update_val("part","quantity", $up_qty, "part_idx", $part_idx);
+        if ($part_type != 2)
+        {
+            if($real_stock < $supp_qty){
+                echo "ERR";
+                exit;
+            }else{
+                if($odr_qty < $supp_qty){   //공급 수량이 발주 수량보다 클 경우
+                    $up_qty = $stock_qty - ($supp_qty - $odr_qty);
+                    update_val("part","quantity", $up_qty, "part_idx", $part_idx);
+                }else if($odr_qty > $supp_qty){ //공급 수량이 발주 수량보다 작을 경우
+                    $up_qty = $stock_qty + ($odr_qty - $supp_qty);
+                    update_val("part","quantity", $up_qty, "part_idx", $part_idx);
+                }
             }
         }
         //2017-01-19 : parts 정보Update(임시테이블에서 가져오기)

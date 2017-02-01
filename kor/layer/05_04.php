@@ -628,11 +628,13 @@ $(document).ready(function(){
 		maskoff();	
 		var quantity = $(this).parent().parent().find("input[name^=quantity]").val();
 		var part_type = $(this).attr("part_type");
+
 		if (part_type != 2){
 			if(parseInt($(this).val()) > parseInt(quantity.replace(",", ""))){
 				$(this).val("");
 			}
 		}
+		
 		maskon();
 	});
 	//-- 선적 선택
@@ -717,6 +719,7 @@ $(document).ready(function(){
 //------------ 버튼 활성 or 비활성 ------------------------------------------------------------------
 function checkActive(){
 
+
 		var Erchkbox = false , ErchkCnt = true, FailCnt = 0;
 		var det_cnt = $("#det_cnt").val();
 		var dlvr_cnt = $("#dlvr_cnt").val();
@@ -737,6 +740,7 @@ function checkActive(){
 				$("#layerPop3 .btn-area :eq(2)").css("cursor","pointer").addClass("btn-dialog-save").attr("src","/kor/images/btn_order_save.gif");
 			}**/
 		}
+	
 		var odr_qty=0, stock_qty=0;
 		sel_box.each(function(e){ //선택 갯수만큼 반복--------------------
 			Erchkbox = true;
