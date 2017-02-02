@@ -68,7 +68,7 @@ else
 
 ?>	
 
-<div class="layer-content" style="padding:0;width:100%;padding-left: 140px;padding-top: 30px;">	
+<div class="layer-content" style="padding:0;width:100%;padding-left: 90px;padding-top: 30px;">	
 	<a href="#" class="btn-close" style="position: absolute;right: 10px;top: 1px;padding: 5px;text-decoration:underline;"><img src="/kor/images/btn_layer_close.png" alt="close"></a>
 	<?if ($sell_nation_idx != $ship_nation){?>
 	<span>Commercial Invoice : <a href="#" class="btn-view-sheet-3011" for_readonly="Y" style="color:#00759e;text-decoration:underline;"><?=$invoice_val?></a></span><br>

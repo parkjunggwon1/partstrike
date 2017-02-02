@@ -194,6 +194,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					</td>
 				</tr>
 			<?}?>
+
 			<?//if ($loadPage=="30_10" || $loadPage=="30_20" || $loadPage == "30_22" || $loadPage == "30_23" || $loadPage=="01_37" || $loadPage=="09_03") { //선적완료 , 도착 : history 안에다 껴넣기.
 			  //-----------------------------------아이템 개별 HISTORY 영역 -----------------------------------------------------------------------------------------------------	
 			  if (strpos($loadPage,"R")=="" && $loadPage!="19_06"&& $loadPage!="19_1_06"&& $loadPage!="18_1_04" && $loadPage!="31_05" && $loadPage!="30_16" &&$loadPage!="30_08" &&$loadPage!="01_29" && $loadPage!="05_04"&& $loadPage!="09_01") { //선적완료 , 도착 : history 안에다 껴넣기.
@@ -257,6 +258,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 				<?}
 			}
 			?>
+
 			<tr id="tr_<?=$odr_det_idx?>"><!------------ 내용 첫 번째 tr -------------->
 				<?if ($loadPage== "30_06"|| $loadPage== "09_03" || $loadPage== "30_22" || $loadPage== "31_04" || $loadPage== "01_29" ){ //판매자 페이지에서 보여지는 내용(30_06 layer)?>
 					<!-- 30_06, 09_03, 30_22, 31_04, 01_09 --------------------------------------->
@@ -301,7 +303,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<?}?>
 					<?if ($loadPage == "30_06" || $loadPage== "09_03"|| $loadPage== "01_29" ){?>
 						<td class="c-blue t-rt"><?=($part_type=="7")?number_format($price,2):number_format($odr_quantity)?></td>
-						<?if ($loadPage == "09_03"){?>
+						<?if ($loadPage == "09_03" || $part_type == 2 || $part_type == 5 || $part_type == 6){?>
 						<td class="c-red t-rt"><?=number_format($supply_quantity)?></td>
 						<?}?>
 					<?if($loadPage == "01_29"){?><td class="c-red t-rt"><?=number_format($supply_quantity)?></td><?}?>
@@ -2627,7 +2629,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
 	function layerOrdListData($loadPage ,$odr_idx , $odr_det_idx=""){ // History 목록에서의 odr_det 내역
 		$turnkey_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and part_type=7 ");  //턴키
-
+		$part_chk = QRY_CNT("odr_det"," and odr_idx=$odr_idx and (part_type=2 or part_type=5 or part_type=6) ");  //지속적, 해외, 국내
 		
 	?>
 		<!-- layer-data -->
@@ -2649,7 +2651,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 					<th scope="col" class="t-amount">Amount</th>
 					<?}else{?>					
 					<th scope="col" class="delivery t-orderoty" lang="ko"><?=($turnkey_cnt>0)? "Price":"발주수량";?></th>
-					<?if ($loadPage == "09_03"){?>
+					<?if ($loadPage == "09_03" || $part_chk >=1){?>
 					<th scope="col" class="t-orderoty">공급수량</th>
 					<?}?>
 					<th scope="col" lang="ko" class="t-period">납기</th>
@@ -3183,8 +3185,13 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 				</td>
 			</tr>
 		<?}elseif($loadPage!="09_03"){ //------------------------------------ 09_03(수정발주서) 외 그 나머지..--------------------------------------?>
+			<?if ($loadPage=="09_01"){?>
+				<tr class="bg-none">
+					<td></td>
+				</tr>
+			<?}?>
 			<tr class="bg-none">
-                <td></td>
+                <td style="height:5px"></td>
 				<?=($det_cnt>1)? "<td></td>":"";?>
 				<td colspan="10" style="padding:0;">		
 				 <div class="txt_option" style="display:none;margin-left:-580px;"><img src="/kor/images/txt_option.gif" alt="선적Option을 선택하여 발주서를 각각 발행할 수 있습니다.발주서 기준 최종 납기 제품과 일괄 배송됩니다." /></div>

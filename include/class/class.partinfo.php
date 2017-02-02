@@ -11,23 +11,17 @@ function GF_GET_PART_LIST($page, $part_type,$part_no){
 				showajaxParam("#f3 #partlist", "partlist", "page="+$(this).attr("num")+"&part_type="+$("#part_type").val()+"&part_no="+document.f3.srch_part_no.value);
 		});
 		$("#partlist input:text").keyup(function(){		
-			if ($(this).attr("name")=="mod_package[]" || $(this).attr("name")=="mod_dc[]")
+			if ($(this).attr("name") !="mod_part_no[]" && $(this).attr("name")!="mod_manufacturer[]" && $(this).attr("name")!="mod_package[]" && $(this).attr("name")!="mod_dc[]" && $(this).attr("name")!="mod_rhtype[]" && $(this).attr("name")!="quantity_tmp[]" && $(this).attr("name")!="mod_price[]")
 			{
 				$("#partlist .save span").hide();
 				$("#partlist .save button").show();
 			}
 			else
 			{
-				if ($(this).val())
-				{				
-					$("#partlist .save span").hide();
-					$("#partlist .save button").show();
-				}		
-				else
-				{
+				
 					$("#partlist .save span").show();
 					$("#partlist .save button").hide();	
-				}
+				
 			}
 			
 			
