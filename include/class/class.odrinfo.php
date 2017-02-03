@@ -1895,6 +1895,7 @@ if ($for_readonly != "P") {?>
 				// tot의 90%를 무조건 하면 안되고, 수정 발주 된 내역이 있을 가능성도 있기 때문에 mybank에서 실제로 지불한 10%값을 가져와서  tot- 지불값 한 금액이 실제 지불해야 할 금액이다.
 				$down = get_any("mybank" ,"charge_amt", "odr_idx=$odr_idx and mem_idx=".$_SESSION["MEM_IDX"]." and rel_idx = ".$_SESSION["REL_IDX"]);	
 
+				$tot = round_down($tot,4) + round_down($down,4);  //더하기. ( 왜냐하면 down 자체가 마이너스 값이니까)
 
 				$tax_name = get_any("tax", "tax_name", "nation=$row_seller[nation]");
 				
