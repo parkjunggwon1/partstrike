@@ -1817,8 +1817,24 @@ $(document).ready(function(){
 		var varNum;
 		var f =  document.f_05_04;  //2016-04-02 layer4에 <form name='f' ... 가 또 있음
 		//var f =  ("#f_05_04");
-		maskoff();
+		maskoff();		
 		err = updateQty();
+
+		if ($(this).attr("save_key") == "on")
+		{			
+			$.ajax({
+				type: "GET", 
+				url: "/kor/proc/odr_proc.php", 
+				data: { 
+						typ : "save_key", //
+						actidx : f.odr_idx.value
+				},
+				success: function (data) {	
+					
+				}
+			});	
+		}
+
 		if (err == false){
 			//What's New 창에서 납기 받은 제품 저장 시 별도 Proc.
 			if($("#odr_status").val() == 16){ //납기받은 품목

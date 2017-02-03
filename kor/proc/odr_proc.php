@@ -259,6 +259,7 @@ if ($typ=="write" || $typ=="odredit" ||$typ =="periodreq"){   //periodreq : 납�
         }else{
             Parent_Search_Refresh(); //2016-04-08
             closeLayer("layer3");
+
         }  //-------------------------------------------end if 납기확인-------------------------------------------------------------------
     }else{  //납기 확인이 아닐 경우(저장, 수정)------------------[Layer Open]------------------------------------------------------
         if($result){
@@ -277,8 +278,7 @@ if ($typ=="write" || $typ=="odredit" ||$typ =="periodreq"){   //periodreq : 납�
             }
             exit;
         }
-    }
-
+    }    
 }   //end of write / odredit / periodreq
 /****************************************************************** 납기 받은거 저장 **********************************************************************
 *** 2016-04-05 : 상태16 꺼 전체(odr, odr_det)를 복제, 기존 상태 16의 history 를 확인(confirm_yn='Y') 처리
@@ -702,6 +702,14 @@ if ($typ =="odrconfirm2"){  //------------ 확정 발주서 (from:30_05) 2016-04
         $odr_history_idx = get_any("odr_history" , "odr_history_idx", "odr_idx= $odr_idx and status = 16");
         if ($odr_history_idx){update_val("odr_history","confirm_yn","Y", "odr_history_idx", $odr_history_idx);}
 
+        //저장된 히스토리 삭제
+        $odr_history_save = get_any("odr_history" , "odr_history_idx", "odr_idx= $odr_idx and status = 90");
+        if ($odr_history_save)
+        {
+            $sql = "delete from odr_history where odr_history_idx = $odr_history_save";
+            $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
+        }
+
         //1. odr_status 변경
         update_val("odr","odr_status","2", "odr_idx", $odr_idx);
         update_val("odr","status_edit_mem_idx",$session_mem_idx, "odr_idx", $odr_idx);
@@ -909,6 +917,7 @@ if($typ =="chmybank"){  //------------------------------------------------------
 
 //--- 결재 -----------------------------------------------------------------------------------------------------------
 if ($typ == "pay"){
+
         if (QRY_CNT("odr_det", "and odr_idx = $odr_idx and part_type='2'")>0){$typ ="pay_jisok2";}
 }
 
@@ -939,6 +948,7 @@ function deposit_proc($mem_idx, $rel_idx, $tot_amt,$charge_method){
 //2016-05-27 : Mybank 테이블 변경 적용하고, 예치금 개념 추가.
 if ($typ == "pay"){
     // 보증금 확인 작업
+    
     if ($_SESSION["MEM_IDX"] == $mem_idx){
         $remain_tot_amt = deposit_proc($mem_idx, $rel_idx, $tot_amt, $charge_method);
         if ($remain_tot_amt < $tot_amt){
@@ -1035,6 +1045,17 @@ if ($typ == "pay_jisok2"){
     $sell_rel_idx = $odr[sell_rel_idx];
     $inv_no = $odr[invoice_no];
     $part_type = "2";
+
+    $deposit_cnt = QRY_CNT("odr_history" , "and odr_idx=$odr_idx and (sell_mem_idx=".$_SESSION["MEM_IDX"]." or buy_mem_idx=".$_SESSION["MEM_IDX"].") and status_name = '송장'");
+
+    if ($_SESSION["DEPOSIT"]=="N" && $deposit_cnt==1){
+        
+        $remain_tot_amt = deposit_proc($mem_idx, $rel_idx, $tot_amt, $charge_method);
+        if ($remain_tot_amt < $tot_amt){
+            $with_deposit = "Y";
+            $tot_amt = $remain_tot_amt;
+        }
+    }
 
     $prt_method = $charge_method=="1" ? "신용카드" : ($charge_method=="2"?"은행송금":"My Bank");
 
@@ -2475,5 +2496,32 @@ if($typ=="delivery_save"){
 if($typ =="delivery_del"){
     $sql = "delete from delivery_addr where delivery_addr_idx = $delivery_addr_idx";
     $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
+}
+
+if($typ =="save_key"){
+   
+    $mem_session_idx = $_SESSION['MEM_IDX'];
+    $cnt = get_any ("odr_history" , "count(*)", "odr_idx= $actidx and status=90");
+
+    if ($cnt == 1)
+    {
+        $sql = "update odr_history set
+            reg_date = now()
+            where odr_idx = '$actidx'";
+    
+        $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+    }
+    else
+    {
+        $sql = "insert into odr_history set
+            odr_idx = '$actidx'
+            ,status = 90
+            ,status_name = '저장'
+            ,reg_mem_idx = '$mem_session_idx'
+            ,reg_date = now()";
+    
+        $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+    }
+    
 }
 ?>

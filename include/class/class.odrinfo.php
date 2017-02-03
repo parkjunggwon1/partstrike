@@ -306,7 +306,6 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<?if ($loadPage == "09_03" || $part_type == 2 || $part_type == 5 || $part_type == 6){?>
 						<td class="c-red t-rt"><?=number_format($supply_quantity)?></td>
 						<?}?>
-					<?if($loadPage == "01_29"){?><td class="c-red t-rt"><?=number_format($supply_quantity)?></td><?}?>
 					<?
 						if($part_type =="2")
 						{
@@ -621,7 +620,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							$<?=$price==0?"":$price_val?>
 							<input type="hidden" name="odr_quantity[]" value="1">
 						<?}else{?>
-						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$supply_quantity?>"  value="" style="width:58px;ime-mode:disabled;">
+						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$supply_quantity?>"  value="<?=$odr_quantity?>" style="width:58px;ime-mode:disabled;">
 						<?}?>
 					</td>
 					<?if($loadPage== "05_04" && $per_cnt>0){ //-- 공급수량?>
@@ -1896,7 +1895,6 @@ if ($for_readonly != "P") {?>
 				// tot의 90%를 무조건 하면 안되고, 수정 발주 된 내역이 있을 가능성도 있기 때문에 mybank에서 실제로 지불한 10%값을 가져와서  tot- 지불값 한 금액이 실제 지불해야 할 금액이다.
 				$down = get_any("mybank" ,"charge_amt", "odr_idx=$odr_idx and mem_idx=".$_SESSION["MEM_IDX"]." and rel_idx = ".$_SESSION["REL_IDX"]);	
 
-				$tot = round_down($tot,4) + round_down($down,4);   //더하기. ( 왜냐하면 down 자체가 마이너스 값이니까)
 
 				$tax_name = get_any("tax", "tax_name", "nation=$row_seller[nation]");
 				
@@ -2651,7 +2649,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 					<th scope="col" class="t-amount">Amount</th>
 					<?}else{?>					
 					<th scope="col" class="delivery t-orderoty" lang="ko"><?=($turnkey_cnt>0)? "Price":"발주수량";?></th>
-					<?if ($loadPage == "09_03" || $part_chk >=1){?>
+					<?if ($loadPage == "09_03" || ($part_chk >=1 && $loadPage != "31_04") ){?>
 					<th scope="col" class="t-orderoty">공급수량</th>
 					<?}?>
 					<th scope="col" lang="ko" class="t-period">납기</th>

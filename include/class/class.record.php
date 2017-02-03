@@ -41,7 +41,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 	
 		//최근 이력이 있거나 save_yn = 'Y'인 경우만 출력하기로.
 		//$status = get_any("odr_history", "status", "odr_history_idx in (select max(odr_history_idx) from odr_history where odr_idx = trim('$odr_idx'))");
-		$status = get_any("odr_history", "status", "odr_history_idx in (select max(odr_history_idx) from odr_history where odr_idx = trim('$odr_idx')) AND status NOT IN(15)"); //2016-04-04 상태 '종료' 미 노출
+		$status = get_any("odr_history", "status", "odr_history_idx in (select max(odr_history_idx) from odr_history where odr_idx = trim('$odr_idx')) AND status NOT IN(90,15)"); //2016-04-04 상태 '종료' 미 노출
 		//상태 16인게 저장에 있을경우 비 노출(구매화면) 2016-04-06
 		$kk = replace_out($row2["odr_det_idx"]);
 		$st16cnt = QRY_CNT("odr a INNER JOIN odr_det b ON(a.odr_idx=b.odr_idx)", "AND b.rel_det_idx = $kk AND a.save_yn='Y'");
@@ -240,10 +240,18 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			<?
 				if($part_type =="2")
 				{
-					$period = str_replace("WK","",$period)."";
+					if ($period=="stock")
+					{
+						$period = str_replace("WK","",$period)."";
+					}
+					else
+					{
+						$period = str_replace("WK","",$period)."WK";
+					}
+					
 				}
 			?>
-			<td class="delivery" <?=$goJump?>><?=($period)?"<span class=''>확인</span>":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class=''>확인</span>":"Stock")?></td>
+			<td class="delivery" <?=$goJump?>><?=($period)?"<span class=''>".$period."</span>":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class=''>확인</span>":"Stock")?></td>
 			<?if ($odr_type == "B") {  //--구매자 화면일경우?>
 				<?//if ((($part_type=="2"||$part_type=="5"||$part_type=="6") && $period=="") || ($save_yn=="Y")){?>
 				<?if ((($part_type=="2"||$part_type=="5"||$part_type=="6") && ($status ==1 || $status ==16 || $status ==7 )) || ($save_yn=="Y")){  //2016-04-04?>
