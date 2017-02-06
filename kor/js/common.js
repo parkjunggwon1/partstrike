@@ -2147,6 +2147,8 @@ $(document).ready(function(){
 	});
 	//---- 납기확인 바랍니다. [전송]---
 	$("body").on("click",".periodreq",function(){
+		$(this).children("img").attr("src","/kor/images/loding_img.gif");		
+		$(this).attr("class","");	
 		maskoff();
 		var frompage = $("input[name='fromPage']").val();
 		var f =  document.f;

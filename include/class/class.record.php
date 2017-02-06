@@ -240,14 +240,22 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			<?
 				if($part_type =="2")
 				{
-					if ($period=="stock")
+					if ($period)
 					{
-						$period = str_replace("WK","",$period)."";
+						if ($period=="stock")
+						{
+							$period = str_replace("WK","",$period)."";
+						}
+						else
+						{
+							$period = str_replace("WK","",$period)."WK";
+						}
 					}
 					else
 					{
-						$period = str_replace("WK","",$period)."WK";
+						$period = "확인";
 					}
+					
 					
 				}
 			?>
@@ -1065,10 +1073,10 @@ function get_layer_step($odr_idx, $odr_det_idx, $his_ty){
 					?>
 							<span class="etc"><span ><?=$etc2?></span></span>
 						<?}else{?>
-							<span class="etc"><span ><?if ($etc2){echo openSheet($status, $etc2,$odr_idx,$etc_change);}?></span></span>
+							<span class="etc"><span ><?if ($etc2){echo openSheet($status, $etc2,$odr_idx,$etc_change,$odr_history_idx);}?></span></span>
 						<?}?>
 					<?}else{?>
-						<span class="etc"><span ><?if ($etc1){echo openSheet($status, $etc1,$odr_idx,$etc_change);}?></span></span>
+						<span class="etc"><span ><?if ($etc1){echo openSheet($status, $etc1,$odr_idx,$etc_change,$odr_history_idx);}?></span></span>
 						<?if ($status!=5){?>
 						<span class="etc"><span ><?if ($etc2){?><?=$etc2?><?}?></span></span>
 						<?}?>

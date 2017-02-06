@@ -758,17 +758,17 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 									<tr <?=$part_type=="2"?"style='display:none;'":""?>>
 										<th scope="row" style="width:230px">
 											&nbsp;부품상태&nbsp;&nbsp;<div class="select type4" lang="en" style="width:150px">
-											<label  class="c-blue"><?=($part_condition)?GF_Common_GetSingleList("PARTCOND",""):""?></label>
-											<?=GF_Common_SetComboList("part_condition[]", "PARTCOND", "", 1, "True",  "", "" , "", "", "part_condition");?>
+											<label  class="c-blue"><?=($part_condition)?GF_Common_GetSingleList("PARTCOND",$part_condition):""?></label>
+											<?=GF_Common_SetComboList("part_condition[]", "PARTCOND", "", 1, "True",  "", $part_condition , "", "", "part_condition");?>
 											</div>
 										</th>
 										<th scope="row">
 											&nbsp;포장상태&nbsp;&nbsp;<div class="select type4" lang="en" style="width:77px">
-											<label  class="c-blue"><?=($pack_condition1)?GF_Common_GetSingleList("PACKCOND1",""):""?></label>
-											<?=GF_Common_SetComboList("pack_condition1[]", "PACKCOND1", "", 1, "True",  "", "" , "");?></div>
+											<label  class="c-blue"><?=($pack_condition1)?GF_Common_GetSingleList("PACKCOND1",$pack_condition1):""?></label>
+											<?=GF_Common_SetComboList("pack_condition1[]", "PACKCOND1", "", 1, "True",  "", $pack_condition1 , "");?></div>
 											<div class="select type4" lang="en" style="width:90px">
-											<label  class="c-blue"><?=($pack_condition2)?GF_Common_GetSingleList("PACKCOND2",""):""?></label>
-											<?=GF_Common_SetComboList("pack_condition2[]", "PACKCOND2", "", 1, "True",  "", "" , "");?></div>
+											<label  class="c-blue"><?=($pack_condition2)?GF_Common_GetSingleList("PACKCOND2",$pack_condition2):""?></label>
+											<?=GF_Common_SetComboList("pack_condition2[]", "PACKCOND2", "", 1, "True",  "", $pack_condition2 , "");?></div>
 										</th>
 									</tr>
 									<tr>
@@ -1138,7 +1138,11 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<?
 						if ($part_type=="2")
 						{
-							$day_val = "WK";
+							if ($period !="stock")
+							{
+								$day_val = "WK";
+							}
+							
 						}
 						?>
 						<td class=""><?=($period)? str_replace("WK","",$period).$day_val."":"Stock";?></td>	
@@ -1895,7 +1899,7 @@ if ($for_readonly != "P") {?>
 				// tot의 90%를 무조건 하면 안되고, 수정 발주 된 내역이 있을 가능성도 있기 때문에 mybank에서 실제로 지불한 10%값을 가져와서  tot- 지불값 한 금액이 실제 지불해야 할 금액이다.
 				$down = get_any("mybank" ,"charge_amt", "odr_idx=$odr_idx and mem_idx=".$_SESSION["MEM_IDX"]." and rel_idx = ".$_SESSION["REL_IDX"]);	
 
-				$tot = round_down($tot,4) + round_down($down,4);  //더하기. ( 왜냐하면 down 자체가 마이너스 값이니까)
+				$tot = round_down($tot,4) + round_down($down,4);   //더하기. ( 왜냐하면 down 자체가 마이너스 값이니까)
 
 				$tax_name = get_any("tax", "tax_name", "nation=$row_seller[nation]");
 				
@@ -3230,27 +3234,40 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						<div class="company-info-wrap" style="display:<?if (!$delivery_addr_idx){echo"none";}?>">
 							<?echo GET_ODR_DELIVERY_ADDR($delivery_addr_idx);?>
 						</div>
-							<?}else{?><!------------------ 05_04_1 이 아닐때 ----------------------------------------------------->
+							<?}else{?><!------------------ 05_04_1 이 아닐때 ------------------------------------------------------>
 						
 							<tr>
 								<th scope="row" style="padding-left:3px;">선적정보 : 
 									<span class="c-grey2">운송회사</span>
-									<div class="select type4" lang="en" style="width:110px">
-										<label class="c-blue text_lang"><?
-										if($assign_idx){  //판매자 지정...
-											echo GF_Common_GetSingleList("DLVR",$assign_idx);
-										}elseif($ship_info){
-											echo GF_Common_GetSingleList("DLVR",$ship_info);
-										}
-										?></label>
-											<?
-											echo GF_Common_SetComboListSrch("ship_info", "DLVR", "", 1, "True",  "", $assign_idx?$assign_idx:$ship_info ,$assign_idx?"disabled":"onchange='chg_ship_info(this)'","");
-											?>
-									</div>
+									
+										<?if ($loadPage=="09_01"){?>
+											<?$ship_info_val = get_any("code_group_detail", "code_desc", "grp_idx=11 and grp_code='DLVR' and dtl_code='".$ship_info."'");?>
+											: <img src="/kor/images/icon_<?=$ship_info_val?>.gif" alt="" >	
+											<input type="hidden" name="ship_info" id="ship_info" value="<?=$ship_info?>"/>									
+										<?}else{?>		
+											<div class="select type4" lang="en" style="width:110px">									
+											<label class="c-blue text_lang"><?
+											if($assign_idx){  //판매자 지정...
+												echo GF_Common_GetSingleList("DLVR",$assign_idx);
+											}elseif($ship_info){
+												echo GF_Common_GetSingleList("DLVR",$ship_info);
+											}
+											?></label>
+												<?
+												echo GF_Common_SetComboListSrch("ship_info", "DLVR", "", 1, "True",  "", $assign_idx?$assign_idx:$ship_info ,$assign_idx?"disabled":"onchange='chg_ship_info(this)'","");
+												?>
+											</div>
+										<?}?>
+									
 								</th>
-								
-								<th scope="row" style="padding-left:3px;"><span lang="en" style="display:<?if ($ship_info == "5" || $ship_info == "6"){?>none<?}?>;"><font color='black'>Account No.</font></span></th>
-								<td><input type="text" class="i-txt2 c-blue t-rt" name ="ship_account_no" id="ship_account_no" value="<?=$ship_account_no?$ship_account_no:$buyer_assign_no?>" style="width:92px;ime-mode:disabled;display:<?if ($ship_info == "5" || $ship_info == "6"){?>none<?}?>;"></td>
+								<?if ($loadPage=="09_01"){?>
+									<th scope="row" style="padding-left:3px;"><span lang="en" style="display:<?if ($ship_info == "5" || $ship_info == "6"){?>none<?}?>;"><font color='black'>Account No.</font></span></th>
+									<td><?=$ship_account_no?$ship_account_no:$buyer_assign_no?></td>
+									<input type="hidden" name="ship_account_no" id="ship_account_no" value="<?=$ship_account_no?$ship_account_no:$buyer_assign_no?>" ">
+								<?}else{?>
+									<th scope="row" style="padding-left:3px;"><span lang="en" style="display:<?if ($ship_info == "5" || $ship_info == "6"){?>none<?}?>;"><font color='black'>Account No.</font></span></th>
+									<td><input type="text" class="i-txt2 c-blue t-rt" name ="ship_account_no" id="ship_account_no" value="<?=$ship_account_no?$ship_account_no:$buyer_assign_no?>" style="width:92px;ime-mode:disabled;display:<?if ($ship_info == "5" || $ship_info == "6"){?>none<?}?>;"></td>
+								<?}?>
 							</tr>
 							<?if ($assign_idx!="" && $assign_idx!=0){?>
                             <tr>

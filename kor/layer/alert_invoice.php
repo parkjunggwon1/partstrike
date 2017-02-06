@@ -83,9 +83,10 @@ else
 		$result =QRY_ODR_DET_LIST(0,"and odr_idx=".$odr_idx."",0,"","asc");
 		while($row = mysql_fetch_array($result))
 		{
-
+			if ($row["file1"])
+			{
 		?>
-		<div>Part No. - 
+				<div>Part No. - 
 		<?					
 				for ($i = 1;$i <= 3; $i++ ){
 					$file = replace_out($row["file$i"]);		
@@ -101,6 +102,7 @@ else
 		?>
 		</div> 
 		<?
+			}//파일 있는지 확인
 		}
 		?>	
 	<?}else{?>

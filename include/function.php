@@ -1317,7 +1317,7 @@ function SumMyBank($mem_idx, $rel_idx){
 function SumMyBank2($mem_idx, $rel_idx, $ty=2){
 	$com_idx = ($rel_idx ==0 ? $mem_idx : $rel_idx);
 
-	$pay = get_any("mybank" ,"sum( charge_amt )", "(mem_idx =$com_idx or rel_idx =$com_idx) and mybank_yn = 'N'");
+	$pay = get_any("mybank" ,"sum( charge_amt )", "(mem_idx =$com_idx or rel_idx =$com_idx) and mybank_yn = 'Y'");
 	if($ty>0){
 		$pay_val = round_down($pay,4);
 		$pay_val = number_format($pay,4);
