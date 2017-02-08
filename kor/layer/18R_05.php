@@ -72,7 +72,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 				</tr>
 				<tr  class="bg-none">
 					<td colspan="9" class="t-lt">
-						<strong class="c-black" Style="font-family:'굴림', sans-serif;">제목&nbsp;:&nbsp;&nbsp;</strong> <input type="text" name="title" class="i-txt5" value="" lang="kor" style="width:400px">
+						<strong class="c-black" Style="font-family:'굴림', sans-serif;">제목&nbsp;:&nbsp;&nbsp;</strong> <input type="text" id="title" name="title" class="i-txt5" value="" lang="kor" style="width:400px">
 					</td>
 					<td colspan="4" class="t-rt">
 						<div class="re-select-box">
@@ -99,12 +99,12 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 		
 		<div class="btn-area t-rt" Style="margin:15px 0 15px 0;">
 			<?if ($sell_mem_idx == $session_mem_idx){?>
-				<button type="button" onclick="check()"><img src="/kor/images/btn_answer_go.gif" alt="회신"></button>
+				<button class="btn_answer" type="button" style="cursor: default;"><img src="/kor/images/btn_answer_go_1.gif" alt="회신"></button>
 			<?}else{
 				if ($refuse_num == 0 ){?> 
-				<button type="button" onclick="check()"><img src="/kor/images/btn_reply_request.gif" alt="회신요청"></button>	
+				<button type="button" onclick="check()" ><img src="/kor/images/btn_reply_request.gif" alt="회신요청"></button>	
 				<?}else{?>
-						<button type="button" onclick="check()"><img src="/kor/images/btn_reply4.gif" alt="답변"></button>
+						<button class="btn_answer2" type="button" style="cursor: default;"><img src="/kor/images/btn_reply4_1.gif" alt="답변"></button>
 						<button type="button" class="btn-dialog-3021"><img src="/kor/images/btn_receipt.gif" alt="수령"></button>
 				<?}?>
 			<?}?>
@@ -117,6 +117,31 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 <!--
 
  $(document).ready(function(){
+ 		$("#title").keyup(function (e){  		
+			
+			if ($("#title").val())
+			{				
+				$(".btn_answer").css("cursor","pointer");
+				$(".btn_answer").attr("onclick","check();")
+				$(".btn_answer").children("img").attr("src","/kor/images/btn_answer_go.gif");
+
+				$(".btn_answer2").css("cursor","pointer");
+				$(".btn_answer2").attr("onclick","check();")
+				$(".btn_answer2").children("img").attr("src","/kor/images/btn_reply4.gif");
+			}
+			else
+			{
+				$(".btn_answer").css("cursor","default");
+				$(".btn_answer").attr("onclick","");
+				$(".btn_answer").children("img").attr("src","/kor/images/btn_answer_go_1.gif");
+
+				$(".btn_answer2").css("cursor","default");
+				$(".btn_answer2").attr("onclick","");
+				$(".btn_answer2").children("img").attr("src","/kor/images/btn_reply4_1.gif");
+			}
+			
+		});
+
 		 $(".editimgbtn").click(function () {
                 $(this).prev().click();
          });

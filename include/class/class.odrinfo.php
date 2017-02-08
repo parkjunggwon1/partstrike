@@ -1970,7 +1970,7 @@ if ($for_readonly != "P") {?>
 		//보증금..
 		$deposit_cnt = QRY_CNT("odr_history" , "and odr_idx=$odr_idx and (sell_mem_idx=".$_SESSION["MEM_IDX"]." or buy_mem_idx=".$_SESSION["MEM_IDX"].") and status_name = '송장'");	
 		?>
-		<?if ($_SESSION["DEPOSIT"]=="N" && $deposit_cnt==1){?>
+		<?if ($_SESSION["DEPOSIT"]=="N" && $deposit_cnt>=1){?>
 			<!-- 대표님 요청으로 display:none -->
 			<li class="sub"><strong>Deposit :</strong><span>$1,000.00	</li>
 		<?
@@ -2131,7 +2131,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						<?}else{?>
 							<span class="etc"><span ><?if ($etc1){echo openSheet($status, $etc1,$odr_idx,$etc_change,$odr_history_idx);}?>
 								<?if ($status=="10"){?>							
-									-<?if ($etc2){?><?=$etc2?><?}?>
+									<!--$etc2-->
 								<?}?>
 							</span></span>
 

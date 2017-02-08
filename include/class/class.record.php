@@ -245,10 +245,12 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 						if ($period=="stock")
 						{
 							$period = str_replace("WK","",$period)."";
+							$period_style="";
 						}
 						else
 						{
 							$period = str_replace("WK","",$period)."WK";
+							$period_style="c-red";
 						}
 					}
 					else
@@ -259,7 +261,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 					
 				}
 			?>
-			<td class="delivery" <?=$goJump?>><?=($period)?"<span class=''>".$period."</span>":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class=''>확인</span>":"Stock")?></td>
+			<td class="delivery" <?=$goJump?>><?=($period)?"<span class='$period_style'>".$period."</span>":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='stock'>확인</span>":"Stock")?></td>
 			<?if ($odr_type == "B") {  //--구매자 화면일경우?>
 				<?//if ((($part_type=="2"||$part_type=="5"||$part_type=="6") && $period=="") || ($save_yn=="Y")){?>
 				<?if ((($part_type=="2"||$part_type=="5"||$part_type=="6") && ($status ==1 || $status ==16 || $status ==7 )) || ($save_yn=="Y")){  //2016-04-04?>
