@@ -11,14 +11,16 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 	function ActiveCheck(){
+		
 		var f = document.f6;
 		var ck_ship=false, ch_delv=false, ck_dc=false, ck_qty=false, ck_pack=false, ck_photo=false;
 		var img_cnt=0;
 		
 		if($("#ship_info").val().length>0) ck_ship=true;
-		if($("#delivery_no").val().length>5) ch_delv=true;
-		if(f.fault_dc.value.length>3) ck_dc=true;
-		if(f.fault_quantity.value>0) ck_qty=true;
+		if($("#delivery_no").val().length>0) ch_delv=true;
+		if($("input[name=fault_dc]").val() !="") ck_dc=true;
+		if($("input[name=fault_quantity]").val() !="") ck_qty=true;
+
 		/** 이미지 1개이상 필수
 		img_file = $("input[name^=file_o<?=$odr_det_idx;?>_]");
 
@@ -155,11 +157,18 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 					<tr>
 					<td class="company"><img src="/kor/images/nation_title2_<?=$buy_com_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$buy_com_nation)?>"> <span class="name"><?=$buy_com_name?></span></td>
 						<td class="c-red2 t-rt">운송회사 : 
-						<div class="select type4" lang="en" style="width:70px">
-							<label class="c-blue">선택</label>
-							<?//echo GF_Common_SetComboList("ship_info", "DLVR", "", 1, "True",  "선택", $ship_info , ""); //기본선택 해지?>
-							<?echo GF_Common_SetComboList("ship_info", "DLVR", "", 1, "True",  "선택", "" , "");?>
-						</div>
+							<?
+								$ship_idx = $_GET['ship_info'];
+								$ship_img = $part_no= get_any("code_group_detail", "code_desc", "grp_idx=11 and grp_code='DLVR' and dtl_code='$ship_idx'");								
+							?>
+							<?if ($ship_idx=="1" || $ship_idx=="2" || $ship_idx=="3" || $ship_idx=="4"){?>
+							<img src="/kor/images/icon_<?=$ship_img?>.gif" alt="">
+							<?}else if($ship_idx=="5"){?>
+								<span class='c-blue'>다른 운송업체</span>
+							<?}else if($ship_idx=="6"){?>
+								<span class='c-blue'>직접 수령</span>
+							<?}?>
+							<input type='hidden' id='ship_info' name='ship_info' value='<?=$ship_idx?>'/>
 						&nbsp;&nbsp;&nbsp;운송장번호: <input type="text" class="i-txt2 c-blue" name="delivery_no" id="delivery_no" value="" style="width:96px"></td>
 					</tr>
 					<tr>

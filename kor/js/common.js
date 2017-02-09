@@ -1890,14 +1890,17 @@ $(document).ready(function(){
 	});
 
 	$("body").on("click",".btn-dialog-1916",function(){
-		openLayer("layer4","19_16", "?odr_det_idx="+$(this).parent().attr("odr_det_idx"));
+		openLayer("layer4","19_16", "?odr_det_idx="+$(this).attr("odr_det_idx"));
 	});
+
+	$("body").on("click",".btn-dialog-19_15_1",function(){
+		openLayer("layer4","19_15_1", "?odr_det_idx="+$(this).parent().attr("odr_det_idx"));
+	});	
 	
 	//수량 부족 후 추가 선적 다이얼로그 -> param추가 후 교환 선적으로 연결
 	$("body").on("click",".btn-dialog-1917",function(){
 //		openLayer("layer3","19_17");
-		closeCommLayer("layer4");
-		openLayer("layer3","18R_21","?fault_quantity="+$("#fault_quantity").val()+"&fault_select=3&odr_idx="+$("#odr_idx_"+$("#loadPage").val()).val()+"&odr_det_idx="+$(this).attr("odr_det_idx"));
+		openLayer("layer3","18R_21","?fault_quantity="+$("#fault_quantity").val()+"&fault_select=3&odr_idx="+$("#odr_idx_"+$("#loadPage").val()).val()+"&odr_det_idx="+$(this).attr("odr_det_idx")+"&ship_info="+$("#ship_info").val());
 	});
 	$("body").on("click",".btn-dialog-2104",function(){
 		var odr_det_idx = $(this).attr("odr_det_idx"); 

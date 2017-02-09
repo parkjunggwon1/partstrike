@@ -3084,7 +3084,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 		$fault_accept = $odr_his[fault_accept];
 		 if ($fault_select=="1"){?><a href="#" class="btn-dialog-18R15" fault_select="1"><img src="/kor/images/btn_exchange.gif" alt="교환"></a>
 		 <?}elseif($fault_select =="2"){?><a href="#" class="btn-dialog-18R15" fault_select="2"><img src="/kor/images/<?=($loadPage=="18R_06")? "btn_return_way":"btn_return";?>.gif" alt="반품"></a>
-		 <?}elseif($fault_select =="3"){?><a href="#" class="btn-dialog-1916"><img src="/kor/images/btn_add_shipping.gif" alt="추가선적"></a>
+		 <?}elseif($fault_select =="3"){?><a href="#" class="btn-dialog-19_15_1"><img src="/kor/images/btn_add_shipping.gif" alt="추가선적"></a>
 		 <?}elseif($fault_select =="4"){?><a href="#" class="btn-view-sheet-19-1-04"><img src="/kor/images/btn_refund.gif" alt="환불"></a>
 		 <?}?>
 		 <?if($fault_accept != "Y"){?><a href="#" class="btn-dialog-<?=$loadPage=="18R_06"?"18R07":"1906"?>"><img src="/kor/images/btn_answer.gif" alt="회신서"></a><?}?>
@@ -3439,7 +3439,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 		?>
 	<script type="text/javascript">
 			$(document).ready(function(){	
-				<?if (!$delivery_addr_idx){?>
+				<?if (!$delivery_addr_idx && $delivery_addr_idx !="0"){?>
 					
 						$(".company-info-wrap input,select").attr("disabled",true);
 						$(".company-info-wrap select:eq(0)").attr("disabled",false);
