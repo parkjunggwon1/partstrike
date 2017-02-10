@@ -20,7 +20,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";
 		}
 		?></label>
 			<?
-			echo GF_Common_SetComboListSrch("ship_info", "DLVR", "", 1, "True",  "", $assign_idx?$assign_idx:$ship_info ,$assign_idx?"disabled":"onchange='chg_ship_info(this)'","");
+			echo GF_Common_SetComboListSrch("ship_info_1916", "DLVR", "", 1, "True",  "", $assign_idx?$assign_idx:$ship_info ,$assign_idx?"":"onchange='chg_ship_info(this)'","");
 			?>
 		</div>
 	</div>

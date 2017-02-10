@@ -3573,10 +3573,12 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 					$(".delivery_save").hide();
 				}
 			});
+			
 			function MustChk()
 			{		
 				var f =  document.f_<?=$loadPage;?>;
 				var com_type = $(".company-info-wrap select[name=com_type]").val();
+				<?if (!$delivery_addr_idx && $delivery_addr_idx !="0"){?>
 				//공통 필수(회사구분,국가,성명(담당자),휴대전화,우편번호,도시,시군구,주소,email)
 				if(f.com_type.value==""){ return "com_type";}
 				if(f.nation.value==""){ return "nation";}
@@ -3594,9 +3596,11 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 					if(f.pos_nm.value==""){ return "pos_nm";}			//직책(학년)
 					if(f.tel.value==""){ return "tel";}						//Tel
 				}
+				<?}?>
 
 				return true;
 			}
+
 			function call_zip(){
 				var nation = $("#nation").val();
 				var s_nation = $("#s_nation").val();

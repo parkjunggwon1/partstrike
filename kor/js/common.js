@@ -1900,7 +1900,8 @@ $(document).ready(function(){
 	//수량 부족 후 추가 선적 다이얼로그 -> param추가 후 교환 선적으로 연결
 	$("body").on("click",".btn-dialog-1917",function(){
 //		openLayer("layer3","19_17");
-		openLayer("layer3","18R_21","?fault_quantity="+$("#fault_quantity").val()+"&fault_select=3&odr_idx="+$("#odr_idx_"+$("#loadPage").val()).val()+"&odr_det_idx="+$(this).attr("odr_det_idx")+"&ship_info="+$("#ship_info").val());
+
+		openLayer("layer3","18R_21","?fault_quantity="+$("#fault_quantity").val()+"&fault_select=3&odr_idx="+$("#odr_idx_"+$("#loadPage").val()).val()+"&odr_det_idx="+$(this).attr("odr_det_idx")+"&ship_info="+$("#ship_info_1916").val());
 	});
 	$("body").on("click",".btn-dialog-2104",function(){
 		var odr_det_idx = $(this).attr("odr_det_idx"); 
@@ -2879,36 +2880,39 @@ function chg_ship_info(obj){
 				dataType : "html" ,
 				async : false ,
 				success: function(data){ 
-							if (obj.value<5)  //일반 운송업체
+							if (load_page != "undefined")
 							{
-								$("#ship_account_no").val(trim(data)==""?"Address":data).show().parent().prev().find("span").show();
-								$("#memo").removeClass("i-txt2").addClass("i-txt5");
-								$(".text_lang").attr('lang','en');	
-								
-							}else{ //다른 운송업체
-								$("#ship_account_no").val("").hide().parent().prev().find("span").hide();
-								$("#memo").removeClass("i-txt5").addClass("i-txt2");
-							}
-
-							if (obj.value==6){ //직접수령
-								$("#insur_yn,#delivery_chg").attr("disabled", true).attr("checked", false).removeClass("checked");
-								$("input[name=insur_yn]").parent().next().html(" : No");
-								$(".company-info-wrap").hide();
-
-							}else{
-								$("#insur_yn,#delivery_chg").attr("disabled", false);
-							}
-							if(load_page=="05_04" || load_page=="09_01")
-							{
-								/*
-								if (ship_ch_btn == 0)
+								if (obj.value<5)  //일반 운송업체
 								{
-									$("#ship_account_no").val("");
+									$("#ship_account_no").val(trim(data)==""?"Address":data).show().parent().prev().find("span").show();
+									$("#memo").removeClass("i-txt2").addClass("i-txt5");
+									$(".text_lang").attr('lang','en');	
+									
+								}else{ //다른 운송업체
+									$("#ship_account_no").val("").hide().parent().prev().find("span").hide();
+									$("#memo").removeClass("i-txt5").addClass("i-txt2");
 								}
-								*/
-								if (chk_val==true)
+
+								if (obj.value==6){ //직접수령
+									$("#insur_yn,#delivery_chg").attr("disabled", true).attr("checked", false).removeClass("checked");
+									$("input[name=insur_yn]").parent().next().html(" : No");
+									$(".company-info-wrap").hide();
+
+								}else{
+									$("#insur_yn,#delivery_chg").attr("disabled", false);
+								}
+								if(load_page=="05_04" || load_page=="09_01")
 								{
-									$("#ship_account_no").val("");
+									/*
+									if (ship_ch_btn == 0)
+									{
+										$("#ship_account_no").val("");
+									}
+									*/
+									if (chk_val==true)
+									{
+										$("#ship_account_no").val("");
+									}
 								}
 							}
 							
