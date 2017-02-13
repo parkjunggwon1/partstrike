@@ -1093,7 +1093,7 @@ function checkActive(){
 			echo GET_ODR_DET_LIST("05_04", $i," and odr_idx=$odr_idx ", $det_cnt);	//include/class/class.odrinfo.php
 		}
 		if($dlvr_cnt > 0){
-			
+			echo pay_dlvr($odr[odr_idx], $sell_mem_idx, $b_nation);	//선.착불 배송비 선택 화면
 		}else{
 			echo shipping_info($odr[odr_idx],"05_04");
 		}

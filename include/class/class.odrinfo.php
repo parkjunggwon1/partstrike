@@ -3427,8 +3427,8 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 		$sell_mem_idx = $odr[sell_mem_idx];
 		$buy_mem_idx = $_SESSION["MEM_IDX"];
 		//구매자, 판매자 국가
-		$s_nation = get_any("member","nation", "mem_idx=$sell_mem_idx");
-		$b_nation = get_any("member","nation", "mem_idx=$buy_mem_idx");
+		$s_nation = get_any("member","nation", "mem_idx='$sell_mem_idx'");
+		$b_nation = get_any("member","nation", "mem_idx='$buy_mem_idx'");
 		$nation_name = get_any("code_group_detail","code_desc", "grp_code ='NA' and code_depth =1 and use_yn='Y' and dtl_code='$nation'");
 		$nation_number = get_any("code_group_detail","code_desc_mt", "grp_code ='NA' and code_depth =1 and use_yn='Y' and dtl_code='$b_nation'");
 
@@ -3439,12 +3439,11 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 		?>
 	<script type="text/javascript">
 			$(document).ready(function(){	
-				<?if (!$delivery_addr_idx && $delivery_addr_idx !="0"){?>
-					
+				<?if (!$delivery_addr_idx || $delivery_addr_idx !="0"){ ?>
 						$(".company-info-wrap input,select").attr("disabled",true);
 						$(".company-info-wrap select:eq(0)").attr("disabled",false);
 						$("#ship_info").attr("disabled",false);
-						chgnation(document.f_<?=$loadPage;?>.nation);
+										
 						$(".company-info-wrap select:eq(1)").attr("disabled",true);
 					
 				<?}?>			
@@ -3567,7 +3566,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 
 					$("#save_deact").hide();
 					$(".delivery_save").show();
-					checkActive();
+					//checkActive();
 				}else{
 					$("#save_deact").show();
 					$(".delivery_save").hide();
@@ -3578,8 +3577,9 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 			{		
 				var f =  document.f_<?=$loadPage;?>;
 				var com_type = $(".company-info-wrap select[name=com_type]").val();
-				<?if (!$delivery_addr_idx && $delivery_addr_idx !="0"){?>
+				
 				//공통 필수(회사구분,국가,성명(담당자),휴대전화,우편번호,도시,시군구,주소,email)
+			
 				if(f.com_type.value==""){ return "com_type";}
 				if(f.nation.value==""){ return "nation";}
 				if(f.manager.value==""){ return "manager";}
@@ -3596,10 +3596,13 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 					if(f.pos_nm.value==""){ return "pos_nm";}			//직책(학년)
 					if(f.tel.value==""){ return "tel";}						//Tel
 				}
-				<?}?>
-
+				
 				return true;
 			}
+
+				function trim(str) {
+				    return str.replace( /(^\s*)|(\s*$)/g, "" );
+				}
 
 			function call_zip(){
 				var nation = $("#nation").val();
@@ -3663,9 +3666,23 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 				<td colspan="2"><input class="i-txt3 c-blue" type="text" maxlength="30" lang="ko" name="pos_nm" style="width:215px" value="<?=$pos_nm?>"></td>
 			</tr>
 			<?			
-				$tel_nation = explode("-",$tel);
-				$fax_nation = explode("-",$fax);
-				$hp_nation = explode("-",$hp);
+				if($delivery_addr_idx!="")
+				{
+					$tel_nation_val = "+".$nation_number."";
+					$fax_nation_val = "+".$nation_number."";
+					$hp_nation_val = "+".$nation_number."";
+				}
+				else
+				{
+					$tel_nation = explode("-",$tel);
+					$fax_nation = explode("-",$fax);
+					$hp_nation = explode("-",$hp);
+
+					$tel_nation_val = $tel_nation[0];
+					$fax_nation_val = $fax_nation[0];
+					$hp_nation_val = $hp_nation[0];
+				}
+				
 
 				$tel_num = str_replace($tel_nation[0]."-","",$tel);
 				$fax_num = str_replace($fax_nation[0]."-","",$fax);
@@ -3673,15 +3690,15 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 			?>
 			<tr>
 				<th scope="row"><strong class="c-red" id="mst_tel">*</strong> <span lang="en">Tel</span></th>
-				<td colspan="2"><input type="text" class="i-txt3 c-blue" lang="en" name="nation_nm" style="width:37px;text-align:right;"  maxlength="5" value="<?=$tel_nation[0]?>-" readonly>&nbsp<input class="i-txt3 c-blue" name="tel" type="text" maxlength="15" lang='en' style="width:175px" value="<?=$tel_num?>"></td>
+				<td colspan="2"><input type="text" class="i-txt3 c-blue" lang="en" name="nation_nm" style="width:37px;text-align:right;"  maxlength="5" value="<?=$tel_nation_val?>-" readonly>&nbsp<input class="i-txt3 c-blue" name="tel" type="text" maxlength="15" lang='en' style="width:175px" value="<?=$tel_num?>"></td>
 			</tr>
 			<tr>
 				<th scope="row"><strong class="c-red"></strong> <span lang="en">Fax</span></th>
-				<td colspan="2"><input type="text" class="i-txt3 c-blue" lang="en" name="nation_nm" style="width:37px;text-align:right;"  maxlength="5" value="<?=$fax_nation[0]?>-" readonly>&nbsp<input class="i-txt3 c-blue" name="fax"  type="text" maxlength="15" lang='en' style="width:175px" value="<?=$fax_num?>"></td>
+				<td colspan="2"><input type="text" class="i-txt3 c-blue" lang="en" name="nation_nm" style="width:37px;text-align:right;"  maxlength="5" value="<?=$fax_nation_val?>-" readonly>&nbsp<input class="i-txt3 c-blue" name="fax"  type="text" maxlength="15" lang='en' style="width:175px" value="<?=$fax_num?>"></td>
 			</tr>
 			<tr>
 				<th scope="row"><strong class="c-red">*</strong> 휴대전화</th>
-				<td colspan="2"><input type="text" class="i-txt3 c-blue" lang="en" name="nation_nm" style="width:37px;text-align:right;"  maxlength="5" value="<?=$hp_nation[0]?>-" readonly>&nbsp<input class="i-txt3 c-blue" name="hp" type="text" maxlength="15" lang='en' style="width:175px" value="<?=$hp_num?>"></td>
+				<td colspan="2"><input type="text" class="i-txt3 c-blue" lang="en" name="nation_nm" style="width:37px;text-align:right;"  maxlength="5" value="<?=$hp_nation_val?>-" readonly>&nbsp<input class="i-txt3 c-blue" name="hp" type="text" maxlength="15" lang='en' style="width:175px" value="<?=$hp_num?>"></td>
 			</tr>
 			<tr>
 				<th scope="row"><strong class="c-red">*</strong> 우편번호</th>
@@ -3760,8 +3777,8 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						}
 				?>
 				<tr >
-					<td <?echo $idx == $delivery_addr_idx?"class='c-red'":""?> style="cursor:pointer;" onclick="delivery_load(<?=$delivery_addr_idx?>,'<?=$loadPage?>',<?=$odr_idx?>);"><?=$i?>.</td>
-					<td <?echo $idx == $delivery_addr_idx?"class='c-red'":""?> style="cursor:pointer;" onclick="delivery_load(<?=$delivery_addr_idx?>,'<?=$loadPage?>',<?=$odr_idx?>);"><?=$com_name;?></td>
+					<td <?echo $idx == $delivery_addr_idx?"class='c-red'":""?> style="cursor:pointer;" onclick="delivery_load(<?=$delivery_addr_idx?>,'<?=$loadPage?>','<?=$odr_idx?>');"><?=$i?>.</td>
+					<td <?echo $idx == $delivery_addr_idx?"class='c-red'":""?> style="cursor:pointer;" onclick="delivery_load(<?=$delivery_addr_idx?>,'<?=$loadPage?>','<?=$odr_idx?>');"><?=$com_name;?></td>
 				</tr>
 				<?}?>		
 			</tbody>

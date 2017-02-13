@@ -2433,7 +2433,7 @@ if($typ=="mybox_in"){
 //-- 배송지변경 : 변경주소 저장
 //--------------------------------------------------------------------------------------------------------------------------------------
 if($typ=="delivery_save"){
-    if($delivery_addr_idx){  //수정
+    if($delivery_addr_idx && $delivery_addr_idx !="aaaa"){  //수정
             $sql = "update delivery_addr set
                     mem_idx = '$session_mem_idx'
                     ,save_yn = '$delivery_save_yn'
