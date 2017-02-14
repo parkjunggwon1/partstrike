@@ -256,6 +256,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 					else
 					{
 						$period = "확인";
+						$period_style="c-red";
 					}
 					
 					

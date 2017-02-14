@@ -620,7 +620,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							$<?=$price==0?"":$price_val?>
 							<input type="hidden" name="odr_quantity[]" value="1">
 						<?}else{?>
-						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$supply_quantity?>"  value="<?=$odr_quantity?>" style="width:58px;ime-mode:disabled;">
+						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$supply_quantity?>"  value="" style="width:58px;ime-mode:disabled;">
 						<?}?>
 					</td>
 					<?if($loadPage== "05_04" && $per_cnt>0){ //-- 공급수량?>
@@ -3566,7 +3566,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 
 					$("#save_deact").hide();
 					$(".delivery_save").show();
-					//checkActive();
+					checkActive();
 				}else{
 					$("#save_deact").show();
 					$(".delivery_save").hide();
@@ -3599,11 +3599,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 				
 				return true;
 			}
-
-				function trim(str) {
-				    return str.replace( /(^\s*)|(\s*$)/g, "" );
-				}
-
+			
 			function call_zip(){
 				var nation = $("#nation").val();
 				var s_nation = $("#s_nation").val();
