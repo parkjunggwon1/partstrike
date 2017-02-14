@@ -69,8 +69,19 @@ include  $_SERVER["DOCUMENT_ROOT"]."/include/class/class.odrinfo.php";
 <!--
 var account_no_val = false;
 var ship_info_val = false;
-var delivery_chk = MustChk();
+
 $("input[name=return_method]").click(function(){
+
+	var delivery_chk_val = $('input:checkbox[id="delivery_chg"]').is(":checked");
+
+	if (delivery_chk_val==true)
+	{
+		var delivery_chk = MustChk();
+	}
+	else
+	{
+		var delivery_chk = true;
+	}
 
 	if($(this).val()=="1"){
 		$(".ship input,.ship select").attr("readonly",true).attr("disabled",true);
@@ -80,7 +91,6 @@ $("input[name=return_method]").click(function(){
 		$(".ship input,.ship select").attr("readonly",false).attr("disabled",false);
 		if (account_no_val==true && ship_info_val==true && delivery_chk == true)
 		{
-
 			//alert(account_no_val);
 			//alert(ship_info_val);
 			$(".return_chk").children("img").attr("src","/kor/images/btn_transmit.gif");
@@ -101,6 +111,17 @@ $(document).ready(function(){
 
 	$("#ship_account_no").keyup(function(e){	
 		
+		var delivery_chk_val = $('input:checkbox[id="delivery_chg"]').is(":checked");
+
+		if (delivery_chk_val==true)
+		{
+			var delivery_chk = MustChk();
+		}
+		else
+		{
+			var delivery_chk = true;
+		}
+
 		if ($("#ship_account_no").val()=="")
 		{
 			account_no_val =false;
@@ -126,7 +147,27 @@ $(document).ready(function(){
 	});
 
 	$("#ship_info").change(function(){	
-		
+		var delivery_chk = MustChk();
+		var delivery_chk_val = $('input:checkbox[id="delivery_chg"]').is(":checked");
+
+		if (delivery_chk_val==true)
+		{
+			var delivery_chk = MustChk();
+		}
+		else
+		{
+			var delivery_chk = true;
+		}
+
+		if ($("#ship_account_no").val()=="")
+		{
+			account_no_val =false;
+		}
+		else
+		{
+			account_no_val =true;
+		}
+
 		if ($("#ship_info option:selected").val() == "")
 		{
 			ship_info_val = false;
@@ -154,6 +195,17 @@ $(document).ready(function(){
 		}
 	});
 
+	$("#delivery_chg").change(function(){	
+		var delivery_chk = MustChk();
+		var delivery_chk_val = $('input:checkbox[id="delivery_chg"]').is(":checked");
+
+		if (delivery_chk_val==true)
+		{
+			$("#ship_account_no").val("");
+		}
+		
+	});
+
 
 	//$(".ship input,.ship select").attr("readonly",true).attr("disabled",true);
 });
@@ -162,115 +214,51 @@ $(document).ready(function(){
 function checkActive(){
 
 
-		var Erchkbox = false , ErchkCnt = true, FailCnt = 0;
-		var det_cnt = $("#det_cnt").val();
-		var dlvr_cnt = $("#dlvr_cnt").val();
-		var turnkey_cnt = $("#turnkey_cnt").val();
-		var chk_val=$("input:checkbox[id='delivery_chg']").is(":checked");
-		$("#layerPop3 .btn-area :eq(2)").css("cursor","pointer").addClass("btn-dialog-save").attr("src","/kor/images/btn_order_save.gif"); //저장버튼
-		$("#layerPop3 .btn-area :eq(2)").attr("save_key","on")
-		//2016-03-30 ccolle-------------------------------------------------------------------
-		if(det_cnt>1){ //-- 여러개 일때 --------------------------
-			sel_box = $("input[name^=odr_det_idx]:checked");
-			//$("#layerPop3 .btn-area :eq(2)").css("cursor","pointer").addClass("btn-dialog-save").attr("src","/kor/images/btn_order_save.gif"); //저장버튼
-		}else{	//-- 한개일때 ---------------------------------------
-			sel_box = $("input[name^=odr_det_idx]");
-			/**
-			//한개이고, 납기 받은거면 '저장' - 비활성 2016-04-05
-			if(sel_box.attr("odr_status")==16){
-				$("#layerPop3 .btn-area :eq(2)").css("cursor","").removeClass("btn-dialog-save").attr("src","/kor/images/btn_order_save_1.gif");
-			}else{
-				$("#layerPop3 .btn-area :eq(2)").css("cursor","pointer").addClass("btn-dialog-save").attr("src","/kor/images/btn_order_save.gif");
-			}**/
-		}
-	
-		var odr_qty=0, stock_qty=0;
-		sel_box.each(function(e){ //선택 갯수만큼 반복--------------------
-			Erchkbox = true;
-			stock_qty = Number($(this).attr("quantity"));
-			if($(this).attr("part_type")=='7'){
-				odr_qty = 1;
-			}else{
-				odr_qty = $(this).parent().parent().parent().find("input[name^=odr_quantity]").val();
-			}
-			if(odr_qty == ""){
-				odr_qty = 0;
-			}else{
-				odr_qty = Number(odr_qty);
-			}
-			if(odr_qty == "" || odr_qty<1) FailCnt++; //발주수량 유무.
-			if($(this).attr("part_type")!='2' && $(this).attr("part_type")!='7'){ //지속적이 아닐 경우..2016-11-13:턴키도 안전재고 체크 무
-				if(odr_qty > stock_qty) FailCnt++; //안전재고 체크
-			}
+		var delivery_chk = MustChk();
+		var delivery_chk_val = $('input:checkbox[id="delivery_chg"]').is(":checked");
 
-		}); // end each
-		//end of ccolle--------------------------------------------------------------------------------
-		
-		//선적정보 2016-11-06
-		if(dlvr_cnt<1){	//선불 배송정보 없을 시..
-			if(($("#ship_info option:selected").val()>=5  && $("#memo").val()=="") ||$("#ship_info option:selected").val()<5  && $("#ship_account_no").val()=="" || $("#ship_info option:selected").val()=="" ){
-				ErchkCnt = false; 
-			}
-		}else{		//선불 배송정보 있을 시...
-			//선불.착불 선택에 따라...
-			var sel_adv = $("input:radio[name=dlvr_adv]:checked").val();
-			
-			if(sel_adv=="Y"){	//선불
-				var dlvr_corp = $("input:radio[name='dlvr_corp']:checked").val();
-				
-				if(!(dlvr_corp && ($("#dlvr_acc").val() || chk_val))){
-					ErchkCnt = false; 
-				}
-			}else if(sel_adv=="N"){	//착불
-				if(($("#ship_info option:selected").val()>=5  && $("#memo").val()=="") ||$("#ship_info option:selected").val()<5  && $("#ship_account_no").val()=="" || $("#ship_info option:selected").val()=="" ){
-					ErchkCnt = false; 
-				}
-			}else{
-				ErchkCnt = false;
-			}
+		if (delivery_chk_val==true)
+		{
+			var delivery_chk = MustChk();
 		}
-		
-
-
-		if(det_cnt==1){
-			if($("input[name^=odr_det_idx]").attr("odr_status") == 1) {
-				Erchkbox = false;
-			} else{
-				Erchkbox = true;
-			}
+		else
+		{
+			var delivery_chk = true;
 		}
-		//-- 발주확인 버튼-------------------------
-		if (Erchkbox==true && ErchkCnt == true && FailCnt==0 )
-		{			
-			if (chk_val==true)
-			{
-				if (MustChk()==true)
-				{
 
-					$("#layerPop3 #btn-confirm").css("cursor","pointer").addClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm.gif");
-				}
-				else
-				{
-					$("#layerPop3 #btn-confirm").css("cursor","").removeClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm_1.gif");
-				}
-				
-			}
-			else
-			{
-				$("#layerPop3 #btn-confirm").css("cursor","pointer").addClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm.gif");
-				//$("#layerPop3 .btn-area :eq(1)").css("cursor","pointer").addClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm.gif");
-			}
-			
-		}else{
-			$("#layerPop3 #btn-confirm").css("cursor","").removeClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm_1.gif");
-			//$("#layerPop3 .btn-area :eq(1)").css("cursor","").removeClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm_1.gif");
-			
+		if ($("#ship_info option:selected").val() == "")
+		{
+			ship_info_val = false;
 		}
-		//-- 삭제버튼 처리 --------------------
-		if(Erchkbox == true) {
-			$("#btn_del_0504").css("cursor","pointer").attr("onclick","del_sel();").attr("src","/kor/images/btn_delete2.gif");
-		}else{
-			$("#btn_del_0504").css("cursor","").attr("onclick","").attr("src","/kor/images/btn_delete2_1.gif");
+		else
+		{
+			ship_info_val = true;
+		}
+
+		if ($("#ship_account_no").val()=="")
+		{
+			account_no_val =false;
+		}
+		else
+		{
+			account_no_val =true;
+		}
+
+		if (account_no_val==true && ship_info_val==true && delivery_chk ==true)
+		{
+			//alert(delivery_chk);
+			//alert(account_no_val);
+			$(".return_chk").children("img").attr("src","/kor/images/btn_transmit.gif");
+			$(".return_chk").attr("onclick","check();");	
+			$("#typ").val("return_method");
+		}
+		else
+		{
+			//alert(delivery_chk);
+			//alert(account_no_val);
+			$(".return_chk").children("img").attr("src","/kor/images/btn_transmit_1.gif");
+			$(".return_chk").attr("onclick","");	
+			$("#typ").val("delivery_save");
 		}
 		
 	}	//end of checkActive()
@@ -407,7 +395,9 @@ function checkActive(){
 		$(".company-info-wrap select:eq(0)").attr("disabled",false);
 		$("#ship_info").attr("disabled",false);	
 		$(".company-info-wrap select:eq(1)").attr("disabled",true);
-		$("#layerPop3 #btn-confirm").css("cursor","").removeClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm_1.gif");
+		$(".return_chk").children("img").attr("src","/kor/images/btn_transmit_1.gif");
+		$(".return_chk").attr("onclick","");	
+		$("#typ").val("delivery_save");
 	}
 
 	function add_change_sel()

@@ -2277,7 +2277,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 					<td class="c-red2 " style="width:33%;text-align:center;font-size:15px;">
 					<?
 					if($odr_his[charge_ty] == "D"){
-						echo "계약금 (<strong class='c-blue'><span lang='en'>".$etc1."- $".$pay; 
+						echo "계약금 (<strong class='c-blue'><span lang='en'>".$etc1."- $".str_replace("$","",$pay); 
 					}else if ($_SESSION["MEM_IDX"] == $odr_his[buy_mem_idx] && $with_deposit=="Y"){
 						echo "보증금, 총 금액 (<strong class='c-blue'><span lang='en'>$"; 
 						$deposit ="1000";
@@ -3579,7 +3579,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 				var com_type = $(".company-info-wrap select[name=com_type]").val();
 				
 				//공통 필수(회사구분,국가,성명(담당자),휴대전화,우편번호,도시,시군구,주소,email)
-			
+
 				if(f.com_type.value==""){ return "com_type";}
 				if(f.nation.value==""){ return "nation";}
 				if(f.manager.value==""){ return "manager";}
