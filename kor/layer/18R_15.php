@@ -213,8 +213,6 @@ $(document).ready(function(){
 //------------ 버튼 활성 or 비활성 ------------------------------------------------------------------
 function checkActive(){
 
-
-		var delivery_chk = MustChk();
 		var delivery_chk_val = $('input:checkbox[id="delivery_chg"]').is(":checked");
 
 		if (delivery_chk_val==true)

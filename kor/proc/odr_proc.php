@@ -1653,8 +1653,9 @@ if($typ == "shipping_ready"){  //------------------------------------------- 선
 //------------------------------------------- 선적(fault) 처리(ccolle)--------------------------------------------------------------------------------------------------
 // 2016-05-16 : fault(교환, 수량부족) 시 판매자 선적으로 사용하자
 if($typ == "shipping2"){
-    echo "$odr_det_idx:".$odr_det_idx."<br>";
+    //echo "$odr_det_idx:".$odr_det_idx."<br>";
     //1. 운송장 번호 update
+
     update_val("odr","fault_delivery_no",$delivery_no, "odr_idx", $odr_idx);
     $sql = "update odr_det set
              fault_quantity                 = '".$fault_quantity."'
@@ -1665,7 +1666,7 @@ if($typ == "shipping2"){
             , fault_dc                          = '".$fault_dc."'
             , fault_memo                        = '".$memo."'
             where odr_det_idx = $odr_det_idx";
-    echo $sql;
+    //echo $sql;
     $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 
     //2. histoy update(반품선적 완료를 확인한 상태로 update)  수량 부족일 때에는 수량 부족을 확인 한 상태로 update
@@ -1695,7 +1696,8 @@ if($typ == "shipping2"){
             ,odr_det_idx = '$odr_det_idx'
             ,status = $now_status
             ,status_name = '$now_txt'
-            ,etc1 = '$ship_info_nm $delivery_no'
+            ,etc1 = '$ship_info_nm'
+            ,etc2 = '$delivery_no'
             ,fault_select = '$fault_select'
             ,fault_yn = '$fault_yn'
             ,sell_mem_idx = '$sell_mem_idx'
@@ -1712,12 +1714,17 @@ if($typ == "shipping2"){
               odr_det_idx = '$odr_det_idx' ,
               ship_info ='$ship_info',
               delivery_no = '$delivery_no' ,
+              delivery_addr_idx = '$delivery_addr_idx' ,            
+              memo =  '$memo',
               insur_yn ='$insur_yn',
               reg_date =  now(),
               reg_ip = '$log_ip'
     ";
+   
     $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
     $new_ship_idx=mysql_insert_id();
+
+    update_val("odr","ship_idx",$new_ship_idx, "odr_idx", $odr_idx);
 
     if($result){
         //사용자정의 창(타이틀,메세지,버튼) function.php
