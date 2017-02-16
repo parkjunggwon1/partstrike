@@ -44,13 +44,13 @@ if($ship[delivery_addr_idx] > 0){
 		//if (nullchk(f.delivery_no,"운송장 번호를 입력해주세요.")== false) return ;
 		//새로운 방법 : 일부일때는 복제하는 ajax 처리 후 new_idx 로 폼 전송.
 		if(det_cnt > selCnt){  //일부일때 ajax로 복제 처리 하자
-			alert("복제처리...");
+			//alert("복제처리...");
 			var $chked_odr_det = sel_box;
 			var ch_odr_det_idx = [];
 			$chked_odr_det.each(function(e){
 				ch_odr_det_idx.push($(this).val());
 			});
-			alert("ch_odr_det_idx"+ch_odr_det_idx);
+			//alert("ch_odr_det_idx"+ch_odr_det_idx);
 			$.ajax({ 
 				type: "GET", 
 				url: "/ajax/proc_ajax.php?det_idx="+ch_odr_det_idx, 
@@ -61,7 +61,7 @@ if($ship[delivery_addr_idx] > 0){
 				dataType : "html" ,
 				async : false ,
 				success: function(data){
-							alert("data"+trim(data));
+							//alert("data"+trim(data));
 					$("#odr_idx_30_16").val(trim(data));
 					//document.location.href="/kor/";
 					//Refresh_Right();
@@ -147,6 +147,7 @@ if($ship[delivery_addr_idx] > 0){
 		$("input[type=file]").change(function(){	
 			 var no_val = $(this).attr("name").replace("file","");
 			 var file_nm = $(this).attr("f_number");
+			 var odr_det_idx_val = $(this).attr("odr_det_idx"); 
 			 if ($(this).val()){
 				 var f =  document.f; 
 				 f.typ.value="imgfileup";
@@ -158,12 +159,12 @@ if($ship[delivery_addr_idx] > 0){
 			 
 			if(file_nm ==3)
 			{
-				$(".minus_chk"+file_nm).show();
+				$(".minus_chk"+file_nm+"_"+odr_det_idx_val).show();
 			}
 			else
 			{
-				$(".plus_chk"+file_nm).show();
-				$(".minus_chk"+file_nm).show();
+				$(".plus_chk"+file_nm+"_"+odr_det_idx_val).show();
+				$(".minus_chk"+file_nm+"_"+odr_det_idx_val).show();
 			}				
 			
 		 });			
@@ -186,11 +187,12 @@ if($ship[delivery_addr_idx] > 0){
 		$(".arrow_top").click(function(){
 			
 			var num_file = $(this).prev().attr("f_number");
+			var odr_det_idx = $(this).prev().attr("odr_det_idx");
 
 			num_file = Number(num_file) + 1;
 
-			$(".img_tap"+num_file).show();				
-			$(".minus_chk"+num_file).show();
+			$(".img_tap"+num_file+"_"+odr_det_idx).show();				
+			$(".minus_chk"+num_file+"_"+odr_det_idx).show();
 		});
 		
 		<?if ($row_ship['ship_info']==5)

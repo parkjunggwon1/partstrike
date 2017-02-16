@@ -415,7 +415,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 										<td colspan="4"  class="img-cntrl-list">
 											<strong class="c-red">라벨/부품사진 </strong>
 											<?
-											for ($i = 1;$i <= 3; $i++ ){
+											for ($j = 1;$j <= 3; $j++ ){
 												$file = $row['file'.$i];	
 												if ($file){										
 												?>
@@ -924,7 +924,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								</tbody>
 							</table>
 						</td>
-						<!--------------------------------------------------------------------------------------------------------------------------------------------------->
+						<!---------------------------------------------------------------------------------------------------------------------------------------------------->
 					<?}elseif ($loadPage == "30_16" ||$loadPage=="18R_21"){ //[판매자] 선적(30_16)/교환선적시 보여지는 내용?>
 						<?if($loadPage == "30_16"){?>
 						<?if ($det_cnt>1){?>
@@ -1027,19 +1027,22 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<td></td>
 							<td colspan="10" class="img-cntrl-list" style="text-align:left;">
 								<strong class="c-red">라벨/부품사진 </strong>
-								<?for ($i = 1;$i <= 3; $i++ ){
-									$file = replace_out($row["file$i"]);
-									if ( $i ==1 || $file ){
+								<?for ($j = 1;$j <= 3; $j++ ){
+
+									$tap_display = "";
+									$file = replace_out($row["file$j"]);
+									if ( $j ==1 || $file ){
 									}
 									else
 									{
+										
 										$tap_display = "display:none;";
 									}
 									?>
-								<div class="img-cntrl-wrap img_tap<?=$i?>" style="margin-top:10px;<?=$tap_display?>" >
+								<div class="img-cntrl-wrap img_tap<?=$j?>_<?=$odr_det_idx?>" style="margin-top:10px;<?=$tap_display?>" >
 									<?
 									
-									if($i>0)
+									if($j>0)
 									{								
 										if($file !="")
 										{									
@@ -1050,8 +1053,8 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 											$display_b = "display:none;";
 										}
 										
-										$plus_chk = "plus_chk".$i;
-										$minus_chk = "minus_chk".$i;
+										$plus_chk = "plus_chk".$j."_".$odr_det_idx;
+										$minus_chk = "minus_chk".$j."_".$odr_det_idx;										
 									}
 									else
 									{
@@ -1059,11 +1062,11 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 										$sel_chk = "";
 									}
 									?>
-									<span class="img-wrap"><img alt="" id="fileimg<?=$odr_det_idx?>_<?=$i?>" <?=get_noimg_photo($file_path, $file, "/kor/images/file_pt.gif")?> style="border: 1px solid #00759e;" ></span>
-									<input name="file_o<?=$i?>" id="file_o<?=$i?>" type="hidden" value="<?=$fileonly?>">
-									<input name="file<?=$odr_det_idx?>_<?=$i?>" id="file<?=$odr_det_idx?>_<?=$i?>" f_number="<?=$i?>" type="file" style="width:1px;height:1px">
+									<span class="img-wrap"><img alt="" id="fileimg<?=$odr_det_idx?>_<?=$j?>" <?=get_noimg_photo($file_path, $file, "/kor/images/file_pt.gif")?> style="border: 1px solid #00759e;" ></span>
+									<input name="file_o<?=$j?>" id="file_o<?=$j?>" type="hidden" value="<?=$fileonly?>">
+									<input name="file<?=$odr_det_idx?>_<?=$j?>" id="file<?=$odr_det_idx?>_<?=$j?>" f_number="<?=$j?>" odr_det_idx="<?=$odr_det_idx?>"" type="file" style="width:1px;height:1px">
 									<a href="javascript:;" class="arrow_top <?=$plus_chk?>" style="<?=$display_b?>">+</a>
-									<a href="javascript:;" class="arrow_bottom <?=$minus_chk?>" f_idx="<?=$odr_det_idx?>_<?=$i?>" style="<?=$display_b?>">-</a>
+									<a href="javascript:;" class="arrow_bottom <?=$minus_chk?>" f_idx="<?=$odr_det_idx?>_<?=$j?>" style="<?=$display_b?>">-</a>
 								</div>
 								<?}?>
 								<span style="font-size:11px;padding-left:10px;"><strong class="c-red">라벨/부품 사진을 첨부해 주십시오. 분쟁 발생 시 보호받을 수 있습니다.</strong></span>
@@ -1442,8 +1445,8 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 										<?
 										$odr_history_idx= get_any("odr_history" , "odr_history_idx" , "odr_idx = $odr_idx and status = 21");
 										$odr_his = get_odr_history($odr_history_idx);										
-										for ($i = 1;$i <= 3; $i++ ){
-											$file = $odr_his["file".$i];											
+										for ($j = 1;$j <= 3; $j++ ){
+											$file = $odr_his["file".$j];											
 						?>
 										<div class="img-cntrl-wrap">
 										<span class="img-wrap"><a href="<?=get_noimg($file_path,$file,"#")?>" <?if ($file){?>target="_blank"<?}?>><img <?=get_noimg_photo($file_path, $file, "/kor/images/file_pt.gif")?> alt=""></a></span>											
@@ -1457,8 +1460,8 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 									<td colspan="2"  class="img-cntrl-list">
 										<strong class="c-red"><span>라벨/부품사진 </span></strong>
 										<?					
-										for ($i = 1;$i <= 3; $i++ ){
-											$file = replace_out($row["file$i"]);		
+										for ($j = 1;$j <= 3; $j++ ){
+											$file = replace_out($row["file$j"]);		
 
 
 								?>
@@ -1505,7 +1508,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					</td>
 					<?}?>
 				<?}?>
-			</tr><!------------------------------ part 목록 끝 ------------------------------------------------->
+			</tr><!------------------------------ part 목록 끝 -------------------------------------------------->
 
 			<?if ($loadPage == "30_22") { //수령(판매자) 개별 '완료'버튼 2016-04-25 : 삭제, odr 단위로 '완료(입금)' 처리
 				
