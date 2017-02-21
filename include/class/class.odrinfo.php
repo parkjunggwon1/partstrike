@@ -20,6 +20,10 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 		//$searchand .= " and b.part_type =$part_type "; //2016-03-23
 		$searchand .= " and b.part_type =$part_type "; //2016-03-23 삭제 odr_det 은 제외
 	}
+	if ($loadPage == "30_20")
+	{
+		$searchand .= " and odr_status <> '6' ";
+	}
 	$cnt = QRY_CNT("odr_det a left outer join part b on  a.part_idx = b.part_idx ",$searchand);
 	
 //	echo $searchand;
@@ -1261,7 +1265,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							
 							if ($recent_his_idx) {
 								$recent_status = get_any("odr_history" ,"status", "odr_history_idx = $recent_his_idx");
-								if ($recent_status == "6" || $recent_status == "9" || $recent_status == "10" || $recent_status == "15"){
+								if ($recent_status == $status || $recent_status == "9" || $recent_status == "10" || $recent_status == "15"){
 									$chkbox_visible = "N";							
 								}
 							}
@@ -2048,32 +2052,28 @@ if ($for_readonly != "P") {?>
 			<li class="sub"><strong>Deposit :</strong><span>$1,000.00	</li>
 		<?
 			$deposit_val = (double)"1000";
-
 			
 			if ($pay_invoice=="D")
 			{
-
 				$tot = str_replace(",","",$tot);
 				$tot = $tot+1000 + $shipping_charge  ;
-
 			}
 			else
 			{				
 				$tot = $total_val + (double)$shipping_charge + 1000;
 			}
 			
-
 			if( ($tot == (int)$tot) )
-				{
-					$tot = number_format($tot,2);
-					$tot_vat_minus = number_format($tot_vat_minus,2);
-					$vat_plus = number_format($vat_plus,2);
-				}
-				else {
-					$tot = number_format($tot,4);
-					$tot_vat_minus = number_format($tot_vat_minus,4);
-					$vat_plus = number_format($vat_plus,4);
-				}
+			{
+				$tot = number_format($tot,2);
+				$tot_vat_minus = number_format($tot_vat_minus,2);
+				$vat_plus = number_format($vat_plus,2);
+			}
+			else {
+				$tot = number_format($tot,4);
+				$tot_vat_minus = number_format($tot_vat_minus,4);
+				$vat_plus = number_format($vat_plus,4);
+			}
 		}
 
 
@@ -2499,7 +2499,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 					<?
 						   echo layerOrdListData($loadPage ,$odr_idx, $odr_det_idx);
 						   break;
-						   case "31_06":?><!----------------------------------------------------- 구매자 : 납기확인 완료 ----------------------------------------------------->
+						   case "31_06":?><!----------------------------------------------------- 구매자 : 납기확인 완료 ------------------------------------------------------>
 					<td class="c-red2 w100 t-ct" style="font-size:14px;">납기 확인이 완료되었습니다.</td>
 					</tr></tbody></table></div>	
 					<?

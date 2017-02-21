@@ -419,6 +419,8 @@ switch($actty) {
 			//3-1. 합계금액 계산
 			//2016-05-23 : fault 의경우, fault_quantity 와 금액을 곱해야 한다. => 이나다, fault가 해결이 되야(환불이 아닌경우) 본 주문수량금액 전체가 입금된다.
 			if($odr_det_idx > 0){ //det 단위 -----
+				$sql = "UPDATE odr_det SET odr_status='15' WHERE odr_det_idx=$odr_det_idx AND odr_status=6 ";
+				$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 				$pay_amt += get_any("odr_det", "odr_price * supply_quantity" , "odr_det_idx = $odr_det_idx");
 			}else{ //----------------- odr 단위 -----
 				$sql = "SELECT (odr_price * supply_quantity) AS amt FROM odr_det WHERE odr_idx = $odr_idx";

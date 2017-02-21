@@ -15,8 +15,9 @@
 		function ChangeBackground(){
 			var bgcolor ="<?=$odr_type=="S"?"#dce6f2":"#ffff99"?>";
 			var criteria_idx ="";
+			var odr_det_idx_chk ="";
 			$("#fr .stock-list-table .criteria").each(function(e){
-				if (criteria_idx != $(this).attr("criteria_idx"))
+				if (criteria_idx != $(this).attr("criteria_idx") || odr_det_idx_chk != $(this).attr("odr_det_idx_chk"))
 				{
 					if (bgcolor =="#ffffff")
 					{
@@ -25,6 +26,7 @@
 						bgcolor ="#ffffff";
 					}
 					criteria_idx = $(this).attr("criteria_idx");
+					odr_det_idx_chk = $(this).attr("odr_det_idx_chk");
 					if(e>0){  //첫번째는 두고, 두번째부터 발주가 바뀔 때마다 간격조정
 						$("<tr><td colspan='15' style='padding-top:20px; background-color:#FFFFFF;'></td></tr>").insertBefore($(this).prev());
 					}
