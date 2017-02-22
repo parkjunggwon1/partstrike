@@ -265,7 +265,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 
 			<tr id="tr_<?=$odr_det_idx?>"><!------------ 내용 첫 번째 tr -------------->
 				<?if ($loadPage== "30_06"|| $loadPage== "09_03" || $loadPage== "30_22" || $loadPage== "31_04" || $loadPage== "01_29" ){ //판매자 페이지에서 보여지는 내용(30_06 layer)?>
-					<!-- 30_06, 09_03, 30_22, 31_04, 01_09 --------------------------------------->
+					<!-- 30_06, 09_03, 30_22, 31_04, 01_09 ---------------------------------------->
 					<?if($loadPage== "30_22"){?><input type="hidden" name="odr_det_idx[]" value="<?=$odr_det_idx?>"><?}?>
 					<td><?=$i?></td>
 					<?if($part_type=="7"){?>
@@ -635,7 +635,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 
 					<?//-----------------------------------------------------------------------------------------------------------------------------------------------
 					}elseif ($loadPage== "05_04" || $loadPage=="04_01"){  //구매자 페이지에서 보여지는 내용 (05_04, 09_01:기존에 여기 있었으나 위에 별도로 뺌 )?>
-					<!--05_04----------------->
+					<!--05_04------------------>
 					<?if($loadPage== "05_04" && $det_cnt==1){?>
 								<input type="hidden" name="odr_det_idx[]" odr_status="<?=$odr_status;?>" part_type="<?=$part_type?>" quantity="<?=$quantity;?>" amend_yn="<?=$amend_yn?>" class="<?=($part_type=="2" && $period*1> 2 && QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")<=0) ? "endure":"stock"?>" value="<?=$odr_det_idx?>" <?if(($part_type=="2"||$part_type=="5"||$part_type=="6") && $period ==""){?>disabled<?}?> part_type="<?=$part_type?>"><span style="margin-right:0"></span>
 							</label>
@@ -897,7 +897,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<tr class="bg-none">
 								<td></td>
 								<td class="c-red" colspan="10" style="text-align:left;">	
-									부품상태<?=$odr_idx?> : 
+									부품상태 : 
 									<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span>&nbsp&nbsp
 									포장상태 : 
 									<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> / <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span>
@@ -1982,7 +1982,7 @@ if ($for_readonly != "P") {?>
 				
 			?>
 				
-				<li class="sub  c-red"><strong>Down Payment :</strong><span>-$<?=round_down(str_replace("-","",$down),4)?>	</li>	
+				<li class="sub  c-red"><strong>Down Payment :</strong><span>-$<?=round_down(str_replace("-","",$down),4)?></span></li>	
 				<li class="sub"><strong><?=$tax_name?> :</strong><span>$<?=$vat_plus?></span></li>			
 			<?}else{	//계약금 계산-------
 				$tot = ($tot / 10) - ($vat_plus/10);
@@ -2138,7 +2138,6 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 	}else{
 		$result = QRY_ODR_HISTORY_LIST(0,$searchand , 1 ,"odr_history_idx ");
 	}
-
 
 	
 ?>

@@ -68,6 +68,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			$odr_quantity= replace_out($row2["odr_quantity"]);
 			$supply_quantity= replace_out($row2["supply_quantity"]);
 			$odr_stock= replace_out($row2["odr_stock"]);
+			$odr_det_status = replace_out($row2["odr_det_status"]);
 			
 			$com_idx = $rel_idx==0 ? $sell_mem_idx : $rel_idx;
 			$company_nm = get_any("member","mem_nm_en", "mem_idx=$com_idx"); 	
@@ -138,7 +139,6 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 					$status = $odr_status; 
 				}
 				
-				
 				$result_arr = array_unique($array_status);				
 				
 				$num = array_count_values($array_status);
@@ -175,8 +175,24 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 							$page = 1;
 						}
 					}
+
 					$status_now = $status;
-					$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$status.":".$sell_mem_idx.":odr:Y:".$page_val."')\" ";
+					if ($status==21)
+					{
+						if (!$odr_det_idx_chk)
+						{
+							$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$odr_det_status.":".$sell_mem_idx.":odr:Y:".$page_val."')\" ";
+						}
+						else
+						{
+							$goJump = "title=\"".GF_Common_GetSingleList("ORD",$odr_det_status)."\" ";			
+						}
+					}
+					else
+					{
+						$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$status.":".$sell_mem_idx.":odr:Y:".$page_val."')\" ";
+					}
+					
 				}else{
 					if ($odr_type =="B" && $save_yn =="Y"){
 						$goJump = "title=\"저장\" style='cursor:pointer;padding:0;' onclick=\"javascript:openCommLayer('layer3','05_04', '?odr_idx=".$odr_idx."')\" ";
@@ -848,6 +864,7 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 				$cnt1=mysql_num_rows($result2);
 				$y = 1;
 				while($row2 = mysql_fetch_array($result2)){
+					
 					$odr_det_idx = replace_out($row2["odr_det_idx"]);
 					$part_idx= replace_out($row2["a.part_idx"]);
 					$part_type= replace_out($row2["part_type"]);
@@ -867,7 +884,7 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 					$supply_quantity= replace_out($row2["supply_quantity"]);
 					$odr_status= replace_out($row2["odr_status"]);
 					$com_idx = $rel_idx==0 ? $sell_mem_idx : $rel_idx;
-					//echo $odr_status."ADSFSDAF";
+					
 					if( ($price == (int)$price) )
 					{					
 						$price_val = round_down($price,2);
