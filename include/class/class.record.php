@@ -84,8 +84,9 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			$mem  =get_mem($buy_mem_idx);
 			$buy_nation =  $mem[nation];
 			$buy_company_nm = $mem[mem_nm_en];
-			$odr_det_idx_chk = get_any("odr_history","odr_det_idx", "odr_det_idx=$odr_det_idx and status=6"); 	
-
+			
+			$odr_det_idx_chk = get_any("odr_history","odr_det_idx", "odr_det_idx='$odr_det_idx' and status=6"); 							
+			
 			//$j++;
 			//2016-04-10 : 품목 구분별 일련번호
 			if($old_part == $part_type){
@@ -177,16 +178,31 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 					}
 
 					$status_now = $status;
-					if ($status==21)
+					if ($status==21 || $status==9)
 					{
-						if (!$odr_det_idx_chk)
+						if ($odr_type =="B")
 						{
-							$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$odr_det_status.":".$sell_mem_idx.":odr:Y:".$page_val."')\" ";
+							if ($odr_det_idx_chk )
+							{
+								$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$odr_det_status.":".$sell_mem_idx.":odr:Y:".$page_val."')\" ";
+							}
+							else
+							{
+								$goJump = "title=\"".GF_Common_GetSingleList("ORD",$odr_det_status)."\" ";			
+							}
 						}
 						else
 						{
-							$goJump = "title=\"".GF_Common_GetSingleList("ORD",$odr_det_status)."\" ";			
+							if (!$odr_det_idx_chk )
+							{
+								$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$odr_det_status.":".$sell_mem_idx.":odr:Y:".$page_val."')\" ";
+							}
+							else
+							{
+								$goJump = "title=\"".GF_Common_GetSingleList("ORD",$odr_det_status)."\" ";			
+							}
 						}
+						
 					}
 					else
 					{

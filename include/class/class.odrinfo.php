@@ -2112,7 +2112,8 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 		$searchand .= " and (odr_det_idx = '$odr_det_idx' or odr_det_idx = 0 or odr_det_idx is null) ";
 	}
 
-	
+
+
 //	if ($loadPage == "01_37"||$loadPage == "09_03" ||$loadPage == "30_10" ||  $loadPage == "30_20" || $loadPage == "30_22" || $loadPage == "30_23"){ 
 		$det_cnt = QRY_CNT("odr_det", $searchand);   //한 odr_idx당 odr_det 개수가 몇개인지 따라 1개이면 전체 다 표시. 한개 이상이면 odr_det=0 or null 인것만 표시
 		if ($det_cnt >1) { 
@@ -2127,6 +2128,11 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 		$amend_yn = "N";
 	}
 
+	if ($loadPage=="30_23")
+	{
+		$searchand .= " and odr_det_idx = '$odr_det_idx' and a.status = 6 ";
+	}
+	
 	if ($loadPage == "31_04"){   //판매자 납기 페이지. 납기 top 1만 표시
 		$searchand .= " and status = 1 and confirm_yn = 'N'";
 		$result = QRY_ODR_HISTORY_LIST(1,$searchand , 1 ,"odr_history_idx ");
