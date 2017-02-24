@@ -69,7 +69,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			$supply_quantity= replace_out($row2["supply_quantity"]);
 			$odr_stock= replace_out($row2["odr_stock"]);
 			$odr_det_status = replace_out($row2["odr_det_status"]);
-			
+		
 			$com_idx = $rel_idx==0 ? $sell_mem_idx : $rel_idx;
 			$company_nm = get_any("member","mem_nm_en", "mem_idx=$com_idx"); 	
 			if ($part_type =="2"){
@@ -83,10 +83,10 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			$buy_com_idx = ($buy_rel_idx ==0? $buy_mem_idx : $buy_rel_idx);
 			$mem  =get_mem($buy_mem_idx);
 			$buy_nation =  $mem[nation];
-			$buy_company_nm = $mem[mem_nm_en];
+			$buy_company_nm = $mem[mem_nm_en];			
 			
-			$odr_det_idx_chk = get_any("odr_history","odr_det_idx", "odr_det_idx='$odr_det_idx' and status=6"); 							
-			
+			$odr_det_idx_chk = get_any("odr_history","odr_det_idx", "odr_det_idx='$odr_det_idx' and status=6"); 
+
 			//$j++;
 			//2016-04-10 : 품목 구분별 일련번호
 			if($old_part == $part_type){
@@ -127,9 +127,23 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 		<?// goMenuJump() splData[0] : status splData[1] : sellmem_idx splData[2] : (odr or fty ) splData[3] : validyn (72시간 적용)?>
 		<?if($fr=="M" || $fr=="S"){
 				//$goJump = "onclick=\"javascript:goMenuJump('".$status.":".$sell_mem_idx.":odr:Y')\" ";				
-				$qrycnt = QRY_CNT("odr_history", "and odr_idx =".$odr_idx." and reg_mem_idx <> ".$_SESSION["MEM_IDX"] ." and confirm_yn ='N'");
+				$status_6 = "";
+				
+				if ($odr_det_status==6)
+				{
+					$status_6 = " and odr_det_idx='".$odr_det_idx."'  ";			
+				}
+
+				if ($odr_det_status==21 && $odr_type=="S")
+				{
+					$status_6 = " and odr_det_idx='".$odr_det_idx."'  ";				
+				}
+
+				$qrycnt = QRY_CNT("odr_history", "and odr_idx =".$odr_idx.$status_6." and reg_mem_idx <> ".$_SESSION["MEM_IDX"] ." and confirm_yn ='N'");
 				$status = get_any("odr_history", "status" , "odr_history_idx = (SELECT max( odr_history_idx ) FROM odr_history WHERE odr_idx =$odr_idx )"); 
 				
+
+
 				if($page_val != $status && $status != "")
 				{
 					array_push($array_status, $status);
@@ -164,56 +178,41 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				 
 				}
 				
-				 
-
 				if ($qrycnt >0) { 					
 					if ($status_now == $status) { 
-						if ($criteria_now_idx != $criteria_idx || $new_odr_det_idx_chk != $odr_det_idx_chk) {
+						if ($criteria_now_idx != $criteria_idx) {
 							$page = $page + 1;
 						}
 					}else{
-						if ($criteria_now_idx != $criteria_idx || $new_odr_det_idx_chk != $odr_det_idx_chk) {
+						if ($criteria_now_idx != $criteria_idx) {
 							$page = 1;
 						}
 					}
-
 					$status_now = $status;
-					if ($status==21 || $status==9)
+					
+					if ($odr_det_status==6)
 					{
-						if ($odr_type =="B")
-						{
-							if ($odr_det_idx_chk )
-							{
-								$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$odr_det_status.":".$sell_mem_idx.":odr:Y:".$page_val."')\" ";
-							}
-							else
-							{
-								$goJump = "title=\"".GF_Common_GetSingleList("ORD",$odr_det_status)."\" ";			
-							}
-						}
-						else
-						{
-							if (!$odr_det_idx_chk )
-							{
-								$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$odr_det_status.":".$sell_mem_idx.":odr:Y:".$page_val."')\" ";
-							}
-							else
-							{
-								$goJump = "title=\"".GF_Common_GetSingleList("ORD",$odr_det_status)."\" ";			
-							}
-						}
-						
+						$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$odr_det_status.":".$sell_mem_idx.":odr:Y:".$page_val."')\" ";
 					}
 					else
 					{
 						$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$status.":".$sell_mem_idx.":odr:Y:".$page_val."')\" ";
-					}
+					}	
 					
+				
 				}else{
 					if ($odr_type =="B" && $save_yn =="Y"){
 						$goJump = "title=\"저장\" style='cursor:pointer;padding:0;' onclick=\"javascript:openCommLayer('layer3','05_04', '?odr_idx=".$odr_idx."')\" ";
 					}else{
-						$goJump = "title=\"".GF_Common_GetSingleList("ORD",$status)."\" ";						
+						
+						if ($odr_det_status==6)
+						{
+							$goJump = "title=\"".GF_Common_GetSingleList("ORD",$odr_det_status)."\" ";	
+						}
+						else
+						{
+							$goJump = "title=\"".GF_Common_GetSingleList("ORD",$status)."\" ";	
+						}						
 					}
 				} 
 			}
