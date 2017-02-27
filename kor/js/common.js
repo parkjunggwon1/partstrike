@@ -2182,8 +2182,8 @@ $(document).ready(function(){
 		var det_cnt = $("#det_cnt_3021").val();
 
 		if($(this).hasClass("succEnd")){  // -------- 수령 ------------------------------
-			if(det_cnt > ary.length){  //----- 일부일경우 ------
-				if(ary.length > 1){ //2개 이상부터...
+			if(det_cnt != ary.length){  //----- 일부일경우 ------			
+				if(ary.length){ //1개 이상부터...
 					//복제하고, 전체처럼 proc
 					$.ajax({ 
 						type: "GET", 

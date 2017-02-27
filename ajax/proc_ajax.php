@@ -396,6 +396,7 @@ switch($actty) {
 				,reg_mem_idx = '$session_mem_idx'
 				,confirm_yn = 'Y'
 				,reg_date = now()";
+
 		$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 		$odr_history_idx=mysql_insert_id();
 		
@@ -454,8 +455,10 @@ switch($actty) {
 					}
 			$sql .= ",reg_date = now()
 					,reg_ip= '$log_ip'";
+
 			$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 			$sell_bank_idx=mysql_insert_id();
+			
 			//bank, hold 합계 Update
 			update_val("mybank","mybank_amt", SumMyBank2($sell_mem_idx, $sell_rel_idx, 0), "mybank_idx", $sell_bank_idx);
 			update_val("mybank","hold_amt", SumBankHold($sell_mem_idx, $sell_rel_idx, 0), "mybank_idx", $sell_bank_idx);

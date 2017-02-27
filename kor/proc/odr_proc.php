@@ -1771,6 +1771,7 @@ if ($typ =="faultEnd"){
 //------------------------------------------ 수령(odr 단위) 및 정상 종료 처리 ------------------------------------------------------------
 //-- 2016-05-18 : 일부 수령일 일경우 det 단위 수령으로 사용
 if ($typ =="succEnd"){
+    
     $det_cnt = QRY_CNT("odr_det", "and odr_idx= $odr_idx");
     $arr = explode(",", $odr_det_idx );
     $session_mem_idx = $_SESSION["MEM_IDX"];
@@ -1811,6 +1812,7 @@ if ($typ =="succEnd"){
 //------------------ 2016-04-24 : det에 각각 히스토리 등록하던것을 odr 단위로 등록 ------------------------------------------------------
 //-- 2016-05-18 : 전체(odr) 수령으로 사용
 if ($typ =="succEnd2"){
+  
     $det_cnt = QRY_CNT("odr_det", "and odr_idx= $odr_idx");
     $session_mem_idx = $_SESSION["MEM_IDX"];
     $sell_mem_idx = get_any("odr", "sell_mem_idx" , "odr_idx = $odr_idx");
@@ -1831,6 +1833,7 @@ if ($typ =="succEnd2"){
     $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
     update_val("odr","odr_status","6", "odr_idx", $odr_idx);
     update_val("odr","status_edit_mem_idx",$session_mem_idx, "odr_idx", $odr_idx);
+    update_val("odr_det","odr_status","6", "odr_idx", $odr_idx);
 
     if($result){
         Page_Parent_Msg_Url2("정상적으로 수령 및 종료 되었습니다.","/kor/");

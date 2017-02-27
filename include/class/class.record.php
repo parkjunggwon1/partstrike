@@ -129,7 +129,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				//$goJump = "onclick=\"javascript:goMenuJump('".$status.":".$sell_mem_idx.":odr:Y')\" ";				
 				$status_6 = "";
 				
-				if ($odr_det_status==6)
+				/*if ($odr_det_status==6)
 				{
 					$status_6 = " and odr_det_idx='".$odr_det_idx."'  ";			
 				}
@@ -137,22 +137,15 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				if ($odr_det_status==21 && $odr_type=="S")
 				{
 					$status_6 = " and odr_det_idx='".$odr_det_idx."'  ";				
-				}
+				}*/
 
 				$qrycnt = QRY_CNT("odr_history", "and odr_idx =".$odr_idx.$status_6." and reg_mem_idx <> ".$_SESSION["MEM_IDX"] ." and confirm_yn ='N'");
 				$status = get_any("odr_history", "status" , "odr_history_idx = (SELECT max( odr_history_idx ) FROM odr_history WHERE odr_idx =$odr_idx )"); 
-				
-
-
 				if($page_val != $status && $status != "")
 				{
 					array_push($array_status, $status);
 				}
 
-				if ($odr_status != $status)
-				{
-					$status = $odr_status; 
-				}
 				
 				$result_arr = array_unique($array_status);				
 				
@@ -178,6 +171,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				 
 				}
 				
+
 				if ($qrycnt >0) { 					
 					if ($status_now == $status) { 
 						if ($criteria_now_idx != $criteria_idx) {
