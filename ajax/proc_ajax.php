@@ -378,6 +378,8 @@ switch($actty) {
 		$buy_rel_idx = get_any("odr", "rel_idx" , "odr_idx = $odr_idx");
 		$sell_mem_idx = get_any("odr", "sell_mem_idx" , "odr_idx = $odr_idx");
 		$sell_rel_idx = get_any("odr", "sell_rel_idx" , "odr_idx = $odr_idx");
+		$odr_no = get_any("odr", "odr_no" , "odr_idx = $odr_idx");
+
 		$pay_amt = 0;
 		$mybank_hold = 0;
 		$data = array();  //json
@@ -462,8 +464,15 @@ switch($actty) {
 			//bank, hold 합계 Update
 			update_val("mybank","mybank_amt", SumMyBank2($sell_mem_idx, $sell_rel_idx, 0), "mybank_idx", $sell_bank_idx);
 			update_val("mybank","hold_amt", SumBankHold($sell_mem_idx, $sell_rel_idx, 0), "mybank_idx", $sell_bank_idx);
+
+			/*$sql = "UPDATE mybank SET hold_amt=hold_amt-$pay_amt ,mybank_hold=mybank_hold-$pay_amt WHERE mem_idx=$sell_mem_idx AND charge_type=3 ";
+			echo $sql;
+			exit;
+			$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());*/
+
 			//3-2. 구매자 결재 방법이 MyBank 라면 예치금 차감
-			$charge_method = get_any("mybank", "charge_method" , "mem_idx=$buy_mem_idx AND mybank_yn='N' AND charge_type=3 AND odr_idx=$odr_idx");
+			$charge_method = get_any("mybank", "charge_method" , "mem_idx=$buy_mem_idx AND mybank_yn='N' AND charge_type=3 AND odr_idx in (select odr_idx from odr where odr_no = '$odr_no') ");
+			
 			if($charge_method == 'MyBank'){
 				//3-2. 구매자 예치금 차감 ------------------------------------------------
 				$sql = "insert into mybank set
@@ -537,6 +546,7 @@ switch($actty) {
 		$refund_invoice = get_any("odr_det", "refund_invoice" , "odr_det_idx = $odr_det_idx");
 		$pay_amt = get_any("odr_det", "odr_price * supply_quantity" , "odr_det_idx = $odr_det_idx");
 		$fault_amt = get_any("odr_det", "odr_price * fault_quantity" , "odr_det_idx = $odr_det_idx");
+
 		$data = array();  //json
 		//1. 환불 처리(구매자 충전)--------------------------------------------------------
 		$sql = "insert into mybank set
@@ -558,6 +568,23 @@ switch($actty) {
 		update_val("mybank","hold_amt", SumBankHold($buy_mem_idx, $buy_rel_idx, 0), "mybank_idx", $buy_bank_idx);
 		//2. Hitory 처리 : 추가로 '종료(15)' 처리 할지는 추후 결정. - 2016-06-01
 		update_val("odr_history","confirm_yn","Y", "odr_history_idx", $actidx);
+
+
+		$sql = "insert into odr_history set 
+				odr_idx = '$odr_idx' ";				
+		$sql .= ",odr_det_idx = '$odr_det_idx' ";				
+		$sql .= ",status = 15
+				,status_name = '완료'
+				,etc1 = ''
+				,sell_mem_idx = '$sell_mem_idx'
+				,buy_mem_idx = '$buy_mem_idx'
+				,reg_mem_idx = '$session_mem_idx'
+				,confirm_yn = 'Y'
+				,reg_date = now()";
+		$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+
+		update_val("odr","odr_status","15", "odr_idx", $odr_idx);
+
 		//3. 구매자 MyBank 로 구매 시 예치금 '차감' 처리
 		$charge_method = get_any("mybank", "charge_method" , "mem_idx=$buy_mem_idx AND mybank_yn='N' AND charge_type=3 AND odr_idx=$odr_idx");
 		if($charge_method == 'MyBank'){

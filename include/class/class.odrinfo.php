@@ -2132,7 +2132,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 	{
 		$searchand .= " and odr_det_idx = '$odr_det_idx' and a.status = 6 ";
 	}
-	
+
 	if ($loadPage == "31_04"){   //판매자 납기 페이지. 납기 top 1만 표시
 		$searchand .= " and status = 1 and confirm_yn = 'N'";
 		$result = QRY_ODR_HISTORY_LIST(1,$searchand , 1 ,"odr_history_idx ");
@@ -2142,6 +2142,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 		$odr=get_odr($odr_idx);
 		$odr_status = $odr[odr_status];
 	}else{
+		
 		$result = QRY_ODR_HISTORY_LIST(0,$searchand , 1 ,"odr_history_idx ");
 	}
 

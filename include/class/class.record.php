@@ -151,7 +151,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				
 				$num = array_count_values($array_status);
 				foreach( $num as $key => $value ){
- 
+
 					if($key == $status)
 					{
 						if ($criteria_now_idx != $criteria_idx || $new_odr_det_idx_chk != $odr_det_idx_chk) {
@@ -170,31 +170,36 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 					}
 				 
 				}
-				
 
-				if ($qrycnt >0) { 					
+				if ($qrycnt >0) { 		
+
 					if ($status_now == $status) { 
+
 						if ($criteria_now_idx != $criteria_idx) {
+							
 							$page = $page + 1;
 						}
 					}else{
 						if ($criteria_now_idx != $criteria_idx) {
+							
 							$page = 1;
 						}
 					}
 					$status_now = $status;
 					
 					if ($odr_det_status==6)
-					{
-						$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$odr_det_status.":".$sell_mem_idx.":odr:Y:".$page_val."')\" ";
+					{						
+						$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$odr_det_status.":".$sell_mem_idx.":odr:Y:".$page."')\" ";
 					}
 					else
 					{
-						$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$status.":".$sell_mem_idx.":odr:Y:".$page_val."')\" ";
+
+						$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$status.":".$sell_mem_idx.":odr:Y:".$page."')\" ";
 					}	
 					
 				
 				}else{
+					
 					if ($odr_type =="B" && $save_yn =="Y"){
 						$goJump = "title=\"저장\" style='cursor:pointer;padding:0;' onclick=\"javascript:openCommLayer('layer3','05_04', '?odr_idx=".$odr_idx."')\" ";
 					}else{
@@ -902,7 +907,9 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 					else {			
 						$price_val = $price;
 					}
-					if ($com_idx && $odr_status!= "6"){
+
+					if ($com_idx ){
+
 						$company_nm = get_any("member","mem_nm_en", "mem_idx=$com_idx"); 	
 					
 						$end_yn = QRY_CNT("odr_history", "and odr_idx = $odr_idx  and status in (6,15)") > 0 ? "Y": "N";  //종료까지 무사히 왔는지 여부
