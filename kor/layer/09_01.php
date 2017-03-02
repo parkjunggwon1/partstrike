@@ -35,8 +35,7 @@ if (!$_SESSION["MEM_IDX"]){ReopenLayer("layer6","alert","?alert=sessionend");exi
 	}
 
 
-$("input[name^=odr_det_idx]").click(function(e){	
-	
+$("input[name^=odr_det_idx]").click(function(e){
 		if($(this).hasClass("checked")==false){  //누르는 순간 체크 됨.
 			//check 됐을때.
 			if ($("#chked_cnt").val() == 0)
@@ -370,7 +369,7 @@ $(document).ready(function(){
 		checkActive();
 	});
 
-	
+	checkActive();
 	//옵션 갯수에 따른 선택 안내 메세지
 	var det_cnt = $("#det_cnt_0901").val();
 	if(det_cnt = $("#det_cnt_0901").val()>1){
@@ -378,7 +377,50 @@ $(document).ready(function(){
 		$(".txt_option").css("margin-left","-470px");
 	}
 
-	checkActive();
+
+
+	$("input:checkbox[name^=odr_det_idx]").click(function(){	
+		var amend_yn;
+		amend_yn = "";
+		$("input:checkbox[name^=odr_det_idx]").each(function(e){ //선택유무와 무관
+			
+			var chk_val;
+
+			chk_val = $(this).is(":checked")
+			if (chk_val==true)
+			{
+				amend_yn = amend_yn + $(this).attr("amend_yn");
+				if (amend_yn.indexOf("Y"))
+				{		
+					if(amend_yn == "N")
+					{
+						$("#btn_cancel_09_01").css("cursor","pointer").addClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel.gif");
+					}
+					else
+					{
+						$("#btn_del_09_01").css("cursor","").attr("onclick","").attr("src","/kor/images/btn_delete2_1.gif");
+						$("#btn_cancel_09_01").css("cursor","").removeClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel_1.gif");	
+					}						
+					
+				}
+				else
+				{				
+					$("#btn_del_09_01").css("cursor","pointer").attr("onclick","del_sel();").attr("src","/kor/images/btn_delete2.gif");	
+					$("#btn_cancel_09_01").css("cursor","").removeClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel_1.gif");
+				}
+			}
+			else
+			{
+				$("#btn_del_09_01").css("cursor","").attr("onclick","del_sel();").attr("src","/kor/images/btn_delete2_1.gif");	
+
+			}
+			
+
+		});
+		
+	});
+
+	
 }); //end of ready
 
 function checkActive(){
@@ -421,18 +463,17 @@ function checkActive(){
 		ErchkCnt = false;	
 	}
 	//발주서 확인 버튼 활성
-
-	if(okCnt > 0 && ErchkCnt && selCnt > 0 && supp_qty <= odr_qty){
+	if(okCnt == det_cnt && ErchkCnt && selCnt == det_cnt && supp_qty <= odr_qty){
 		$("#layerPop3 .btn-area :eq(1)").css("cursor","pointer").addClass("btn-view-sheet-1207").attr("src","/kor/images/btn_order_confirm.gif");
 	}else{
 		$("#layerPop3 .btn-area :eq(1)").css("cursor","").removeClass("btn-view-sheet-1207").attr("src","/kor/images/btn_order_confirm_1.gif");
 	}
 	//취소버튼 활성
-	/*if(selCnt>0){
+	if(selCnt>0){
 		$("#btn_cancel_09_01").css("cursor","pointer").addClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel.gif");
 	}else{
 		$("#btn_cancel_09_01").css("cursor","").removeClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel_1.gif");
-	}*/
+	}
 
 	/**
 	$("#layerPop3 .stock-list-table").find("tr[id^=tr]").each(function(e){
@@ -549,19 +590,19 @@ $det_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx ");  //odr_det 수량
 				<?if($det_cnt>1){?>
 				<th scope="col" style="width:50px">Option</th>
 				<?}?>
-				<th scope="col" class="t-no">No. </th>
+				<th scope="col" class="t-no" style="width:23px">No. </th>
 				<th scope="col" class="t-nation">Nation</th>
-				<th scope="col" class="t-partno" style="width:120px;">Part No.</th>
-				<th scope="col" class="t-Manufacturer" style="width:80px;">Manufacturer</th>
-				<th scope="col" class="t-Package">Package</th>
-				<th scope="col" class="t-dc">D/C</th>
-				<th scope="col" class="t-rohs">RoHS</th>
-				<th scope="col" class="t-oty">O'ty</th>
-				<th scope="col" class="t-unitprice">Unit Price</th>
-				<th scope="col" lang="ko" class="t-orderoty">발주수량</th>
-				<th scope="col" lang="ko"  class="t-supplyoty">공급수량</th>
-				<th scope="col" lang="ko" class="t-period">납기</th>
-				<th scope="col" class="t-company">Company</th>
+				<th scope="col" class="t-partno" style="width:300px;">Part No.</th>
+				<th scope="col" class="t-Manufacturer" style="width:180px;">Manufacturer</th>
+				<th scope="col" class="t-Package" style="width:80px">Package</th>
+				<th scope="col" class="t-dc" style="width:36px">D/C</th>
+				<th scope="col" class="t-rohs" style="width:36px">RoHS</th>
+				<th scope="col" class="t-oty" style="width:60px">O'ty</th>
+				<th scope="col" class="t-unitprice" style="width:61px">Unit Price</th>
+				<th scope="col" lang="ko" class="t-orderoty" style="width:66px">발주수량</th>
+				<th scope="col" lang="ko"  class="t-supplyoty" style="width:66px">공급수량</th>
+				<th scope="col" lang="ko" class="t-period" style="width:38px">납기</th>
+				<th scope="col" class="t-company" style="width:66px">Company</th>
 				<!--th scope="col" >&nbsp;</th-->
 				</tr>
 		</thead>

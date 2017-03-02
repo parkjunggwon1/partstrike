@@ -93,9 +93,9 @@ if ($cnt == 0 ){?>
 				include $_SERVER["DOCUMENT_ROOT"]."/include/paging3.php"; ?>
 		</div>
 		<!-- //layer-pagination -->
-		<?="Layer:19_21/odr_idx:".$odr_idx."/odr_det_idx:".$odr_det_idx?>
+		<? //echo "Layer:19_21/odr_idx:".$odr_idx."/odr_det_idx:".$odr_det_idx?>
 		<?
-			echo "/FAULT=Y";
+			//echo "/FAULT=Y";
 			echo GET_ODR_HISTORY_LIST("30_20_F", $odr_idx, $odr_det_idx);
 		?>
 		<input type="hidden" name="fault_yn" id="fault_yn" value="<?=$fault_yn;?>">

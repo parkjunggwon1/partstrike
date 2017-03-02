@@ -208,8 +208,8 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 ?>
 <form name="f6" id="f6" method="post" enctype="multipart/form-data">		
 	<input type="hidden" name="typ" value="refund2">
-	<input type="hidden" name="odr_idx" id="odr_30_16_04" value="<?=$odr_idx?>">
-	<input type="hidden" name="odr_det_idx" id="det_30_16_04" value="<?=$odr_det_idx?>">
+	<input type="hidden" name="odr_idx" id="odr_19_1_04" value="<?=$odr_idx?>">
+	<input type="hidden" name="odr_det_idx" id="det_19_1_04" value="<?=$odr_det_idx?>">
 	<input type="hidden" name="odr_history_idx" id="history_19_1_04" value="<?=$odr_history_idx?>">
 	<input type="hidden" name="mem_idx" value="<?=$row_odr["mem_idx"]?>">
 	<input type="hidden" name="rel_idx" value="<?=$row_odr["rel_idx"]?>">
@@ -227,11 +227,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 
 
 function check(){
-		var f =  document.f6;				
-		$(".btn-area.t-rt button").attr("onclick","alert_msg('처리중입니다.')");
-		f.tot_amt.value = $("input[id^=tot_]").val();
 	alert("작업중...");
-
 	/**
 		var f =  document.f6;				
 		$(".btn-area.t-rt button").attr("onclick","alert_msg('처리중입니다.')");

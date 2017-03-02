@@ -1189,6 +1189,7 @@ function get_auto_no($ty, $table, $column){  // 통합 no 생성
 		$result_value = $ty.date("y")."-PS".str_pad(fmod($cnt,99999)+1,5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
 	}
 	return $result_value;
+
 }
 
 function get_memfee_no($ty, $table, $column){     //memfee no
@@ -1330,6 +1331,7 @@ function SumBankHold($mem_idx, $rel_idx, $ty=2){
 	$com_idx = ($rel_idx ==0 ? $mem_idx : $rel_idx);
 
 	$pay = get_any("mybank" ,"sum(mybank_hold)", "(mem_idx =$com_idx or rel_idx =$com_idx) and mybank_yn = 'Y'");
+
 	if($ty>0){
 		$pay_val = round_down($pay,4);
 		$pay_val = number_format($pay,4);
@@ -1340,8 +1342,9 @@ function SumBankHold($mem_idx, $rel_idx, $ty=2){
 }
 
 function GetDeposit($mem_idx, $rel_idx, $charge_type){
+	
 	$com_idx = ($rel_idx ==0 ? $mem_idx : $rel_idx);
-	$pay = get_any("mybank" ,"sum( charge_amt )", "(mem_idx =$com_idx or rel_idx =$com_idx) and charge_type in ($charge_type) and mybank_yn='Y'");
+	$pay = get_any("mybank" ,"sum( charge_amt )", "(mem_idx =$com_idx or rel_idx =$com_idx) and charge_type in ($charge_type) and mybank_yn = 'N'");
 	
 	return number_format(round_down(abs($pay),4),4);
 }
@@ -1576,9 +1579,7 @@ function GET_WhatsNew($ty,$viewty){
 
 
 function openSheet($status, $etc1, $odr_idx,$etc_change,$odr_history_idx=""){
-	
 		
-
 	if ($etc_change)
 	{
 
@@ -1595,11 +1596,17 @@ function openSheet($status, $etc1, $odr_idx,$etc_change,$odr_history_idx=""){
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"12_07\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>"; //JSJ
 			 $return_val = "<a style='color:#00759e;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"payment_ok\",\"?odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."\")'>".$etc1."</a>"; //2016-04-18
 			 break;
+			case "10":  //수량부족
+			 $etc2 = get_any("odr_history", "etc2", "odr_history_idx = $odr_history_idx");
+			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"12_07\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>"; //JSJ
+			 $return_val = "<a style='color:#00759e;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"alert_qty_minus\",\"?odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."\")'>".$etc1."-".$etc2."</a>"; //2016-04-18
+			 break;
 		   case "18": //송장
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>";  //JSJ
 			 $return_val = "<a style='color:#00759e !important;text-decoration:underline;' href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?sheets_no=".$etc1."&odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."&forread=Y\")'>".$etc1."</a>";
 			 break;
 		   case "21": //선적
+		   case "23": //추가선적
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>";  //JSJ
 			
 			if($etc1 == "DHL" || $etc1 == "UPS" || $etc1 == "Fedex" || $etc1 == "TNT")
@@ -1621,6 +1628,7 @@ function openSheet($status, $etc1, $odr_idx,$etc_change,$odr_history_idx=""){
 	}
 	else
 	{
+
 		switch ($status) {		
 			
 		   case 2:  //발주서
@@ -1641,6 +1649,7 @@ function openSheet($status, $etc1, $odr_idx,$etc_change,$odr_history_idx=""){
 			 $return_val = "<a style='color:#000;text-decoration:underline;' href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?sheets_no=".$etc1."&odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."&forread=Y\")'>".$etc1."</a>";
 			 break;
 		   case "21": //선적
+		   case "23": //추가선적			 
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>";  //JSJ
 			 if($etc1 == "DHL" || $etc1 == "UPS" || $etc1 == "Fedex" || $etc1 == "TNT")
 			{			

@@ -44,13 +44,13 @@ if($ship[delivery_addr_idx] > 0){
 		//if (nullchk(f.delivery_no,"운송장 번호를 입력해주세요.")== false) return ;
 		//새로운 방법 : 일부일때는 복제하는 ajax 처리 후 new_idx 로 폼 전송.
 		if(det_cnt > selCnt){  //일부일때 ajax로 복제 처리 하자
-			alert("복제처리...");
+			//alert("복제처리...");
 			var $chked_odr_det = sel_box;
 			var ch_odr_det_idx = [];
 			$chked_odr_det.each(function(e){
 				ch_odr_det_idx.push($(this).val());
 			});
-			alert("ch_odr_det_idx"+ch_odr_det_idx);
+			//alert("ch_odr_det_idx"+ch_odr_det_idx);
 			$.ajax({ 
 				type: "GET", 
 				url: "/ajax/proc_ajax.php?det_idx="+ch_odr_det_idx, 
@@ -61,7 +61,7 @@ if($ship[delivery_addr_idx] > 0){
 				dataType : "html" ,
 				async : false ,
 				success: function(data){
-							alert("data"+trim(data));
+							//alert("data"+trim(data));
 					$("#odr_idx_30_16").val(trim(data));
 					//document.location.href="/kor/";
 					//Refresh_Right();
@@ -84,13 +84,23 @@ if($ship[delivery_addr_idx] > 0){
 		//alert("check");
 		var det_cnt = $("#det_cnt_30_16").val();
 		var selCnt=0;
+		var checked;
 
 		if(det_cnt>1){ //-- 여러개 일때 --------------------------
 			sel_box = $("input[name^=odr_det_idx]:checked");
 			selCnt = sel_box.length;
+			if (selCnt == det_cnt)
+			{
+				checked = true;
+			}
+			else
+			{
+				checked = false;
+			}
 		}else{	//-- 한개일때 ---------------------------------------
 			sel_box = $("input[name^=odr_det_idx]");
 			selCnt=1;
+			checked = true;
 		}
 
 		//취소 버튼
@@ -119,7 +129,7 @@ if($ship[delivery_addr_idx] > 0){
 		}
 
 		//alert("delv_no.length:"+delv_no.length);
-		if(delv_no.length>0 && selCnt>0 && delv_shop != ""){  //활성
+		if(delv_no.length>0 && checked==true && delv_shop != ""){  //활성
 			$("#btn_submit_3016").attr("src","/kor/images/btn_shipping.gif");
 			$("#btn_submit_3016").attr("onclick","shipping();");
 			$("#btn_submit_3016").css("cursor","pointer");
@@ -147,6 +157,7 @@ if($ship[delivery_addr_idx] > 0){
 		$("input[type=file]").change(function(){	
 			 var no_val = $(this).attr("name").replace("file","");
 			 var file_nm = $(this).attr("f_number");
+			 var odr_det_idx_val = $(this).attr("odr_det_idx"); 
 			 if ($(this).val()){
 				 var f =  document.f; 
 				 f.typ.value="imgfileup";
@@ -158,12 +169,12 @@ if($ship[delivery_addr_idx] > 0){
 			 
 			if(file_nm ==3)
 			{
-				$(".minus_chk"+file_nm).show();
+				$(".minus_chk"+file_nm+"_"+odr_det_idx_val).show();
 			}
 			else
 			{
-				$(".plus_chk"+file_nm).show();
-				$(".minus_chk"+file_nm).show();
+				$(".plus_chk"+file_nm+"_"+odr_det_idx_val).show();
+				$(".minus_chk"+file_nm+"_"+odr_det_idx_val).show();
 			}				
 			
 		 });			
@@ -186,11 +197,12 @@ if($ship[delivery_addr_idx] > 0){
 		$(".arrow_top").click(function(){
 			
 			var num_file = $(this).prev().attr("f_number");
+			var odr_det_idx = $(this).prev().attr("odr_det_idx");
 
 			num_file = Number(num_file) + 1;
 
-			$(".img_tap"+num_file).show();				
-			$(".minus_chk"+num_file).show();
+			$(".img_tap"+num_file+"_"+odr_det_idx).show();				
+			$(".minus_chk"+num_file+"_"+odr_det_idx).show();
 		});
 		
 		<?if ($row_ship['ship_info']==5)
@@ -332,7 +344,7 @@ if($ship[delivery_addr_idx] > 0){
 					}					
 
 					if($ship_nation != $sell_com_nation){ //국제간의 거래일 경우에만 노출?>
-					<tr><!-- 2016-04-25 송장 class변경 'btn-view-sheet-3011' -> 'btn-view-sheet-3017' --->
+					<tr><!-- 2016-04-25 송장 class변경 'btn-view-sheet-3011' -> 'btn-view-sheet-3017' -->
 						<?if ($row_ship['ship_info']==5)
 						{
 							$delivery_shop_val = "btn-view-sheet-3017no";

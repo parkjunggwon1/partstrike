@@ -38,12 +38,13 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 		$odr_idx = replace_out($row2["odr_idx"]);
 		$save_yn = replace_out($row2["save_yn"]);
 		$odr_status= replace_out($row2["order_status"]);
+		$kk = replace_out($row2["odr_det_idx"]);
 	
 		//최근 이력이 있거나 save_yn = 'Y'인 경우만 출력하기로.
 		//$status = get_any("odr_history", "status", "odr_history_idx in (select max(odr_history_idx) from odr_history where odr_idx = trim('$odr_idx'))");
-		$status = get_any("odr_history", "status", "odr_history_idx in (select max(odr_history_idx) from odr_history where odr_idx = trim('$odr_idx')) AND status NOT IN(15)"); //2016-04-04 상태 '종료' 미 노출
+		$status = get_any("odr_history", "status", "odr_history_idx in (select max(odr_history_idx) from odr_history where odr_idx = trim('$odr_idx') and odr_det_idx is null or odr_det_idx='$kk') AND status NOT IN(90,15)"); //2016-04-04 상태 '종료' 미 노출
 		//상태 16인게 저장에 있을경우 비 노출(구매화면) 2016-04-06
-		$kk = replace_out($row2["odr_det_idx"]);
+		
 		$st16cnt = QRY_CNT("odr a INNER JOIN odr_det b ON(a.odr_idx=b.odr_idx)", "AND b.rel_det_idx = $kk AND a.save_yn='Y'");
 		$chk = ($st16cnt>0 && $status==16 && $odr_type =="B")? false:true;
 
@@ -67,7 +68,8 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			$odr_quantity= replace_out($row2["odr_quantity"]);
 			$supply_quantity= replace_out($row2["supply_quantity"]);
 			$odr_stock= replace_out($row2["odr_stock"]);
-			
+			$odr_det_status = replace_out($row2["odr_det_status"]);
+		
 			$com_idx = $rel_idx==0 ? $sell_mem_idx : $rel_idx;
 			$company_nm = get_any("member","mem_nm_en", "mem_idx=$com_idx"); 	
 			if ($part_type =="2"){
@@ -81,8 +83,10 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			$buy_com_idx = ($buy_rel_idx ==0? $buy_mem_idx : $buy_rel_idx);
 			$mem  =get_mem($buy_mem_idx);
 			$buy_nation =  $mem[nation];
-			$buy_company_nm = $mem[mem_nm_en];
+			$buy_company_nm = $mem[mem_nm_en];			
 			
+			$odr_det_idx_chk = get_any("odr_history","odr_det_idx", "odr_det_idx='$odr_det_idx' and status=6"); 
+
 			//$j++;
 			//2016-04-10 : 품목 구분별 일련번호
 			if($old_part == $part_type){
@@ -93,7 +97,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			$old_part = $part_type;
 			$criteria_now_idx = $odr_idx; //$odr_type=="S"? $buy_mem_idx : $sell_mem_idx; //bgcolor회색,흰색 바꾸는 기준_idx : odr_idx  발주서 기준이다.
 			
-			if ($criteria_now_idx != $criteria_idx) {
+			if ($criteria_now_idx != $criteria_idx && $new_odr_det_idx_chk != $odr_det_idx_chk) {
 				if ($bgcolor == "") { 
 					$bgcolor_now="background-color:#ffffff;";
 				}else{
@@ -107,12 +111,12 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				}
 			}
 
-			if ($criteria_now_idx != $criteria_idx || $saved_part != $part_type){
+			if ($criteria_now_idx != $criteria_idx || $new_odr_det_idx_chk != $odr_det_idx_chk || $saved_part != $part_type){
 		?>		
 		<tr>
 			<td colspan="<?=$colspan?>" class="title-box" >
-				<?if ($odr_type == "S" && ($criteria_now_idx != $criteria_idx)){?><div class="nation2" lang="en"><img src="/kor/images/nation_title_<?=$buy_nation?>.png" alt="<?=$buy_company_nm?>">&nbsp;&nbsp;<a href="javascript:side_company_info2(<?=$buy_com_idx?>,'<?=$odr_type?>')" class="c-blue"><?=($status==1 || $status==16 || $status==7)? "&nbsp;":$buy_company_nm;?></a></div><?}?>
-				<?if ($saved_part != $part_type || $criteria_now_idx != $criteria_idx){?>
+				<?if ($odr_type == "S" && ($criteria_now_idx != $criteria_idx || $new_odr_det_idx_chk != $odr_det_idx_chk)){?><div class="nation2" lang="en"><img src="/kor/images/nation_title_<?=$buy_nation?>.png" alt="<?=$buy_company_nm?>">&nbsp;&nbsp;<a href="javascript:side_company_info2(<?=$buy_com_idx?>,'<?=$odr_type?>')" class="c-blue"><?=($status==1 || $status==16 || $status==7)? "&nbsp;":$buy_company_nm;?></a></div><?}?>
+				<?if ($saved_part != $part_type || $criteria_now_idx != $criteria_idx || $new_odr_det_idx_chk != $odr_det_idx_chk){?>
 				<h3 class="title"><img src="/kor/images/stock_title0<?=$part_type?><?if ($fr=="M"){echo "_s";}?>.gif" alt="<?=GF_Common_GetSingleList("PART",$part_type)?>"></h3>
 				<?
 				$saved_part = $part_type;	
@@ -123,24 +127,34 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 		<?// goMenuJump() splData[0] : status splData[1] : sellmem_idx splData[2] : (odr or fty ) splData[3] : validyn (72시간 적용)?>
 		<?if($fr=="M" || $fr=="S"){
 				//$goJump = "onclick=\"javascript:goMenuJump('".$status.":".$sell_mem_idx.":odr:Y')\" ";				
-				$qrycnt = QRY_CNT("odr_history", "and odr_idx =".$odr_idx." and reg_mem_idx <> ".$_SESSION["MEM_IDX"] ." and confirm_yn ='N'");
-				$status = get_any("odr_history", "status" , "odr_history_idx = (SELECT max( odr_history_idx ) FROM odr_history WHERE odr_idx =$odr_idx )"); 
+				$status_6 = "";
 				
+				/*if ($odr_det_status==6)
+				{
+					$status_6 = " and odr_det_idx='".$odr_det_idx."'  ";			
+				}
+
+				if ($odr_det_status==21 && $odr_type=="S")
+				{
+					$status_6 = " and odr_det_idx='".$odr_det_idx."'  ";				
+				}*/
+
+				$qrycnt = QRY_CNT("odr_history", "and odr_idx =".$odr_idx.$status_6." and reg_mem_idx <> ".$_SESSION["MEM_IDX"] ." and confirm_yn ='N'");
+				$status = get_any("odr_history", "status" , "odr_history_idx = (SELECT max( odr_history_idx ) FROM odr_history WHERE odr_idx =$odr_idx )"); 
 				if($page_val != $status && $status != "")
 				{
 					array_push($array_status, $status);
 				}
-
 
 				
 				$result_arr = array_unique($array_status);				
 				
 				$num = array_count_values($array_status);
 				foreach( $num as $key => $value ){
- 
+
 					if($key == $status)
 					{
-						if ($criteria_now_idx != $criteria_idx) {
+						if ($criteria_now_idx != $criteria_idx || $new_odr_det_idx_chk != $odr_det_idx_chk) {
 							array_push($array_real_status, $status);
 							
 							$num_real = array_count_values($array_real_status);
@@ -156,26 +170,48 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 					}
 				 
 				}
-				
-				 
 
-				if ($qrycnt >0) { 					
+				if ($qrycnt >0) { 		
+
 					if ($status_now == $status) { 
+
 						if ($criteria_now_idx != $criteria_idx) {
+							
 							$page = $page + 1;
 						}
 					}else{
 						if ($criteria_now_idx != $criteria_idx) {
+							
 							$page = 1;
 						}
 					}
 					$status_now = $status;
-					$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$status.":".$sell_mem_idx.":odr:Y:".$page_val."')\" ";
+					
+					if ($odr_det_status==6)
+					{						
+						$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$odr_det_status.":".$sell_mem_idx.":odr:Y:".$page."')\" ";
+					}
+					else
+					{
+
+						$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$status.":".$sell_mem_idx.":odr:Y:".$page."')\" ";
+					}	
+					
+				
 				}else{
+					
 					if ($odr_type =="B" && $save_yn =="Y"){
 						$goJump = "title=\"저장\" style='cursor:pointer;padding:0;' onclick=\"javascript:openCommLayer('layer3','05_04', '?odr_idx=".$odr_idx."')\" ";
 					}else{
-						$goJump = "title=\"".GF_Common_GetSingleList("ORD",$status)."\" ";						
+						
+						if ($odr_det_status==6)
+						{
+							$goJump = "title=\"".GF_Common_GetSingleList("ORD",$odr_det_status)."\" ";	
+						}
+						else
+						{
+							$goJump = "title=\"".GF_Common_GetSingleList("ORD",$status)."\" ";	
+						}						
 					}
 				} 
 			}
@@ -200,8 +236,8 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 
 			
 		?>
-		<tr class="criteria" criteria_idx="<?=$criteria_now_idx?>">
-			<td ><?$j = ($criteria_now_idx != $criteria_idx)? 1:$j;
+		<tr class="criteria" criteria_idx="<?=$criteria_now_idx?>" odr_det_idx_chk="<?=$odr_det_idx_chk?>">
+			<td ><?$j = ($criteria_now_idx != $criteria_idx || $new_odr_det_idx_chk != $odr_det_idx_chk)? 1:$j;
 			echo $j;?></td>
 			<?if ($odr_type == "B"){?><td ><img src="/kor/images/nation_title<?=($odr_type=="B"?"2":"")?>_<?=$nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$nation)?>"></td><?}?>
 			<td class="t-lt" <?=$goJump?>><?=get_cut($part_no,($odr_type == "B"?"15":"25"),($fr=="S"?"":"."))?></td>
@@ -217,6 +253,8 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				<?}else{?>
 					<td  <?=$goJump?>  class="t-rt"><?=$odr_stock<=0?"":number_format($odr_stock)?></td>
 				<?}?>			
+			<?}else if ($odr_status==7){?>
+				<td  <?=$goJump?>  class="t-rt"><?=$odr_stock<=0?"":number_format($odr_stock)?></td>
 			<?}else{?>
 				<td  <?=$goJump?>  class="t-rt"><?=$supply_quantity<=0?"":number_format($supply_quantity)?></td>
 			<?}?>
@@ -226,18 +264,41 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				<?if ($odr_status==0 || $odr_status==1 || $odr_status==2 || $odr_status==3 || $odr_status==8 || $odr_status==16 || $odr_status==18 || $odr_status==19 || $odr_status==20 || $odr_status==31){?>
 					<td  <?=$goJump?> class="t-rt c-blue" ><?=$odr_quantity<=0?"":number_format($odr_quantity)?></td>			
 					<td  <?=$goJump?> class="t-rt c-red" ><?=$supply_quantity<=0?"":number_format($supply_quantity)?></td>
+				<?}else if ($odr_status==7){?>
+					<td  <?=$goJump?>  class="t-rt"><?=$odr_quantity<=0?"":number_format($odr_quantity)?></td>
+					<td  <?=$goJump?> class="t-rt c-red" ><?=$supply_quantity<=0?"":number_format($supply_quantity)?></td>
 				<?}else{?>
 					<td  <?=$goJump?> class="t-rt" >$<?=number_format($total_price_value,4)?></td>
 				<?}?>		
 			
 			<?}?>
+
 			<?
 				if($part_type =="2")
 				{
-					$period = str_replace("WK","",$period)."WK";
+					if ($period)
+					{
+						if ($period=="stock")
+						{
+							$period = str_replace("WK","",$period)."";
+							$period_style="";
+						}
+						else
+						{
+							$period = str_replace("WK","",$period)."WK";
+							$period_style="c-red";
+						}
+					}
+					else
+					{
+						$period = "확인";
+						$period_style="c-red";
+					}
+					
+					
 				}
 			?>
-			<td class="delivery" <?=$goJump?>><?=($period)?"<span class='c-red'>".$period."</span>":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>
+			<td class="delivery" <?=$goJump?>><?=($period)?"<span class='$period_style'>".$period."</span>":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='stock'>확인</span>":"Stock")?></td>
 			<?if ($odr_type == "B") {  //--구매자 화면일경우?>
 				<?//if ((($part_type=="2"||$part_type=="5"||$part_type=="6") && $period=="") || ($save_yn=="Y")){?>
 				<?if ((($part_type=="2"||$part_type=="5"||$part_type=="6") && ($status ==1 || $status ==16 || $status ==7 )) || ($save_yn=="Y")){  //2016-04-04?>
@@ -250,6 +311,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 	
 <?			$criteria_idx = $criteria_now_idx;
 			$bgcolor = $bgcolor_now;
+			$new_odr_det_idx_chk = $odr_det_idx_chk;
 		}
    }
 }
@@ -774,7 +836,7 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 			$sn = "and odr_idx in (select odr_idx from odr_det a left outer join part b on a.part_idx = b.part_idx and b.part_no like '%$sch_part_no%')";
 		}
 		
-		$searchand = "and odr_status IN('13','14','15','25','26','27','28','29','30') $dateClause and odr_no <> ''  and ".($odr_type=="S"?"sell_":"")."mem_idx =$this_mem_idx $sn";
+		$searchand = "and odr_status IN('6', '8','13','14','15','25','26','27','28','29','30') $dateClause and odr_no <> ''  and ".($odr_type=="S"?"sell_":"")."mem_idx =$this_mem_idx $sn";
 		//2016-11-13 : 쿼리 수정(거래 완료된 주문만)
 		//$sql = "SELECT * FROM odr where  odr_status <> 99 and DATE_FORMAT(reg_date,'%Y-%m') = '$yr-$mki' and odr_no <> '' and invoice_no <> '' and ".($odr_type=="S"?"sell_":"")."mem_idx =$this_mem_idx $sn order by odr.odr_idx desc";
 		$sql = "SELECT * FROM odr where 1=1 $searchand order by odr.odr_idx desc";
@@ -816,6 +878,7 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 				$cnt1=mysql_num_rows($result2);
 				$y = 1;
 				while($row2 = mysql_fetch_array($result2)){
+					
 					$odr_det_idx = replace_out($row2["odr_det_idx"]);
 					$part_idx= replace_out($row2["a.part_idx"]);
 					$part_type= replace_out($row2["part_type"]);
@@ -833,6 +896,7 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 					$odr_quantity= replace_out($row2["odr_quantity"]);
 					$reg_date= replace_out($row2["reg_date"]);
 					$supply_quantity= replace_out($row2["supply_quantity"]);
+					$odr_status= replace_out($row2["odr_status"]);
 					$com_idx = $rel_idx==0 ? $sell_mem_idx : $rel_idx;
 					
 					if( ($price == (int)$price) )
@@ -845,6 +909,7 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 					}
 
 					if ($com_idx ){
+
 						$company_nm = get_any("member","mem_nm_en", "mem_idx=$com_idx"); 	
 					
 						$end_yn = QRY_CNT("odr_history", "and odr_idx = $odr_idx  and status in (6,15)") > 0 ? "Y": "N";  //종료까지 무사히 왔는지 여부
@@ -1051,10 +1116,10 @@ function get_layer_step($odr_idx, $odr_det_idx, $his_ty){
 					?>
 							<span class="etc"><span ><?=$etc2?></span></span>
 						<?}else{?>
-							<span class="etc"><span ><?if ($etc2){echo openSheet($status, $etc2,$odr_idx,$etc_change);}?></span></span>
+							<span class="etc"><span ><?if ($etc2){echo openSheet($status, $etc2,$odr_idx,$etc_change,$odr_history_idx);}?></span></span>
 						<?}?>
 					<?}else{?>
-						<span class="etc"><span ><?if ($etc1){echo openSheet($status, $etc1,$odr_idx,$etc_change);}?></span></span>
+						<span class="etc"><span ><?if ($etc1){echo openSheet($status, $etc1,$odr_idx,$etc_change,$odr_history_idx);}?></span></span>
 						<?if ($status!=5){?>
 						<span class="etc"><span ><?if ($etc2){?><?=$etc2?><?}?></span></span>
 						<?}?>

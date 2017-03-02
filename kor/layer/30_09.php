@@ -35,7 +35,15 @@ if ($odr_history_idx)
 }
 else
 {
-	$pay_invoice =QRY_CNT("odr_history"," and status='5'  and odr_idx = '$odr_idx' order by odr_history_idx asc limit 1")==2?"F":"D";	
+	if ($part_type==2)
+	{
+		$pay_invoice =QRY_CNT("odr_history"," and status='5'  and odr_idx = '$odr_idx' order by odr_history_idx asc limit 1")==2?"F":"D";	
+	}
+	else
+	{
+		$pay_invoice ="";
+	}
+	
 }
 
 

@@ -41,6 +41,8 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 	  $status_name = "거절";
   }
   $refuse_num = QRY_CNT("odr_history", "and odr_idx = $odr_idx and odr_det_idx = $odr_det_idx and status= $status and reg_mem_idx = $session_mem_idx");
+
+  $det_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx ");  //odr_det 수량
 ?>
 
 <div class="layer-hd">
@@ -51,8 +53,8 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 <div class="layer-content">
 	<form name="f6" id="f6" method="post" enctype="multipart/form-data">		
 	<input type="hidden" name="typ" value="imgfileup">
-	<input type="hidden" name="odr_idx" value="<?=$odr_idx?>">
-	<input type="hidden" name="odr_det_idx" value="<?=$odr_det_idx?>">
+	<input type="hidden" id="odr_idx" name="odr_idx" value="<?=$odr_idx?>">
+	<input type="hidden" id="odr_det_idx" name="odr_det_idx" value="<?=$odr_det_idx?>">
 	<input type="hidden" name="status" value="<?=$status?>">
 	<input type="hidden" name="status_name" value="<?=$status_name?>">
 	<input type="hidden" name="fault_quantity" value="<?=$fault_quantity;?>">
@@ -72,7 +74,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 				</tr>
 				<tr  class="bg-none">
 					<td colspan="9" class="t-lt">
-						<strong class="c-black" Style="font-family:'굴림', sans-serif;">제목&nbsp;:&nbsp;&nbsp;</strong> <input type="text" name="title" class="i-txt5" value="" lang="kor" style="width:400px">
+						<strong class="c-black" Style="font-family:'굴림', sans-serif;">제목&nbsp;:&nbsp;&nbsp;</strong> <input type="text" id="title" name="title" class="i-txt5" value="" lang="kor" style="width:400px">
 					</td>
 					<td colspan="4" class="t-rt">
 						<div class="re-select-box">
@@ -99,16 +101,17 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 		
 		<div class="btn-area t-rt" Style="margin:15px 0 15px 0;">
 			<?if ($sell_mem_idx == $session_mem_idx){?>
-				<button type="button" onclick="check()"><img src="/kor/images/btn_answer_go.gif" alt="회신"></button>
+				<button class="btn_answer" type="button" style="cursor: default;"><img src="/kor/images/btn_answer_go_1.gif" alt="회신"></button>
 			<?}else{
 				if ($refuse_num == 0 ){?> 
 				<button type="button" onclick="check()"><img src="/kor/images/btn_reply_request.gif" alt="회신요청"></button>	
 				<?}else{?>
-						<button type="button" onclick="check()"><img src="/kor/images/btn_reply4.gif" alt="답변"></button>
+						<button class="btn_answer2" type="button" style="cursor: default;"><img src="/kor/images/btn_reply4_1.gif" alt="답변"></button>
 						<button type="button" class="btn-dialog-3021"><img src="/kor/images/btn_receipt.gif" alt="수령"></button>
 				<?}?>
 			<?}?>
 		</div>
+		<input type="hidden" id="det_cnt_18R05" name="det_cnt_18R05" value="<?=$det_cnt?>" />
 	</form>
 </div>
 
@@ -117,6 +120,31 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 <!--
 
  $(document).ready(function(){
+ 		$("#title").keyup(function (e){  		
+			
+			if ($("#title").val())
+			{				
+				$(".btn_answer").css("cursor","pointer");
+				$(".btn_answer").attr("onclick","check();")
+				$(".btn_answer").children("img").attr("src","/kor/images/btn_answer_go.gif");
+
+				$(".btn_answer2").css("cursor","pointer");
+				$(".btn_answer2").attr("onclick","check();")
+				$(".btn_answer2").children("img").attr("src","/kor/images/btn_reply4.gif");
+			}
+			else
+			{
+				$(".btn_answer").css("cursor","default");
+				$(".btn_answer").attr("onclick","");
+				$(".btn_answer").children("img").attr("src","/kor/images/btn_answer_go_1.gif");
+
+				$(".btn_answer2").css("cursor","default");
+				$(".btn_answer2").attr("onclick","");
+				$(".btn_answer2").children("img").attr("src","/kor/images/btn_reply4_1.gif");
+			}
+			
+		});
+
 		 $(".editimgbtn").click(function () {
                 $(this).prev().click();
          });
@@ -138,13 +166,34 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 	function check(){
 		var f =  document.f6;				
 		//if (nullchk(f.title,"Memo 제목을 입력해 주세요.")== false) return ;			
+		var det_cnt = $("#det_cnt_18R05").val();
+		var det_idx = $("#odr_det_idx").val();
+		
+		if(det_cnt > 1){ //1개 이상부터...
+			//복제하고, 전체처럼 proc
+			$.ajax({ 
+				type: "GET", 
+				url: "/ajax/proc_ajax.php?det_idx="+det_idx, 
+				data: { actty : "ODRCP", //주문 복제
+						odr_idx : $("#odr_idx").val()
+						},
+				dataType : "html" ,
+				async : false ,
+				success: function(data){
+					$("#odr_idx").val(trim(data));					
+				}
+			});
+		}
+
 		$(".btn-area.t-rt button").attr("onclick","alert_msg('처리중입니다.')");
 		f.typ.value="refuse";
 		f.target = "proc";
 		f.action = "/kor/proc/odr_proc.php";
 		f.submit();	
 		alert_msg("<?=$sell_mem_idx == $session_mem_idx?"회신":($refuse_num==0?"회신요청":"답변");?> 하였습니다.");
-		location.href="/kor/";
+
+		
+		//location.href="/kor/";
 		/**
 		var formData = $("#f6").serialize(); 
 		alert(formData);

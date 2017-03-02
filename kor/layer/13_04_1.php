@@ -16,7 +16,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";?>
 
 
 	<div class="btn-area t-rt">
-		<button type="button" class="btn-confirm-1304_1s" odr_idx = "<?=$odr_idx?>" new_odr_idx="<?=$new_odr_idx?>"><img src="/kor/images/btn_end.gif" alt="종료"></button>
+		<button type="button" class="btn-confirm-1304_1s" odr_idx = "<?=$odr_idx?>" odr_history_idx = "<?=$actidx?>" new_odr_idx="<?=$new_odr_idx?>"><img src="/kor/images/btn_end.gif" alt="종료"></button>
 	</div>
 </div>
 
