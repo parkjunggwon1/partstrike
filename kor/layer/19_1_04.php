@@ -226,14 +226,15 @@ $fault_select = get_any("odr_history", "fault_select", "odr_idx=$odr_idx AND odr
 
 function check(){
 		var f =  document.f6;				
-		$(".btn-area.t-rt button").attr("onclick","alert_msg('처리중입니다.')");
+		//$(".btn-area.t-rt button").attr("onclick","alert_msg('처리중입니다.')");
 		f.tot_amt.value = $("input[id^=tot_]").val();
-		var formData = $("#f6").serialize();
+		
 
 		var odr_idx = $("#odr_19_1_04").val();
 		var det_idx = $("#det_19_1_04").val();
 		var odr_history_idx = $("#history_19_1_04").val();
-
+		var formData = $("#f6").serialize();
+		/*
 		$.ajax({
 				url: "/kor/proc/odr_proc.php", 
 				data: formData,
@@ -246,8 +247,8 @@ function check(){
 						alert(data);
 					}
 				}
-		});
-
+		});*/
+		openCommLayer("layer3","19_1_05","?forgenl=<?=$forgenl?>&"+formData+"&odr_det_idx="+det_idx+"&odr_history_idx="+odr_history_idx);
 		//openCommLayer("layer3","19_1_05","?forgenl=<?=$forgenl?>&odr_idx="+odr_idx+"&odr_det_idx="+det_idx+"&odr_history_idx="+odr_history_idx);
 
 	}

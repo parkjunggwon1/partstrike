@@ -1478,6 +1478,20 @@ if ($typ == "refund2"){  //환불 처리2 2016-05-11
     $odr_price = get_any("odr_det", "odr_price", "odr_det_idx=$odr_det_idx");
     $supply_qty = get_any("odr_det", "supply_quantity", "odr_det_idx=$odr_det_idx");
     $buy_amt = ($odr_price * $supply_qty) - $tot_amt;
+
+    $vat_price = get_any("ship" ,"tax", "odr_idx=$odr_idx limit 1");    //부가세
+
+    if($vat_price==0)
+    {
+        $vat_price = get_any("tax" ,"tax_percent", "nation=$ship_nation "); //부가세
+    }
+    //echo $vat_price."BBBBB";
+
+    $vat_val = $vat_price/100;
+    $vat_plus =  $buy_amt*$vat_val;         
+
+    $buy_amt = $buy_amt + $vat_plus;
+ 
     $sql = "insert into mybank set
             mem_idx = '$sell_mem_idx'
             ,rel_idx = '$sell_rel_idx'

@@ -1791,7 +1791,7 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 					//2016-09-04 : 판매자 송장(Invoice) 30_09 에서 Quantity는 발주수량이 아닌, '공급수량'
 					global $pay_invoice;
 
-					if($loadPage != "12_07"){//수정 발주서 Sheet(Purchase Order Amendment)
+					if($loadPage != "12_07" && $loadPage != "19_1_04"){//수정 발주서 Sheet(Purchase Order Amendment)
 						$odr_quantity = ($supply_quantity)? $supply_quantity : $odr_quantity;
 						$total_price = number_format(round_down($odr_quantity*$price,2),2);
 
@@ -1911,7 +1911,7 @@ if ($for_readonly != "P") {?>
 		}
 
 
-		if ((($row_buyer["nation"] == 1 && $row_seller["nation"] ==1) || ($row_seller["nation"]==$ship_nation)) && $loadPage=="30_09")
+		if ((($row_buyer["nation"] == 1 && $row_seller["nation"] ==1) || ($row_seller["nation"]==$ship_nation)) && ($loadPage=="30_09" || $loadPage=="19_1_04"))
 		{	
 			$tot_vat_minus = $tot;
 
@@ -2003,7 +2003,7 @@ if ($for_readonly != "P") {?>
 		?>			
 						
 			<?
-			if ((($row_buyer["nation"] == 1 && $row_seller["nation"] ==1) || ($row_seller["nation"]==$ship_nation)) && $loadPage=="30_09")
+			if ((($row_buyer["nation"] == 1 && $row_seller["nation"] ==1) || ($row_seller["nation"]==$ship_nation)) && ($loadPage=="30_09" || $loadPage=="19_1_04"))
 			{	
 			?>
 				<li class="sub"><strong>Sub Total :</strong><span id="sub_total">$<?=$tot_vat_minus?></span></li>	

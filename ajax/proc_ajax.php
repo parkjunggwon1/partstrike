@@ -547,6 +547,19 @@ switch($actty) {
 		$pay_amt = get_any("odr_det", "odr_price * supply_quantity" , "odr_det_idx = $odr_det_idx");
 		$fault_amt = get_any("odr_det", "odr_price * fault_quantity" , "odr_det_idx = $odr_det_idx");
 
+		$vat_price = get_any("ship" ,"tax", "odr_idx=$odr_idx limit 1");    //부가세
+
+	    if($vat_price==0)
+	    {
+	        $vat_price = get_any("tax" ,"tax_percent", "nation=$ship_nation "); //부가세
+	    }
+	    //echo $vat_price."BBBBB";
+
+	    $vat_val = $vat_price/100;
+	    $vat_plus =  $fault_amt*$vat_val;         
+
+	    $fault_amt = $fault_amt + $vat_plus;
+	   
 		$data = array();  //json
 		//1. 환불 처리(구매자 충전)--------------------------------------------------------
 		$sql = "insert into mybank set
