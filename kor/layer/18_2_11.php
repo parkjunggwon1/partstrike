@@ -91,8 +91,7 @@ function pay2(){
 	<input type="hidden" name="odr_idx" id="odr_idx" value="<?=$odr_idx?>">		
 	<input type="hidden" name="odr_det_idx" id="odr_det_idx" value="<?=$odr_det_idx?>">		
 	<input type="hidden" name="charge_method" id="charge_method" value="MyBank">		
-	<input type="hidden" name="alert_msg" id="alert_msg" value="결제가 완료되었습니다.">
-	<input type="hidden" name="deposit_yn" id="deposit_yn" value="<?=$deposit_yn?>">		
+	<input type="hidden" name="alert_msg" id="alert_msg" value="결제가 완료되었습니다.">		
 
 	
 	<!-- //form1 -->

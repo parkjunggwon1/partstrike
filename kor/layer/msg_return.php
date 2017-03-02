@@ -51,6 +51,7 @@ if ($alert =="sessionend"){
 			f.target = "proc";
 			f.action = "/kor/proc/odr_proc.php";
 			f.submit();	
+			location.href="/kor/";
 		});
 	});
 </SCRIPT>

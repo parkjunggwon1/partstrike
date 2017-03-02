@@ -15,9 +15,8 @@
 		function ChangeBackground(){
 			var bgcolor ="<?=$odr_type=="S"?"#dce6f2":"#ffff99"?>";
 			var criteria_idx ="";
-			var odr_det_idx_chk ="";
 			$("#fr .stock-list-table .criteria").each(function(e){
-				if (criteria_idx != $(this).attr("criteria_idx") || odr_det_idx_chk != $(this).attr("odr_det_idx_chk"))
+				if (criteria_idx != $(this).attr("criteria_idx"))
 				{
 					if (bgcolor =="#ffffff")
 					{
@@ -26,7 +25,6 @@
 						bgcolor ="#ffffff";
 					}
 					criteria_idx = $(this).attr("criteria_idx");
-					odr_det_idx_chk = $(this).attr("odr_det_idx_chk");
 					if(e>0){  //첫번째는 두고, 두번째부터 발주가 바뀔 때마다 간격조정
 						$("<tr><td colspan='15' style='padding-top:20px; background-color:#FFFFFF;'></td></tr>").insertBefore($(this).prev());
 					}
@@ -94,7 +92,7 @@
 						</thead>
 						<tbody id="orderlist">
 						<?//	for ($i = 1; $i<=6; $i++){
-							echo GET_RCD_DET_LIST($i , $odr_type, " and a.".($odr_type=="S"?"sell_":"")."mem_idx=$this_mem_idx AND (a.odr_status IN(1,2,3,7,8,16,18,19,20,31,90) or a.odr_status=0 and imsi_odr_no <> '') ", "S");
+							echo GET_RCD_DET_LIST($i , $odr_type, " and a.".($odr_type=="S"?"sell_":"")."mem_idx=$this_mem_idx AND (a.odr_status IN(1,2,3,8,16,18,19,20,31) or a.odr_status=0 and imsi_odr_no <> '') ", "S");
 						//}?>							
 						</tbody>
 					</table>
@@ -152,7 +150,7 @@
 						</thead>
 						<tbody id="orderlist">
 						<?//	for ($i = 1; $i<=6; $i++){
-							echo GET_RCD_DET_LIST($i , $odr_type, " and a.".($odr_type=="S"?"sell_":"")."mem_idx=$this_mem_idx AND a.odr_status NOT IN(0,1,2,3,7,8,16,18,19,20,31,90)", "S");
+							echo GET_RCD_DET_LIST($i , $odr_type, " and a.".($odr_type=="S"?"sell_":"")."mem_idx=$this_mem_idx AND a.odr_status NOT IN(0,1,2,3,8,16,18,19,20,31)", "S");
 						//}?>							
 						</tbody>
 					</table>

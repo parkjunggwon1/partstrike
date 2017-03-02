@@ -44,7 +44,6 @@ $fault_select = get_any("odr_history", "fault_select", "odr_history_idx=$odr_his
 						echo ($fault_select=="1")? "교환수량":"부족수량";
 						?>
 					</th>
-					<th scope="col" class="t-unitprice">Amount</th>
 					<th scope="col" lang="ko" class="t-period">납기</th>
 					<th scope="col" class="t-company">Company</th>
 				</tr>

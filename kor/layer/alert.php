@@ -14,7 +14,7 @@ if ($alert =="sessionend"){
 <div class="layer-content">
 	<p class="txt-warning t-ct"><?=$alert_msg?></p>
 	<div class="btn-area t-rt"> <!-- periodreq-->
-		<button class="btn-<?=$alert=="sessionend"?"refresh":"refresh"?>" type="button"><img alt="확인" src="/kor/images/btn_ok.gif"></button>
+		<button class="btn-<?=$alert=="sessionend"?"refresh":"close"?>" type="button"><img alt="확인" src="/kor/images/btn_ok.gif"></button>
 	</div>
 </div>
 

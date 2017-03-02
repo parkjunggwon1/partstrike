@@ -33,7 +33,7 @@ Function QRY_ODR_DET_LIST($recordcnt,$searchand,$page,$ord='odr_det_idx',$odrby=
 	}
 
 	$sql = "
-			SELECT *,b.quantity as part_stock,a.odr_price as odr_price,a.odr_status as odr_status FROM odr_det a
+			SELECT *,b.quantity as part_stock,a.odr_price as odr_price FROM odr_det a
 			left outer join part b on a.part_idx = b.part_idx 
 			WHERE
 				1=1 $searchand

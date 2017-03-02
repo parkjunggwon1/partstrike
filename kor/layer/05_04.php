@@ -628,28 +628,11 @@ $(document).ready(function(){
 		maskoff();	
 		var quantity = $(this).parent().parent().find("input[name^=quantity]").val();
 		var part_type = $(this).attr("part_type");
-		var supp_qty = $(this).attr("supp_qty");
-
 		if (part_type != 2){
 			if(parseInt($(this).val()) > parseInt(quantity.replace(",", ""))){
 				$(this).val("");
 			}
 		}
-
-		if (part_type == 2 || part_type == 5 || part_type == 6)
-		{
-			if(parseInt(supp_qty) <= parseInt($(this).val()))
-			{
-				$("#layerPop3 #btn-confirm").css("cursor","pointer").addClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm.gif");
-			}
-			else
-			{
-				$("#layerPop3 #btn-confirm").css("cursor","").removeClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm_1.gif");		
-			}
-		}
-
-		
-		
 		maskon();
 	});
 	//-- 선적 선택
@@ -734,14 +717,12 @@ $(document).ready(function(){
 //------------ 버튼 활성 or 비활성 ------------------------------------------------------------------
 function checkActive(){
 
-
 		var Erchkbox = false , ErchkCnt = true, FailCnt = 0;
 		var det_cnt = $("#det_cnt").val();
 		var dlvr_cnt = $("#dlvr_cnt").val();
 		var turnkey_cnt = $("#turnkey_cnt").val();
 		var chk_val=$("input:checkbox[id='delivery_chg']").is(":checked");
 		$("#layerPop3 .btn-area :eq(2)").css("cursor","pointer").addClass("btn-dialog-save").attr("src","/kor/images/btn_order_save.gif"); //저장버튼
-		$("#layerPop3 .btn-area :eq(2)").attr("save_key","on")
 		//2016-03-30 ccolle-------------------------------------------------------------------
 		if(det_cnt>1){ //-- 여러개 일때 --------------------------
 			sel_box = $("input[name^=odr_det_idx]:checked");
@@ -756,7 +737,6 @@ function checkActive(){
 				$("#layerPop3 .btn-area :eq(2)").css("cursor","pointer").addClass("btn-dialog-save").attr("src","/kor/images/btn_order_save.gif");
 			}**/
 		}
-	
 		var odr_qty=0, stock_qty=0;
 		sel_box.each(function(e){ //선택 갯수만큼 반복--------------------
 			Erchkbox = true;
@@ -1108,10 +1088,10 @@ function checkActive(){
 			<img id="btn-confirm" src="/kor/images/btn_order_confirm_1.gif" alt="발주서 확인" style="cursor:pointer"><!--class="btn-order-confirm" -->
 			
 			<?if ($save_yn =="Y"){?>
-				<img src="/kor/images/btn_order_save_1.gif" save_key="" alt="발주 저장">
+				<img src="/kor/images/btn_order_save_1.gif" alt="발주 저장">
 				<!--img src="/kor/images/btn_delete2.gif" alt="발주 삭제" style="cursor:pointer" class="btn-close odr" imsi_odr_no="<?=$imsi_odr_no?>"-->
 			<?}else{?>
-				<img src="/kor/images/btn_order_save.gif" alt="발주 저장" save_key="on" style="cursor:pointer" class="btn-dialog-save"><!--class="btn-dialog-save" -->
+				<img src="/kor/images/btn_order_save.gif" alt="발주 저장" style="cursor:pointer" class="btn-dialog-save"><!--class="btn-dialog-save" -->
 			<?}?>
 			<img src="/kor/images/btn_delete2_1.gif" alt="삭제" id="btn_del_0504">
 		<?}?>

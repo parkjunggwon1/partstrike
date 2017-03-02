@@ -25,8 +25,6 @@ if ($alert =="sessionend"){
 							openCommLayer("layer3","18_2_12","?odr_idx=<?=$odr_idx?>&odr_det_idx=<?=$odr_det_idx?>&tot_amt=<?=$tot_amt?>");
 						<?}else{?>
 							//alert_msg("결제가 완료되었습니다.");
-							closeCommLayer("layer4");
-							closeCommLayer("layer5");
 							location.href='/kor/';						
 						<?}?>
 						

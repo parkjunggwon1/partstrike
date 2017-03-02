@@ -987,13 +987,16 @@ $(document).ready(function(){
 	});
 	//선적(3016)화면에서 취소 버튼 -> '취소' 화면에서 '환불' 버튼
 	$("body").on("click",".btn-refund-cancel",function(){
-		/**
+		/** 기존(바로 DB처리)
 		var f = document.f_pocancel;
 		f.target = "proc";
 		//f.target = "_blank";
 		f.action = "/ajax/proc_ajax.php";
 		f.submit();	
 		**/
+		//2017-01-16 : 환불 INVOICE 필요
+		var extraVal="" , odr_idx="";
+		openLayer("layer5","30_16_04","?odr_idx="+$("#odr_idx_3016_cancel").val()+"&odr_det_idx="+$("#cancel_det_idx").val());
 	});
 	//판매자 송장화면(30_08), 수정발주서(09_01) : '취소' 버튼 -----------------------------------------2016-04-12
 	$("body").on("click",".btn-cancel-3008, .btn-cancel-0901",function(){
@@ -1322,19 +1325,26 @@ $(document).ready(function(){
 						url: "/kor/proc/odr_proc.php", 
 						data: "typ=poano&odr_idx="+odr_idx+"&ship_info="+$("#ship_info").val()+"&ship_account_no="+$("#ship_account_no").val()+"&memo="+encodeURIComponent($("#memo").val())+"&insur_yn="+insur_chk+"&delivery_addr_idx="+$("#delivery_addr_idx").val(),
 						encType:"multipart/form-data",
-						success: function (data) {							
-							if($.trim(data)=="STOCK"){
-								//alert("재고수량 변경 경고!!");
-								closeCommLayer("layer4");
-								openLayer('layer3','09_01','?odr_idx='+odr_idx);
-								openLayer('layer4','alarm','?odr_idx='+odr_idx);
+						success: function (data) {
+							if($.trim(data)=="PRICE"){	//가격변동 경고!!
+									closeCommLayer("layer3");
+									closeCommLayer("layer4");
+									openCommLayer('layer3','09_01','?odr_idx='+odr_idx);
+									openLayer('layer4','alarm2','?odr_idx='+odr_idx);	//가격변동 경고창
 							}else{
-								if($.trim(data)=="SUCCESS"){
-									openLayer("layer5","12_07","?odr_idx="+odr_idx); //12_07에서의 번호생성은 삭제
+								if($.trim(data)=="STOCK"){
+									//alert("재고수량 변경 경고!!");
+									closeCommLayer("layer4");
+									openLayer('layer3','09_01','?odr_idx='+odr_idx);
+									openLayer('layer4','alarm','?odr_idx='+odr_idx);
 								}else{
-									alert($.trim(data));
+									if($.trim(data)=="SUCCESS"){
+										openLayer("layer5","12_07","?odr_idx="+odr_idx); //12_07에서의 번호생성은 삭제
+									}else{
+										alert($.trim(data));
+									}
 								}
-							}							
+							}
 						}
 				});
 			}
@@ -1817,24 +1827,8 @@ $(document).ready(function(){
 		var varNum;
 		var f =  document.f_05_04;  //2016-04-02 layer4에 <form name='f' ... 가 또 있음
 		//var f =  ("#f_05_04");
-		maskoff();		
+		maskoff();
 		err = updateQty();
-
-		if ($(this).attr("save_key") == "on")
-		{			
-			$.ajax({
-				type: "GET", 
-				url: "/kor/proc/odr_proc.php", 
-				data: { 
-						typ : "save_key", //
-						actidx : f.odr_idx.value
-				},
-				success: function (data) {	
-					
-				}
-			});	
-		}
-
 		if (err == false){
 			//What's New 창에서 납기 받은 제품 저장 시 별도 Proc.
 			if($("#odr_status").val() == 16){ //납기받은 품목
@@ -1890,18 +1884,14 @@ $(document).ready(function(){
 	});
 
 	$("body").on("click",".btn-dialog-1916",function(){
-		openLayer("layer4","19_16", "?odr_det_idx="+$(this).attr("odr_det_idx"));
+		openLayer("layer4","19_16", "?odr_det_idx="+$(this).parent().attr("odr_det_idx"));
 	});
-
-	$("body").on("click",".btn-dialog-19_15_1",function(){
-		openLayer("layer4","19_15_1", "?odr_det_idx="+$(this).parent().attr("odr_det_idx"));
-	});	
 	
 	//수량 부족 후 추가 선적 다이얼로그 -> param추가 후 교환 선적으로 연결
 	$("body").on("click",".btn-dialog-1917",function(){
 //		openLayer("layer3","19_17");
-
-		openLayer("layer3","18R_21","?fault_quantity="+$("#fault_quantity").val()+"&fault_select=3&odr_idx="+$("#odr_idx_"+$("#loadPage").val()).val()+"&odr_det_idx="+$(this).attr("odr_det_idx")+"&ship_info="+$("#ship_info_1916").val());
+		closeCommLayer("layer4");
+		openLayer("layer3","18R_21","?fault_quantity="+$("#fault_quantity").val()+"&fault_select=3&odr_idx="+$("#odr_idx_"+$("#loadPage").val()).val()+"&odr_det_idx="+$(this).attr("odr_det_idx"));
 	});
 	$("body").on("click",".btn-dialog-2104",function(){
 		var odr_det_idx = $(this).attr("odr_det_idx"); 
@@ -2151,8 +2141,6 @@ $(document).ready(function(){
 	});
 	//---- 납기확인 바랍니다. [전송]---
 	$("body").on("click",".periodreq",function(){
-		$(this).children("img").attr("src","/kor/images/loding_img.gif");		
-		$(this).attr("class","");	
 		maskoff();
 		var frompage = $("input[name='fromPage']").val();
 		var f =  document.f;
@@ -2182,8 +2170,8 @@ $(document).ready(function(){
 		var det_cnt = $("#det_cnt_3021").val();
 
 		if($(this).hasClass("succEnd")){  // -------- 수령 ------------------------------
-			if(det_cnt != ary.length){  //----- 일부일경우 ------			
-				if(ary.length){ //1개 이상부터...
+			if(det_cnt > ary.length){  //----- 일부일경우 ------
+				if(ary.length > 1){ //2개 이상부터...
 					//복제하고, 전체처럼 proc
 					$.ajax({ 
 						type: "GET", 
@@ -2477,16 +2465,7 @@ $(document).ready(function(){
 	$("body").on("click",".btn-pop-1904",function(){
 		var $chked_odr_det = $("input[name^=odr_det_idx]:checked");
 		if($chked_odr_det.length==0){
-			
-			if ($("input[name^=odr_det_idx]").length > 0)
-			{				
-				openLayer("layer4","19_04", "?det_cnt=1&odr_det_idx="+$("input[name^=odr_det_idx]").val()+"&fault_method="+$(this).attr("fault_method"));
-			}
-			else
-			{			
-				alert_msg("제품을 선택해 주세요.");
-			}
-			
+			alert_msg("제품을 선택해 주세요.");
 		}else{
 			var ch_odr_det_idx = [];
 			$chked_odr_det.each(function(e){
@@ -2880,39 +2859,36 @@ function chg_ship_info(obj){
 				dataType : "html" ,
 				async : false ,
 				success: function(data){ 
-							if (load_page != "undefined")
+							if (obj.value<5)  //일반 운송업체
 							{
-								if (obj.value<5)  //일반 운송업체
-								{
-									$("#ship_account_no").val(trim(data)==""?"Address":data).show().parent().prev().find("span").show();
-									$("#memo").removeClass("i-txt2").addClass("i-txt5");
-									$(".text_lang").attr('lang','en');	
-									
-								}else{ //다른 운송업체
-									$("#ship_account_no").val("").hide().parent().prev().find("span").hide();
-									$("#memo").removeClass("i-txt5").addClass("i-txt2");
-								}
+								$("#ship_account_no").val(trim(data)==""?"Address":data).show().parent().prev().find("span").show();
+								$("#memo").removeClass("i-txt2").addClass("i-txt5");
+								$(".text_lang").attr('lang','en');	
+								
+							}else{ //다른 운송업체
+								$("#ship_account_no").val("").hide().parent().prev().find("span").hide();
+								$("#memo").removeClass("i-txt5").addClass("i-txt2");
+							}
 
-								if (obj.value==6){ //직접수령
-									$("#insur_yn,#delivery_chg").attr("disabled", true).attr("checked", false).removeClass("checked");
-									$("input[name=insur_yn]").parent().next().html(" : No");
-									$(".company-info-wrap").hide();
+							if (obj.value==6){ //직접수령
+								$("#insur_yn,#delivery_chg").attr("disabled", true).attr("checked", false).removeClass("checked");
+								$("input[name=insur_yn]").parent().next().html(" : No");
+								$(".company-info-wrap").hide();
 
-								}else{
-									$("#insur_yn,#delivery_chg").attr("disabled", false);
-								}
-								if(load_page=="05_04" || load_page=="09_01")
+							}else{
+								$("#insur_yn,#delivery_chg").attr("disabled", false);
+							}
+							if(load_page=="05_04" || load_page=="09_01")
+							{
+								/*
+								if (ship_ch_btn == 0)
 								{
-									/*
-									if (ship_ch_btn == 0)
-									{
-										$("#ship_account_no").val("");
-									}
-									*/
-									if (chk_val==true)
-									{
-										$("#ship_account_no").val("");
-									}
+									$("#ship_account_no").val("");
+								}
+								*/
+								if (chk_val==true)
+								{
+									$("#ship_account_no").val("");
 								}
 							}
 							

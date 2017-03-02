@@ -31,11 +31,12 @@ Function QRY_RCD_DET_LIST($recordcnt,$searchand,$page,$ord='odr_det_idx'){
 			$s_ord=" order by odr_det_idx desc";
 			break;
 		default:
-			$s_ord=" order by (select max(reg_date) from odr_history where odr_history.odr_idx = a.odr_idx limit 1) desc,(select ifnull(max(reg_date),0) from odr_history where odr_history.odr_det_idx = b.odr_det_idx limit 1) desc";
+			$s_ord=" order by (select max(reg_date) from odr_history where odr_history.odr_idx = a.odr_idx limit 1) desc,$ord";
 			break;
 	}
+
 	$sql = "
-			SELECT *,a.odr_status as order_status,c.quantity as part_stock,c.price as part_price,b.odr_status as odr_det_status FROM odr a 
+			SELECT *,a.odr_status as order_status,c.quantity as part_stock,c.price as part_price FROM odr a 
 			left outer join odr_det b on a.odr_idx = b.odr_idx
 			left outer join part c on b.part_idx = c.part_idx 
 			WHERE

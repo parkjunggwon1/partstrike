@@ -10,21 +10,9 @@ function GF_GET_PART_LIST($page, $part_type,$part_no){
 		$(".pagination a.link").click(function(){
 				showajaxParam("#f3 #partlist", "partlist", "page="+$(this).attr("num")+"&part_type="+$("#part_type").val()+"&part_no="+document.f3.srch_part_no.value);
 		});
-		$("#partlist input:text").keyup(function(){		
-			if ($(this).attr("name") !="mod_part_no[]" && $(this).attr("name")!="mod_manufacturer[]" && $(this).attr("name")!="mod_package[]" && $(this).attr("name")!="mod_dc[]" && $(this).attr("name")!="mod_rhtype[]" && $(this).attr("name")!="quantity_tmp[]" && $(this).attr("name")!="mod_price[]")
-			{
-				$("#partlist .save span").hide();
-				$("#partlist .save button").show();
-			}
-			else
-			{
-				
-					$("#partlist .save span").show();
-					$("#partlist .save button").hide();	
-				
-			}
-			
-			
+		$("#partlist input:text").keyup(function(){				
+			$("#partlist .save span").hide();
+			$("#partlist .save button").show();
 		});
 		
 		$("#partlist input[name^=delchk]").click(function(e){
@@ -569,7 +557,7 @@ function GET_MAIN_LIST($titleyn, $part_type, $page, $searchand , $area =""){   /
 				if(($already_idx and $_SESSION["MEM_IDX"] ) ){$already="1";}else{$already="";}
 				if ($part_type =="2"){
 						$dc = "NEW";
-						$quantity="I";
+						$quantity="";
 					}
 				$nation_nm = ($area == "on" || strpos($searchand,"nation")==true)?$nation."_".$dosi:$nation;
 				//지속적 공급가능 품목외에 모든 품목은 수량 0 이상인 것만 노출 - 2016-04-08 ->개수를 위에서 계산해 놨는데, 여기에서 제약하면 출력 되는 개수가 줄어들어 버림. searchand 조건에 걸었음. (2016-11-10)
@@ -583,11 +571,7 @@ function GET_MAIN_LIST($titleyn, $part_type, $page, $searchand , $area =""){   /
 					<td><?=$package?></td>
 					<td><?=$dc?></td>
 					<td><?=$rhtype?></td>
-					<?if($part_type == "2"){?>
-						<td class="t-rt"><?=$quantity?></td>
-					<?}else{?>
-						<td class="t-rt"><?=$quantity==0?"":number_format($quantity)?></td>
-					<?}?>
+					<td class="t-rt"><?=$quantity==0?"":number_format($quantity)?></td>
 					<td class="t-rt">$<?=$price_val?></td>
 					<td class="delivery t-ct">
 					<?if ($part_type=="2" || $part_type=="5" || $part_type=="6"){?>

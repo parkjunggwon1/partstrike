@@ -69,81 +69,34 @@ $tax_name = get_any("tax", "tax_name", "nation=$seller_nation");
 	<table class="price-table1" lang="en" align="center">
 		<tbody>
 			<?
-				if( ($down_payment == (int)$down_payment) )
-				{					
-					$down_payment = number_format($down_payment,2);					
-				}
-				else {
-					$down_payment = round_down($down_payment,4);	
-				}
+			if ($charge_ty=="F")
+			{
 
-				if( ($vat_plus == (int)$vat_plus) )
-				{					
-					$vat_plus = number_format($vat_plus,2);					
-				}
-				else {
-					$vat_plus = round_down($vat_plus,4);	
-				}
-
-				if( ($sub_price == (int)$sub_price) )
-				{					
-					$sub_price = number_format($sub_price,2);					
-				}
-				else {
-					$sub_price = round_down($sub_price,4);	
-				}
-
-				if( (str_replace("$","",$etc2_val) == (int)str_replace("$","",$etc2_val)) )
-				{					
-
-					$etc2_val = "$".number_format(str_replace("$","",$etc2_val),2);					
-				}
-				else {
-					$etc2_val = "$".round_down(str_replace("$","",$etc2_val),4);	
-				}
-				
 				//지속적(납기3주이상)--------------------------------------
 				if ($part_type == 2) 
 				{ 
-					if ($charge_ty=="F")
-					{
-
 				?>
-						<tr>
-							<th scope="row"><span >Sub Total</span> : </th>
-							<td><span ><?=$etc2_val?></span></td>
-						</tr>
-						<tr>
-							<th scope="row"><span >Down Payment</span> : </th>
-							<td><span class="c-red">-$<?=$down_payment?></span></td>
-						</tr>
-						<tr>
-							<th scope="row"><span ><?=$tax_name?></span> : </th>
-							<td><span >$<?=$vat_plus?></span></td>
-						</tr>
-						<tr class="lst">
-							<td colspan="2"></td>
-						</tr>
-						<tr>
-							<th scope="row"><span class="c-blue">Total : </span></th>
-							<td><span class="c-blue"><?=$etc2_val?></span></td>
-						</tr>
+					<tr>
+						<th scope="row"><span >Sub Total</span> : </th>
+						<td><span ><?=$etc2_val?></span></td>
+					</tr>
+					<tr>
+						<th scope="row"><span >Down Payment</span> : </th>
+						<td><span class="c-red">-$<?=number_format($down_payment,4)?></span></td>
+					</tr>
+					<tr>
+						<th scope="row"><span ><?=$tax_name?></span> : </th>
+						<td><span >$<?=number_format($vat_plus,4)?></span></td>
+					</tr>
+					<tr class="lst">
+						<td colspan="2"></td>
+					</tr>
+					<tr>
+						<th scope="row"><span class="c-blue">Total : </span></th>
+						<td><span class="c-blue"><?=$etc2_val?></span></td>
+					</tr>
 					
 				<?
-					}
-					else
-					{
-				?>
-						<tr>
-							<th scope="row"><span >Down Payment</span> : </th>
-							<td><span ><?=$etc2_val?></span></td>
-						</tr>
-						<tr>
-							<th scope="row"><span ></span> Total : </th>
-							<td><span ><?=$etc2_val?></span></td>
-						</tr>
-				<?
-					}
 				}
 				else
 				{
@@ -152,11 +105,11 @@ $tax_name = get_any("tax", "tax_name", "nation=$seller_nation");
 					?>
 						<tr>
 							<th scope="row"><span >Sub Total</span> : </th>
-							<td><span >$<?=$sub_price?></span></td>
+							<td><span >$<?=number_format($sub_price,4)?></span></td>
 						</tr>
 						<tr>
 							<th scope="row"><span ></span> VAT : </th>
-							<td><span >$<?=$vat_plus?></span></td>
+							<td><span >$<?=number_format($vat_plus,4)?></span></td>
 						</tr>
 						<tr class="lst">
 							<td colspan="2"></td>
@@ -170,7 +123,24 @@ $tax_name = get_any("tax", "tax_name", "nation=$seller_nation");
 					</tr>
 				<?
 				}
-				?>
+				
+			}
+			else
+			{
+			?>
+				<tr>
+					<th scope="row"><span >Down Payment</span> : </th>
+					<td><span ><?=$etc2_val?></span></td>
+				</tr>
+				<tr>
+					<th scope="row"><span ></span> Total : </th>
+					<td><span ><?=$etc2_val?></span></td>
+				</tr>
+				
+			<?
+			}
+			?>			
+			
 		</tbody>
 	</table>
 	<div class="btn-area t-rt">

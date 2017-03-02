@@ -59,9 +59,9 @@ $(document).ready(function(){
 <div class="layer-content po-cancel">
 	<form name="f_pocancel" id="f_pocancel" method="post" >
 	<input type="hidden" name="actty" value="POCS">	
-	<input type="hidden" name="odr_idx" id="odr_idx_30_08" value="<?=$odr_idx?>">
+	<input type="hidden" name="odr_idx" id="odr_idx_3016_cancel" value="<?=$odr_idx?>">
 	<input type="hidden" name="cancel_det_idx" id="cancel_det_idx" value="<?=$cancel_det_idx?>">
-	<input type="hidden" name="load_page" id="load_page_30_08" value="<?=$load_page?>">
+	<input type="hidden" name="load_page" id="load_page_3016_cancel" value="<?=$load_page?>">
 		<!-- layer-file -->
 		<?if($load_page == "30_08" || $load_page == "30_16"){?>
 		<div class="layer-file">

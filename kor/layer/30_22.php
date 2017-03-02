@@ -55,7 +55,6 @@ if ($cnt == 0 ){?>
 		//2016-05-20
 		$det_cnt = QRY_CNT("odr_det", "and odr_idx= $odr_idx");
 	}
-
 	?>
 	<!-- //layer-left-menu -->
 
@@ -79,11 +78,10 @@ if ($cnt == 0 ){?>
 				//echo GET_ODR_HISTORY_LIST("30_20_F", $odr_idx, $odr_det_idx);
 				echo GET_ODR_HISTORY_LIST("30_22_F", $odr_idx, $odr_det_idx);
 			}else{
-				echo GET_ODR_HISTORY_LIST("30_22", $odr_idx, $odr_det_idx);				
+				echo GET_ODR_HISTORY_LIST("30_22", $odr_idx, $odr_det_idx);
 			}
 		}else{  //------------- odr 단위 History -----------------------------------------
 			echo GET_ODR_HISTORY_LIST("30_22", $odr_idx);
-
 		}
 	?>
 	<?//=GET_ODR_HISTORY_LIST("30_22", $odr_idx)  //JSJ?>
