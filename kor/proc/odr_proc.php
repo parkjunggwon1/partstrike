@@ -1486,7 +1486,7 @@ if ($typ == "refund2"){  //환불 처리2 2016-05-11
         $vat_price = get_any("tax" ,"tax_percent", "nation=$ship_nation "); //부가세
     }
     //echo $vat_price."BBBBB";
-
+    
     $vat_val = $vat_price/100;
     $vat_plus =  $buy_amt*$vat_val;         
 

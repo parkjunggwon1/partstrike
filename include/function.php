@@ -1330,7 +1330,7 @@ function SumMyBank2($mem_idx, $rel_idx, $ty=2){
 function SumBankHold($mem_idx, $rel_idx, $ty=2){
 	$com_idx = ($rel_idx ==0 ? $mem_idx : $rel_idx);
 
-	$pay = get_any("mybank" ,"sum(mybank_hold)", "(mem_idx =$com_idx or rel_idx =$com_idx) and mybank_yn = 'Y'");
+	$pay = get_any("mybank" ,"TRUNCATE(sum(mybank_hold),4)", "(mem_idx =$com_idx or rel_idx =$com_idx) and mybank_yn = 'Y'");
 
 	if($ty>0){
 		$pay_val = round_down($pay,4);
@@ -1740,6 +1740,11 @@ function round_down($val,$d)
 {
 	$re_price = str_replace("$","",$val);
 
+	
+	if (str_replace("-","",$val)=="-0.0000")
+	{
+		$val = "0.0000";
+	}
 	
 	if (str_replace("$","",$val)==(int)str_replace("$","",$re_price))
 	{

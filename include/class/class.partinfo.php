@@ -10,21 +10,20 @@ function GF_GET_PART_LIST($page, $part_type,$part_no){
 		$(".pagination a.link").click(function(){
 				showajaxParam("#f3 #partlist", "partlist", "page="+$(this).attr("num")+"&part_type="+$("#part_type").val()+"&part_no="+document.f3.srch_part_no.value);
 		});
-		$("#partlist input:text").keyup(function(){		
-			if ($(this).attr("name") !="mod_part_no[]" && $(this).attr("name")!="mod_manufacturer[]" && $(this).attr("name")!="mod_package[]" && $(this).attr("name")!="mod_dc[]" && $(this).attr("name")!="mod_rhtype[]" && $(this).attr("name")!="quantity_tmp[]" && $(this).attr("name")!="mod_price[]")
-			{
+		$("#partlist input:text").keyup(function(){	
+			
+			var text_check = txtFieldCheck();
+						
+			if (text_check == "true")
+			{				
 				$("#partlist .save span").hide();
 				$("#partlist .save button").show();
-			}
+			}		
 			else
 			{
-				
-					$("#partlist .save span").show();
-					$("#partlist .save button").hide();	
-				
+				$("#partlist .save span").show();
+				$("#partlist .save button").hide();	
 			}
-			
-			
 		});
 		
 		$("#partlist input[name^=delchk]").click(function(e){
@@ -63,10 +62,40 @@ function doller_add(nm)
 	//$문자 검증 end
 }
 
+function txtFieldCheck(){
+// partlist안의 모든 text type 조회
+	var txtEle = $("#partlist input[type=text]");
+  	var text_chk = "";
+	for(var i = 0; i < txtEle.length; i ++){
+		if("" == $(txtEle[i]).val() || null == $(txtEle[i]).val())
+		{
+			text_chk = "false";
+			break;
+		}
+		else
+		{
+			text_chk = "true";
+		}
+	}
+	return text_chk; 
+}
+
+
+
 function change_select()
 {
-	$("#partlist .save span").hide();
-	$("#partlist .save button").show();
+	var text_check = txtFieldCheck();
+						
+	if (text_check == "true")
+	{				
+		$("#partlist .save span").hide();
+		$("#partlist .save button").show();
+	}		
+	else
+	{
+		$("#partlist .save span").show();
+		$("#partlist .save button").hide();	
+	}
 }
 
 </SCRIPT>
@@ -179,7 +208,7 @@ function change_select()
 								}
 								?></tbody>					
 					</table>
-					<div class="btn-area save pos_ab">
+					<div class="btn-area save pos_ab" style="padding-bottom:30px;">
 						<span class="f-rt"><img src="/kor/images/btn_stock_save_1.gif" alt="저장"></span>
 						<button type="button" class="f-rt" onclick="del();" style="display:none;"><img src="/kor/images/btn_stock_save.gif" alt="저장"></button>
 					</div>
@@ -187,7 +216,7 @@ function change_select()
 							}else{
 							?></tbody>					
 					</table>
-					<div class="btn-area save" >
+					<div class="btn-area save" style="padding-bottom:30px;">
 						<span class="f-rt" style="display:none;"><img src="/kor/images/btn_stock_save_1.gif" alt="저장"></span>
 						<button type="button" class="f-rt" onclick="del();" style="display:none;"><img src="/kor/images/btn_stock_save.gif" alt="저장"></button>
 					</div>

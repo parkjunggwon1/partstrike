@@ -51,7 +51,7 @@ function pay_ok()
 	<a href="#" class="btn-close payment"><img src="/kor/images/btn_layer_close_w.png" alt="close"></a>
 </div>
 <div class="layer-content">
-	<p class="txt-warning t-ct"><span class="c-blue">My Bank  - $<?=$buy_amt?></span> 충전 되었습니다.</p>
+	<p class="txt-warning t-ct"><span class="c-blue">My Bank  - $<?=round_down($buy_amt,4)?></span> 충전 되었습니다.</p>
 	<div class="btn-area t-rt">
 		<button  type="button" onclick="pay_ok();"><img alt="button" src="/kor/images/btn_complete.gif"></button>
 	</div>

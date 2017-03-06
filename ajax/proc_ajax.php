@@ -546,6 +546,7 @@ switch($actty) {
 		$refund_invoice = get_any("odr_det", "refund_invoice" , "odr_det_idx = $odr_det_idx");
 		$pay_amt = get_any("odr_det", "odr_price * supply_quantity" , "odr_det_idx = $odr_det_idx");
 		$fault_amt = get_any("odr_det", "odr_price * fault_quantity" , "odr_det_idx = $odr_det_idx");
+		$odr_no = get_any("odr", "odr_no" , "odr_idx = $odr_idx");
 
 		$vat_price = get_any("ship" ,"tax", "odr_idx=$odr_idx limit 1");    //부가세
 
@@ -556,10 +557,12 @@ switch($actty) {
 	    //echo $vat_price."BBBBB";
 
 	    $vat_val = $vat_price/100;
-	    $vat_plus =  $fault_amt*$vat_val;         
+	    $vat_plus =  $fault_amt*$vat_val;    
+	    $vat_plus2 = $pay_amt*$vat_val;  
 
 	    $fault_amt = $fault_amt + $vat_plus;
-	   
+	    $pay_amt = $pay_amt + $vat_plus2;
+	
 		$data = array();  //json
 		//1. 환불 처리(구매자 충전)--------------------------------------------------------
 		$sql = "insert into mybank set
@@ -579,6 +582,7 @@ switch($actty) {
 		//bank, hold 합계 Update
 		update_val("mybank","mybank_amt", SumMyBank2($buy_mem_idx, $buy_rel_idx, 0), "mybank_idx", $buy_bank_idx);
 		update_val("mybank","hold_amt", SumBankHold($buy_mem_idx, $buy_rel_idx, 0), "mybank_idx", $buy_bank_idx);
+		//update_val("mybank","mybank_hold",$pay_amt, "mybank_idx", $buy_bank_idx);
 		//2. Hitory 처리 : 추가로 '종료(15)' 처리 할지는 추후 결정. - 2016-06-01
 		update_val("odr_history","confirm_yn","Y", "odr_history_idx", $actidx);
 
@@ -599,7 +603,8 @@ switch($actty) {
 		update_val("odr","odr_status","15", "odr_idx", $odr_idx);
 
 		//3. 구매자 MyBank 로 구매 시 예치금 '차감' 처리
-		$charge_method = get_any("mybank", "charge_method" , "mem_idx=$buy_mem_idx AND mybank_yn='N' AND charge_type=3 AND odr_idx=$odr_idx");
+		//$charge_method = get_any("mybank", "charge_method" , "mem_idx=$buy_mem_idx AND mybank_yn='N' AND charge_type=3 AND odr_idx=$odr_idx");
+		$charge_method = get_any("mybank", "charge_method" , "mem_idx=$buy_mem_idx AND mybank_yn='N' AND charge_type=3 AND odr_idx in (select odr_idx from odr where odr_no = '$odr_no') ");
 		if($charge_method == 'MyBank'){
 			$sql = "insert into mybank set
 					mem_idx = '$buy_mem_idx'
