@@ -6,6 +6,25 @@
 include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";
 include  $_SERVER["DOCUMENT_ROOT"]."/include/class/class.odrinfo.php";
 include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
+
+$fault_sel = get_any("odr_history", "fault_select", "odr_det_idx = $odr_det_idx"); 
+
+if ($fault_sel=="1")
+{
+	$fault_chk = "2";
+}
+else if ($fault_sel=="2")
+{
+	$fault_chk = "1";
+}
+else if ($fault_sel=="3")
+{
+	$fault_chk = "4";
+}
+else if ($fault_sel=="4")
+{
+	$fault_chk = "3";
+}
 ?>
 <script src="/kor/js/jquery-1.11.3.min.js"></script>
 <script src="/include/function.js"></script>
@@ -27,6 +46,17 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 			};
 		}
 	});
+
+	$("body").on("click","#fault_select<?=$fault_chk?>",function(){
+		$("#fault_select<?=$fault_chk?>").attr("class","checked");
+
+		if($("#fault_select<?=$fault_chk?>").prop("checked") == true){
+			$("#fault_select<?=$fault_chk?>").addClass('checked');
+		}
+		else if($("#fault_select<?=$fault_chk?>").prop("checked") == false){
+			$("#fault_select<?=$fault_chk?>").removeClass('checked');
+		}
+	});
 </script>
 
 <?
@@ -40,9 +70,17 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 	  $status = "9";
 	  $status_name = "거절";
   }
+
+   
+
   $refuse_num = QRY_CNT("odr_history", "and odr_idx = $odr_idx and odr_det_idx = $odr_det_idx and status= $status and reg_mem_idx = $session_mem_idx");
 
   $det_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx ");  //odr_det 수량
+  if (!$fault_quantity || $fault_quantity=="undefined")
+  {
+  	$fault_quantity = get_any("odr_det", "fault_quantity", "odr_det_idx = $odr_det_idx");  //odr_det 부족수량
+  }
+  
 ?>
 
 <div class="layer-hd">
@@ -81,12 +119,12 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 							<strong>선택 :</strong>
 							<input type="hidden" name="fault_quantity" value="<?=$fault_quantity?>">
 							<?if ($status =="9"){?>
-							<label class="ipt-rd rd2"><input type="radio" name="fault_select" value="1"><span></span> 교환</label>
-							<label class="ipt-rd rd2"><input type="radio" name="fault_select" value="2"><span></span> 반품</label>
+							<label class="ipt-rd rd2 fault_sel" ><input type="radio" id="fault_select1" idx='1' name="fault_select" value="1"><span></span> 교환</label>
+							<label class="ipt-rd rd2 fault_sel" ><input type="radio" id="fault_select2" idx='2' name="fault_select" value="2"><span></span> 반품</label>
 							<?}else{ //status = 10 : 수량부족?>
 							<input type="hidden" name="etc2" value="<?=$fault_quantity?>EA">
-							<label class="ipt-rd rd2"><input type="radio" name="fault_select" value="3"><span></span> 추가선적</label>
-							<label class="ipt-rd rd2"><input type="radio" name="fault_select" value="4"><span></span> 환불</label>
+							<label class="ipt-rd rd2 fault_sel" ><input type="radio" id="fault_select3" idx='3' name="fault_select" value="3" <?if ($fault_sel=="4"){ echo "disabled='disabled'";}?> ><span></span> 추가선적</label>
+							<label class="ipt-rd rd2 fault_sel" ><input type="radio" id="fault_select4" idx='4' name="fault_select" value="4" <?if ($fault_sel=="3"){ echo "disabled='disabled'";}?> ><span></span> 환불</label>
 							<?}?>
 						</div>
 					</td>

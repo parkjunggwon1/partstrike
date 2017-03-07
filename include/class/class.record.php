@@ -897,6 +897,7 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 					$reg_date= replace_out($row2["reg_date"]);
 					$supply_quantity= replace_out($row2["supply_quantity"]);
 					$odr_status= replace_out($row2["odr_status"]);
+					$fault_quantity= replace_out($row2["fault_quantity"]);
 					$com_idx = $rel_idx==0 ? $sell_mem_idx : $rel_idx;
 					
 					if( ($price == (int)$price) )
@@ -948,56 +949,116 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 								<h3 class="title"><img src="/kor/images/stock_title0<?=$part_type?>.gif" alt="<?=GF_Common_GetSingleList("PART",$part_type)?>"></h3>
 							</td>
 							<?}else{?>
-								<h3 class="title"><img src="/kor/images/stock_title0<?=$part_type?>.gif" alt="<?=GF_Common_GetSingleList("PART",$part_type)?>"></h3><a href="javascript:;" class="f-rt recordbt"><img src="/kor/images/btn_record2.gif" alt="기록"></a>
+								<h3 class="title"><img src="/kor/images/stock_title0<?=$part_type?>.gif" alt="<?=GF_Common_GetSingleList("PART",$part_type)?>"></h3><a href="javascript:;" class="f-rt recordbt" odr_det_idx="<?=$odr_det_idx?>"><img src="/kor/images/btn_record2.gif" alt="기록"></a>
 							<?}?>
 							</td>
 						</tr>
 						<?}?>
 						<tr  style="background-color:#ffffff;">
-						<td><?=$y?></td>
+							<td><?=$y?></td>
+							<?if ($odr_type == "B"){?><td><img src="/kor/images/nation_title<?=($odr_type=="B"?"2":"")?>_<?=$nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$nation)?>"></td><?}?>
+							<td class="t-lt"><?=get_cut($part_no,"21",".")?></td>
+							<td class="t-lt"><?=get_cut($manufacturer,"13",".")?></td>
+							<td><?=$package?></td>
+							<td><?=$dc?></td>
+							<td><?=$rhtype?></td>						
+							<!--16년 12월 27일 취소 시 발주수량 나머지 공급수량 고정 대표님 요청사항-->
+							<?if ($cancel_odr=="Y" && $cancel_in_odr=="N"){?>
+								<td class="t-rt"><?=$odr_quantity==0?"":number_format($odr_quantity)?></td>	
+							<?}else{?>
+								<td class="t-rt"><?=$supply_quantity==0?"":number_format($supply_quantity-$fault_quantity)?></td>	
+							<?}?>									
+							<td class="t-rt">$<?=$price_val?></td>
+							<?if ($cancel_odr=="Y"){?>
+								<?
+
+								if ($cancel_in_odr=="Y")
+								{
+									$total_price_val = $supply_quantity*$price;
+								}
+								else
+								{
+									$total_price_val = $odr_quantity*$price;
+								}							
+								
+								if ($total_price_val==(int)$total_price_val){								
+									$total_price_val = number_format($total_price_val,2);
+								}else{
+									$total_price_val = number_format(round_down($total_price_val,4),4);
+								}
+								?>
+								<td class="t-rt">$<?=$total_price_val?></td>
+							<?}else{?>
+								<?
+								$total_price_val = ($supply_quantity-$fault_quantity)*$price;
+								if ($total_price_val==(int)$total_price_val){								
+									$total_price_val = number_format($total_price_val,2);
+								}else{
+									$total_price_val = number_format(round_down($total_price_val,4),4);
+								}
+								?>
+								<td class="t-rt">$<?=$total_price_val?></td>
+							<?}?>	
+							
+							<?if ($odr_type == "B"){?><td class="txt-r t-ct">
+							<?if ($end_yn=="Y"){?>
+							<div class="c-blue company_div" style="cursor:pointer;" onclick="side_company_info2(<?=$com_idx?>,'<?=$odr_type?>')">
+								<?=get_cut($company_nm,"8",".")?>							
+							</div>
+							<?if ($cancel_odr=="Y"){?>
+							<div class="c-blue company_div2" style="cursor:pointer;display: none;" onclick="side_company_info2(<?=$com_idx?>,'<?=$odr_type?>')">
+								<?=get_cut($company_nm,"8",".")?>							
+							</div>
+							<?}?>
+							<?
+							$now_date = date("Y-m-d H:i:s", strtotime(date('Y-m-d').' - 6month')); 
+							$reg_date = get_any("odr","reg_date" , "odr_idx = $odr_idx");
+							$fault_valid_yn = $now_date<=$reg_date?"Y":"N";		
+							if($fty_exist_yn =="N" && $fault_valid_yn =="Y"){
+								$badness_chk = QRY_CNT("odr_history", "and odr_idx = $odr_idx  and status in (8)") > 0 ? "Y": "N";  //종료까지 무사히 왔는지 여부
+								
+								if($badness_chk =="N"){
+							?>
+							<a href="#" odr_det_idx="<?=$odr_det_idx?>" class="btn-pop-2102"><img src="/kor/images/btn_badness.gif" alt="불량통보" class="badness" style="display:none;"></a>
+								<?}else{?>
+
+								<?}?>
+							<?}else{?>
+								<!--<img src="/kor/images/btn_badness_1.gif" alt="불량통보" title="보증기간 만료" class="badness" style="display:none;">-->
+							<?}?>
+							<?}else{ ?> <div class="c-blue company_div2" style="cursor:pointer;" onclick="side_company_info2(<?=$com_idx?>,'<?=$odr_type?>')">
+								<?=get_cut($company_nm,"8",".")?>							
+							</div><?}?>
+
+							</td>
+							<?}?>			
+						</tr>
+					<?
+					$fault_cnt = QRY_CNT("odr_history"," and odr_idx=$odr_idx and status=10 ");  //odr_det 수량
+
+					if ($fault_cnt>=1)
+					{
+					?>
+
+					<tr  style="background-color:#ffffff;">
+						<td><?=$y+1?></td>
 						<?if ($odr_type == "B"){?><td><img src="/kor/images/nation_title<?=($odr_type=="B"?"2":"")?>_<?=$nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$nation)?>"></td><?}?>
 						<td class="t-lt"><?=get_cut($part_no,"21",".")?></td>
 						<td class="t-lt"><?=get_cut($manufacturer,"13",".")?></td>
 						<td><?=$package?></td>
 						<td><?=$dc?></td>
-						<td><?=$rhtype?></td>						
-						<!--16년 12월 27일 취소 시 발주수량 나머지 공급수량 고정 대표님 요청사항-->
-						<?if ($cancel_odr=="Y" && $cancel_in_odr=="N"){?>
-							<td class="t-rt"><?=$odr_quantity==0?"":number_format($odr_quantity)?></td>	
-						<?}else{?>
-							<td class="t-rt"><?=$supply_quantity==0?"":number_format($supply_quantity)?></td>	
-						<?}?>									
-						<td class="t-rt">$<?=$price_val?></td>
-						<?if ($cancel_odr=="Y"){?>
-							<?
-
-							if ($cancel_in_odr=="Y")
-							{
-								$total_price_val = $supply_quantity*$price;
-							}
-							else
-							{
-								$total_price_val = $odr_quantity*$price;
-							}							
-							
-							if ($total_price_val==(int)$total_price_val){								
-								$total_price_val = number_format($total_price_val,2);
-							}else{
-								$total_price_val = number_format(round_down($total_price_val,4),4);
-							}
-							?>
-							<td class="t-rt">$<?=$total_price_val?></td>
-						<?}else{?>
-							<?
-							$total_price_val = $supply_quantity*$price;
-							if ($total_price_val==(int)$total_price_val){								
-								$total_price_val = number_format($total_price_val,2);
-							}else{
-								$total_price_val = number_format(round_down($total_price_val,4),4);
-							}
-							?>
-							<td class="t-rt">$<?=$total_price_val?></td>
-						<?}?>	
+						<td><?=$rhtype?></td>	
+						<td class="t-rt"><?=$fault_quantity==0?"":number_format($fault_quantity)?></td>	
+						<td class="t-rt">$<?=$price_val?></td>						
+						<?
+						$total_price_val = $fault_quantity*$price;
+						if ($total_price_val==(int)$total_price_val){								
+							$total_price_val = number_format($total_price_val,2);
+						}else{
+							$total_price_val = number_format(round_down($total_price_val,4),4);
+						}
+						?>
+						<td class="t-rt">$<?=$total_price_val?></td>							
 						
 						<?if ($odr_type == "B"){?><td class="txt-r t-ct">
 						<?if ($end_yn=="Y"){?>
@@ -1032,6 +1093,11 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 						</td>
 						<?}?>			
 					</tr>
+					<?	
+					}
+					?>
+
+
 					<?if($y==$cnt1){?>
 					<tr><td colspan='15' style='padding-top:20px; background-color:#FFFFFF;'></td></tr>
 					<?}
@@ -1110,7 +1176,7 @@ function get_layer_step($odr_idx, $odr_det_idx, $his_ty){
 					<span class="date"><?=$reg_date_fmt?></span>
 					<strong class="status"><?=$status_name?></strong>
 					<?
-					if ($status_name=="선적완료"){
+					if ($status_name=="선적완료" || $status_name=="추가선적완료"){
 						if ($etc2=="직접 수령")
 						{	
 					?>

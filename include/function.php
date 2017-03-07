@@ -1309,7 +1309,7 @@ function GET_SAVE_CNT(){
 function SumMyBank($mem_idx, $rel_idx){
 	$com_idx = ($rel_idx ==0 ? $mem_idx : $rel_idx);
 	
-	$pay = get_any("mybank" ,"sum( charge_amt )", "(mem_idx =$com_idx or rel_idx =$com_idx) and (charge_method = 'MyBank' or invoice_no like 'CMBI%')");
+	$pay = get_any("mybank" ,"TRUNCATE(sum( charge_amt ),4)", "(mem_idx =$com_idx or rel_idx =$com_idx) and (charge_method = 'MyBank' or invoice_no like 'CMBI%')");
 	return number_format($pay,2);
 }
 
@@ -1317,7 +1317,7 @@ function SumMyBank($mem_idx, $rel_idx){
 function SumMyBank2($mem_idx, $rel_idx, $ty=2){
 	$com_idx = ($rel_idx ==0 ? $mem_idx : $rel_idx);
 
-	$pay = get_any("mybank" ,"sum( charge_amt )", "(mem_idx =$com_idx or rel_idx =$com_idx) and mybank_yn = 'Y'");
+	$pay = get_any("mybank" ,"TRUNCATE(sum( charge_amt ),4)", "(mem_idx =$com_idx or rel_idx =$com_idx) and mybank_yn = 'Y'");
 	if($ty>0){
 		$pay_val = round_down($pay,4);
 		$pay_val = number_format($pay,4);
@@ -1344,7 +1344,7 @@ function SumBankHold($mem_idx, $rel_idx, $ty=2){
 function GetDeposit($mem_idx, $rel_idx, $charge_type){
 	
 	$com_idx = ($rel_idx ==0 ? $mem_idx : $rel_idx);
-	$pay = get_any("mybank" ,"sum( charge_amt )", "(mem_idx =$com_idx or rel_idx =$com_idx) and charge_type in ($charge_type) and mybank_yn = 'N'");
+	$pay = get_any("mybank" ,"TRUNCATE(sum( charge_amt ),4)", "(mem_idx =$com_idx or rel_idx =$com_idx) and charge_type in ($charge_type) and mybank_yn = 'N'");
 	
 	return number_format(round_down(abs($pay),4),4);
 }
@@ -1579,7 +1579,7 @@ function GET_WhatsNew($ty,$viewty){
 
 
 function openSheet($status, $etc1, $odr_idx,$etc_change,$odr_history_idx=""){
-		
+		//echo $status."<BR>";
 	if ($etc_change)
 	{
 
@@ -1618,7 +1618,7 @@ function openSheet($status, $etc1, $odr_idx,$etc_change,$odr_history_idx=""){
 				$change_val = $etc1;
 			}
 			
-			 $return_val = "<a style='color:#00759e;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"alert_invoice\",\"?odr_idx=".$odr_idx."\")'>".$change_val."</a>";
+			 $return_val = "<a style='color:#00759e;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"alert_invoice\",\"?odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."\")'>".$change_val."</a>";
 			 
 			 break;
 			default:
@@ -1660,7 +1660,7 @@ function openSheet($status, $etc1, $odr_idx,$etc_change,$odr_history_idx=""){
 				$change_val = $etc1;
 			}
 
-			 $return_val = "<a style='color:#000 !important;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"alert_invoice\",\"?odr_idx=".$odr_idx."\")'>".$change_val."</a>";
+			 $return_val = "<a style='color:#000 !important;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"alert_invoice\",\"?odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."\")'>".$change_val."</a>";
 			 break;
 			default:
 

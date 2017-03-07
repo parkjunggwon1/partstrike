@@ -14,7 +14,8 @@ if ($alert =="sessionend"){
 	$alert_msg = "세션이 종료되었습니다. 다시 로그인이 필요합니다.";
 }
 
-$sql = "select * from odr left join odr_history on odr_history.odr_idx = odr.odr_idx and `status` = 21 where odr.odr_idx = '".$odr_idx."'";
+$sql = "select * from odr left join odr_history on odr_history.odr_idx = odr.odr_idx  where odr.odr_idx = '".$odr_idx."' and odr_history_idx='".$odr_history_idx."'";
+
 $conn = dbconn();	
 $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());	
 while($row = mysql_fetch_array($result)){

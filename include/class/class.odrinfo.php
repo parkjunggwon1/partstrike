@@ -3012,7 +3012,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 										<span style="padding-left:<?=($i-1)*30-23?>px;">└></span>
 									<?}?>
 									<span class="box-num"><?=$num;?></span>
-									<span class="c-red"><?if($fault_select>0){?>(<?=$etc2?>)<?}?></span>
+									<span class="c-red"><?if($fault_select>0){?>[<?=$etc2?>]<?}?></span>
 									<span style="cursor:pointer;color:#00759e;" OnClick="show_msg(<?=$msg_history_idx;?>);"><?=$msg_reason_title?></span>
 									<?if(($fault_select=='3' || $fault_select=='4') && $fault_quantity > 0){?>
 										<span class="c-red">[부족수량 : <?=$fault_quantity;?>EA]</span>

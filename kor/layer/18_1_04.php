@@ -13,7 +13,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 	function shipping(){
-		var f =  document.f;
+		var f =  document.f6;
 		//if (nullchk(f.delivery_no,"운송장 번호를 입력해주세요.")== false) return ;			
 		f.typ.value="return_submit";
 		 f.target = "proc";

@@ -17,25 +17,26 @@
 			$(".recordbt").click(function(){
 				var $this = $(this).parents("tr").prev().find(".layer-step");
 				var backgound = ($("#odr_type").val()=="S")?"#dce6f2":"#ffff99";
+				var tr_idx = $(this).attr("odr_det_idx");
 				
 				if ($this.css("display")=="none")
 				{					
-					$(this).parents("tbody").addClass("record-on");
+					$(this).parents("tbody").addClass("record-on"+tr_idx);
 					 $this.css("display","");	
-					 $(this).parent().parent().next().find("img.badness").show();
-					 $(this).parents("tr").css("background-color",backgound);
-					 $(this).parents("tr").next().css("background-color",backgound);
-					$(this).parent().parent().next().find(".company_div").hide();
-					$(this).parent().parent().next().find(".company_div2").show();
+					 $(".record-on"+tr_idx+" tr").find("img.badness").show();
+					 $(".record-on"+tr_idx+" tr").css("background-color",backgound);
+					 $(".record-on"+tr_idx+" tr").css("background-color",backgound);
+					$(".record-on"+tr_idx+" tr").find(".company_div").hide();
+					$(".record-on"+tr_idx+" tr").find(".company_div2").show();
 					 
 				}else{	
 					$(this).parents("tbody").removeClass("record-on");
 					$this.css("display","none");
-					$(this).parent().parent().next().find("img.badness").hide();
-					$(this).parents("tr").css("background-color","#ffffff");
-					$(this).parents("tr").next().css("background-color","#ffffff");
-					$(this).parent().parent().next().find(".company_div").show();
-					$(this).parent().parent().next().find(".company_div2").hide();
+					$(".record-on"+tr_idx+" tr").find("img.badness").hide();
+					$(".record-on"+tr_idx+" tr").css("background-color","#ffffff");
+					$(".record-on"+tr_idx+" tr").next().css("background-color","#ffffff");
+					$(".record-on"+tr_idx+" tr").find(".company_div").show();
+					$(".record-on"+tr_idx+" tr").find(".company_div2").hide();
 					
 				}
 				if ($(this).find("img").attr("src").indexOf("record2")>0)

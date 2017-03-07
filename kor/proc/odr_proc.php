@@ -1710,8 +1710,8 @@ if($typ == "shipping2"){
             ,odr_det_idx = '$odr_det_idx'
             ,status = $now_status
             ,status_name = '$now_txt'
-            ,etc1 = '$ship_info_nm'
-            ,etc2 = '$delivery_no'
+            ,etc1 = '$delivery_no'
+            ,etc2 = '$ship_info_nm'
             ,fault_select = '$fault_select'
             ,fault_yn = '$fault_yn'
             ,sell_mem_idx = '$sell_mem_idx'
