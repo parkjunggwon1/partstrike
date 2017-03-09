@@ -7,7 +7,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";
 include  $_SERVER["DOCUMENT_ROOT"]."/include/class/class.odrinfo.php";
 include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 
-$fault_sel = get_any("odr_history", "fault_select", "odr_det_idx = $odr_det_idx"); 
+$fault_sel = get_any("odr_history", "fault_select", "odr_det_idx = $odr_det_idx and fault_select <> '' order by odr_history_idx desc limit 1 "); 
 
 if ($fault_sel=="1")
 {
@@ -25,6 +25,7 @@ else if ($fault_sel=="4")
 {
 	$fault_chk = "3";
 }
+
 ?>
 <script src="/kor/js/jquery-1.11.3.min.js"></script>
 <script src="/include/function.js"></script>
@@ -47,16 +48,7 @@ else if ($fault_sel=="4")
 		}
 	});
 
-	$("body").on("click","#fault_select<?=$fault_chk?>",function(){
-		$("#fault_select<?=$fault_chk?>").attr("class","checked");
-
-		if($("#fault_select<?=$fault_chk?>").prop("checked") == true){
-			$("#fault_select<?=$fault_chk?>").addClass('checked');
-		}
-		else if($("#fault_select<?=$fault_chk?>").prop("checked") == false){
-			$("#fault_select<?=$fault_chk?>").removeClass('checked');
-		}
-	});
+	
 </script>
 
 <?
@@ -101,7 +93,9 @@ else if ($fault_sel=="4")
 	<input type="hidden" name="sell_mem_idx" value="<?=$sell_mem_idx?>">
 	<input type="hidden" name="buy_mem_idx" value="<?=$buy_mem_idx?>">
 	<input type="hidden" name="no" value="">
-	<input type="hidden" name="odr_history_idx" value="">
+	<input type="hidden" name="odr_history_idx" value="">	
+	<input type="hidden" id="radio_chk" name="radio_chk" value="0">
+	<input type="hidden" id="real_fault_select" name="real_fault_select" value="<?=$fault_select?>">
 	<?=layerInvListData("18R_05", $odr_idx, $odr_det_idx)?>
 		<div class="layer-data">
 			<table class="stock-list-table" id="list_18R_05">
@@ -116,15 +110,22 @@ else if ($fault_sel=="4")
 					</td>
 					<td colspan="4" class="t-rt">
 						<div class="re-select-box">
+						<?
+						if ($fault_sel){
+							$fault_chk = "checkbox";
+						}else{
+							$fault_chk = "radio";
+						}
+						?>
 							<strong>선택 :</strong>
 							<input type="hidden" name="fault_quantity" value="<?=$fault_quantity?>">
 							<?if ($status =="9"){?>
-							<label class="ipt-rd rd2 fault_sel" ><input type="radio" id="fault_select1" idx='1' name="fault_select" value="1"><span></span> 교환</label>
-							<label class="ipt-rd rd2 fault_sel" ><input type="radio" id="fault_select2" idx='2' name="fault_select" value="2"><span></span> 반품</label>
+							<label class="ipt-rd rd2 fault_sel" ><input type="<?=$fault_chk?>" style="<?if ($fault_sel=="1"){ echo 'background:#808080;'; }else { echo 'background:#FFF;';}?>" id="fault_select1" idx='1' class="fault_select" name="fault_select" value="1" <?if ($fault_sel=="1"){ echo "disabled='disabled'";}?>><span style="<?if ($fault_sel=="1"){ echo 'background:#808080;'; }else { echo 'background:#FFF;';}?>"></span> 교환</label>
+							<label class="ipt-rd rd2 fault_sel" ><input type="<?=$fault_chk?>" style="<?if ($fault_sel=="2"){ echo 'background:#808080;'; }else { echo 'background:#FFF;';}?>" id="fault_select2" idx='2' class="fault_select" name="fault_select" value="2" <?if ($fault_sel=="2"){ echo "disabled='disabled'";}?>><span style="<?if ($fault_sel=="2"){ echo 'background:#808080;'; }else { echo 'background:#FFF;';}?>"></span> 반품</label>
 							<?}else{ //status = 10 : 수량부족?>
 							<input type="hidden" name="etc2" value="<?=$fault_quantity?>EA">
-							<label class="ipt-rd rd2 fault_sel" ><input type="radio" id="fault_select3" idx='3' name="fault_select" value="3" <?if ($fault_sel=="4"){ echo "disabled='disabled'";}?> ><span></span> 추가선적</label>
-							<label class="ipt-rd rd2 fault_sel" ><input type="radio" id="fault_select4" idx='4' name="fault_select" value="4" <?if ($fault_sel=="3"){ echo "disabled='disabled'";}?> ><span></span> 환불</label>
+							<label class="ipt-rd rd2 fault_sel" ><input type="<?=$fault_chk?>" style="<?if ($fault_sel=="3"){ echo 'background:#808080;'; }else { echo 'background:#FFF;';}?>" id="fault_select3" idx='3' class="fault_select" name="fault_select" value="3" <?if ($fault_sel=="3"){ echo "disabled='disabled'";}?> ><span style="<?if ($fault_sel=="3"){ echo 'background:#808080;'; }else { echo 'background:#FFF;';}?>"></span> 추가선적</label>
+							<label class="ipt-rd rd2 fault_sel" ><input type="<?=$fault_chk?>" style="<?if ($fault_sel=="4"){ echo 'background:#808080;'; }else { echo 'background:#FFF;';}?>;" id="fault_select4" idx='4' class="fault_select" name="fault_select" value="4" <?if ($fault_sel=="4"){ echo "disabled='disabled'";}?> ><span style="<?if ($fault_sel=="4"){ echo 'background:#808080;'; }else { echo 'background:#FFF;';}?>"></span> 환불</label>
 							<?}?>
 						</div>
 					</td>
@@ -155,6 +156,7 @@ else if ($fault_sel=="4")
 
 
 <SCRIPT LANGUAGE="JavaScript">
+
 <!--
 
  $(document).ready(function(){
@@ -162,6 +164,7 @@ else if ($fault_sel=="4")
 			
 			if ($("#title").val())
 			{				
+				
 				$(".btn_answer").css("cursor","pointer");
 				$(".btn_answer").attr("onclick","check();")
 				$(".btn_answer").children("img").attr("src","/kor/images/btn_answer_go.gif");
@@ -172,6 +175,7 @@ else if ($fault_sel=="4")
 			}
 			else
 			{
+				
 				$(".btn_answer").css("cursor","default");
 				$(".btn_answer").attr("onclick","");
 				$(".btn_answer").children("img").attr("src","/kor/images/btn_answer_go_1.gif");
@@ -199,6 +203,47 @@ else if ($fault_sel=="4")
 			 }
 		 });
 		 **/
+		
+	 	$("#fault_select<?=$fault_sel?>").click(function(){
+
+	 		var fault_val = $("#real_fault_select").val();
+			if($("#radio_chk").val()==0){
+				$("#fault_select<?=$fault_sel?>").attr('class','checked');
+				
+				$("#radio_chk").val("1");
+				if (fault_val==1)
+				{
+					$("#real_fault_select").val("2");
+				}
+				else if(fault_val==2)
+				{
+					$("#real_fault_select").val("1");
+				}
+				else if(fault_val==3)
+				{
+					$("#real_fault_select").val("4");
+				}
+				else if(fault_val==4)
+				{
+					$("#real_fault_select").val("3");
+				}
+
+			}
+			else if($("#radio_chk").val()==1){	
+				$("#fault_select<?=$fault_sel?>").attr('class','');
+				$("#radio_chk").val("0");
+				$("#real_fault_select").val("0");					
+			}
+
+
+		});
+
+	 	<?if (!$fault_sel){?>
+		$(".fault_select").click(function(){		 		
+			$("#radio_chk").val("1");
+		});
+		<?}?>
+
 	});
 
 	function check(){
@@ -228,7 +273,7 @@ else if ($fault_sel=="4")
 		f.target = "proc";
 		f.action = "/kor/proc/odr_proc.php";
 		f.submit();	
-		alert_msg("<?=$sell_mem_idx == $session_mem_idx?"회신":($refuse_num==0?"회신요청":"답변");?> 하였습니다.");
+		alert_msg("답변 하였습니다.");
 
 		
 		//location.href="/kor/";
@@ -241,7 +286,7 @@ else if ($fault_sel=="4")
 				encType:"multipart/form-data",
 				success: function (data) {						
 					if (trim(data) == "SUCCESS"){		
-						alert_msg("<?=$sell_mem_idx == $session_mem_idx?"회신":($refuse_num==0?"회신요청":"답변");?> 하였습니다.");
+						alert_msg("답변 하였습니다.");
 						location.href="/kor/";
 					}else{
 						alert(data);
@@ -252,4 +297,5 @@ else if ($fault_sel=="4")
 	}
 
 -->
+
 </SCRIPT>

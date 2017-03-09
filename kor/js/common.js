@@ -114,9 +114,10 @@ $(document).ready(function(){
 	//---- 발주창(0504) 닫기(X) --------------------------------------------------------------
 	$("section[class^='layer']").on("click",".btn-close",function(){
 		if($(this).hasClass("odr")){
+			
 			if($(".layer-section").hasClass("open")){
 				if ($(this).attr("part_type") == "256")
-				{
+				{					
 					closeCommLayer("layer4");
 				}
 				else
@@ -141,6 +142,7 @@ $(document).ready(function(){
 					}
 				});
 		}else if ($(this).hasClass("amend")){  // 기존 데이터 제외하고 amend 된 데이터 모두 삭제.
+			
 			$.ajax({ 
 				type: "GET", 
 				url: "/ajax/proc_ajax.php", 
@@ -154,6 +156,7 @@ $(document).ready(function(){
 					}
 				});
 		}else if($(this).hasClass("save")){  // 기존 데이터중 납기품목 제외하고 amend 된 데이터 모두 삭제. (저장 발주서) 2016-04-03
+			
 			$.ajax({ 
 				type: "GET", 
 				url: "/ajax/proc_ajax.php", 
@@ -183,6 +186,11 @@ $(document).ready(function(){
 			if($(this).parents("section[class^='layer']").hasClass("layer7-section")==true){
 				$("#layerPop7").html("");
 			}
+
+			if($(this).parents("section[class^='layer']").hasClass("layer3-section")==true){				
+				$("#layerPop3").empty();
+			}
+			
 		}
 		//po-cancel 닫기(X)
 		if ($(this).hasClass("po-cancel")){

@@ -2216,10 +2216,11 @@ if ($typ=="refuse"){
         $sql = "update odr_det set fault_quantity = '$fault_quantity' , fault_method = '$fault_select' where odr_idx = $odr_idx and odr_det_idx = $odr_det_idx";
         $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
     }
-
+   
     if ($fault_select==""){
         if (strpos($etc2,"EA")==0){ $etc2 = $etc2."EA";}        //몇개 부족인지
     }else{
+        
         switch($fault_select){
             case "1":
                 $etc2= "교환";
@@ -2234,6 +2235,7 @@ if ($typ=="refuse"){
                 $etc2 = "환불";
             break;
         }
+       
     }
 
     //1. odr_status 변경 : 거절으로.
