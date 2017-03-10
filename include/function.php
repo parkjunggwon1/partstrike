@@ -1582,6 +1582,7 @@ function openSheet($status, $etc1, $odr_idx,$etc_change,$odr_history_idx=""){
 		//echo $status."<BR>";
 	if ($etc_change)
 	{
+		
 
 		switch ($status) {
 		   case "2":  //발주서

@@ -2993,15 +2993,28 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 					$msg_reason = $row["reason"];
 					$msg_date = replace_out($row["reg_date"]);
 					$fault_quantity = get_any("odr_det", "fault_quantity", "odr_idx=$odr_idx AND odr_det_idx=$odr_det_idx");
+					
 					if($i<2){
 						$num = $i;
 					}else{
 						if($i%2 == 0){//짝수
 							$num = intval($i/2);
+							$color_tr = "background-color:#FF0000";
 						}else{//홀수
 							$num = intval($i/2)+1;
+							$color_tr = "background-color:#808080";
 						}
 					}
+
+					if($i%2 == 0){//짝수
+						
+						$color_tr = "background-color:#808080";
+						
+					}else{//홀수
+						
+						$color_tr = "background-color:#FF0000";
+					}
+
 				?>
 				<tr>
 					<td>
@@ -3011,7 +3024,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 									<?if($i>1){?>
 										<span style="padding-left:<?=($i-1)*30-23?>px;">└></span>
 									<?}?>
-									<span class="box-num"><?=$num;?></span>
+									<span class="box-num" style="<?=$color_tr?>"><?=$num;?></span>
 									<span class="c-red"><?if($fault_select>0 && $etc2 != ""){?>[<?=$etc2?>]<?}?></span>
 									<span style="cursor:pointer;color:#00759e;" OnClick="show_msg(<?=$msg_history_idx;?>);"><?=$msg_reason_title?></span>
 									<?if(($fault_select=='3' || $fault_select=='4') && $fault_quantity > 0){?>
