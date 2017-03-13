@@ -2211,6 +2211,7 @@ if ($typ=="imgfileup" || $typ =="imgfiledel"){   //18R_21 에서 사용.
 }
 //----------------------------------------------------------------- 수량부족, 거절 : 18R_05 ---------------------------------------------------------------
 if ($typ=="refuse"){
+
     //fault 수량 및 종휴 Update
     if($fault_quantity > 0){
         $sql = "update odr_det set fault_quantity = '$fault_quantity' , fault_method = '$fault_select' where odr_idx = $odr_idx and odr_det_idx = $odr_det_idx";
@@ -2219,6 +2220,21 @@ if ($typ=="refuse"){
    
     if ($fault_select==""){
         if (strpos($etc2,"EA")==0){ $etc2 = $etc2."EA";}        //몇개 부족인지
+        switch($real_fault_select){
+            case "1":
+                $etc2= "교환";
+            break;
+            case "2":
+                $etc2 = "반품";
+            break;
+            case "3" :
+                $etc2 = "추가선적";
+            break;
+            case "4" :
+                $etc2 = "환불";
+            break;
+        }
+        $fault_select = $real_fault_select;
     }else{
         
         switch($fault_select){
@@ -2237,6 +2253,7 @@ if ($typ=="refuse"){
         }
        
     }
+
 
     //1. odr_status 변경 : 거절으로.
     update_val("odr","odr_status",$status, "odr_idx", $odr_idx);
@@ -2335,13 +2352,14 @@ if ($typ=="notify"){
 }
 //-------------------------------------------반품방법-------------------------------------------------------------------------------------------------------
 if ($typ =="return_method"){
+
     //1. odr_status 변경 : 반품 방법으로
     update_val("odr","odr_status","22", "odr_idx", $odr_idx);
     update_val("odr","status_edit_mem_idx",$session_mem_idx, "odr_idx", $odr_idx);
     //2. history update (1번 이상이면 거절 확인 한 상태로), 2016-05-12 : Update 쿼리에 odr_det_idx 추가
     $sql = "update odr_history set confirm_yn  = 'Y' where odr_idx = $odr_idx AND odr_det_idx=$odr_det_idx AND status = 9 AND confirm_yn = 'N'";
     $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
-    $etc1 = $return_method == "1" ? "반품포기" : GF_Common_GetSingleList("DLVR",$ship_info)."-".$ship_account_no;
+    $etc2 = $return_method == "1" ? "반품포기" : GF_Common_GetSingleList("DLVR",$ship_info);
     if ($return_method =="2") {
         $ship_type = $ship_type == "" ? "1" : $ship_type;
         $ship_idx = get_any("ship" , "ship_idx", "ship_type = $ship_type and odr_idx = $odr_idx and odr_det_idx = $odr_det_idx");
@@ -2370,7 +2388,7 @@ if ($typ =="return_method"){
             ,odr_det_idx = '$odr_det_idx'
             ,status = $status
             ,status_name = '$status_name'
-            ,etc1 = '$etc1'
+            ,etc1 = '$ship_account_no'
             ,etc2 = '$etc2'
             ,fault_select= '$fault_select'
             ,return_method = '$return_method'
@@ -2403,7 +2421,8 @@ if ($typ =="return_submit"){
         $sql = "update odr_history set confirm_yn  = 'Y' where odr_history_idx = $prev_odr_history_idx";
         $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
     }
-    $etc1 = $return_method == "1" ? "반품포기" : GF_Common_GetSingleList("DLVR",$ship_info) ." ".$delivery_no;
+    $etc2 = $return_method == "1" ? "반품포기" : GF_Common_GetSingleList("DLVR",$ship_info);
+    
     $sell_mem_idx = get_any("odr", "sell_mem_idx" , "odr_idx = $odr_idx");
     $buy_mem_idx = get_any("odr", "mem_idx" , "odr_idx = $odr_idx");
 
@@ -2412,7 +2431,7 @@ if ($typ =="return_submit"){
             ,odr_det_idx = '$odr_det_idx'
             ,status = '11'
             ,status_name = '반품선적완료'
-            ,etc1 = '$etc1'
+            ,etc1 = '$delivery_no'
             ,etc2 = '$etc2'
             ,fault_select= '$fault_select'
             ,return_method = '$return_method'

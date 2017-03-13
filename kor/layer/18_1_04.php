@@ -123,28 +123,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 						</td>
 						<td rowspan="2">
 							<table>
-								<?if($ship[insur_yn] == "Y"){?><tr><td colspan="2">운송보험 : <span class="c-red">Yes</span></td></tr><?}?>
-								<?if($ship[delivery_addr_idx] > 0){?>
-									<tr><td Style="width:75px; vertical-align:top;">
-										배송지변경 : 
-									</td>
-									<td>
-										<table class="table-type1-1" lang="ko">
-											<tr>
-												<td class="t-lt">우편번호 : <?=$addr_row[zipcode];?></td>
-											</tr>
-											<tr>
-												<td>도/시 : <?=$addr_row[dositxt];?></td>
-											</tr>
-											<tr>
-												<td>시/구/군 : <?=$addr_row[sigungu];?></td>
-											</tr>
-											<tr>
-												<td>주소 : <?=$addr_row[addr];?></td>
-											</tr>
-										</table>
-									</td></tr>
-								<?}?>
+								<?if($ship[insur_yn] == "Y"){?><tr><td colspan="2">운송보험 : <span class="c-red">Yes</span></td></tr><?}?>								
 								<?if(strlen($ship[memo])>0){?><tr><td colspan="2">Memo : <span class="c-red"><?=$ship[memo];?></span></td></tr><?}?>
 							</table>
 						</td>

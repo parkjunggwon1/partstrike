@@ -19,7 +19,8 @@ $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
 $sql = "truncate `mybox`";
 $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
 
-
+$sql = "truncate `ship`";
+$result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
 
 header('Location: /kor/index.php');
 ?>

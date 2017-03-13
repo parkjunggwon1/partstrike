@@ -95,7 +95,7 @@ else if ($fault_sel=="4")
 	<input type="hidden" name="no" value="">
 	<input type="hidden" name="odr_history_idx" value="">	
 	<input type="hidden" id="radio_chk" name="radio_chk" value="0">
-	<input type="hidden" id="real_fault_select" name="real_fault_select" value="<?=$fault_select?>">
+	<input type="hidden" id="real_fault_select" name="real_fault_select" value="<?=$fault_sel?>">
 	<?=layerInvListData("18R_05", $odr_idx, $odr_det_idx)?>
 		<div class="layer-data">
 			<table class="stock-list-table" id="list_18R_05">
