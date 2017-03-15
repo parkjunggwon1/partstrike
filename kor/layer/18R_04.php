@@ -16,8 +16,47 @@
 			<label class="c-red2">운임 <span lang="en">US$</span> : <input type="text" class="i-txt2 c-blue onlynum numfmt" name="buyer_delivery_fee" id="buyer_delivery_fee" value="" style="width:67px"></label>
 		</div>
 		<div class="btn-area t-rt">
-			<button type="button" class="btn-dialog-18R05" fault_method="<?=$fault_method;?>" fault_quantity="<?=$fault_quantity;?>" odr_det_idx="<?=$odr_det_idx?>"><img src="/kor/images/btn_ok.gif" alt="확인"></button>
+			<button type="button" class="btn_delivery_18R_05" odr_idx="<?=$odr_idx?>" odr_det_idx="<?=$odr_det_idx?>" det_cnt="<?=$det_cnt?>" ><img src="/kor/images/btn_ok.gif" alt="확인"></button>
 		</div>
 	</form>
 </div>
 
+<script type="text/javascript">
+	//운임 입력 창(구매자) - 거절 시(마지막 아이템에서)
+	
+	$(".btn_delivery_18R_05").click(function(){
+
+		var odr_idx = $(this).attr("odr_idx");
+ 		var odr_det_idx = $(this).attr("odr_det_idx");
+		var det_cnt = $(this).attr("det_cnt");
+		var f =  document.f6;
+		if ($("#buyer_delivery_fee").val()=="")
+		{
+			alert_msg("운임을 입력해 주세요.");
+			$("#buyer_delivery_fee").focus();			
+		}else{
+			maskoff();
+			$.ajax({
+					url: "/kor/proc/odr_proc.php", 
+					data: "typ=updbuyerdelifee&odr_idx="+odr_idx+"&buyer_delivery_fee="+$("#buyer_delivery_fee").val(),
+					encType:"multipart/form-data",
+					success: function (data) {	
+						if (trim(data) == "SUCCESS"){
+							
+
+							$(".btn-area.t-rt button").attr("onclick","alert_msg('처리중입니다.')");
+							f.typ.value="refuse";
+							f.target = "proc";
+							f.action = "/kor/proc/odr_proc.php";
+							f.submit();	
+							alert_msg("답변 하였습니다.");
+							//closeCommLayer("layer4");
+							//openLayer("layer3","18R_05","?odr_idx="+$("#odr_idx_30_20").val()+"&odr_det_idx="+odr_det_idx+"&fault_method="+$(this).attr("fault_method")+"&fault_quantity="+fault_quantity);
+						}
+					}
+			});				
+		}
+
+	});
+
+</script>

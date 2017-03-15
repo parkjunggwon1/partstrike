@@ -1154,8 +1154,8 @@ function get_layer_step($odr_idx, $odr_det_idx, $his_ty){
 					$etc_change = "change_img";
 				}
 
-				if ($status== "9" || $status== "10" || $status== "22" || $status =="11"){
-					$cls = "class='c3".$blank."'";
+				if ($status== "9" || $status== "10" ){
+					$cls = "class='c1".$blank."'";
 					if ($session_mem_idx == $reg_mem_idx){$cls = "";}
 					if ($etc2){
 						$etc2 = ($etc2 == "1")? "- 교환":(($etc2 == "2")? "- 환불":"- ".$etc2);
@@ -1169,26 +1169,31 @@ function get_layer_step($odr_idx, $odr_det_idx, $his_ty){
 				}
 
 
-
+				if ($status_name=="완료")
+				{
+					$status_name = "<font color='red'>".$status_name."</font>";
+				}
 
 			?>
 				<li <?=$cls?>>
 					<span class="date"><?=$reg_date_fmt?></span>
 					<strong class="status"><?=$status_name?></strong>
 					<?
-					if ($status_name=="선적완료" || $status_name=="추가선적완료"){
+					if (($status_name=="선적완료" || $status_name=="추가선적완료" || $status_name=="반품방법" || $status_name=="반품선적완료")){
 						if ($etc2=="직접 수령")
 						{	
 					?>
-							<span class="etc"><span ><?=$etc2?></span></span>
-						<?}else{?>
-							<span class="etc"><span ><?if ($etc2){echo openSheet($status, $etc2,$odr_idx,$etc_change,$odr_history_idx);}?></span></span>
-						<?}?>
+						<span class="etc"><span ><?=$etc2?></span></span>
 					<?}else{?>
-						<span class="etc"><span ><?if ($etc1){echo openSheet($status, $etc1,$odr_idx,$etc_change,$odr_history_idx);}?></span></span>
-						<?if ($status!=5){?>
-						<span class="etc"><span ><?if ($etc2){?><?=$etc2?><?}?></span></span>
-						<?}?>
+						<span class="etc"><span ><?if ($etc2){echo openSheet($status, $etc2,$odr_idx,$etc_change,$odr_history_idx);}?></span></span>
+					<?}?>
+					<?}else{?>
+						<span class="etc"><span ><?if ($etc1){echo openSheet($status, $etc1,$odr_idx,$etc_change,$odr_history_idx);}?>
+							<?if ($status== "9" || $status== "10"  || $status =="11"){?>							
+								<?=$etc2?>
+							<?}?>
+						</span></span>
+
 					<?}?>
 					
 				</li>

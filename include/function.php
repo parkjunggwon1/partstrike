@@ -1582,7 +1582,7 @@ function openSheet($status, $etc1, $odr_idx,$etc_change,$odr_history_idx=""){
 		//echo $status."<BR>";
 	if ($etc_change)
 	{				
-		
+
 		switch ($status) {
 		   case "2":  //발주서
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"30_05\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>"; //JSJ
@@ -1591,7 +1591,7 @@ function openSheet($status, $etc1, $odr_idx,$etc_change,$odr_history_idx=""){
 		   case "3":  //수정발주서
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"12_07\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>"; //JSJ
 			 $return_val = "<a style='color:#00759e;text-decoration:underline;' href='javascript:openCommLayer(\"layer5\",\"12_07\",\"?sheets_no=".$etc1."&odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>"; //2016-04-18
-			 break;
+			 break;			
 			case "5":  //결제완료
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"12_07\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>"; //JSJ
 			 $return_val = "<a style='color:#00759e;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"payment_ok\",\"?odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."\")'>".$etc1."</a>"; //2016-04-18
@@ -1623,6 +1623,12 @@ function openSheet($status, $etc1, $odr_idx,$etc_change,$odr_history_idx=""){
 			 $return_val = "<a style='color:#00759e;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"alert_invoice\",\"?odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."\")'>".$change_val."</a>";
 			 
 			 break;
+			case "24":  //결제완료
+			 $odr_det_idx = get_any("odr_history", "odr_det_idx", "odr_history_idx = $odr_history_idx");
+			 $new_etc1 = get_any("odr_det", "refund_invoice", "odr_det_idx = $odr_det_idx");
+
+			 $return_val = "<a style='color:#00759e;text-decoration:underline;' href='javascript:openCommLayer(\"layer5\",\"19_1_04\",\"?odr_det_idx=".$odr_det_idx."&read_chk=Y&odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."&forread=Y\")'>".$new_etc1."</a>"; //2016-04-18
+			 break;
 			default:
 				$return_val = $etc1;
 			break;
@@ -1641,7 +1647,7 @@ function openSheet($status, $etc1, $odr_idx,$etc_change,$odr_history_idx=""){
 		   case "3":  //수정발주서
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"12_07\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>"; //JSJ
 			 $return_val = "<a style='color:#000 !important;text-decoration:underline;' href='javascript:openCommLayer(\"layer5\",\"12_07\",\"?sheets_no=".$etc1."&odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>"; //2016-04-18
-			 break;
+			 break;			
 			case "5":  //결제완료
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"12_07\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>"; //JSJ
 			 $return_val = "<a style='color:#000;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"payment_ok\",\"?odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."\")'>".$etc1."</a>"; //2016-04-18
@@ -1665,6 +1671,12 @@ function openSheet($status, $etc1, $odr_idx,$etc_change,$odr_history_idx=""){
 			}
 
 			 $return_val = "<a style='color:#000 !important;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"alert_invoice\",\"?odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."\")'>".$change_val."</a>";
+			 break;
+			case "24":  //결제완료
+			 $odr_det_idx = get_any("odr_history", "odr_det_idx", "odr_history_idx = $odr_history_idx");
+			 $new_etc1 = get_any("odr_det", "refund_invoice", "odr_det_idx = $odr_det_idx");
+
+			 $return_val = "<a style='color:#000 !important;text-decoration:underline;' href='javascript:openCommLayer(\"layer5\",\"19_1_04\",\"?odr_det_idx=".$odr_det_idx."&odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."&forread=Y\")'>".$new_etc1."</a>"; //2016-04-18
 			 break;
 			default:
 

@@ -1358,7 +1358,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<!-- 발주수량/반품수량-->
 							<?if($loadPage == "18_1_04"){?>
 								<input type="text" name="fault_quantity" id="fault_quantity" class="i-txt4 c-red  onlynum numfmt t-rt" maxlength="10" Style="width:60px;" value="<?=$fault_quantity==0?"":number_format($fault_quantity)?>">
-							<?}elseif($loadPage == "18R_19" || $loadPage=="19_1_05" || $loadPage=="19_1_06" ){
+							<?}elseif($loadPage == "_18R_19" || $loadPage=="19_1_05" || $loadPage=="19_1_06" ){
 									$fault_quantity = ($fault_quantity==0)? "0":number_format($fault_quantity);
 									echo "<span class=\"c-red2\">".$fault_quantity."</span>";
 								}
@@ -1727,7 +1727,7 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 			$memo = replace_out($row["memo"]);
 			$period = replace_out($row["period"]);
 			$pay_cnt = QRY_CNT("odr_history", "and odr_idx=$odr_idx AND status=5");
-			if ($loadPage=="19_1_04" && $for_readonly=="Y"){
+			if ($loadPage=="19_1_04"){
 				$odr_quantity = $fault_quantity;
 			}
 
@@ -2227,7 +2227,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						<span class="date"><?=$reg_date_fmt?></span>
 						<strong class="status"><?=$status_name?></strong>
 						<?
-						if (($loadPage=="30_20" || $loadPage=="30_22" || $loadPage=="30_23" || $loadPage=="19_08" || $loadPage=="30_20_F" || $loadPage=="19_06" || $loadPage=="30_22_F" || $loadPage=="18R_16" || $loadPage=="18R_19") && ($status_name=="선적완료" || $status_name=="추가선적완료" || $status_name=="반품방법" || $status_name=="반품선적완료")){
+						if (($loadPage=="30_20" || $loadPage=="30_22" || $loadPage=="30_23" || $loadPage=="19_08" || $loadPage=="30_20_F" || $loadPage=="19_06" || $loadPage=="30_22_F" || $loadPage=="18R_16" || $loadPage=="18R_19" || $loadPage=="18R_08" || $loadPage=="18R_06" || $loadPage=="19_1_06") && ($status_name=="선적완료" || $status_name=="추가선적완료" || $status_name=="반품방법" || $status_name=="반품선적완료")){
 							if ($etc2=="직접 수령")
 							{	
 						?>
@@ -2237,7 +2237,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						<?}?>
 						<?}else{?>
 							<span class="etc"><span ><?if ($etc1){echo openSheet($status, $etc1,$odr_idx,$etc_change,$odr_history_idx);}?>
-								<?if ($status== "9" || $status== "10"  || $status =="11"|| $status =="24"){?>							
+								<?if ($status== "9" || $status== "10"  || $status =="11"){?>							
 									<?=$etc2?>
 								<?}?>
 							</span></span>
@@ -2615,8 +2615,22 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						 <?echo layerInvListData($loadPage ,$odr_idx,$odr_det_idx,$odr_history_idx);
 								break;
 							case "19_1_06": //-------------------------------------- 환불(19_1_16) -------------------------------------------------------?>
+							<?
+							$etc = str_replace("$","",$etc2);	
+
+							if( ($etc == (int)$etc) )
+							{
+								$pay_val = round_down($etc,2);
+								$pay_val = number_format($etc,2);
+							}
+							else
+							{
+								$pay_val = round_down($etc,4);
+								$pay_val = number_format($etc,4);
+							}
+							?>
 							<td><div class="re-select"><strong>선택</strong><em><?=GF_Common_GetSingleList("FAULT",$fault_select)?></em></div></td>
-								<td class="c-red2 w100 t-ct">환불 (<strong class="c-blue"><span lang="en"><?=$etc1?></span></strong>) 완료되었습니다.</td>
+								<td class="c-red2 w100 t-ct" style="font-size:14px;">환불 (<strong class="c-blue"><span lang="en"><?=$etc1."- $".$pay_val?></span></strong>) 완료되었습니다.</td>
 								<td class="t-rt"><!-- 수량부족 문구 삭제 2016-05-11
 									<?if ($fault_quantity!=""){?>
 									<div class="red-box"><input type="hidden" id="fault_quantity" value="<?=$fault_quantity?>"><span>부족 수량 개수 </span><strong lang="en"><?=str_replace("EA", "</strong><span lang='en'>EA",$fault_quantity."EA")?></strong></div><?}?>-->

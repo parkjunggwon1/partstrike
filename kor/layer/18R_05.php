@@ -8,6 +8,7 @@ include  $_SERVER["DOCUMENT_ROOT"]."/include/class/class.odrinfo.php";
 include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 
 $fault_sel = get_any("odr_history", "fault_select", "odr_det_idx = $odr_det_idx and fault_select <> '' order by odr_history_idx desc limit 1 "); 
+$delivery_fee = get_any("odr", "buyer_delivery_fee", "odr_idx = $odr_idx order by odr_idx desc limit 1 "); 
 
 if ($fault_sel=="1")
 {
@@ -25,6 +26,7 @@ else if ($fault_sel=="4")
 {
 	$fault_chk = "3";
 }
+
 
 ?>
 <script src="/kor/js/jquery-1.11.3.min.js"></script>
@@ -96,6 +98,7 @@ else if ($fault_sel=="4")
 	<input type="hidden" name="odr_history_idx" value="">	
 	<input type="hidden" id="radio_chk" name="radio_chk" value="0">
 	<input type="hidden" id="real_fault_select" name="real_fault_select" value="<?=$fault_sel?>">
+	<input type="hidden" id="delivery_fee" name="delivery_fee" value="<?=$delivery_fee?>">
 	<?=layerInvListData("18R_05", $odr_idx, $odr_det_idx)?>
 		<div class="layer-data">
 			<table class="stock-list-table" id="list_18R_05">
@@ -251,30 +254,37 @@ else if ($fault_sel=="4")
 		//if (nullchk(f.title,"Memo 제목을 입력해 주세요.")== false) return ;			
 		var det_cnt = $("#det_cnt_18R05").val();
 		var det_idx = $("#odr_det_idx").val();
+		var delivery_fee = $("#delivery_fee").val();
 		
-		if(det_cnt > 1){ //1개 이상부터...
-			//복제하고, 전체처럼 proc
-			$.ajax({ 
-				type: "GET", 
-				url: "/ajax/proc_ajax.php?det_idx="+det_idx, 
-				data: { actty : "ODRCP", //주문 복제
-						odr_idx : $("#odr_idx").val()
-						},
-				dataType : "html" ,
-				async : false ,
-				success: function(data){
-					$("#odr_idx").val(trim(data));					
-				}
-			});
+		if (delivery_fee !="diff")
+		{
+			if(det_cnt > 1){ //1개 이상부터...
+				//복제하고, 전체처럼 proc
+				$.ajax({ 
+					type: "GET", 
+					url: "/ajax/proc_ajax.php?det_idx="+det_idx, 
+					data: { actty : "ODRCP", //주문 복제
+							odr_idx : $("#odr_idx").val()
+							},
+					dataType : "html" ,
+					async : false ,
+					success: function(data){
+						$("#odr_idx").val(trim(data));					
+					}
+				});
+			}
+
+			$(".btn-area.t-rt button").attr("onclick","alert_msg('처리중입니다.')");
+			f.typ.value="refuse";
+			f.target = "proc";
+			f.action = "/kor/proc/odr_proc.php";
+			f.submit();	
+			alert_msg("답변 하였습니다.");
 		}
-
-		$(".btn-area.t-rt button").attr("onclick","alert_msg('처리중입니다.')");
-		f.typ.value="refuse";
-		f.target = "proc";
-		f.action = "/kor/proc/odr_proc.php";
-		f.submit();	
-		alert_msg("답변 하였습니다.");
-
+		else
+		{
+			openLayer("layer4","18R_04","?odr_idx="+$("#odr_idx").val()+"&odr_det_idx="+$("#odr_det_idx").val()+"&det_cnt="+det_cnt+"&fault_quantity="+$("#fault_quantity").val());
+		}
 		
 		//location.href="/kor/";
 		/**
@@ -294,6 +304,23 @@ else if ($fault_sel=="4")
 				}
 		});
 		**/
+	}
+	function openLayer(layerNum,loadPage,varNum){
+		$layer = $("."+layerNum+"-section");
+		$layer.addClass("open");
+		$layer.siblings("section").each(function() {
+			if($(this).css("z-index")=="999"){
+				$(this).css("z-index","990");
+			}else if($(this).css("z-index")=="990"){
+				$(this).css("z-index","980");
+			}else{
+				$(this).css("z-index","900");
+			}
+		});
+		$layer.css("z-index","999");
+		$("body").addClass("open-layer");
+		!varNum? $var = "" : $var = varNum;
+		$layer.find(">.layer-wrap").load("/kor/layer/"+loadPage+".php"+$var);
 	}
 
 -->

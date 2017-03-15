@@ -2211,7 +2211,7 @@ if ($typ=="imgfileup" || $typ =="imgfiledel"){   //18R_21 에서 사용.
 }
 //----------------------------------------------------------------- 수량부족, 거절 : 18R_05 ---------------------------------------------------------------
 if ($typ=="refuse"){
-
+    
     //fault 수량 및 종휴 Update
     if($fault_quantity > 0){
         $sql = "update odr_det set fault_quantity = '$fault_quantity' , fault_method = '$fault_select' where odr_idx = $odr_idx and odr_det_idx = $odr_det_idx";

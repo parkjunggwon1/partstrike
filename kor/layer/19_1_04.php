@@ -44,11 +44,11 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 	<div class="top-info">
 		<ul class="company-info">
 			<li>
-				<span class="b1"><img src="<?=$row_parts["filelogo"]?>" width="75" height="18" alt=""></span>
+				<span class="b1"><img src="/kor/images/parts_logo.png" width="75" height="18" alt=""></span>
 				<span class="b2" lang="en"><?=$row_parts["mem_nm_en"]?></span>
 			</li>
 			<li>
-				<span class="b1"><img src="/kor/images/nation_title2_<?=GF_Common_GetSingleList("NA",$row_parts["nation"])?>.png" alt="<?=GF_Common_GetSingleList("NA",$row_parts["nation"])?>"></span>
+				<span class="b1"><img src="/kor/images/nation_title2_1.png"></span>
 				<span lang="en"><?=$row_parts["homepage"]?></span>
 			</li>
 		</ul>
@@ -196,9 +196,11 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 	
 	<div class="btn-area t-rt">
 		<button type="button" class="f-lt"><img src="/kor/images/btn_print.gif" alt="인쇄"></button>		
+		<?if ($read_chk){?>
 		<div class="f-rt">			
 			<button type="button" onclick="check();"><img src="/kor/images/btn_refund.gif" alt="환불"></button>
 		</div>
+		<?}?>
 	</div>
 </div>
 <?
