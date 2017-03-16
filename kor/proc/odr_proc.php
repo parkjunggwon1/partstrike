@@ -1545,6 +1545,8 @@ if ($typ == "refund2"){  //환불 처리2 2016-05-11
     update_val("odr_history","confirm_yn","Y", "odr_history_idx", $odr_history_idx);  //odr_history_idx => form으로 받았음
     //$prt_method = $charge_method=="1" ? "신용카드" : ($charge_method=="2"?"입금":"My Bank"); //JSJ
     $prt_method = "My Bank"; //무조건 마이뱅크
+    //운임을 지불했는지 안했는지 확인하기위함
+    $fault_odrno = get_any("odr", "odr_no", "odr_idx=$odr_idx");
     //4. history 등록
         $session_mem_idx = $_SESSION["MEM_IDX"];
         $buy_mem_idx = get_any("odr", "mem_idx" , "odr_idx = $odr_idx");
@@ -1558,6 +1560,7 @@ if ($typ == "refund2"){  //환불 처리2 2016-05-11
                 ,etc2 = '$tot_amt'
                 ,fault_select = '4'
                 ,sell_mem_idx = '$sell_mem_idx'
+                ,fault_odrno = '$fault_odrno'
                 ,buy_mem_idx = '$mem_idx'
                 ,reg_mem_idx = '$session_mem_idx'
                 ,reg_date = now()";
@@ -2211,13 +2214,14 @@ if ($typ=="imgfileup" || $typ =="imgfiledel"){   //18R_21 에서 사용.
 }
 //----------------------------------------------------------------- 수량부족, 거절 : 18R_05 ---------------------------------------------------------------
 if ($typ=="refuse"){
-    
+
     //fault 수량 및 종휴 Update
     if($fault_quantity > 0){
         $sql = "update odr_det set fault_quantity = '$fault_quantity' , fault_method = '$fault_select' where odr_idx = $odr_idx and odr_det_idx = $odr_det_idx";
+       
         $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
     }
-   
+  
     if ($fault_select==""){
         if (strpos($etc2,"EA")==0){ $etc2 = $etc2."EA";}        //몇개 부족인지
         switch($real_fault_select){

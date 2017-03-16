@@ -1353,7 +1353,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<?}?>
 						<?}?>
 						<td class="t-rt">$<?=$price_val?></td>
-						<?if ($loadPage !="19_08" && $loadPage !="18R_05"){?>
+						<?if ($loadPage !="19_08" && $loadPage !="18R_05" ){?>
 						<td class="t-rt ">
 						<!-- 발주수량/반품수량-->
 							<?if($loadPage == "18_1_04"){?>
@@ -1362,7 +1362,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 									$fault_quantity = ($fault_quantity==0)? "0":number_format($fault_quantity);
 									echo "<span class=\"c-red2\">".$fault_quantity."</span>";
 								}
-								elseif ($loadPage =="30_20" || $loadPage =="30_14" || $loadPage =="19_06" || $loadPage =="18R_16" || $loadPage =="18R_19")
+								elseif ($loadPage =="30_20" || $loadPage =="30_14" || $loadPage =="19_06" || $loadPage =="18R_16" || $loadPage =="18R_19" || $loadPage =="18R_06" )
 								{
 									$price_sum = $price*$supply_quantity;
 
@@ -1386,7 +1386,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						</td>
 						<?}?>
 						<?if ($loadPage !="21_04" || $loadPage !="30_20" || $loadPage =="30_14"  ){?>
-								<?if($loadPage!="02_02"&& $loadPage !="05_04_1" && $loadPage !="30_20" && $loadPage !="30_14"  && $loadPage !="13_04s" && $loadPage !="19_08" && $loadPage !="18R_05" && $loadPage !="19_06" && $loadPage !="18R_16" && $loadPage !="18R_19" ){?>
+								<?if($loadPage!="02_02"&& $loadPage !="05_04_1" && $loadPage !="30_20" && $loadPage !="30_14"  && $loadPage !="13_04s" && $loadPage !="19_08" && $loadPage !="18R_05" && $loadPage !="19_06" && $loadPage !="18R_16" && $loadPage !="18R_19" && $loadPage !="18R_06"){?>
 									<td class="t-rt c-red">
 										<?if($part_type=="7"){?>
 										$<?=number_format($price,2);?>
@@ -1872,9 +1872,13 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 
 			$ListNO--;		
 			}
+
+$odr_no = get_any("odr", "odr_no", "odr_idx=$odr_idx");
+$odr_no_cnt = QRY_CNT("odr_history", "and  fault_odrno ='$odr_no'");
+
 ?>
 
-<?if ($loadPage=="18_2_09"){//부대비용일때 (판매자 책임. 구매자 반품후 환불 원할때)
+<?if ($loadPage=="18_2_09" || ($loadPage=="19_1_04" && $odr_no_cnt == 0)){//부대비용일때 (판매자 책임. 구매자 반품후 환불 원할때)
 //계산법 다시 듣고 수정하기!!
 /** JSJ
 $freight = $tot * 0.01;
@@ -1883,7 +1887,7 @@ $bankingchg = $tot * 0.001;
 $freight = get_any("odr", "buyer_delivery_fee", "odr_idx=$odr_idx");
 $bankingchg = 0;
 
-$tot =  $freight + $bankingchg ;
+$tot =  $tot + $freight + $bankingchg ;
 ?>
 	<tr><td><?=$i+1?></td><td colspan="2" class="t-lt"> Freight </td><td colspan="3">&nbsp; </td><td class="t-rt">$<?=number_format($freight,2)?></td></tr>
 	<!--tr><td><?=$i+2?></td><td colspan="2" class="t-lt"> Banking Charge  </td><td colspan="3">&nbsp; </td><td class="t-rt">$<?=number_format($bankingchg,2)?></td></tr-->
@@ -2939,14 +2943,14 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 					<th scope="col" class="t-rohs" style="width:36px;">RoHS</th>
 					<?if($loadPage!="18R_19" && $loadPage!="19_1_05" && $loadPage!="19_1_06" && $loadPage != "30_14" && $loadPage != "30_20_F" && $loadPage != "30_22_F"){?><th scope="col" class="t-oty">O'ty</th><?}?>
 					<th scope="col" class="t-unitprice" style="width:61px;">Unit Price</th>
-					<?if ($loadPage=="21_04" || $loadPage=="30_15" || $loadPage=="30_20" || $loadPage=="30_14" || $loadPage == "19_06" || $loadPage == "18R_16" || $loadPage == "18R_19"){?>
+					<?if ($loadPage=="21_04" || $loadPage=="30_15" || $loadPage=="30_20" || $loadPage=="30_14" || $loadPage == "19_06" || $loadPage == "18R_16" || $loadPage == "18R_19" || $loadPage == "18R_06"){?>
 						<th scope="col" lang="en" class="t-amount" style="width:65px;">Amount</th>
-						<?if ($loadPage=="30_15" || $loadPage=="30_20" || $loadPage=="30_14" || $loadPage == "19_06" || $loadPage == "18R_16" || $loadPage == "18R_19"){?>
+						<?if ($loadPage=="30_15" || $loadPage=="30_20" || $loadPage=="30_14" || $loadPage == "19_06" || $loadPage == "18R_16" || $loadPage == "18R_19" || $loadPage == "18R_06"){?>
 							<th scope="col" lang="ko" class="t-period" style="width:36px;">납기</th>
 						<?}?>
 
 					<?}else{?>
-						<?if ($loadPage != "19_08" && $loadPage !="18R_05" && $loadPage !="19_06" && $loadpage != "18R_16" && $loadpage != "18R_19"){?>
+						<?if ($loadPage != "19_08" && $loadPage !="18R_05" && $loadPage !="19_06" && $loadpage != "18R_16" && $loadpage != "18R_19" && $loadPage != "18R_06"){?>
 						<th scope="col" lang="ko" class="t-orderoty">
 							<?if($loadPage == "18_1_04" || $loadPage == "18R_19" || $loadPage=="19_1_05" || $loadPage == "30_14"){?>반품수량
 							<?}elseif($loadPage=="19_1_06"){?>환불수량
@@ -2957,7 +2961,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 							<?}else{?>발주수량<?}?>
 						</th>
 						<?}?>
-						<?if($loadPage!="30_20_F" && $loadPage!="30_22_F" && $loadPage!="13_04s" && $loadPage != "19_08" && $loadPage !="18R_05" && $loadPage !="19_06" && $loadpage != "18R_16" && $loadpage != "18R_19"){?><th scope="col" lang="ko" class="t-supplyoty">공급수량</th><?}?>
+						<?if($loadPage!="30_20_F" && $loadPage!="30_22_F" && $loadPage!="13_04s" && $loadPage != "19_08" && $loadPage !="18R_05" && $loadPage !="19_06" && $loadPage != "18R_16" && $loadpage != "18R_19" && $loadPage != "18R_06"){?><th scope="col" lang="ko" class="t-supplyoty">공급수량</th><?}?>
 						<?if($loadPage=="30_20_F" || $loadPage == "30_22_F"){?><th scope="col" lang="en" class="t-amount" style="width:61px;">Amount</th><?}?>
 						<?if($loadPage=="19_1_05" || $loadPage=="19_1_06"){?><th scope="col" lang="en" class="t-amount">Amount</th>
 						<?}else{?><th scope="col" lang="ko" class="t-period">납기</th>
@@ -3008,7 +3012,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 					$msg_reason_title = replace_out($row["reason_title"]);
 					$msg_reason = $row["reason"];
 					$msg_date = replace_out($row["reg_date"]);
-					$fault_quantity = get_any("odr_det", "fault_quantity", "odr_idx=$odr_idx AND odr_det_idx=$odr_det_idx");
+					$fault_quantity = get_any("odr_det", "fault_quantity", "odr_det_idx=$odr_det_idx");
 					
 					if($i<2){
 						$num = $i;
@@ -3043,8 +3047,12 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 									<span class="box-num" style="<?=$color_tr?>"><?=$num;?></span>
 									<span class="c-red"><?if($fault_select>0 && $etc2 != ""){?>[<?=$etc2?>]<?}?></span>
 									<span style="cursor:pointer;color:#00759e;" OnClick="show_msg(<?=$msg_history_idx;?>);"><?=$msg_reason_title?></span>
-									<?if(($fault_select=='3' || $fault_select=='4') && $fault_quantity > 0){?>
-										<span class="c-red">[부족수량 : <?=$fault_quantity;?>EA]</span>
+									<?if($fault_quantity > 0){?>
+										<?if ($fault_select=='3' || $fault_select=='4'){?>
+											<span class="c-red">[부족수량 : <?=$fault_quantity;?>EA]</span>
+										<?}else{?>
+											<span class="c-red">[거절수량 : <?=$fault_quantity;?>EA]</span>
+										<?}?>										
 									<?}?>
 								</td>
 								<td class="t-rt" lang="en" Style="width:100px; padding-right:5px;color:#00759e;"><?=date("j M Y");?></td>

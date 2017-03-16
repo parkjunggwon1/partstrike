@@ -1623,7 +1623,7 @@ function openSheet($status, $etc1, $odr_idx,$etc_change,$odr_history_idx=""){
 			 $return_val = "<a style='color:#00759e;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"alert_invoice\",\"?odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."\")'>".$change_val."</a>";
 			 
 			 break;
-			case "24":  //결제완료
+			case "24":  //환불
 			 $odr_det_idx = get_any("odr_history", "odr_det_idx", "odr_history_idx = $odr_history_idx");
 			 $new_etc1 = get_any("odr_det", "refund_invoice", "odr_det_idx = $odr_det_idx");
 
@@ -1672,7 +1672,7 @@ function openSheet($status, $etc1, $odr_idx,$etc_change,$odr_history_idx=""){
 
 			 $return_val = "<a style='color:#000 !important;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"alert_invoice\",\"?odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."\")'>".$change_val."</a>";
 			 break;
-			case "24":  //결제완료
+			case "24":  //환불
 			 $odr_det_idx = get_any("odr_history", "odr_det_idx", "odr_history_idx = $odr_history_idx");
 			 $new_etc1 = get_any("odr_det", "refund_invoice", "odr_det_idx = $odr_det_idx");
 

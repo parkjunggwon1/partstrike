@@ -8,7 +8,8 @@ include  $_SERVER["DOCUMENT_ROOT"]."/include/class/class.odrinfo.php";
 include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 
 $fault_sel = get_any("odr_history", "fault_select", "odr_det_idx = $odr_det_idx and fault_select <> '' order by odr_history_idx desc limit 1 "); 
-$delivery_fee = get_any("odr", "buyer_delivery_fee", "odr_idx = $odr_idx order by odr_idx desc limit 1 "); 
+$odr_no_val = get_any("odr", "odr_no", "odr_idx = $odr_idx order by odr_idx desc limit 1 "); 
+$delivery_fee = get_any("odr", "buyer_delivery_fee", "odr_no = '$odr_no_val' order by odr_idx desc limit 1 "); 
 
 if ($fault_sel=="1")
 {
@@ -26,7 +27,6 @@ else if ($fault_sel=="4")
 {
 	$fault_chk = "3";
 }
-
 
 ?>
 <script src="/kor/js/jquery-1.11.3.min.js"></script>
@@ -74,7 +74,7 @@ else if ($fault_sel=="4")
   {
   	$fault_quantity = get_any("odr_det", "fault_quantity", "odr_det_idx = $odr_det_idx");  //odr_det 부족수량
   }
-  
+
 ?>
 
 <div class="layer-hd">
@@ -255,8 +255,49 @@ else if ($fault_sel=="4")
 		var det_cnt = $("#det_cnt_18R05").val();
 		var det_idx = $("#odr_det_idx").val();
 		var delivery_fee = $("#delivery_fee").val();
-		
-		if (delivery_fee !="diff")
+		var fault_select1 = $('input:radio[name=fault_select]').is(':checked');
+		var fault_select2 = $('input:checkbox[name=fault_select]').is(':checked');
+		var fault_method = $('[name="fault_select"]').val();
+		var fault_val1 = $(":input:radio[name=fault_select]:checked").val();
+		var fault_val2 = $(":input:checkbox[name=fault_select]:checked").val();
+
+		if ((fault_select1==true || fault_select2==true) && (fault_val1==1 || fault_val2==1 || fault_val1==2 || fault_val2==2))
+		{
+			if (delivery_fee !="diff")
+			{
+
+				if(det_cnt > 1){ //1개 이상부터...
+			
+					//복제하고, 전체처럼 proc
+					$.ajax({ 
+						type: "GET", 
+						url: "/ajax/proc_ajax.php?det_idx="+det_idx, 
+						data: { actty : "ODRCP", //주문 복제
+								odr_idx : $("#odr_idx").val()
+								},
+						dataType : "html" ,
+						async : false ,
+						success: function(data){
+							$("#odr_idx").val(trim(data));					
+						}
+					});
+				}
+
+				$(".btn-area.t-rt button").attr("onclick","alert_msg('처리중입니다.')");
+				f.typ.value="refuse";
+				f.target = "proc";
+				f.action = "/kor/proc/odr_proc.php";
+				f.submit();	
+				alert_msg("답변 하였습니다.");
+
+				
+			}
+			else
+			{
+				openLayer("layer4","18R_04","?odr_idx="+$("#odr_idx").val()+"&odr_det_idx="+$("#odr_det_idx").val()+"&det_cnt="+det_cnt+"&fault_quantity="+$("#fault_quantity").val());
+			}
+		}
+		else
 		{
 			if(det_cnt > 1){ //1개 이상부터...
 				//복제하고, 전체처럼 proc
@@ -281,10 +322,7 @@ else if ($fault_sel=="4")
 			f.submit();	
 			alert_msg("답변 하였습니다.");
 		}
-		else
-		{
-			openLayer("layer4","18R_04","?odr_idx="+$("#odr_idx").val()+"&odr_det_idx="+$("#odr_det_idx").val()+"&det_cnt="+det_cnt+"&fault_quantity="+$("#fault_quantity").val());
-		}
+		
 		
 		//location.href="/kor/";
 		/**

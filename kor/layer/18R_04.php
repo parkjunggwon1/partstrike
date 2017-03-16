@@ -43,6 +43,22 @@
 					success: function (data) {	
 						if (trim(data) == "SUCCESS"){
 							
+							if(det_cnt > 1){ //1개 이상부터...
+							
+								//복제하고, 전체처럼 proc
+								$.ajax({ 
+									type: "GET", 
+									url: "/ajax/proc_ajax.php?det_idx="+odr_det_idx, 
+									data: { actty : "ODRCP", //주문 복제
+											odr_idx : $("#odr_idx").val()
+											},
+									dataType : "html" ,
+									async : false ,
+									success: function(data){
+										$("#odr_idx").val(trim(data));					
+									}
+								});
+							}
 
 							$(".btn-area.t-rt button").attr("onclick","alert_msg('처리중입니다.')");
 							f.typ.value="refuse";

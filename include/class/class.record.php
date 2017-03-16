@@ -1034,7 +1034,7 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 							<?}?>			
 						</tr>
 					<?
-					$fault_cnt = QRY_CNT("odr_history"," and odr_idx=$odr_idx and status=10 ");  //odr_det 수량
+					$fault_cnt = QRY_CNT("odr_history"," and odr_idx=$odr_idx and (status=10 or status=9)");  //odr_det 수량
 
 					if ($fault_cnt>=1)
 					{
