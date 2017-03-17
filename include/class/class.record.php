@@ -43,6 +43,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 		//최근 이력이 있거나 save_yn = 'Y'인 경우만 출력하기로.
 		//$status = get_any("odr_history", "status", "odr_history_idx in (select max(odr_history_idx) from odr_history where odr_idx = trim('$odr_idx'))");
 		$status = get_any("odr_history", "status", "odr_history_idx in (select max(odr_history_idx) from odr_history where odr_idx = trim('$odr_idx') and odr_det_idx is null or odr_det_idx='$kk') AND status NOT IN(90,15)"); //2016-04-04 상태 '종료' 미 노출
+		
 		//상태 16인게 저장에 있을경우 비 노출(구매화면) 2016-04-06
 		
 		$st16cnt = QRY_CNT("odr a INNER JOIN odr_det b ON(a.odr_idx=b.odr_idx)", "AND b.rel_det_idx = $kk AND a.save_yn='Y'");

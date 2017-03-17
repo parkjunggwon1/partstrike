@@ -159,8 +159,9 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 			update_val("odr_det","ship_idx",$odr[ship_idx], "odr_det_idx", $odr_det_idx);	
 		}
 	
-		$ship_info = $ship[ship_info];
+		$ship_info = $ship[ship_info];	
   }
+
 ?>
 
 		<form name="f_18R_21" id="f"  method="post" enctype="multipart/form-data">
@@ -182,19 +183,18 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 				<tbody>
 					<tr>
 					<td class="company"><img src="/kor/images/nation_title2_<?=$buy_com_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$buy_com_nation)?>"> <span class="name"><?=$buy_com_name?></span></td>
-						<td class="c-red2 t-rt">운송회사 : 
-							<?
-								$ship_idx = $_GET['ship_info'];
-								$ship_img = $part_no= get_any("code_group_detail", "code_desc", "grp_idx=11 and grp_code='DLVR' and dtl_code='$ship_idx'");								
+						<td class="c-red2 t-rt">운송회사 :
+							<?							
+								$ship_img = get_any("code_group_detail", "code_desc", "grp_idx=11 and grp_code='DLVR' and dtl_code='$ship_info'");
 							?>
-							<?if ($ship_idx=="1" || $ship_idx=="2" || $ship_idx=="3" || $ship_idx=="4"){?>
+							<?if ($ship_info=="1" || $ship_info=="2" || $ship_info=="3" || $ship_info=="4"){?>
 							<img src="/kor/images/icon_<?=$ship_img?>.gif" alt="">
-							<?}else if($ship_idx=="5"){?>
+							<?}else if($ship_info=="5"){?>
 								<span class='c-blue'>다른 운송업체</span>
-							<?}else if($ship_idx=="6"){?>
+							<?}else if($ship_info=="6"){?>
 								<span class='c-blue'>직접 수령</span>
 							<?}?>
-							<input type='hidden' id='ship_info' name='ship_info' value='<?=$ship_idx?>'/>
+							<input type='hidden' id='ship_info' name='ship_info' value='<?=$ship_info?>'/>
 						&nbsp;&nbsp;&nbsp;운송장번호: <input type="text" class="i-txt2 c-blue" name="delivery_no" id="delivery_no" value="" style="width:96px"></td>
 					</tr>
 					<tr>

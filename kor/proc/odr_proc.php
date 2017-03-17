@@ -1692,11 +1692,11 @@ if($typ == "shipping2"){
         $now_status = 23;
         $now_txt = "추가선적완료";
     }else{ //fault_method - 1:교환/2:반품
-        $prev_status = 9;   //거절
+        $prev_status = "9,11";   //거절
         $now_status = 21;
         $now_txt = "선적완료";
     }
-    $prev_odr_history_idx = get_any("odr_history" , "odr_history_idx", "odr_idx= $odr_idx and status = '$prev_status' and confirm_yn = 'N'");
+    $prev_odr_history_idx = get_any("odr_history" , "odr_history_idx", "odr_idx= $odr_idx and status in ($prev_status) and confirm_yn = 'N'");   
     update_val("odr_history","confirm_yn","Y", "odr_history_idx", $prev_odr_history_idx);
 
     //3. odr_status 변경
