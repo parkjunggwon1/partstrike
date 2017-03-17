@@ -342,7 +342,27 @@ $(document).ready(function(){
 	});
 	//--P.O Sheet(30_05) 화면 : '확정 발주서' 클릭 --------------------------------------------
 	$("body").on("click",".orderConfirm",function(){
-		//openLayer("layer","30_06","?mn=02");
+		//2017-03-16 : 별도 처리없이 그냥 닫음(1분후 전송기능 없애고, 앞에서 이미 전송했으므로...)
+			if ($("#odr_idx_05_04").val() != $("#odr_idx_30_05").val())
+			{	
+				openLayer('layer3','05_04','?odr_idx='+$("#odr_idx_05_04").val());
+			}else{
+				//모두 닫기
+				closeCommLayer("layer3"); //발주서창(05_04))
+				//document.location.href="/kor/";
+			}
+			closeCommLayer("layer5");	//sheet
+			closeCommLayer("layer4"); //공지창(30_05)
+			if($(".layer-section").hasClass("open")){ //What's New 창 있으면 닫기
+				closeCommLayer("layer");
+			}
+			//좌우화면 모두 새로고침
+			if ($("input[name=top_part_no]").val().length>1){
+				main_srch();
+			} else{
+				showajaxParam('.col-right','side_order','');
+			}
+		/**
 		$.ajax({
 				url: "/kor/proc/odr_proc.php", 
 				//data: "typ=odrconfirm&odr_idx="+$("#odr_idx_30_05").val()+"&sell_mem_idx="+$("#sell_mem_idx").val(), //JSJ
@@ -382,7 +402,8 @@ $(document).ready(function(){
 						alert_msg(data);
 					}
 				}
-		});		
+		});
+		**/
 	});	 
 	//수정발주서 Sheet(P.O Amendment) 12_07 '확정 발주서' 클릭
 	$("body").on("click",".odrAmendConfirm",function(){
@@ -853,9 +874,11 @@ $(document).ready(function(){
 			$.ajax({ 
 				type: "GET", 
 				url: "/ajax/proc_ajax.php", 
-				data: { actty : "MRO", //Move to Real order Process				
+				//data: { actty : "MRO", //Move to Real order Process
+				data: { actty : "MRO_ONCE", //Move to Real order at once 2017-03-16
 						delivery_addr_idx : $("#delivery_addr_idx").val(),
 						session_mem_idx : $("#session_mem_idx").val(),
+						sell_mem_idx : $("#sell_mem_idx").val(),	//2017-03-16
 						delivery_save_yn : $("#delivery_save_yn").val(),
 						nation : $("#nation").val(),
 						com_name : $("#com_name").val(),
