@@ -1158,7 +1158,7 @@ function get_auto_no($ty, $table, $column){  // 통합 no 생성
 
 	if ($ty == "TFI"){
 		//$addCl = " or testB_invoice like '".$ty.date("y")."%'"; //error에의한 주석처리.아래도 수정 2016-10-16
-		$addCl = " or invoice_no like '".$ty.date("y")."%'";
+		//$addCl = " or invoice_no like '".$ty.date("y")."%'";
 	}
 	//2016-04-18 : odr 테이블을 경우 odr_status=99 카운트에서 제외
 	if($table == 'odr'){
