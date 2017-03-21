@@ -1831,9 +1831,9 @@ function fnSideodrlist($odr_type,$this_mem_idx){
 }
 
 function fnOdrlist($odr_type, $this_mem_idx){
-		for ($i = 1; $i<=6; $i++){
+		//for ($i = 1; $i<=6; $i++){
 			echo GET_RCD_DET_LIST($i , $odr_type, " and a.".($odr_type=="S"?"sell_":"")."mem_idx=$this_mem_idx ", "S");
-		}
+		//}
 }
 
 function fnRemitList($yr,$mon,$remit_ty,$mem_id, $mem_nm, $charge_method, $invoice_no,$page){

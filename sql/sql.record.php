@@ -19,7 +19,7 @@ function QRY_MYMEMBER_LIST($session_mem_idx, $session_rel_idx){
 
 Function QRY_RCD_DET_LIST($recordcnt,$searchand,$page,$ord='odr_det_idx'){
 	$conn = dbconn();	
-	if ($recordcnt > 0) {  //$recordcnt°¡ ³Ñ¾î¿À¸é ±×¸¸Å­¾¿ ²÷¾î¼­ ÆäÀÌÂ¡ Ã³¸®. recordcnt°¡ 0À¸·Î ³Ñ¾î¿À¸é ÀüÃ¼ ´Ù Ãâ·Â ÇÏ°Ú´Ù´Â ÀÇ¹Ì (¿¢¼¿ ´Ù¿î·Îµå µî¿¡¼­ ¾²ÀÓ)
+	if ($recordcnt > 0) {  //$recordcntê°€ ë„˜ì–´ì˜¤ë©´ ê·¸ë§Œí¼ì”© ëŠì–´ì„œ í˜ì´ì§• ì²˜ë¦¬. recordcntê°€ 0ìœ¼ë¡œ ë„˜ì–´ì˜¤ë©´ ì „ì²´ ë‹¤ ì¶œë ¥ í•˜ê² ë‹¤ëŠ” ì˜ë¯¸ (ì—‘ì…€ ë‹¤ìš´ë¡œë“œ ë“±ì—ì„œ ì“°ì„)
 		$startno = ($page-1) * $recordcnt;
 		$limit = "LIMIT $startno,$recordcnt";
 	}else{
@@ -51,7 +51,7 @@ Function QRY_RCD_DET_LIST($recordcnt,$searchand,$page,$ord='odr_det_idx'){
 
 function QRY_RCD_HISTORY_LIST($recordcnt, $searchand, $page, $his_ty , $ord){
 	$conn = dbconn();	
-	if ($recordcnt > 0) {  //$recordcnt°¡ ³Ñ¾î¿À¸é ±×¸¸Å­¾¿ ²÷¾î¼­ ÆäÀÌÂ¡ Ã³¸®. recordcnt°¡ 0À¸·Î ³Ñ¾î¿À¸é ÀüÃ¼ ´Ù Ãâ·Â ÇÏ°Ú´Ù´Â ÀÇ¹Ì (¿¢¼¿ ´Ù¿î·Îµå µî¿¡¼­ ¾²ÀÓ)
+	if ($recordcnt > 0) {  //$recordcntê°€ ë„˜ì–´ì˜¤ë©´ ê·¸ë§Œí¼ì”© ëŠì–´ì„œ í˜ì´ì§• ì²˜ë¦¬. recordcntê°€ 0ìœ¼ë¡œ ë„˜ì–´ì˜¤ë©´ ì „ì²´ ë‹¤ ì¶œë ¥ í•˜ê² ë‹¤ëŠ” ì˜ë¯¸ (ì—‘ì…€ ë‹¤ìš´ë¡œë“œ ë“±ì—ì„œ ì“°ì„)
 		$startno = ($page-1) * $recordcnt;
 		$limit = " LIMIT $startno,$recordcnt ";
 	}else{
@@ -68,7 +68,7 @@ function QRY_RCD_HISTORY_LIST($recordcnt, $searchand, $page, $his_ty , $ord){
 	return $result;
 }
 
-//°ÅÀı, ¼ö·®ºÎÁ· ¸Ş¼¼Áö °¡Á®¿À±â(ÇØ´ç °ÇÀÇ ÁÖ°í ¹ŞÀº ³»¿ª ÀüÃ¼)
+//ê±°ì ˆ, ìˆ˜ëŸ‰ë¶€ì¡± ë©”ì„¸ì§€ ê°€ì ¸ì˜¤ê¸°(í•´ë‹¹ ê±´ì˜ ì£¼ê³  ë°›ì€ ë‚´ì—­ ì „ì²´)
 function QRY_RCD_MSG_LIST($odr_det_idx, $stat){
 	$conn = dbconn();
 	//$sql = "SELECT * FROM odr_history WHERE odr_det_idx = $odr_det_idx AND status = $stat ORDER BY odr_history_idx"; //2016-05-22
@@ -78,7 +78,7 @@ function QRY_RCD_MSG_LIST($odr_det_idx, $stat){
 	return $result;
 }
 
-//ºÒ·®Åëº¸ ¸Ş¼¼Áö °¡Á®¿À±â(ÇØ´ç °ÇÀÇ ÁÖ°í ¹ŞÀº ³»¿ª ÀüÃ¼) 2016-10-06
+//ë¶ˆëŸ‰í†µë³´ ë©”ì„¸ì§€ ê°€ì ¸ì˜¤ê¸°(í•´ë‹¹ ê±´ì˜ ì£¼ê³  ë°›ì€ ë‚´ì—­ ì „ì²´) 2016-10-06
 function QRY_FTY_MSG_LIST($odr_det_idx){
 	$conn = dbconn();
 	//$sql = "SELECT * FROM fty_history WHERE odr_det_idx = $odr_det_idx AND status IN(12) ORDER BY fty_history_idx";

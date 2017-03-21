@@ -208,7 +208,7 @@ function change_select()
 								}
 								?></tbody>					
 					</table>
-					<div class="btn-area save pos_ab" style="padding-bottom:30px;">
+					<div class="btn-area save pos_ab">
 						<span class="f-rt"><img src="/kor/images/btn_stock_save_1.gif" alt="저장"></span>
 						<button type="button" class="f-rt" onclick="del();" style="display:none;"><img src="/kor/images/btn_stock_save.gif" alt="저장"></button>
 					</div>
@@ -216,14 +216,14 @@ function change_select()
 							}else{
 							?></tbody>					
 					</table>
-					<div class="btn-area save" style="padding-bottom:30px;">
+					<div class="btn-area save">
 						<span class="f-rt" style="display:none;"><img src="/kor/images/btn_stock_save_1.gif" alt="저장"></span>
 						<button type="button" class="f-rt" onclick="del();" style="display:none;"><img src="/kor/images/btn_stock_save.gif" alt="저장"></button>
 					</div>
 						  <?}?>
 
 						
-					<div class="pagination">
+					<div class="pagination" style="margin-left:100px;width:600px;">
 						<? include $_SERVER["DOCUMENT_ROOT"]."/include/paging2.php"; ?>									
 					</div>
 <?}				
@@ -668,7 +668,8 @@ function GET_ADDPART_LIST($part_type,$searchand){
 		<!--
 			$(document).ready(function(){
 				$('.onlynum').css("ime-mode","disabled").keypress(function(event){ 		//숫자만 입력하게.(.도 포함) 
-				  if (event.which && (event.which > 45 && event.which < 58 || event.which == 8)) {			
+					
+				  if (event.which && (event.which == 190 || event.which == 110 || event.which > 45 && event.which < 58 || event.which == 8 || event.which > 95 && event.which < 106)) {			
 				   } else { 
 				   event.preventDefault(); 
 				  } 

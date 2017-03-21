@@ -1058,7 +1058,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 										$tap_display = "display:none;";
 									}
 									?>
-								<div class="img-cntrl-wrap img_tap<?=$j?>_<?=$odr_det_idx?>" style="margin-top:10px;<?=$tap_display?>" >
+								<div class="img-cntrl-wrap img_tap<?=$j?>_<?=$odr_det_idx?> img_sub_<?=$j?>" style="margin-top:10px;<?=$tap_display?>" >
 									<?
 									
 									if($j>0)
@@ -1085,7 +1085,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 									<input name="file_o<?=$j?>" id="file_o<?=$j?>" type="hidden" value="<?=$fileonly?>">
 									<input name="file<?=$odr_det_idx?>_<?=$j?>" id="file<?=$odr_det_idx?>_<?=$j?>" f_number="<?=$j?>" odr_det_idx="<?=$odr_det_idx?>"" type="file" style="width:1px;height:1px">
 									<a href="javascript:;" class="arrow_top <?=$plus_chk?>" style="<?=$display_b?>">+</a>
-									<a href="javascript:;" class="arrow_bottom <?=$minus_chk?>" f_idx="<?=$odr_det_idx?>_<?=$j?>" style="<?=$display_b?>">-</a>
+									<a href="javascript:;" class="arrow_bottom <?=$minus_chk?>" f_idx="<?=$odr_det_idx?>_<?=$j?>" f_number="<?=$j?>" f_odr_det_idx="<?=$odr_det_idx?>" style="<?=$display_b?>">-</a>
 								</div>
 								<?}?>
 								<span style="font-size:11px;padding-left:10px;"><strong class="c-red">라벨/부품 사진을 첨부해 주십시오. 분쟁 발생 시 보호받을 수 있습니다.</strong></span>
@@ -3377,7 +3377,8 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 											: <img src="/kor/images/icon_<?=$ship_info_val?>.gif" alt="" >	
 											<input type="hidden" name="ship_info" id="ship_info" value="<?=$ship_info?>"/>									
 										<?}else{?>		
-											<div class="select type4" lang="en" style="width:110px">									
+											<?if($assign_idx){ $div_color="background-image:url(/kor/images/select5_bg.gif)"; }?>
+											<div class="select type4" lang="en" style="width:110px;<?=$div_color?>">									
 											<label class="c-blue text_lang"><?
 											if($assign_idx){  //판매자 지정...
 												echo GF_Common_GetSingleList("DLVR",$assign_idx);
@@ -3414,7 +3415,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 								<td  colspan="4"><label class="ipt-chk chk2" Style="margin-left:38px;"><input <?if ($ship_info=="6") {echo "disabled";}?> type="checkbox" id="insur_yn" name="insur_yn" <?if ($insur_yn=="o"){echo "checked class='checked'";}?>><span></span> 운송보험</label> <span class="c-red" lang="en"> <?if ($insur_yn=="o"){echo ": Yes";}else{echo ": No";}?></span></td>
 							</tr>
 							<tr >
-								<td  colspan="4"><label class="ipt-chk chk2 com-chck" Style="margin-left:38px;"><input type="checkbox" <?if ($ship_info=="6") {echo "disabled";}?> name="delivery_chg" id="delivery_chg"  <?if ($delivery_addr_idx){echo "checked class='checked'";}?> onclick="javascript:add_change_sel();"><span></span> 배송지 변경</label></td>
+								<td  colspan="4"><label class="ipt-chk chk2 com-chck" Style="margin-left:38px;"><input type="checkbox" <?if ($ship_info=="6") {echo "disabled";}?> name="delivery_chg" id="delivery_chg"  <?if ($delivery_addr_idx){echo "checked class='checked'";}?> onclick="javascript:add_change_sel('<?=$assign_idx?>');"><span></span> 배송지 변경</label></td>
 							</tr>
 						</tbody>
 					</table>
@@ -3973,7 +3974,7 @@ function pay_dlvr($odr_idx, $sell_mem_idx, $b_nation){
 											<td colspan="4" ><strong class="c-black">Memo</strong> <input type="text" class="i-txt<?=$ship_info=="6" || $ship_info=="5"?"2":"5"?>" style="width:330px"></td>
 										</tr>
 										<tr>
-											<td colspan="4"><label class="ipt-chk chk2 com-chck" Style="margin-left:38px;"><input type="checkbox" <?if ($ship_info=="6") {echo "disabled";}?> name="delivery_chg" id="delivery_chg"  <?if ($delivery_addr_idx){echo "checked class='checked'";}?> onclick="javascript:add_change_sel();"><span></span> 배송지 변경</label></td>
+											<td colspan="4"><label class="ipt-chk chk2 com-chck" Style="margin-left:38px;"><input type="checkbox" <?if ($ship_info=="6") {echo "disabled";}?> name="delivery_chg" id="delivery_chg"  <?if ($delivery_addr_idx){echo "checked class='checked'";}?> onclick="javascript:add_change_sel('<?=$assign_idx?>');"><span></span> 배송지 변경</label></td>
 										</tr>
 									</tbody>
 								</table>
@@ -3993,7 +3994,8 @@ function pay_dlvr($odr_idx, $sell_mem_idx, $b_nation){
 											</th>
 											<td class="w180p">
 												<span class="c-grey2">운송회사</span>
-													<div class="select type4" lang="en" style="width:110px">
+													<?if($assign_idx){ $div_color="background-image:url(/kor/images/select5_bg.gif)"; }?>
+													<div class="select type4" lang="en" style="width:110px;<?=$div_color?>">
 														<label class="c-blue text_lang"><?
 														if($assign_idx){  //판매자 지정...
 															echo GF_Common_GetSingleList("DLVR",$assign_idx);
@@ -4022,7 +4024,7 @@ function pay_dlvr($odr_idx, $sell_mem_idx, $b_nation){
 											<td  colspan="4"><label class="ipt-chk chk2" Style="margin-left:38px;"><input <?if ($ship_info=="6") {echo "disabled";}?> type="checkbox" id="insur_yn" name="insur_yn" <?if ($insur_yn=="o"){echo "checked class='checked'";}?>><span></span> 운송보험</label> <span class="c-red" lang="en"> <?if ($insur_yn=="o"){echo ": Yes";}else{echo ": No";}?></span></td>
 										</tr>
 										<tr>
-											<td colspan="4"><label class="ipt-chk chk2 com-chck" Style="margin-left:38px;"><input type="checkbox" <?if ($ship_info=="6") {echo "disabled";}?> name="delivery_chg" id="delivery_chg"  <?if ($delivery_addr_idx){echo "checked class='checked'";}?> onclick="javascript:add_change_sel();"><span></span> 배송지 변경</label></td>
+											<td colspan="4"><label class="ipt-chk chk2 com-chck" Style="margin-left:38px;"><input type="checkbox" <?if ($ship_info=="6") {echo "disabled";}?> name="delivery_chg" id="delivery_chg"  <?if ($delivery_addr_idx){echo "checked class='checked'";}?> onclick="javascript:add_change_sel('<?=$assign_idx?>');"><span></span> 배송지 변경</label></td>
 										</tr>
 									</tbody>
 								</table>

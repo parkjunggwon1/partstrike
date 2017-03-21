@@ -626,9 +626,13 @@ $(document).ready(function(){
 	//발주 수량 키업~
 	$("#layerPop3 .stock-list-table input[name^=odr_quantity]").keyup(function(e){
 		maskoff();	
-		var quantity = $(this).parent().parent().find("input[name^=quantity]").val();
+		var quantity = $(this).parent().parent().find("input[name^=quantity]").val().replace(",","").replace(",","");
 		var part_type = $(this).attr("part_type");
 		var supp_qty = $(this).attr("supp_qty");
+		if (supp_qty=="")
+		{
+			supp_qty ="0";
+		}
 
 		if (part_type != 2){
 			if(parseInt($(this).val()) > parseInt(quantity.replace(",", ""))){
@@ -983,24 +987,32 @@ function checkActive(){
 		$("#layerPop3 #btn-confirm").css("cursor","").removeClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm_1.gif");
 	}
 
-	function add_change_sel()
+	function add_change_sel(val)
 	{
-		var chk_val=$("input:checkbox[id='delivery_chg']").is(":checked");
-		//alert(chk_val);
-		if (chk_val==true)
+		if (val)
 		{
-			$("#delivery_addr_idx").val("0");
-			$("#ship_account_no").val("");	
-			$("#ship_info option:eq(0)").attr("selected", "selected");
-			$(".text_lang").text("");
+
 		}
 		else
 		{
-			$("#delivery_addr_idx").val("aaaa");
-			$("#ship_account_no").val("");	
-			$("#ship_info option:eq(0)").attr("selected", "selected");
-			$(".text_lang").text("");
-		}		
+			var chk_val=$("input:checkbox[id='delivery_chg']").is(":checked");
+			//alert(chk_val);
+			if (chk_val==true)
+			{
+				$("#delivery_addr_idx").val("0");
+				$("#ship_account_no").val("");	
+				$("#ship_info option:eq(0)").attr("selected", "selected");
+				$(".text_lang").text("");
+			}
+			else
+			{
+				$("#delivery_addr_idx").val("aaaa");
+				$("#ship_account_no").val("");	
+				$("#ship_info option:eq(0)").attr("selected", "selected");
+				$(".text_lang").text("");
+			}
+		}
+				
 	}
 
 

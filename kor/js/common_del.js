@@ -114,7 +114,7 @@ $(document).ready(function(){
 	});
 
 	$('.onlynum').css("ime-mode","disabled").keypress(function(event){ 		//숫자만 입력하게.(.도 포함) 
-	  if (event.which && (event.which > 45 && event.which < 58 || event.which == 8)) {			
+	  if (event.which && (event.which == 190 || event.which == 110 || event.which > 45 && event.which < 58 || event.which == 8 || event.which > 95 && event.which < 106)) {			
 	   } else { 
 	   event.preventDefault(); 
 	  } 

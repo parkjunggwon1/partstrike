@@ -756,29 +756,38 @@ Function GF_Common_SetComboList($CheckBoxName,$CommTy, $ParCode, $Depth, $IsBlan
 }
 
 
-Function GF_Common_SetComboListSrch($CheckBoxName,$CommTy, $ParCode, $Depth, $IsBlank, $BlankString, $CheckValue, $StyleOption,$srch, $lang=""){		
-		$GF_Common_SetComboList .="<select ".$StyleOption." name='".$CheckBoxName."' id='".$CheckBoxName."'>\n";
-		If($IsBlank=="True"){			
-			$GF_Common_SetComboList .="<option value='' ".($CheckValue==null?"selected":"").">" .$BlankString ."</option>\n";
-		}
-		If ($Depth == "") {$Depth = " =1";}else{ $Depth = "=".$Depth;}
+Function GF_Common_SetComboListSrch($CheckBoxName,$CommTy, $ParCode, $Depth, $IsBlank, $BlankString, $CheckValue, $StyleOption,$srch, $lang=""){
 		
-		if ($lang==""){
-			$result =QRY_COMMON_LIST_SRCH($CommTy ,$ParCode, $Depth , $srch);		
-		}else{
-			$result =QRY_COMMON_LIST_SRCH_LANG($CommTy ,$ParCode, $Depth,$srch, $lang);		
+		if ($StyleOption=="disabled")
+		{
+			$GF_Common_SetComboList ="<input type='hidden' name='".$CheckBoxName."' value='".$CheckValue."'";
 		}
-		while($row = mysql_fetch_array($result)){
-			$dtl_code = replace_out($row["dtl_code"]);
-			$code_desc = replace_out($row["code_desc"]);
-			$code_desc_en = replace_out($row["code_desc_en"]);
-			If(strcmp($CheckValue,$dtl_code)==0){
-				$GF_Common_SetComboList .="<option value='".$dtl_code."' selected>".$code_desc."</option>\n";
-			}else{
-				$GF_Common_SetComboList .="<option value='".$dtl_code."'>".$code_desc."</option>\n";
+		else
+		{
+			$GF_Common_SetComboList ="<select ".$StyleOption." name='".$CheckBoxName."' id='".$CheckBoxName."'>\n";
+			If($IsBlank=="True"){			
+				$GF_Common_SetComboList .="<option value='' ".($CheckValue==null?"selected":"").">" .$BlankString ."</option>\n";
 			}
+			If ($Depth == "") {$Depth = " =1";}else{ $Depth = "=".$Depth;}
+			
+			if ($lang==""){
+				$result =QRY_COMMON_LIST_SRCH($CommTy ,$ParCode, $Depth , $srch);		
+			}else{
+				$result =QRY_COMMON_LIST_SRCH_LANG($CommTy ,$ParCode, $Depth,$srch, $lang);		
+			}
+			while($row = mysql_fetch_array($result)){
+				$dtl_code = replace_out($row["dtl_code"]);
+				$code_desc = replace_out($row["code_desc"]);
+				$code_desc_en = replace_out($row["code_desc_en"]);
+				If(strcmp($CheckValue,$dtl_code)==0){
+					$GF_Common_SetComboList .="<option value='".$dtl_code."' selected>".$code_desc."</option>\n";
+				}else{
+					$GF_Common_SetComboList .="<option value='".$dtl_code."'>".$code_desc."</option>\n";
+				}
+			}
+			$GF_Common_SetComboList .="</select>\n";	
 		}
-		$GF_Common_SetComboList .="</select>\n";	
+		
 		return $GF_Common_SetComboList;
 }
 
@@ -875,7 +884,7 @@ Function GF_warea_SetComboList($CheckBoxName,$ParCode, $Depth, $IsBlank, $BlankS
 // 작 성 일 시 :
 // 수 정 이 력 : 2013-10-01 (정선진)
 //-------------------------------------------------------------------------------
-Function GF_Common_GetSingleList($CommTy, $CheckValue){
+Function GF_Common_GetSingleList($CommTy, $CheckValue){	
 	If ($CheckValue ==""){
 			$GF_Common_GetSingleList = "";
 	}else{
