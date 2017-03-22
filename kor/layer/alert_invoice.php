@@ -69,7 +69,7 @@ else
 
 ?>	
 
-<div class="layer-content" style="padding:0;width:100%;padding-left: 90px;padding-top: 30px;">	
+<div class="layer-content" style="padding:0;width:100%;padding-left: 130px;padding-top: 30px;">	
 	<a href="#" class="btn-close" style="position: absolute;right: 10px;top: 1px;padding: 5px;text-decoration:underline;"><img src="/kor/images/btn_layer_close.png" alt="close"></a>
 	<?if ($sell_nation_idx != $ship_nation){?>
 	<span>Commercial Invoice : <a href="#" class="btn-view-sheet-3011" for_readonly="Y" style="color:#00759e;text-decoration:underline;"><?=$invoice_val?></a></span><br>
@@ -79,7 +79,7 @@ else
 	if ($etc2=="DHL" || $etc2=="UPS" || $etc2=="Fedex" || $etc2=="TNT")
 	{	
 	?>	
-		<span><img src="/kor/images/icon_<?=strtolower($etc2)?>.gif" height="15">-<a href="#" style="color:#00759e;cursor: default;"><?=$etc1?></a></span><br>		
+		<span><img src="/kor/images/icon_<?=strtolower($etc2)?>.gif" height="15"> - <a href="#" style="color:#00759e;cursor: default;"><?=$etc1?></a></span><br><br>		
 		<?
 		$result =QRY_ODR_DET_LIST(0,"and odr_idx=".$odr_idx."",0,"","asc");
 		while($row = mysql_fetch_array($result))
@@ -87,7 +87,7 @@ else
 			if ($row["file1"])
 			{
 		?>
-				<div>Part No. - 
+				<div><?=$row["part_no"]?> - 
 		<?					
 				for ($i = 1;$i <= 3; $i++ ){
 					$file = replace_out($row["file$i"]);		
@@ -107,7 +107,7 @@ else
 		}
 		?>	
 	<?}else{?>
-		<span><?=$etc2?>-<a href="#" style="color:#00759e;cursor: default;"><?=$etc1?></a></span>
+		<span><?=$etc2?> - <a href="#" style="color:#00759e;cursor: default;"><?=$etc1?></a></span>
 	<?}?>
 	
 	<!--<span><?=$etc2?>-<a href="#" style="color:#00759e;text-decoration:underline;"><?=$etc1?></a></span>-->

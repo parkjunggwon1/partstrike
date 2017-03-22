@@ -10,6 +10,8 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 
 $det_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx ");  //odr_det 수량
 $odr = get_odr($odr_idx);
+$odr_det_idx = get_any("odr_det","odr_det_idx", "odr_idx=$odr_idx"); 	
+
 $sell_mem_idx = $odr[sell_mem_idx];
 $buy_mem_idx = $odr[mem_idx];
 $buy_com_idx = $odr[rel_idx]==0 ? $odr[mem_idx] : $odr[rel_idx];
@@ -179,6 +181,25 @@ if($ship[delivery_addr_idx] > 0){
 			
 		 });			
 	}
+
+	function img_chk()
+	{
+		//alert($(".img_sub_2").css("display"));
+		if ($(".img_sub_2").css("display") != "none")
+		{			
+			$(".plus_chk1_"+<?=$odr_det_idx?>).hide();
+			$(".minus_chk1_"+<?=$odr_det_idx?>).hide();
+		}
+		
+		if ($(".img_sub_3").css("display") != "none")
+		{
+			$(".plus_chk2_"+<?=$odr_det_idx?>).hide();
+			$(".minus_chk2_"+<?=$odr_det_idx?>).hide();
+			$(".plus_chk3_"+<?=$odr_det_idx?>).hide();
+			$(".minus_chk3_"+<?=$odr_det_idx?>).show();
+		}
+
+	}
 	
 	 $(document).ready(function(){
 		 $("#layerPop3 .stock-list-table tbody:eq(0) tr:eq(0) td").addClass("first");
@@ -193,16 +214,22 @@ if($ship[delivery_addr_idx] > 0){
             });
 
 		fileChange();
+		img_chk();
 
 		$(".arrow_top").click(function(){
 			
 			var num_file = $(this).prev().attr("f_number");
 			var odr_det_idx = $(this).prev().attr("odr_det_idx");
+			var after_file;
+			var before_file;
 
-			num_file = Number(num_file) + 1;
+			after_file = Number(num_file) + 1;
+			before_file = Number(num_file);
 
-			$(".img_tap"+num_file+"_"+odr_det_idx).show();				
-			$(".minus_chk"+num_file+"_"+odr_det_idx).show();
+			$(".img_tap"+after_file+"_"+odr_det_idx).show();				
+			$(".minus_chk"+after_file+"_"+odr_det_idx).show();
+			$(".plus_chk"+before_file+"_"+odr_det_idx).hide();
+			$(".minus_chk"+before_file+"_"+odr_det_idx).hide();
 		});
 		
 		<?if ($row_ship['ship_info']==5)
@@ -251,6 +278,9 @@ if($ship[delivery_addr_idx] > 0){
 					var f = document.f;
 					var no_val = $(this).attr("f_idx");
 					var file_no = $(this).attr("class").replace("arrow_bottom minus_chk","");
+					var f_number = $(this).attr("f_number");
+					var f_odr_det_idx = $(this).attr("f_odr_det_idx");
+					var before_number;
 			
 					f.no.value = no_val;
 					f.typ.value="imgfiledel";
@@ -263,16 +293,21 @@ if($ship[delivery_addr_idx] > 0){
 
 							if (trim(data) == "SUCCESS"){									
 								$("#fileimg"+no_val).attr("src", "/kor/images/file_pt.gif");
-							    $("#file_o"+no_val).val("");
-								if(Number(file_no) > 1)
-								{									
-									$(".img_tap"+file_no).hide();
+							    $("#file_o"+no_val).val("");								
+								$(".plus_chk"+file_no).hide();
+								$(".minus_chk"+file_no).hide();
+								if (f_number=="1")
+								{
+
 								}
 								else
 								{
-									$(".plus_chk"+file_no).hide();
-									$(".minus_chk"+file_no).hide();
+									$(".img_tap"+file_no).hide();
+									before_number = Number(f_number-1)
+									$(".minus_chk"+before_number+"_"+f_odr_det_idx).show();
+									$(".plus_chk"+before_number+"_"+f_odr_det_idx).show();
 								}
+								
 							}else{
 								alert(data);
 							}

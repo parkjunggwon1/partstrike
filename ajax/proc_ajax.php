@@ -261,9 +261,9 @@ switch($actty) {
 
 	   $sql = "insert into odr_history set 
 				odr_idx = '$odr_idx'			
-				,status = 32
-				,status_name = '수락'
-				,etc1 = '종료'
+				,status = 15
+				,status_name = '완료'
+				,etc1 = ''
 				,sell_mem_idx = '$sell_mem_idx'
 				,buy_mem_idx = '$buy_mem_idx'
 				,reg_mem_idx = '$session_mem_idx'

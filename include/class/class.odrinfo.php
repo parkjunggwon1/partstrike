@@ -1047,10 +1047,10 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<td colspan="10" class="img-cntrl-list" style="text-align:left;">
 								<strong class="c-red">라벨/부품사진 </strong>
 								<?for ($j = 1;$j <= 3; $j++ ){
-
 									$tap_display = "";
 									$file = replace_out($row["file$j"]);
 									if ( $j ==1 || $file ){
+										
 									}
 									else
 									{
@@ -1084,8 +1084,10 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 									<span class="img-wrap"><img alt="" id="fileimg<?=$odr_det_idx?>_<?=$j?>" <?=get_noimg_photo($file_path, $file, "/kor/images/file_pt.gif")?> style="border: 1px solid #00759e;" ></span>
 									<input name="file_o<?=$j?>" id="file_o<?=$j?>" type="hidden" value="<?=$fileonly?>">
 									<input name="file<?=$odr_det_idx?>_<?=$j?>" id="file<?=$odr_det_idx?>_<?=$j?>" f_number="<?=$j?>" odr_det_idx="<?=$odr_det_idx?>"" type="file" style="width:1px;height:1px">
+									
 									<a href="javascript:;" class="arrow_top <?=$plus_chk?>" style="<?=$display_b?>">+</a>
 									<a href="javascript:;" class="arrow_bottom <?=$minus_chk?>" f_idx="<?=$odr_det_idx?>_<?=$j?>" f_number="<?=$j?>" f_odr_det_idx="<?=$odr_det_idx?>" style="<?=$display_b?>">-</a>
+									
 								</div>
 								<?}?>
 								<span style="font-size:11px;padding-left:10px;"><strong class="c-red">라벨/부품 사진을 첨부해 주십시오. 분쟁 발생 시 보호받을 수 있습니다.</strong></span>
@@ -3235,7 +3237,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 	<?}elseif($loadPage =="13_04"){?>
 	<a href="#" class="btn-pop-1305"><img src="/kor/images/btn_ok.gif" alt="확인"></a>
 	<?}elseif($loadPage =="13_04s"){ //------------------------------ 13_04s -----------------------------------------?>
-	<a href="#" class="btn-confirm-1304s" odr_history_idx="<?=$odr_history_idx?>"><img src="/kor/images/btn_complete.gif" alt="완료"></a>	
+	<a href="#" class="btn-confirm-1304s" odr_history_idx="<?=$odr_history_idx?>" part_type="<?=$part_type?>"><img src="/kor/images/btn_complete.gif" alt="완료"></a>	
 	<?}elseif($loadPage =="1304_accept"){ //------------------------------ 13_04s -----------------------------------------
 		$down_payment = get_any("odr_history", " etc2", "odr_idx=".$odr_idx." and charge_ty='D' limit 1");		
 	?>

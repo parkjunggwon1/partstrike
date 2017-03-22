@@ -934,24 +934,33 @@ $(document).ready(function(){
 	
 	//What's New(구매자) 취소(13_04)화면 '수락' 버튼------
 	$("body").on("click",".btn-confirm-1304s",function(){ //실제 취소 처리(DB)
-		
-		/*$.ajax({ 
-		type: "GET", 
-		url: "/ajax/proc_ajax.php", 
-		data: { actty : "CF", //ConFirm
-				actidx : $(this).attr("odr_history_idx")
-		},
-			dataType : "html" ,
-			async : false ,
-			success: function(data){ 
-				//document.location.href="/kor/";
-				closeCommLayer("layer");
-				Refresh_Right();
-			}
-		});*/
 
-		openCommLayer("layer4","13_04_1","?&actidx="+$(this).attr("odr_history_idx"));
+		var part_type = $(this).attr("part_type");
+
+		if (part_type ==2)
+		{
+			openCommLayer("layer4","13_04_1","?&actidx="+$(this).attr("odr_history_idx"));
+		}
+		else
+		{
+			$.ajax({ 
+			type: "GET", 
+			url: "/ajax/proc_ajax.php", 
+			data: { actty : "CF", //ConFirm
+					actidx : $(this).attr("odr_history_idx")
+			},
+				dataType : "html" ,
+				async : false ,
+				success: function(data){ 
+					//document.location.href="/kor/";
+					closeCommLayer("layer");
+					Refresh_Right();
+				}
+			});
+		}
 		
+
+		//openCommLayer("layer4","13_04_1","?&actidx="+$(this).attr("odr_history_idx"));		
 
 	});
 
