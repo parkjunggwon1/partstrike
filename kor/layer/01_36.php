@@ -79,8 +79,7 @@ $buy_com_name = $row_mem["mem_nm_en"];
 						<th scope="col" class="t-rohs">RoHS</th>
 						<th scope="col" class="t-oty">O'ty</th>
 						<th scope="col" class="t-unitprice">Unit Price</th>
-						<th scope="col" lang="ko" class="t-orderoty">발주수량</th>
-						<th scope="col" lang="ko" id="t-supplyoty" class="t-supplyoty">공급수량</th>
+						<th scope="col" lang="ko" class="t-orderoty">Amount</th>
 						<th scope="col" lang="ko" class="t-period">납기</th>
 					</tr>
 				</thead>

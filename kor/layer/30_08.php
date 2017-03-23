@@ -54,9 +54,9 @@ function checkActive(){
 		if($(this).val().length>0) opCond2++;
 	});
 	//부품상태 및 포장상태 - 지속적 갯수 추가
-	opCond = opCond + part2;
-	opCond1 = opCond1 + part2;
-	opCond2 = opCond2 + part2;
+	//opCond = opCond + part2;
+	//opCond1 = opCond1 + part2;
+	//opCond2 = opCond2 + part2;
 	//공급수량 체크
 	$("input[name^=supply_quantity]").each(function(e){ //공급수량
 		if($(this).val().replace(/,/gi,"")>0) sqty++;

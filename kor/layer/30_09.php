@@ -19,7 +19,7 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 }
 $result_odr = QRY_ODR_VIEW($odr_idx);    
 $row_odr = mysql_fetch_array($result_odr);
-
+$odr_no = $row_odr['odr_no'];
 $result_odr_det =QRY_ODR_DET_LIST(0,"and odr_idx = ".$odr_idx,0); 
 $row_odr_det = mysql_fetch_array($result_odr_det);
 
@@ -71,7 +71,6 @@ if ($sheets_no==""){
 }else{
 	$invoice_no =$sheets_no;
 }
-
 
 $result_buyer = QRY_ODR_MEMBER_VIEW($odr_idx,"idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"]),$invoice_no);
 $row_buyer = mysql_fetch_array($result_buyer);
@@ -144,10 +143,55 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 			}
 			elseif (($pay_invoice =="D") && $row_odr_det["part_type"]==2){?>Down Payment Invoice<?
 				$chr = "DPI";
-				$invoice_no = str_replace("EI", $chr, get_auto_no("EI", "odr" , "invoice_no"));
+				//$invoice_no = str_replace("EI", $chr, get_auto_no("EI", "odr" , "invoice_no"));
+				$invoice_cnt =QRY_CNT("odr", "and odr_no ='$odr_no' and invoice_no <> ''"); 
+
+				if ($invoice_cnt == 1 || $invoice_cnt == 0)
+				{
+					$invoice_no = get_auto_no("EI", "odr" , "invoice_no");
+					$invoice_no = str_replace("EI", $chr,$row_odr["invoice_no"]);
+					
+				}
+				else
+				{
+					if (!$loadPage)
+					{
+						$invoice_no = get_auto_no("EI", "odr" , "invoice_no","Y");
+						$invoice_no = str_replace("EI", $chr,$invoice_no);
+					}
+					else
+					{
+						$invoice_no = get_auto_no("EI", "odr" , "invoice_no","Y");
+						$invoice_no = str_replace("EI", $chr,$invoice_no);
+					}
+					
+				}
 			}else{?>Escrow Invoice<?
 				$chr =  "EI";
-				$invoice_no = str_replace("DPI", $chr,$row_odr["invoice_no"]);
+				
+				$invoice_cnt =QRY_CNT("odr", "and odr_no ='$odr_no' and invoice_no <> ''"); 
+
+				if ($invoice_cnt == 1 || $invoice_cnt == 0)
+				{
+					$invoice_no = get_auto_no("EI", "odr" , "invoice_no");
+					$invoice_no = str_replace("DPI", $chr,$row_odr["invoice_no"]);
+					
+				}
+				else
+				{
+					if (!$loadPage)
+					{
+						$invoice_no = get_auto_no("EI", "odr" , "invoice_no");
+						$invoice_no = str_replace("DPI", $chr,$invoice_no);
+					}
+					else
+					{
+						$invoice_no = get_auto_no("EI", "odr" , "invoice_no","Y");
+						$invoice_no = str_replace("DPI", $chr,$invoice_no);
+					}
+					
+				}
+				
 			}
 			?> No.</strong><span>
 
@@ -381,7 +425,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 									<li><?=$row_buyer["addr"]?></li>
 									<li><span class="tel">Tel : <?=$tel_buyer?></span>Fax : <?=$fax_buyer?></li>
 									<li>Contact : <?=$row_odr["rel_idx"]==0?$row_buyer["pos_nm"]:get_any("member", "mem_nm", "mem_idx=".$row_odr["mem_idx"])?> / <?=$row_odr["rel_idx"]==0?"CEO":get_any("member", "pos_nm", "mem_idx=".$row_odr["mem_idx"])?></li>
-									<li><?=$row_buyer["email"]?><?=$testtt?></li>
+									<li><?=$row_buyer["email"]?></li>
 								<?
 								}
 								else
@@ -392,7 +436,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 									<li><?=$row_buyer["addr_en"]?></li>
 									<li><span class="tel">Tel : <?=$row_buyer["tel"]?></span>Fax : <?=$row_buyer["fax"]?></li>
 									<li>Contact : <?=$row_odr["rel_idx"]==0?$row_buyer["pos_nm_en"]:get_any("member", "mem_nm_en", "mem_idx=".$row_odr["mem_idx"])?> / <?=$row_odr["rel_idx"]==0?"CEO":get_any("member", "pos_nm_en", "mem_idx=".$row_odr["mem_idx"])?></li>
-									<li><?=$row_buyer["email"]?><?=$testtt?></li>
+									<li><?=$row_buyer["email"]?></li>
 								<?
 								}
 								?>
@@ -569,8 +613,16 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 			<?
 			if (!$charge_type) { $charge_type = "3";}			
 			if(QRY_CNT("mybank", "and odr_idx = $odr_idx and charge_type ='".$charge_type."' and charge_method = '2' and put_money_yn is null")==0){?>
-				<?if($row_odr_det["part_type"]!="7"){?>
+				<?if($row_odr_det["part_type"]!="7" && $row_odr_det["part_type"]!="2"){?>
 					<button type="button" class="btn-dialog-0901" now_idx="<?=$now_idx;?>"><img src="/kor/images/btn_order_edit.gif" alt="발주서 수정"></button>
+				<?}else{?>
+					<?if ($row_odr_det["part_type"]=="2"){?>
+						<?if ($row_odr_det['part_condition']){?>
+							<button type="button" class="btn-dialog-0901" now_idx="<?=$now_idx;?>"><img src="/kor/images/btn_order_edit.gif" alt="발주서 수정"></button>
+						<?}else{?>
+							<button type="button" style="cursor:default;"><img src="/kor/images/btn_order_edit_1.gif" alt="발주서 수정"><?=$row_odr_det['part_condition']?></button>
+						<?}?>						
+					<?}?>
 				<?}?>
 				<!--<button type="button" class="btn-dialog-18-2-14"><img src="/kor/images/btn_refund.gif" alt="환불"></button>-->
 				<button type="button" class="btn-pop-3012" odr_idx="<?=$row_odr["odr_idx"]?>" odr_det_idx="<?=$row_odr["odr_det_idx"]?>" tot_amt="<?=$tot_amt?>" fromLoadPage="<?=$LoadPage?>"  deposit_yn="<?=$_SESSION["DEPOSIT"]=="N"?"Y":""?>" charge_type="<?=$charge_type?>"><img src="/kor/images/btn_payment.gif" alt="결제"></button>

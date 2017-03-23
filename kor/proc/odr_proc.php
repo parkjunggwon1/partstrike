@@ -58,6 +58,7 @@ if ($typ=="write" || $typ=="odredit" ||$typ =="periodreq"){   //periodreq : 납�
             ";
         $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
         $odr_idx=mysql_insert_id(); //신규 생성 odr
+        $new_odr_idx=mysql_insert_id(); //신규 생성 odr
         //2. 일반 배송으로 ship_info 하나 생성.
         $sql = "insert into ship set
                   ship_type = '1' ,
@@ -521,6 +522,7 @@ if($typ =="invconfirm"){ //-------------------------------------- 송장 확정:
 
 if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : 송장 확정2:30_09 (Invoice) 2016-04-15 ----------------------------------------
     //1. status변경
+
     $part_type = get_any("odr_det", "part_type" , "odr_idx = $odr_idx");
     
     update_val("odr","odr_status","18", "odr_idx", $odr_idx);
@@ -749,6 +751,7 @@ if ($typ =="odrconfirm2"){  //------------ 확정 발주서 (from:30_05) 2016-04
 
 if ($typ =="odramendconfirm"){ // 확정 발주서(P.O Amendment)12_07 처리 --------------------------------------------------------------------------------------------
         //0. 만약에 odr_status가  송장 또는 도착한 데이터가 있다면 그 테이터를 확인 한것으로 표시 (confirm_yn = Y')  왜냐면, 수정 발주서를 발행하는 시점은 처음 송장 받았거나, 물건이 도착 한 후에 할수 있으므로.
+
         $odr_history_idx = get_any("odr_history" , "odr_history_idx", "odr_idx= $odr_idx and (status = 18 or status = 19) and confirm_yn='N'");
         if ($odr_history_idx){update_val("odr_history","confirm_yn","Y", "odr_history_idx", $odr_history_idx);}
 
@@ -756,7 +759,8 @@ if ($typ =="odramendconfirm"){ // 확정 발주서(P.O Amendment)12_07 처리 --
         update_val("odr","odr_status","3", "odr_idx", $odr_idx);
         update_val("odr","status_edit_mem_idx",$session_mem_idx, "odr_idx", $odr_idx);
 
-        $amend_no = get_any("odr", "amend_no", "odr_idx = $odr_idx"); //수정발주서 번호생성
+        //$amend_no = get_any("odr", "amend_no", "odr_idx = $odr_idx"); //수정발주서 번호생성
+        
         //2. history 등록
         $session_mem_idx = $_SESSION["MEM_IDX"];
         $sell_mem_idx = get_any("odr", "sell_mem_idx" , "odr_idx = $odr_idx");
@@ -772,7 +776,7 @@ if ($typ =="odramendconfirm"){ // 확정 발주서(P.O Amendment)12_07 처리 --
                 ,reg_date = now()";
         //echo $sql;
         $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
-        update_val("odr","save_yn","N", "odr_idx", $odr_idx);
+        //update_val("odr","save_yn","N", "odr_idx", $odr_idx);
         if($result){
             echo "SUCCESS";
             exit;
@@ -780,6 +784,9 @@ if ($typ =="odramendconfirm"){ // 확정 발주서(P.O Amendment)12_07 처리 --
 }
 
 if ($typ =="odramendconfirm2"){ //구매자: 수정발주서(P.O Amendment)12_07 처리 / 2016-04-15 : Log 기록 -------------------------------------------------------------
+        
+        $ship_idx = get_any("ship" , "ship_idx", "odr_idx= $odr_idx");
+
         //2017-01-10 : ship 정보를 임시테이블에서 복사
         $sql = "
                 UPDATE ship AS a
@@ -790,8 +797,9 @@ if ($typ =="odramendconfirm2"){ //구매자: 수정발주서(P.O Amendment)12_07
                     a.memo = b.memo,
                     a.insur_yn = b.insur_yn,
                     a.delivery_addr_idx = b.delivery_addr_idx
-                WHERE a.odr_idx=$odr_idx
+                WHERE a.ship_idx=$ship_idx
                 ";
+
         $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 
         //2016-12-06 : 재고 UPDATE('UQ'에서 Upate 것을 여기서 Update) - ccolle
@@ -822,7 +830,7 @@ if ($typ =="odramendconfirm2"){ //구매자: 수정발주서(P.O Amendment)12_07
         update_val("odr","status_edit_mem_idx",$session_mem_idx, "odr_idx", $odr_idx);
 
         //수정발주서 번호 가져오기 - 이전 단계 Sheet(12_07)에서 생성하여 odr 테이블에 Update 했음.  2016-04-18 : Sheet 호출 전에 'poano'에서 번호 생성
-        $amend_no = get_any("odr", "amend_no", "odr_idx = $odr_idx");
+        //$amend_no = get_any("odr", "amend_no", "odr_idx = $odr_idx");
         //2. 최근 History 읽음 처리 - (2016-04-15)
         $old_history_idx = get_any("odr_history" , "MAX(odr_history_idx)", "odr_idx= $odr_idx");
         update_val("odr_history","confirm_yn","Y", "odr_history_idx", $old_history_idx);
@@ -875,6 +883,7 @@ if($typ == "poano"){
         **/
         //임시테이블에 데이터 존재여부
         $ship_idx = get_any("ship_temp", "ship_idx", "odr_idx=$odr_idx");
+
         if($ship_idx>0){
             $ship_sql = "update ship_temp set ship_info = '".$ship_info."', ship_account_no = '".$ship_account_no."', memo = '".$memo."',insur_yn='".$insur_yn."',delivery_addr_idx='".$delivery_addr_idx."'  where ship_idx=".$ship_idx;
         }else{

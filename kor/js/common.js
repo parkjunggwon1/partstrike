@@ -412,7 +412,7 @@ $(document).ready(function(){
 		$.ajax({
 				url: "/kor/proc/odr_proc.php", 
 				//data: "typ=odramendconfirm&odr_idx="+$(this).attr("odr_idx"),  //JSJ
-				data: "typ=odramendconfirm2&odr_idx="+$(this).attr("odr_idx"),  //2016-04-15 : odramendconfirm2(Log 기록)으로 수정
+				data: "typ=odramendconfirm2&odr_idx="+$(this).attr("odr_idx")+"&amend_no="+$(this).attr("amend_no"),  //2016-04-15 : odramendconfirm2(Log 기록)으로 수정
 				encType:"multipart/form-data",
 				success: function (data) {	
 					if (trim(data) == "SUCCESS"){		
@@ -929,7 +929,7 @@ $(document).ready(function(){
 
 	//--------------------------------------------------------------------------------
 	$("body").on("click",".btn-view-amend-sheet-forread",function(){
-		openLayer("layer5","12_07","?odr_idx="+$(this).attr("odr_idx"));
+		openLayer("layer5","12_07","?odr_idx="+$(this).attr("odr_idx")+"&load_page=09_01");
 	});
 	
 	//What's New(구매자) 취소(13_04)화면 '수락' 버튼------
@@ -978,6 +978,7 @@ $(document).ready(function(){
 			success: function(data){ 
 				//document.location.href="/kor/";
 				closeCommLayer("layer");
+				closeCommLayer("layer4");
 				Refresh_Right();
 			}
 		});
@@ -1345,7 +1346,7 @@ $(document).ready(function(){
 			insur_chk = "";
 		}
 
-		$("#ship_info").val();
+		//alert($("#ship_info").val();
 		
 		if($chked_odr.length==0){ 
 			alert_msg("발주서를 선택해 주세요.");
@@ -1370,7 +1371,7 @@ $(document).ready(function(){
 								openLayer('layer4','alarm','?odr_idx='+odr_idx);
 							}else{
 								if($.trim(data)=="SUCCESS"){
-									openLayer("layer5","12_07","?odr_idx="+odr_idx); //12_07에서의 번호생성은 삭제
+									openLayer("layer5","12_07","?odr_idx="+odr_idx+"&loadPage=09_01"); //12_07에서의 번호생성은 삭제
 								}else{
 									alert($.trim(data));
 								}

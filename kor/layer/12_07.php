@@ -14,11 +14,13 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 <script src="/include/function.js"></script>
 <?
 //수정 발주서 sheet
+
 if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 위해 Sheet No.($sheets_no)를 넘겨준다.
 	$odr_idx = get_any("odr", "max(odr_idx)", "odr_status=99 AND doc_no='$sheets_no'");
 }
   $result_odr = QRY_ODR_VIEW($odr_idx);    
   $row_odr = mysql_fetch_array($result_odr);
+  $odr_no = $row_odr['odr_no'];
 
   $result_buyer = QRY_ODR_MEMBER_VIEW($odr_idx, "idx",($row_odr["rel_idx"]==0?$row_odr["mem_idx"]:$row_odr["rel_idx"]));
   $row_buyer = mysql_fetch_array($result_buyer);
@@ -37,6 +39,8 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
   //}
 
   $row_ship = get_ship($row_odr["ship_idx"]);
+  $row_ship_tmp = get_ship_temp($row_odr["odr_idx"]);
+
 ?>
 
 
@@ -58,26 +62,50 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 
 	<div class="order-info">
 		<ul>
-			<li class="b1"><strong>Purchase Order Amendment No.</strong><span><?=$row_odr["amend_no"]?></span></li>
+			<?
+			$poa_cnt =QRY_CNT("odr", "and odr_no ='$odr_no' and amend_no <> ''"); 
+
+			if ($poa_cnt == 1 || $poa_cnt == 0)
+			{
+				$poa_no = get_auto_no("POA", "odr" , "amend_no","Y");
+				$poa_no = str_replace("EI", $chr,$row_odr["amend_no"]);
+				
+			}
+			else
+			{
+				if ($loadPage)
+				{
+					$poa_no = get_auto_no("POA", "odr" , "amend_no","Y");
+					$poa_no = str_replace("EI", $chr,$poa_no);
+				}
+				else
+				{
+					$poa_no = get_auto_no("POA", "odr" , "amend_no");
+					$poa_no = str_replace("EI", $chr,$poa_no);
+				}
+				
+			}
+			?>
+			<li class="b1"><strong>Purchase Order Amendment No.</strong><span><?=$poa_no?></span></li>
 			<li class="b2"><strong>Date</strong><span><?=$row_odr["reg_date_fmt"]?></span></li>
 			<li><strong>Page</strong><span>1</span></li>
 		</ul>
 		<ul>
 		<?
-		if ($row_ship["ship_info"]==5)
+		if ($row_ship_tmp["ship_info"]==5)
 		{
 			$ship_via = "Other";
 			$ship_address = "Address";
 		}
-		else if ($row_ship["ship_info"]==6)
+		else if ($row_ship_tmp["ship_info"]==6)
 		{
 			$ship_via = "Pick Up";
 			$ship_address = "Address";
 		}
 		else
 		{
-			$ship_via = "<img src='/kor/images/icon_".strtolower(GF_Common_GetSingleList('DLVR',$row_ship['ship_info'])).".gif' alt='' height='10'>";
-			$ship_address = $row_ship["ship_account_no"];
+			$ship_via = "<img src='/kor/images/icon_".strtolower(GF_Common_GetSingleList('DLVR',$row_ship_tmp['ship_info'])).".gif' alt='' height='10'>";
+			$ship_address = $row_ship_tmp["ship_account_no"];
 		}
 		?>
 			<li class="b3"><strong>Ship Via</strong>
@@ -86,7 +114,7 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 				</span>
 			</li>
 			<li><strong>Account No.</strong><span><?=$ship_address?></span></li>
-			<li class="b2"><strong>Transport insurance</strong><span><?=$row_ship["insur_yn"]=="o"?"Yes":"No"?></span></li>
+			<li class="b2"><strong>Transport insurance</strong><span><?=$row_ship_tmp["insur_yn"]=="o"?"Yes":"No"?></span></li>
 		</ul>
 		<ul>
 			<li class="b1"><strong>Payment Term</strong><span>CBD</span></li>
@@ -317,9 +345,9 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 			<button type="button" class="f-lt"><img src="/kor/images/btn_print.gif" alt="인쇄"></button>
 	<?if ($forread==""){?>
 			<?if ($row_odr["sell_mem_idx"]!=$session_mem_idx){?>
-				<button type="button" class="f-rt odrAmendConfirm" odr_idx="<?=$odr_idx?>"><img src="/kor/images/btn_fix_order.gif" alt="확정 발주서"></button>
+				<button type="button" class="f-rt odrAmendConfirm" odr_idx="<?=$odr_idx?>" amend_no="<?=$poa_no?>"><img src="/kor/images/btn_fix_order.gif" alt="확정 발주서"></button>
 			<?}else{?>				
-				<button type="button" class="btn-invoice-3008 f-rt"  odr_idx="<?=$odr_idx?>"><img src="/kor/images/btn_invoice.gif" alt="송장"></button><!--btn-dialog-1210-->
+				<button type="button" class="btn-invoice-3008 f-rt"  odr_idx="<?=$odr_idx?>" amend_no="<?=$poa_no?>"><img src="/kor/images/btn_invoice.gif" alt="송장"></button><!--btn-dialog-1210-->
 			<?}
 		}?>
 	</div>

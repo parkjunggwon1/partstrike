@@ -1161,7 +1161,7 @@ function get_odr_det_no($ty){  //agreement no
 }
 
 
-function get_auto_no($ty, $table, $column){  // 통합 no 생성
+function get_auto_no($ty, $table, $column, $update=""){  // 통합 no 생성
 	global $odr_idx;
 	global $part_type;
 
@@ -1177,8 +1177,16 @@ function get_auto_no($ty, $table, $column){  // 통합 no 생성
 		$odr_no_cnt = QRY_CNT("odr","and ($column like '".$ty.date("y")."%'".$addCl.") and odr_idx = '".$odr_idx."' ");
 		$cnt = get_any("odr","IFNULL(CAST(SUBSTR(MAX($column),$cut_bit,5) AS UNSIGNED),0)", "odr_status NOT IN(8,99) AND ($column like '".$ty.date("y")."%'".$addCl.")");
 		if ($odr_no_cnt)
-		{		
-			$result_value = $ty.date("y")."-PS".str_pad(fmod($cnt,99999),5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
+		{	
+			if ($update=="Y")
+			{
+				$result_value = $ty.date("y")."-PS".str_pad(fmod($cnt,99999)+1,5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
+			}
+			else
+			{
+				$result_value = $ty.date("y")."-PS".str_pad(fmod($cnt,99999),5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
+			}
+			
 		}
 		else
 		{	
@@ -1429,6 +1437,10 @@ function get_odr_history2($odr_idx, $fields='*'){
 
 function get_ship($ship_idx, $fields='*'){
 		return sql_fetch("select $fields from ship where ship_idx = trim('$ship_idx')");
+}
+
+function get_ship_temp($odr_idx, $fields='*'){
+		return sql_fetch("select $fields from ship_temp where odr_idx = trim('$odr_idx')");
 }
 
 function get_fty_history($fty_history_idx, $fields='*'){

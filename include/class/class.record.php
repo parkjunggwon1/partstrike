@@ -9,7 +9,7 @@ function GET_MyMember($this_mem_idx){
 			$mem_idx= replace_out($row["mem_idx"]);
 			$mem_name= replace_out($row["name"]);
 			if($this_mem_idx == $mem_idx){ 
-				$label = "<label lang='en'>$mem_name</label>\n";
+				$label = "<label lang='en'>$mem_name</label>";
 				$option .= "<option lang='en' value='$mem_idx' selected>$mem_name</option>\n";
 			}else{
 				$option .= "<option lang='en' value='$mem_idx'>$mem_name</option>\n";

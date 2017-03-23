@@ -12,6 +12,12 @@
 		
 		ChangeBackground();
 
+		$(".title-box select").each(function(){
+				if($(this).find("option").length==1){
+					$(this).parent().removeClass("type2").addClass("type7");
+				}
+		});
+
 		function ChangeBackground(){
 			var bgcolor ="<?=$odr_type=="S"?"#dce6f2":"#ffff99"?>";
 			var criteria_idx ="";
