@@ -2172,13 +2172,14 @@ if ($for_readonly != "P") {?>
 
 		<input type="hidden" name="tot" id="tot_<?=$odr_idx?>" value="<?=$tot?>"></span></li>
 		<?
-		if( ($tot == (int)$tot) )
+/*
+		if( (str_replace(",","",$tot) == (int)$tot) )
 		{
 			$tot = number_format($tot,2);
 		}
 		else {
 			$tot = number_format($tot,4);
-		}
+		}*/
 		?>
 		<li class="total"><strong>Total :</strong><span id="g_total">$<?=$tot?></span></li>
 	
