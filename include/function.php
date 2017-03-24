@@ -1174,6 +1174,7 @@ function get_auto_no($ty, $table, $column, $update=""){  // 통합 no 생성
 		//$cnt = QRY_CNT($table,"and odr_status NOT IN(8,99) AND ($column like '".$ty.date("y")."%'".$addCl.")"); //JSJ : 수량으로 되어있어서 번호 늘지 않는다.
 		//cnt 아닌 최대번호 가져오자. 2016-04-19
 		$cut_bit = strlen($ty) + 6; //ty 문자열 길이에따라 자르는 시작 위치 바뀌어야 한다.
+
 		$odr_no_cnt = QRY_CNT("odr","and ($column like '".$ty.date("y")."%'".$addCl.") and odr_idx = '".$odr_idx."' ");
 		$cnt = get_any("odr","IFNULL(CAST(SUBSTR(MAX($column),$cut_bit,5) AS UNSIGNED),0)", "odr_status NOT IN(8,99) AND ($column like '".$ty.date("y")."%'".$addCl.")");
 		if ($odr_no_cnt)

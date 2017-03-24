@@ -64,7 +64,15 @@ function checkActive(){
 	//alert("selCnt:"+selCnt);
 	//송장확인 버튼
 
-	if(selCnt == det_cnt && opCond==det_cnt && opCond1==det_cnt && opCond2==det_cnt && sqty==det_cnt) btnConfirm = true;
+	if (part2>=1)
+	{
+		if(selCnt == det_cnt && sqty==det_cnt) btnConfirm = true;
+	}
+	else
+	{
+		if(selCnt == det_cnt && opCond==det_cnt && opCond1==det_cnt && opCond2==det_cnt && sqty==det_cnt) btnConfirm = true;
+	}
+	
 
 	if(btnConfirm){
 		$("#btn_confirm_3008").css("cursor","pointer").addClass("btn-view-sheet-3009").attr("src","/kor/images/btn_invoice_confirm.gif");

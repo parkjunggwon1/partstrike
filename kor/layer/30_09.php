@@ -15,7 +15,8 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 <script src="/include/function.js"></script>
 <?
 if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 위해 Sheet No.($sheets_no)를 넘겨준다.
-	//$odr_idx = get_any("odr", "max(odr_idx)", "odr_status=99 AND doc_no='$sheets_no'");
+	$odr_idx = get_any("odr", "max(odr_idx)", "odr_status=99 AND doc_no='$sheets_no'");
+	//echo "max(odr_idx)", "odr_status=99 AND doc_no='$sheets_no'";
 }
 $result_odr = QRY_ODR_VIEW($odr_idx);    
 $row_odr = mysql_fetch_array($result_odr);
@@ -136,63 +137,74 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 	<div class="order-info">
 		<ul>
 			<li class="b1"><strong>			
-			<?if ($for_readonly=="Y"){?>Commercial Invoice<?
-			 $chr =  "CI";
-			}elseif ($for_readonly=="P"){?>Packing List<?
-				$chr =  "PL";
+			<?
+			if($sheets_no)
+			{
+				$invoice_no = $invoice_no;
 			}
-			elseif (($pay_invoice =="D") && $row_odr_det["part_type"]==2){?>Down Payment Invoice<?
-				$chr = "DPI";
-				//$invoice_no = str_replace("EI", $chr, get_auto_no("EI", "odr" , "invoice_no"));
-				$invoice_cnt =QRY_CNT("odr", "and odr_no ='$odr_no' and invoice_no <> ''"); 
+			else
+			{
+				if ($for_readonly=="Y"){?>Commercial Invoice<?
+				 $chr =  "CI";
+				}elseif ($for_readonly=="P"){?>Packing List<?
+					$chr =  "PL";
+				}
+				elseif (($pay_invoice =="D") && $row_odr_det["part_type"]==2){?>Down Payment Invoice<?
+					$chr = "DPI";
+					//$invoice_no = str_replace("EI", $chr, get_auto_no("EI", "odr" , "invoice_no"));
+					$invoice_cnt =QRY_CNT("odr", "and odr_idx ='$odr_idx' and invoice_no ='".$row_odr["invoice_no"]."'"); 
 
-				if ($invoice_cnt == 1 || $invoice_cnt == 0)
-				{
-					$invoice_no = get_auto_no("EI", "odr" , "invoice_no");
-					$invoice_no = str_replace("EI", $chr,$row_odr["invoice_no"]);
-					
-				}
-				else
-				{
-					if (!$loadPage)
-					{
-						$invoice_no = get_auto_no("EI", "odr" , "invoice_no","Y");
-						$invoice_no = str_replace("EI", $chr,$invoice_no);
-					}
-					else
-					{
-						$invoice_no = get_auto_no("EI", "odr" , "invoice_no","Y");
-						$invoice_no = str_replace("EI", $chr,$invoice_no);
-					}
-					
-				}
-			}else{?>Escrow Invoice<?
-				$chr =  "EI";
-				
-				$invoice_cnt =QRY_CNT("odr", "and odr_no ='$odr_no' and invoice_no <> ''"); 
-
-				if ($invoice_cnt == 1 || $invoice_cnt == 0)
-				{
-					$invoice_no = get_auto_no("EI", "odr" , "invoice_no");
-					$invoice_no = str_replace("DPI", $chr,$row_odr["invoice_no"]);
-					
-				}
-				else
-				{
-					if (!$loadPage)
+					if ($invoice_cnt == 1 || $invoice_cnt == 0)
 					{
 						$invoice_no = get_auto_no("EI", "odr" , "invoice_no");
-						$invoice_no = str_replace("DPI", $chr,$invoice_no);
+						$invoice_no = str_replace("EI", $chr,$row_odr["invoice_no"]);
+						//echo $invoice_no."SSSS";
 					}
 					else
 					{
-						$invoice_no = get_auto_no("EI", "odr" , "invoice_no","Y");
-						$invoice_no = str_replace("DPI", $chr,$invoice_no);
+
+						if (!$loadPage)
+						{						
+							$invoice_no = get_auto_no("DPI", "odr" , "invoice_no");
+							$invoice_no = str_replace("EI", $chr,$invoice_no);
+						}
+						else
+						{						
+							$invoice_no = get_auto_no("DPI", "odr" , "invoice_no","Y");
+							$invoice_no = str_replace("EI", $chr,$invoice_no);
+						}
+						
+					}
+
+				}else{?>Escrow Invoice<?
+					$chr =  "EI";
+					
+					$invoice_cnt =QRY_CNT("odr", "and odr_idx ='$odr_idx' and invoice_no <> ''"); 
+
+					if ($invoice_cnt == 1 || $invoice_cnt == 0)
+					{
+						$invoice_no = get_auto_no("EI", "odr" , "invoice_no");
+						$invoice_no = str_replace("DPI", $chr,$row_odr["invoice_no"]);
+						
+					}
+					else
+					{
+						if (!$loadPage)
+						{
+							$invoice_no = get_auto_no("EI", "odr" , "invoice_no");
+							$invoice_no = str_replace("DPI", $chr,$invoice_no);
+						}
+						else
+						{
+							$invoice_no = get_auto_no("EI", "odr" , "invoice_no","Y");
+							$invoice_no = str_replace("DPI", $chr,$invoice_no);
+						}
+						
 					}
 					
 				}
-				
 			}
+			
 			?> No.</strong><span>
 
 			<?=$invoice_no?>
@@ -617,11 +629,8 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 					<button type="button" class="btn-dialog-0901" now_idx="<?=$now_idx;?>"><img src="/kor/images/btn_order_edit.gif" alt="발주서 수정"></button>
 				<?}else{?>
 					<?if ($row_odr_det["part_type"]=="2"){?>
-						<?if ($row_odr_det['part_condition']){?>
-							<button type="button" class="btn-dialog-0901" now_idx="<?=$now_idx;?>"><img src="/kor/images/btn_order_edit.gif" alt="발주서 수정"></button>
-						<?}else{?>
-							<button type="button" style="cursor:default;"><img src="/kor/images/btn_order_edit_1.gif" alt="발주서 수정"><?=$row_odr_det['part_condition']?></button>
-						<?}?>						
+						<button type="button" class="btn-dialog-0901" now_idx="<?=$now_idx;?>"><img src="/kor/images/btn_order_edit.gif" alt="발주서 수정"></button>
+												
 					<?}?>
 				<?}?>
 				<!--<button type="button" class="btn-dialog-18-2-14"><img src="/kor/images/btn_refund.gif" alt="환불"></button>-->

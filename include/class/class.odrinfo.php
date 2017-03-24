@@ -627,16 +627,31 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<table class="detail-table" style="margin:0">
 								<tbody>
 									<?if ($loadPage != "05_04_1" && $loadPage != "08_02" && $loadPage !="10_02" && $loadPage!="10_04" && $loadPage != "13_04" && $loadPage != "13_04s" && $loadPage != "03_02"){?>
-									<tr class="noinput">
-										<td class="c-red" colspan="10" style="text-align:left;">	
-											부품상태 : 
-											<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span>&nbsp&nbsp
-											포장상태 : 
-											<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> / <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span>
-										</td>
-										<!--<th scope="row" style="width:170px">&nbsp;부품상태&nbsp;:&nbsp;&nbsp;<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span></th>
-										<th scope="row" style="width:193px">포장상태&nbsp;:&nbsp;&nbsp;<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> / <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span></th>-->
-									</tr>
+										<?if ($loadPage=="09_01"){?>
+											<?if ($part_condition){?>
+												<tr class="noinput">
+													<td class="c-red" colspan="10" style="text-align:left;">	
+														부품상태 : 
+														<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span>&nbsp&nbsp
+														포장상태 : 
+														<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> / <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span>
+													</td>
+													<!--<th scope="row" style="width:170px">&nbsp;부품상태&nbsp;:&nbsp;&nbsp;<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span></th>
+													<th scope="row" style="width:193px">포장상태&nbsp;:&nbsp;&nbsp;<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> / <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span></th>-->
+												</tr>
+											<?}?>
+										<?}else{?>
+											<tr class="noinput">
+												<td class="c-red" colspan="10" style="text-align:left;">	
+													부품상태 : 
+													<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span>&nbsp&nbsp
+													포장상태 : 
+													<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> / <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span>
+												</td>
+												<!--<th scope="row" style="width:170px">&nbsp;부품상태&nbsp;:&nbsp;&nbsp;<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span></th>
+												<th scope="row" style="width:193px">포장상태&nbsp;:&nbsp;&nbsp;<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> / <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span></th>-->
+											</tr>
+										<?}?>
 									<?}?>
 									<?if ($loadPage != "03_02" && $loadPage!="05_04_1" && $loadPage!="13_04s" && strlen($memo)>0){?>
 									<tr class="noinput">
@@ -2028,6 +2043,7 @@ if ($for_readonly != "P") {?>
 			$period = get_any("odr","period","odr_idx=$odr_idx");
 		}
 
+
 		//지속적(납기3주이상)--------------------------------------
 		if ($part_type == 2 && $period*1 > 2 && $for_readonly=="" && $loadPage != "30_05"&& $loadPage != "12_07") { 
 			
@@ -2040,15 +2056,24 @@ if ($for_readonly != "P") {?>
 				// tot의 90%를 무조건 하면 안되고, 수정 발주 된 내역이 있을 가능성도 있기 때문에 mybank에서 실제로 지불한 10%값을 가져와서  tot- 지불값 한 금액이 실제 지불해야 할 금액이다.
 				$down = get_any("mybank" ,"charge_amt", "odr_idx=$odr_idx and mem_idx=".$_SESSION["MEM_IDX"]." and rel_idx = ".$_SESSION["REL_IDX"]);	
 
+				$tot = str_replace(",","",$tot);
 				$tot = round_down($tot,4) + round_down($down,4);   //더하기. ( 왜냐하면 down 자체가 마이너스 값이니까)
-
+				if( ($down == (int)$down) )
+				{
+					$down = number_format($down,2);
+				}
+				else 
+				{					
+					$down = number_format($down,4);
+				}
 				$tax_name = get_any("tax", "tax_name", "nation=$row_seller[nation]");
 				
 			?>
 				
 				<li class="sub  c-red"><strong>Down Payment :</strong><span>-$<?=round_down(str_replace("-","",$down),4)?></span></li>	
 				<li class="sub"><strong><?=$tax_name?> :</strong><span>$<?=$vat_plus?></span></li>			
-			<?}else{	//계약금 계산-------
+			<?}else{	//계약금 계산-------		
+				$tot = str_replace(",","",$tot);	
 				$tot = ($tot / 10) - ($vat_plus/10);
 				$tot = round_down($tot,4);
 				$charge_type = "2";
@@ -2067,8 +2092,10 @@ if ($for_readonly != "P") {?>
 		?>			
 						
 			<?
+
 			if ((($row_buyer["nation"] == 1 && $row_seller["nation"] ==1) || ($row_seller["nation"]==$ship_nation)) && ($loadPage=="30_09" || $loadPage=="19_1_04"))
 			{	
+
 			?>
 				<li class="sub"><strong>Sub Total :</strong><span id="sub_total">$<?=$tot_vat_minus?></span></li>	
 				<li class="sub"><strong><?=$tax_name?> :</strong><span>$<?=$vat_plus?></span></li>		
@@ -2144,6 +2171,15 @@ if ($for_readonly != "P") {?>
 		?>
 
 		<input type="hidden" name="tot" id="tot_<?=$odr_idx?>" value="<?=$tot?>"></span></li>
+		<?
+		if( ($tot == (int)$tot) )
+		{
+			$tot = number_format($tot,2);
+		}
+		else {
+			$tot = number_format($tot,4);
+		}
+		?>
 		<li class="total"><strong>Total :</strong><span id="g_total">$<?=$tot?></span></li>
 	
 	</ul>
