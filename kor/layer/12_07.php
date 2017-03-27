@@ -63,58 +63,60 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 	<div class="order-info">
 		<ul>
 			<?
-			$poa_cnt =QRY_CNT("odr", "and odr_no ='$odr_no' and amend_no <> ''"); 
+			$odr_invoice_cnt =QRY_CNT("odr", "and odr_idx ='$odr_idx' and amend_no <> '".$row_odr["amend_no"]."' "); 
+			$history_invoice_cnt =QRY_CNT("odr_history", "and odr_idx ='$odr_idx' and etc1 = '".$row_odr["amend_no"]."' "); 
 
-			if ($poa_cnt == 1 || $poa_cnt == 0)
+			if ($odr_invoice_cnt == $history_invoice_cnt)
 			{
-				$poa_no = get_auto_no("POA", "odr" , "amend_no","Y");
-				$poa_no = str_replace("EI", $chr,$row_odr["amend_no"]);
+				$poa_no = get_auto_no("POA", "odr" , "amend_no");
+				$poa_no = str_replace("DPI", $chr,$row_odr["amend_no"]);
 				
 			}
 			else
 			{
-				if ($loadPage)
+				if (!$loadPage)
 				{
-					$poa_no = get_auto_no("POA", "odr" , "amend_no","Y");
-					$poa_no = str_replace("EI", $chr,$poa_no);
+					$poa_no = get_auto_no("POA", "odr" , "amend_no");
+					$poa_no = str_replace("DPI", $chr,$poa_no);
 				}
 				else
 				{
-					$poa_no = get_auto_no("POA", "odr" , "amend_no");
-					$poa_no = str_replace("EI", $chr,$poa_no);
-				}
+					$poa_no = get_auto_no("POA", "odr" , "amend_no","Y");
+					$poa_no = str_replace("DPI", $chr,$poa_no);
+				}						
 				
 			}
 			?>
 			<li class="b1"><strong>Purchase Order Amendment No.</strong><span><?=$poa_no?></span></li>
+			<input type="hidden" name="poa_no" id="poa_no_1207" value="<?=$poa_no;?>">
 			<li class="b2"><strong>Date</strong><span><?=$row_odr["reg_date_fmt"]?></span></li>
 			<li><strong>Page</strong><span>1</span></li>
 		</ul>
 		<ul>
-		<?
-		if ($row_ship_tmp["ship_info"]==5)
-		{
-			$ship_via = "Other";
-			$ship_address = "Address";
-		}
-		else if ($row_ship_tmp["ship_info"]==6)
-		{
-			$ship_via = "Pick Up";
-			$ship_address = "Address";
-		}
-		else
-		{
-			$ship_via = "<img src='/kor/images/icon_".strtolower(GF_Common_GetSingleList('DLVR',$row_ship_tmp['ship_info'])).".gif' alt='' height='10'>";
-			$ship_address = $row_ship_tmp["ship_account_no"];
-		}
-		?>
-			<li class="b3"><strong>Ship Via</strong>
-				<span> 				
-					<?=$ship_via?>		
-				</span>
-			</li>
-			<li><strong>Account No.</strong><span><?=$ship_address?></span></li>
-			<li class="b2"><strong>Transport insurance</strong><span><?=$row_ship_tmp["insur_yn"]=="o"?"Yes":"No"?></span></li>
+			<?
+			if ($row_ship["ship_info"] == "5" || $row_ship["ship_info"] == "6"){
+				if($row_ship["ship_info"] == "5")
+				{
+					$ship_via = "Others";
+				}
+				elseif($row_ship["ship_info"] == "6")
+				{
+					$ship_via = "Pick Up";
+				}								
+			?>
+				<li class="b3"><strong>Ship Via </strong><span><?=$ship_via?></span></li>
+				<li><strong>Account No.</strong><span>Address</span></li>
+			<?
+			}
+			else
+			{
+			?>
+				<li class="b3"><strong>Ship Via </strong><span> <?if ($row_ship["ship_info"]){?><img src="/kor/images/icon_<?=strtolower(GF_Common_GetSingleList("DLVR",$row_ship["ship_info"]))?>.gif" alt="" height="10"><?}else{echo "&nbsp;";}?></span></li>
+				<li><strong>Account No.</strong><span><?=$row_ship["ship_account_no"]?></span></li>
+			<?
+			}
+			?>			
+			<li class="b2"><strong>Transport insurance</strong><span><?=$row_ship["insur_yn"]=="o"?"Yes":"No"?></span></li>
 		</ul>
 		<ul>
 			<li class="b1"><strong>Payment Term</strong><span>CBD</span></li>

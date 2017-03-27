@@ -412,7 +412,7 @@ $(document).ready(function(){
 		$.ajax({
 				url: "/kor/proc/odr_proc.php", 
 				//data: "typ=odramendconfirm&odr_idx="+$(this).attr("odr_idx"),  //JSJ
-				data: "typ=odramendconfirm2&odr_idx="+$(this).attr("odr_idx")+"&amend_no="+$(this).attr("amend_no"),  //2016-04-15 : odramendconfirm2(Log 기록)으로 수정
+				data: "typ=odramendconfirm2&odr_idx="+$(this).attr("odr_idx")+"&amend_no="+$(this).attr("amend_no")+"&poa_no="+$("#poa_no_1207").val(),  //2016-04-15 : odramendconfirm2(Log 기록)으로 수정
 				encType:"multipart/form-data",
 				success: function (data) {	
 					if (trim(data) == "SUCCESS"){		

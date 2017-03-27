@@ -138,72 +138,77 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 		<ul>
 			<li class="b1"><strong>			
 			<?
+
 			if($sheets_no)
 			{
 				$invoice_no = $invoice_no;
 			}
-			else
-			{
-				if ($for_readonly=="Y"){?>Commercial Invoice<?
-				 $chr =  "CI";
-				}elseif ($for_readonly=="P"){?>Packing List<?
-					$chr =  "PL";
-				}
-				elseif (($pay_invoice =="D") && $row_odr_det["part_type"]==2){?>Down Payment Invoice<?
-					$chr = "DPI";
-					//$invoice_no = str_replace("EI", $chr, get_auto_no("EI", "odr" , "invoice_no"));
-					$invoice_cnt =QRY_CNT("odr", "and odr_idx ='$odr_idx' and invoice_no ='".$row_odr["invoice_no"]."'"); 
 
-					if ($invoice_cnt == 1 || $invoice_cnt == 0)
-					{
-						$invoice_no = get_auto_no("EI", "odr" , "invoice_no");
-						$invoice_no = str_replace("EI", $chr,$row_odr["invoice_no"]);
-						//echo $invoice_no."SSSS";
-					}
-					else
-					{
+			if ($for_readonly=="Y"){?>Commercial Invoice<?
 
-						if (!$loadPage)
-						{						
-							$invoice_no = get_auto_no("DPI", "odr" , "invoice_no");
-							$invoice_no = str_replace("EI", $chr,$invoice_no);
-						}
-						else
-						{						
-							$invoice_no = get_auto_no("DPI", "odr" , "invoice_no","Y");
-							$invoice_no = str_replace("EI", $chr,$invoice_no);
-						}
-						
-					}
+			 $chr =  "CI";
+			}elseif ($for_readonly=="P"){?>Packing List<?
 
-				}else{?>Escrow Invoice<?
-					$chr =  "EI";
-					
-					$invoice_cnt =QRY_CNT("odr", "and odr_idx ='$odr_idx' and invoice_no <> ''"); 
-
-					if ($invoice_cnt == 1 || $invoice_cnt == 0)
-					{
-						$invoice_no = get_auto_no("EI", "odr" , "invoice_no");
-						$invoice_no = str_replace("DPI", $chr,$row_odr["invoice_no"]);
-						
-					}
-					else
-					{
-						if (!$loadPage)
-						{
-							$invoice_no = get_auto_no("EI", "odr" , "invoice_no");
-							$invoice_no = str_replace("DPI", $chr,$invoice_no);
-						}
-						else
-						{
-							$invoice_no = get_auto_no("EI", "odr" , "invoice_no","Y");
-							$invoice_no = str_replace("DPI", $chr,$invoice_no);
-						}
-						
-					}
-					
-				}
+				$chr =  "PL";
 			}
+			elseif (($pay_invoice =="D") && $row_odr_det["part_type"]==2){?>Down Payment Invoice<?
+
+				$chr = "DPI";
+				$invoice_no = str_replace("EI", $chr, get_auto_no("EI", "odr" , "invoice_no"));
+				$odr_invoice_cnt =QRY_CNT("odr", "and odr_idx ='$odr_idx' and invoice_no <> '".$invoice_no."' "); 
+				$history_invoice_cnt =QRY_CNT("odr_history", "and odr_idx ='$odr_idx' and etc1 = '".$invoice_no."' "); 
+
+				if ($odr_invoice_cnt == $history_invoice_cnt)
+				{
+					$invoice_no = get_auto_no("DPI", "odr" , "invoice_no");
+					$invoice_no = str_replace("EI", $chr,$row_odr["invoice_no"]);
+					
+				}
+				else
+				{
+					if (!$loadPage)
+					{
+						$invoice_no = get_auto_no("DPI", "odr" , "invoice_no");
+						$invoice_no = str_replace("EI", $chr,$invoice_no);
+					}
+					else
+					{
+						$invoice_no = get_auto_no("DPI", "odr" , "invoice_no","Y");
+						$invoice_no = str_replace("EI", $chr,$invoice_no);
+					}						
+					
+				}
+
+			}else{?>Escrow Invoice<?
+				$chr =  "EI";
+				
+				$odr_invoice_cnt =QRY_CNT("odr", "and odr_idx ='$odr_idx' and invoice_no <> '".$row_odr["invoice_no"]."' "); 
+				$history_invoice_cnt =QRY_CNT("odr_history", "and odr_idx ='$odr_idx' and etc1 = '".$row_odr["invoice_no"]."' "); 
+
+				if ($odr_invoice_cnt == $history_invoice_cnt)
+				{
+					$invoice_no = get_auto_no("EI", "odr" , "invoice_no");
+					$invoice_no = str_replace("DPI", $chr,$row_odr["invoice_no"]);
+					
+				}
+				else
+				{
+					if (!$loadPage)
+					{
+						$invoice_no = get_auto_no("EI", "odr" , "invoice_no");
+						$invoice_no = str_replace("DPI", $chr,$invoice_no);
+					}
+					else
+					{
+						$invoice_no = get_auto_no("EI", "odr" , "invoice_no","Y");
+						$invoice_no = str_replace("DPI", $chr,$invoice_no);
+					}						
+					
+				}
+
+				
+			}
+			
 			
 			?> No.</strong><span>
 

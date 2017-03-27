@@ -672,7 +672,7 @@ if ($typ =="odrconfirm"){   //------------ 확정 발주서 (from:30_05) JSJ ---
         //1. odr_status 변경
         update_val("odr","odr_status","2", "odr_idx", $odr_idx);
         update_val("odr","status_edit_mem_idx",$session_mem_idx, "odr_idx", $odr_idx);
-
+       
         $odr_no = get_any("odr", "odr_no", "odr_idx = $odr_idx");
         //2. history 등록
         $session_mem_idx = $_SESSION["MEM_IDX"];
@@ -701,6 +701,8 @@ if ($typ =="odrconfirm"){   //------------ 확정 발주서 (from:30_05) JSJ ---
 }
 if ($typ =="odrconfirm2"){  //------------ 확정 발주서 (from:30_05) 2016-04-19 : log 기록(사본생성) --------------------------------------------------------------------
         //0. 만약에 odr_status가 납기 확인한 데이터가 있다면 그 테이터를 확인 한것으로 표시 (confirm_yn = Y')
+        
+
         $odr_history_idx = get_any("odr_history" , "odr_history_idx", "odr_idx= $odr_idx and status = 16");
         if ($odr_history_idx){update_val("odr_history","confirm_yn","Y", "odr_history_idx", $odr_history_idx);}
 
@@ -715,6 +717,7 @@ if ($typ =="odrconfirm2"){  //------------ 확정 발주서 (from:30_05) 2016-04
         //1. odr_status 변경
         update_val("odr","odr_status","2", "odr_idx", $odr_idx);
         update_val("odr","status_edit_mem_idx",$session_mem_idx, "odr_idx", $odr_idx);
+        
 
         $odr_no = get_any("odr", "odr_no", "odr_idx = $odr_idx");
         //2016-11-29 : 중복저장 방지 - KSR
@@ -784,7 +787,7 @@ if ($typ =="odramendconfirm"){ // 확정 발주서(P.O Amendment)12_07 처리 --
 }
 
 if ($typ =="odramendconfirm2"){ //구매자: 수정발주서(P.O Amendment)12_07 처리 / 2016-04-15 : Log 기록 -------------------------------------------------------------
-        
+
         $ship_idx = get_any("ship" , "ship_idx", "odr_idx= $odr_idx");
 
         //2017-01-10 : ship 정보를 임시테이블에서 복사
@@ -828,6 +831,7 @@ if ($typ =="odramendconfirm2"){ //구매자: 수정발주서(P.O Amendment)12_07
         //1. odr_status 변경
         update_val("odr","odr_status","3", "odr_idx", $odr_idx);
         update_val("odr","status_edit_mem_idx",$session_mem_idx, "odr_idx", $odr_idx);
+        update_val("odr","amend_no",$poa_no, "odr_idx", $odr_idx);     
 
         //수정발주서 번호 가져오기 - 이전 단계 Sheet(12_07)에서 생성하여 odr 테이블에 Update 했음.  2016-04-18 : Sheet 호출 전에 'poano'에서 번호 생성
         //$amend_no = get_any("odr", "amend_no", "odr_idx = $odr_idx");
