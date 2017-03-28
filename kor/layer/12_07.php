@@ -89,6 +89,7 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 			?>
 			<li class="b1"><strong>Purchase Order Amendment No.</strong><span><?=$poa_no?></span></li>
 			<input type="hidden" name="poa_no" id="poa_no_1207" value="<?=$poa_no;?>">
+			<input type="hidden" name="odr_idx" id="odr_idx_12_07" value="<?=$odr_idx;?>">
 			<li class="b2"><strong>Date</strong><span><?=$row_odr["reg_date_fmt"]?></span></li>
 			<li><strong>Page</strong><span>1</span></li>
 		</ul>
@@ -355,3 +356,8 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 	</div>
 </div>
 
+<script>
+	$(document).ready(function(){
+		$(".btn-close").attr("loadPage","<?=$loadPage?>");
+	});
+</script>

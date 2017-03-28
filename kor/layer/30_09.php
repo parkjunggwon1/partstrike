@@ -665,3 +665,8 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 	</div>
 </div>
 
+<script>
+	$(document).ready(function(){
+		$(".btn-close").attr("loadPage","<?=$loadPage?>");
+	});
+</script>

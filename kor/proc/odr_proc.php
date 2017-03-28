@@ -354,35 +354,34 @@ if ($typ == "edit"){
      }
 
 
-     for ($j = 0 ; $j<count($ary_part_idx); $j++){
+    for ($j = 0 ; $j<count($ary_part_idx); $j++){
 
-          if ($part_type== "2"){
-            $option = ", price = '".$ary_price[$j]."'";
-          }elseif($part_type =="7"){ //turnkey
-            $option = ", quantity = '".$ary_quantity[$j]."'";
-            if ($i <=4){
-            }
-          }else{
-            $option = ", quantity       = '".$ary_quantity[$j]."'
-                       , price          = '".$ary_price[$j]."' ";
-          }
+        if ($part_type== "2"){
+        $option = ", price = '".$ary_price[$j]."'";
+        }elseif($part_type =="7"){ //turnkey
+        $option = ", quantity = '".$ary_quantity[$j]."'";
+        if ($i <=4){
+        }
+        }else{
+        $option = ", quantity       = '".$ary_quantity[$j]."'
+                   , price          = '".$ary_price[$j]."' ";
+        }
 
+        $sql = "update part set
+            mem_idx ='".$_SESSION["MEM_IDX"]."'
+            ,rel_idx='".$_SESSION["REL_IDX"]."'
+            , part_no       = '".$ary_part_no[$j]."'
+            , manufacturer  = '".$ary_manufacturer[$j]."'
+            , package       = '".$ary_package[$j]."'
+            ,  dc           = '".$ary_dc[$j]."'
+            , rhtype        = '".$ary_rhtype[$j]."'
+            $option
+            where part_idx = $ary_part_idx[$j]";
 
-            $sql = "update part set
-                mem_idx ='".$_SESSION["MEM_IDX"]."'
-                ,rel_idx='".$_SESSION["REL_IDX"]."'
-                , part_no       = '".$ary_part_no[$j]."'
-                , manufacturer  = '".$ary_manufacturer[$j]."'
-                , package       = '".$ary_package[$j]."'
-                ,  dc           = '".$ary_dc[$j]."'
-                , rhtype        = '".$ary_rhtype[$j]."'
-                $option
-                where part_idx = $ary_part_idx[$j]";
+        //echo $sql."<BR>";
+        $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 
-                //echo $sql."<BR>";
-                $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
-
-     }
+    }
     if($result){
         PageReLoad("저장되었습니다.",$part_type);
     }
@@ -2585,5 +2584,17 @@ if($typ =="save_key"){
         $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
     }
     
+}
+
+if ($typ=="return_qty")
+{
+    $odr_det_sql = "select odr_det_idx from odr_det where odr_idx='".$odr_idx."'";
+    //echo  $sql;
+    $det_result = mysql_query($odr_det_sql,$conn) or die ("SQL Error : ". mysql_error());
+    while($row = mysql_fetch_array($det_result)){
+        $update_sql = "update odr_det set $qty_type ='0' where odr_det_idx='".$row['odr_det_idx']."'";
+
+        $result = mysql_query($update_sql,$conn) or die ("SQL Error : ". mysql_error());
+    }
 }
 ?>

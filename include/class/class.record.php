@@ -252,10 +252,10 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				<?if ($part_type==2){?>
 					<td  <?=$goJump?>  class="t-rt">I</td>
 				<?}else{?>
-					<td  <?=$goJump?>  class="t-rt"><?=$odr_stock<=0?"":number_format($odr_stock)?></td>
+					<td  <?=$goJump?>  class="t-rt"><?=$odr_stock<=0?"":number_format($odr_stock+$odr_quantity)?></td>
 				<?}?>			
 			<?}else if ($odr_status==7){?>
-				<td  <?=$goJump?>  class="t-rt"><?=$odr_stock<=0?"":number_format($odr_stock)?></td>
+				<td  <?=$goJump?>  class="t-rt"><?=$odr_stock<=0?"":number_format($odr_stock+$odr_quantity)?></td>
 			<?}else{?>
 				<td  <?=$goJump?>  class="t-rt"><?=$supply_quantity<=0?"":number_format($supply_quantity)?></td>
 			<?}?>

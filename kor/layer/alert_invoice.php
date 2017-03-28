@@ -70,11 +70,7 @@ else
 ?>	
 
 <div class="layer-content" style="padding:0;width:100%;padding-left: 130px;padding-top: 30px;">	
-	<a href="#" class="btn-close" style="position: absolute;right: 10px;top: 1px;padding: 5px;text-decoration:underline;"><img src="/kor/images/btn_layer_close.png" alt="close"></a>
-	<?if ($sell_nation_idx != $ship_nation){?>
-	<span>Commercial Invoice : <a href="#" class="btn-view-sheet-3011" for_readonly="Y" style="color:#00759e;text-decoration:underline;"><?=$invoice_val?></a></span><br>
-	<span>Packing List : <a href="#" class="btn-view-sheet-3011" for_readonly="P" style="color:#00759e;text-decoration:underline;"><?=$odr_val?></a></span><br>
-	<?}?>
+	<a href="#" class="btn-close" style="position: absolute;right: 10px;top: 1px;padding: 5px;text-decoration:underline;"><img src="/kor/images/btn_layer_close.png" alt="close"></a>	
 	<?
 	if ($etc2=="DHL" || $etc2=="UPS" || $etc2=="Fedex" || $etc2=="TNT")
 	{	
@@ -107,7 +103,11 @@ else
 		}
 		?>	
 	<?}else{?>
-		<span><?=$etc2?> - <a href="#" style="color:#00759e;cursor: default;"><?=$etc1?></a></span>
+		<span><span class='c-red'><?=$etc2?></span> - <a href="#" style="color:#00759e;cursor: default;"><?=$etc1?></a></span>
+	<?}?>
+	<?if ($sell_nation_idx != $ship_nation){?>
+	<span>Commercial Invoice : <a href="#" class="btn-view-sheet-3011" for_readonly="Y" style="color:#00759e;text-decoration:underline;"><?=$invoice_val?></a></span><br>
+	<span>Packing List : <a href="#" class="btn-view-sheet-3011" for_readonly="P" style="color:#00759e;text-decoration:underline;"><?=$odr_val?></a></span><br>
 	<?}?>
 	
 	<!--<span><?=$etc2?>-<a href="#" style="color:#00759e;text-decoration:underline;"><?=$etc1?></a></span>-->

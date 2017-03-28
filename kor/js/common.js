@@ -112,7 +112,7 @@ $(document).ready(function(){
 	});
 	$(".collapse-panel .panel-hd:first-child").click();
 	//---- 발주창(0504) 닫기(X) --------------------------------------------------------------
-	$("section[class^='layer']").on("click",".btn-close",function(){
+	$("section[class^='layer']").on("click",".btn-close",function(){		
 		if($(this).hasClass("odr")){
 			
 			if($(".layer-section").hasClass("open")){
@@ -169,6 +169,33 @@ $(document).ready(function(){
 					showajax(".col-right", "side_order");
 				}
 			});
+		}
+
+		if ($(this).attr("loadPage") != "")
+		{		
+			var odr_idx;
+			var qty_type;
+
+			if ($(this).attr("loadPage")=="30_08")
+			{
+				odr_idx=$("#odr_idx_30_09").val();
+				qty_type="supply_quantity";
+			}
+			else if ($(this).attr("loadPage")=="09_01")
+			{
+				odr_idx=$("#odr_idx_12_07").val();
+				qty_type="odr_quantity";
+			}
+			
+			$.ajax({
+					url: "/kor/proc/odr_proc.php", 
+					data: "typ=return_qty&odr_idx="+odr_idx+"&qty_type="+qty_type,
+					encType:"multipart/form-data",
+					success: function (data) {	
+						
+					}
+			});		
+			$(".btn-close").removeAttr("loadPage");
 		}
 
 	});
