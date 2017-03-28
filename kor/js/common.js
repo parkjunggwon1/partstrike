@@ -260,12 +260,17 @@ $(document).ready(function(){
 			check_value(this);
 	 });
 
-	  $('.onlyEngNum').css("ime-mode","disabled").keydown(function(event){ 		//ENG, 숫자만 입력하게.(.도 포함) 		 
+	 $('.onlyEngNum').css("ime-mode","disabled").keydown(function(event){ 		//ENG, 숫자만 입력하게.(.도 포함) 		 
 	  if (event.which && (event.which == 13 || event.which == 32 ||event.which == 189 ||event.which == 190 || event.which == 110 || event.which > 45 && event.which < 58 || event.which == 8 || event.which > 64 && event.which < 91|| event.which > 95 && event.which < 123)) {			
 	   } else { 
 	   event.preventDefault(); 
 	  } 
 	 });
+
+	 $(document).on("keyup", ".onlyEngNum", function() {$(this).val( $(this).val().replace(/[^\!-z]/gi,"") );});
+	 $(document).on("keyup", ".no_hangul", function() {$(this).val( $(this).val().replace(/[0-9]|[^\!-z]/gi,"") );});
+	 $(document).on("keyup", ".onlynum", function() {$(this).val( $(this).val().replace(/[^0-9]/g,"") );});
+
 	//-- 레이어 창 열기 ------------------------------------
 	function openLayer(layerNum,loadPage,varNum){
 		$layer = $("."+layerNum+"-section");
