@@ -229,6 +229,17 @@ function chgdositxt(obj,enty){
 			$("#ship_account_no").val("");	
 			$("#ship_info option:eq(0)").attr("selected", "selected");
 			$(".text_lang").text("");
+			$(".company-info-wrap input").val("");
+			$(".company-info-wrap select").val("");
+			$("#sp_addr").html("");
+			$("#delv_load").val("05_04");
+			$("#delivery_addr_idx").val("0");
+			$(".company-rank td").attr('class',"");
+			$(".company-info-wrap input,select").attr("disabled",true);
+			$(".company-info-wrap select:eq(0)").attr("disabled",false);
+			$("#ship_info").attr("disabled",false);	
+			$(".company-info-wrap select:eq(1)").attr("disabled",true);
+			$("#layerPop3 #btn-confirm").css("cursor","").removeClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm_1.gif");	
 		}
 		else
 		{
@@ -398,6 +409,7 @@ $(document).ready(function(){
 					}
 					else
 					{
+						$("#btn_del_09_01").hide();
 						$("#btn_del_09_01").css("cursor","").attr("onclick","").attr("src","/kor/images/btn_delete2_1.gif");
 						$("#btn_cancel_09_01").css("cursor","").removeClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel_1.gif");	
 					}						
@@ -405,12 +417,14 @@ $(document).ready(function(){
 				}
 				else
 				{				
+					$("#btn_del_09_01").show();
 					$("#btn_del_09_01").css("cursor","pointer").attr("onclick","del_sel();").attr("src","/kor/images/btn_delete2.gif");	
 					$("#btn_cancel_09_01").css("cursor","").removeClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel_1.gif");
 				}
 			}
 			else
 			{
+				$("#btn_del_09_01").hide();
 				$("#btn_del_09_01").css("cursor","").attr("onclick","del_sel();").attr("src","/kor/images/btn_delete2_1.gif");	
 
 			}
@@ -602,7 +616,7 @@ $det_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx ");  //odr_det 수량
 				<th scope="col" lang="ko" class="t-orderoty" style="width:66px">발주수량</th>
 				<th scope="col" lang="ko"  class="t-supplyoty" style="width:66px">공급수량</th>
 				<th scope="col" lang="ko" class="t-period" style="width:38px">납기</th>
-				<th scope="col" class="t-company" style="width:66px">Company</th>
+				<th scope="col" class="t-company" style="width:76px">Company</th>
 				<!--th scope="col" >&nbsp;</th-->
 				</tr>
 		</thead>
@@ -617,7 +631,7 @@ $det_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx ");  //odr_det 수량
 		<img src="/kor/images/btn_order_add.gif" alt="발주 추가" style="cursor:pointer"  class="btn-dialog-0501-from_0901">
 		<img src="/kor/images/btn_order_confirm.gif" alt="발주서 확인" odr_idx="<?=$odr_idx?>" class="btn-view-sheet-1207">
 		<img src="/kor/images/btn_cancel_1.gif" id="btn_cancel_09_01" alt="취소">
-		<img src="/kor/images/btn_delete2_1.gif" alt="삭제" id="btn_del_09_01">
+		<img src="/kor/images/btn_delete2_1.gif" style="display: none;" alt="삭제" id="btn_del_09_01">
 	</div>
 </div>
 

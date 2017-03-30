@@ -146,6 +146,8 @@ function agency_won()
 
 			";
 
+			
+
 			if ($country_code [$k2]=="USD")
 			{
 				$won_change = $remittance_send[$k2];
@@ -154,7 +156,6 @@ function agency_won()
 
 	}
 
-	
 	return $won_change;
 	exit;
 

@@ -527,7 +527,7 @@ function dlvr_click(obj){
 	});		
 }
 $(document).ready(function(){
-
+	new_addr();
 	var delivery_chg=$("input:checkbox[id='delivery_chg']").is(":checked");
 	var select = $("select");
 	select.change(function(){
@@ -984,11 +984,11 @@ function checkActive(){
 		$(".company-info-wrap select:eq(0)").attr("disabled",false);
 		$("#ship_info").attr("disabled",false);	
 		$(".company-info-wrap select:eq(1)").attr("disabled",true);
-		$("#layerPop3 #btn-confirm").css("cursor","").removeClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm_1.gif");
+		$("#layerPop3 #btn-confirm").css("cursor","").removeClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm_1.gif");		
 	}
 
 	function add_change_sel(val)
-	{
+	{		
 		if (val)
 		{
 
@@ -1003,6 +1003,17 @@ function checkActive(){
 				$("#ship_account_no").val("");	
 				$("#ship_info option:eq(0)").attr("selected", "selected");
 				$(".text_lang").text("");
+				$(".company-info-wrap input").val("");
+				$(".company-info-wrap select").val("");
+				$("#sp_addr").html("");
+				$("#delv_load").val("05_04");
+				$("#delivery_addr_idx").val("0");
+				$(".company-rank td").attr('class',"");
+				$(".company-info-wrap input,select").attr("disabled",true);
+				$(".company-info-wrap select:eq(0)").attr("disabled",false);
+				$("#ship_info").attr("disabled",false);	
+				$(".company-info-wrap select:eq(1)").attr("disabled",true);
+				$("#layerPop3 #btn-confirm").css("cursor","").removeClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm_1.gif");	
 			}
 			else
 			{

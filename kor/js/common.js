@@ -138,7 +138,9 @@ $(document).ready(function(){
 					dataType : "html" ,
 					async : false ,
 					success: function(data){ 
-						showajax(".col-right", "side_order");
+						main_srch();
+						//showajax(".col-right", "side_order");
+
 					}
 				});
 		}else if ($(this).hasClass("amend")){  // 기존 데이터 제외하고 amend 된 데이터 모두 삭제.
@@ -206,7 +208,13 @@ $(document).ready(function(){
 
 	$("section[class^='layer']").on("click",".btn-close",function(){
 		
-		if (!$(this).hasClass("btn-order-periodconfirm"))
+		//po-cancel 닫기(X)
+		if ($(this).hasClass("po-cancel")){			
+			var load_page = $("#load_page_30_08").val();
+			openLayer("layer3",load_page,"?odr_idx="+$("#odr_idx_30_08").val());
+		}
+
+		else if (!$(this).hasClass("btn-order-periodconfirm"))
 		{			
 			$(this).parents("section[class^='layer']").removeClass("open");
 			$("body").removeClass("open-layer");
@@ -219,11 +227,7 @@ $(document).ready(function(){
 			}
 			
 		}
-		//po-cancel 닫기(X)
-		if ($(this).hasClass("po-cancel")){
-			var load_page = $("#load_page_30_08").val();
-			openCommLayer("layer3",load_page,"?odr_idx="+$("#odr_idx_30_08").val());
-		}
+		
 	});
 	//---모든레이어 닫고 페이지 새로고침(from:alert2.php)---------------------------------
 	$("section[class^='layer']").on("click",".btn-close-refresh",function(){

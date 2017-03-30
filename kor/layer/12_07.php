@@ -312,7 +312,7 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 	<div class="etc-info1">
 		<div class="txt-area">
 			<strong>Request from buyer</strong>
-			<p class="txt1 c-blue" style="margin:0;padding-top:5px;"><?=$row_ship["memo"]?></p>
+			<p class="txt1 c-blue" style="margin:0;padding-top:5px;"><?=$row_ship_tmp["memo"]?></p>
 		</div>
 	</div>
 	

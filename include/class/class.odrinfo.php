@@ -2005,7 +2005,7 @@ if ($for_readonly != "P") {?>
 			$vat_val = $vat_price/100;
 			$vat_plus =  $tot*$vat_val;			
 			$tot = $tot + $vat_plus;
-			$tot_val = $tot + $vat_plus;
+			$tot_val = $tot;
 
 		}
 
