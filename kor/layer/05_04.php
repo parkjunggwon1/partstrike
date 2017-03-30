@@ -205,11 +205,11 @@ function chgnation(obj){
 		$("#addr_full").val("");
 
 		$("#zipcode").val("");
-		if (obj.value=="")
+		if (obj=="")
 		{
 			//$("#nation").parent().attr("lang","en");
 		}else{
-			if(obj.value ==$("#s_nation").val() && obj.value ==$("#b_nation").val()){
+			if(obj ==$("#s_nation").val() && obj ==$("#b_nation").val()){
 				//$(".company-info-wrap [lang=en]").attr("lang","ko");
 				$(".company-info-wrap input").css("ime-mode","active");
 			}else{
@@ -217,7 +217,7 @@ function chgnation(obj){
 				$(".company-info-wrap input").css("ime-mode","disabled");
 			}
 		}
-		if(obj.value== "1"){	//한국---------
+		if(obj== "1"){	//한국---------
 			$(".roadname").show();
 			$(".roadname_1").hide();
 		}else{	//그 외 국가-----------------
@@ -225,7 +225,7 @@ function chgnation(obj){
 			$(".roadname").hide();
 		}
 		//국가번호 세팅~
-		if (obj.value=="")
+		if (obj=="")
 		{
 			$("input[name=nation_nm]").val("");		
 		}else{
@@ -233,7 +233,7 @@ function chgnation(obj){
 			type: "GET", 
 			url: "/ajax/proc_ajax.php", 
 			data: { actty : "STC",
-					actidx : obj.value
+					actidx : obj
 			},
 				dataType : "html" ,
 				async : false ,
@@ -243,14 +243,14 @@ function chgnation(obj){
 			});		
 		}
 
-		$("#nation").val(obj.value).attr("selected", "selected");
+		$("#nation").val(obj).attr("selected", "selected");
 		$("#nation").siblings("label").text($("#nation").children("option:selected").text());
 		
 		$.ajax({ 
 			type: "GET", 
 			url: "/ajax/proc_ajax.php", 
 			data: { actty : "NPT",
-					actidx : obj.value
+					actidx : obj
 			},
 				dataType : "text" ,
 				async : false ,
@@ -275,7 +275,7 @@ function chgnation(obj){
 		});	
 
 		var same_nation = "";
-		if (s_nation==obj.value)
+		if (s_nation==obj)
 		{
 			same_nation = "";
 		}
@@ -289,7 +289,7 @@ function chgnation(obj){
 		url: "/ajax/proc_ajax.php", 
 		data: { actty : "SDA",
 				lang : same_nation , //language
-				actidx : obj.value
+				actidx : obj
 		},
 			dataType : "html" ,
 			async : false ,
@@ -301,7 +301,7 @@ function chgnation(obj){
 			$("input[name=zipcode]").val("");			
 			$("#korea_chk").val(same_nation);
 			$("#addr").val($("#nation").children("option:selected").text());
-			if(obj.value == $("#s_nation").val()){
+			if(obj == $("#s_nation").val()){
 				$("#sp_addr").html("");
 			}else{
 				$("#sp_addr").html(""+$("#nation").children("option:selected").text()+"");

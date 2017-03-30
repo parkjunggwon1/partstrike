@@ -1780,6 +1780,7 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 				$odr_quantity = $fault_quantity;
 			}
 
+
 			//금액이 정수면 ,2 실수면 ,4 포멧 20161202 박정권
 			if( ($price == (int)$price) )
 			{					
@@ -1791,7 +1792,6 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 				$price_val = $price;
 				$total_price = $odr_quantity*$price;
 			}
-
 			
 			if ($loadPage!="12_07_v"){ //수정발주서 Sheet(Purchase Order Amendment)
 				$extra = "";
@@ -1799,6 +1799,7 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 				if($pack_condition1) { $extra .=($extra==""?"<BR>":", "). GF_Common_GetSingleList_LANG("PACKCOND1",$pack_condition1,"_en");}
 				if($pack_condition2) { $extra .=($extra==""?"<BR>":"/ "). GF_Common_GetSingleList_LANG("PACKCOND2",$pack_condition2,"_en");}				
 			}
+
 			if ($part_type =="2"){
 					$dc = "NEW";
 					$quantity="";
@@ -3584,6 +3585,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 	//****************** 배송지 변경 *********************************************************************************************
 	//****************************************************************************************************************************
 	function GET_CHG_ODR_DELIVERY_ADDR($delivery_addr_idx,$loadPage="",$odr_idx=""){
+
 		if ($delivery_addr_idx){
 			$result = QRY_DELIVERY_ADDR_VIEW($delivery_addr_idx);
 			$row = mysql_fetch_array($result);
@@ -3611,6 +3613,8 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 		}else{
 			$saved_cnt = QRY_CNT("delivery_addr", "and mem_idx=".$_SESSION["MEM_IDX"]." and save_yn='Y'");
 		}
+
+
 		//odr 정보
 		$odr=get_odr($odr_idx);
 		$sell_mem_idx = $odr[sell_mem_idx];
@@ -3628,7 +3632,8 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 		?>
 	<script type="text/javascript">
 			$(document).ready(function(){	
-				<?if (!$delivery_addr_idx || $delivery_addr_idx !="0"){ ?>
+				//alert(<?=$delivery_addr_idx?>);
+				<?if (!$delivery_addr_idx && $delivery_addr_idx !="0"){ ?>
 						$(".company-info-wrap input,select").attr("disabled",true);
 						$(".company-info-wrap select:eq(0)").attr("disabled",false);
 						$("#ship_info").attr("disabled",false);						
@@ -3681,6 +3686,8 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 				});
 				
 			});
+			
+			chgnation($("#nation").val());
 			
 			//회사구분 선택 ---------------------------------------------------------------
 			$(".company-info-wrap select[name=com_type]").change(function(){
@@ -3763,7 +3770,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 			});
 			
 			function MustChk()
-			{		
+			{	
 				var f =  document.f_<?=$loadPage;?>;
 				var com_type = $(".company-info-wrap select[name=com_type]").val();
 				
@@ -3830,7 +3837,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 				<td colspan="2">
 									<div class="select type5" >
 										<label ><?=($nation)?GF_Common_GetSingleList("NA",$nation):"Nation"?></label>
-										<?=GF_Common_SetComboList("nation", "NA", "", 1, "True",  "", $nation , "onchange='chgnation(this);'");?>
+										<?=GF_Common_SetComboList("nation", "NA", "", 1, "True",  "", $nation , "onchange='chgnation(this.value);'");?>
 									</div>
 				</td>
 			</tr>			
@@ -3851,23 +3858,14 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 				<td colspan="2"><input class="i-txt3 c-blue" type="text" maxlength="30" lang="ko" name="pos_nm" style="width:215px" value="<?=$pos_nm?>"></td>
 			</tr>
 			<?			
-				if($delivery_addr_idx!="")
-				{
-					$tel_nation_val = "+".$nation_number."";
-					$fax_nation_val = "+".$nation_number."";
-					$hp_nation_val = "+".$nation_number."";
-				}
-				else
-				{
-					$tel_nation = explode("-",$tel);
-					$fax_nation = explode("-",$fax);
-					$hp_nation = explode("-",$hp);
-
-					$tel_nation_val = $tel_nation[0];
-					$fax_nation_val = $fax_nation[0];
-					$hp_nation_val = $hp_nation[0];
-				}
 				
+				$tel_nation = explode("-",$tel);
+				$fax_nation = explode("-",$fax);
+				$hp_nation = explode("-",$hp);
+
+				$tel_nation_val = $tel_nation[0];
+				$fax_nation_val = $fax_nation[0];
+				$hp_nation_val = $hp_nation[0];				
 
 				$tel_num = str_replace($tel_nation[0]."-","",$tel);
 				$fax_num = str_replace($fax_nation[0]."-","",$fax);
@@ -4077,7 +4075,7 @@ function pay_dlvr($odr_idx, $sell_mem_idx, $b_nation){
 											<td colspan="4" style="padding-left:3px;"><strong class="c-black">Memo&nbsp;&nbsp;</strong> <input type="text" class="i-txt<?=$ship_info=="6" || $ship_info=="5"?"2":"5"?>" id ="memo" name="memo" maxlength="300" value="<?=$memo?>" style="width:350px;color:#00759e;"></td>
 										</tr>
 										<tr>
-											<td  colspan="4"><label class="ipt-chk chk2" Style="margin-left:38px;"><input <?if ($ship_info=="6") {echo "disabled";}?> type="checkbox" id="insur_yn" name="insur_yn" <?if ($insur_yn=="o"){echo "checked class='checked'";}?>><span></span> 운송보험</label> <span class="c-red" lang="en"> <?if ($insur_yn=="o"){echo ": Yes";}else{echo ": No";}?></span></td>
+											<td  colspan="4"><label class="ipt-chk chk2" Style="margin-left:38px;"><input <?if ($ship_info=="6") {echo "disabled";}?> type="checkbox" id="insur_yn" name="insur_yn" <?if ($insur_yn=="o"){echo "checked class='checked'";}?>><span></span> 운송보험11111111111</label> <span class="c-red" lang="en"> <?if ($insur_yn=="o"){echo ": Yes";}else{echo ": No";}?></span></td>
 										</tr>
 										<tr>
 											<td colspan="4"><label class="ipt-chk chk2 com-chck" Style="margin-left:38px;"><input type="checkbox" <?if ($ship_info=="6") {echo "disabled";}?> name="delivery_chg" id="delivery_chg"  <?if ($delivery_addr_idx){echo "checked class='checked'";}?> onclick="javascript:add_change_sel('<?=$assign_idx?>');"><span></span> 배송지 변경</label></td>

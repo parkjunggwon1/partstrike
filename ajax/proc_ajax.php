@@ -783,6 +783,25 @@ switch($actty) {
 		//		echo $sql;
 		$result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
 		break;
+	case "UQ_TEMP":	//[수정 발주서]창에서 '발주서 확인' 버튼	
+
+		//임시테이블에 데이터 존재여부
+        $ship_idx = get_any("odr_det_temp", "odr_det_idx", "odr_det_idx=$actidx");
+        $actkind = str_replace(",","",$actkind);
+
+        if($ship_idx>0){
+        	$sql = "update odr_det_temp set 
+				odr_quantity = '$actkind' 
+				where odr_det_idx =$actidx";
+        }else{
+            $sql = "insert odr_det_temp set 
+				odr_quantity = '$actkind',
+				odr_det_idx = '$actidx'";
+        }
+        
+        $ship_result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());	
+
+		break;
 	case "UAQ":
 		if ($actkind > 0){
 			if(get_any("odr_det", "add_quantity", " odr_idx = $actidx and part_type =2") == ""){

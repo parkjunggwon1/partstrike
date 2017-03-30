@@ -66,12 +66,12 @@ $("input[name^=odr_det_idx]").click(function(e){
 
 
 
-function chgnation(obj){
-		if (obj.value=="")
+function chgnation(obj){	
+		if (obj=="")
 		{
 			$("#nation").parent().attr("lang","en");
 		}else{
-			if(obj.value ==$("#s_nation").val() && obj.value ==$("#b_nation").val()){
+			if(obj ==$("#s_nation").val() && obj ==$("#b_nation").val()){
 				$(".company-info-wrap [lang=en]").attr("lang","ko");
 				$(".company-info-wrap input").css("ime-mode","active");
 			}else{
@@ -79,17 +79,17 @@ function chgnation(obj){
 				$(".company-info-wrap input").css("ime-mode","disabled");
 			}
 		}
-		if(obj.value== "1"){
+		if(obj== "1"){
 			$(".roadname").show();
 			$(".roadname_1").hide();
 		}else{
 			$(".roadname_1").show();
 			$(".roadname").hide();
 		}
-		$("#nation").val(obj.value).attr("selected", "selected");
+		$("#nation").val(obj).attr("selected", "selected");
 		$("#nation").siblings("label").text($("#nation").children("option:selected").text());
 		
-		if (obj.value=="")
+		if (obj=="")
 		{
 			$("input[name=nation_nm]").val("");		
 		}else{
@@ -97,7 +97,7 @@ function chgnation(obj){
 			type: "GET", 
 			url: "/ajax/proc_ajax.php", 
 			data: { actty : "STC",
-					actidx : obj.value
+					actidx : obj
 			},
 				dataType : "html" ,
 				async : false ,
@@ -112,7 +112,7 @@ function chgnation(obj){
 		url: "/ajax/proc_ajax.php", 
 		data: { actty : "SDA",
 				lang : "" , //language
-				actidx : obj.value
+				actidx : obj
 		},
 			dataType : "html" ,
 			async : false ,
@@ -122,7 +122,7 @@ function chgnation(obj){
 			$("#dosi").append($($data.html()));
 			//$("#dosi").siblings("label").text("모국어");
 			$("#sigungu").val("");
-			$("input[name=zipcode]").val("");
+			//$("input[name=zipcode]").val("");
 			$("#addr").val($("#nation").children("option:selected").text());
 			
 			 if($("#dosi option").length==1){   //도/시가 등록된게 없으면 텍스트 박스로 대체
@@ -231,8 +231,8 @@ function chgdositxt(obj,enty){
 			$(".text_lang").text("");
 			$(".company-info-wrap input").val("");
 			$(".company-info-wrap select").val("");
-			$("#sp_addr").html("");
-			$("#delv_load").val("05_04");
+			//$("#sp_addr").html("");
+			$("#delv_load").val("09_01");
 			$("#delivery_addr_idx").val("0");
 			$(".company-rank td").attr('class',"");
 			$(".company-info-wrap input,select").attr("disabled",true);
@@ -254,7 +254,7 @@ function chgdositxt(obj,enty){
 		$(".company-info-wrap input").val("");
 		$(".company-info-wrap select").val("");
 		$("#sp_addr").html("");
-		$("#delv_load").val("05_04");
+		$("#delv_load").val("09_01");
 		$("#delivery_addr_idx").val("0");
 		$(".company-rank td").attr('class',"");
 		$(".company-info-wrap input,select").attr("disabled",true);
@@ -302,6 +302,45 @@ function chgdositxt(obj,enty){
 				
 		$("#sp_addr").html($("#addr_full").val()+" "+", "+post_val+" "+nation_val);
 					
+	}
+
+	function zipcode_txt(str)
+	{
+		
+		var s_nation ="<?=$s_nation?>";
+		var check_val = $("input:checkbox[id='zipcode_no']").is(":checked");
+		var nation_code = $("#nation").children("option:selected").val();
+		var nation_val=$("#nation").children("option:selected").text();		
+		var zipcode_val=$("#zipcode").val();
+		var dosi_val=$("#real_do_val").val();
+		var sigungu_val=$("#sigungu").val();
+		var detail_val=$("#addr_det").val();
+		var post_val="";
+		var post_val_en="";
+
+		if (check_val==true)
+		{
+			post_val="";
+			post_val_en="";
+
+			$("#zipcode").attr("readonly",true);
+			$("#zipcode").css("background-color",'rgb(235, 235, 228)');
+			$("#zipcode").val(" ");
+		}
+		else
+		{
+			$("#zipcode").css("background-color",'');
+			$("#zipcode").attr("readonly",false);
+
+			
+			post_val=" "+$("#zipcode").val()+", ";
+			post_val_en=""+$("#zipcode").val()+", ";
+			
+		}
+					
+		$("#addr").val($("#addr_full").val()+" "+", "+post_val+" "+nation_val);
+				
+		$("#sp_addr").html($("#addr_full").val()+" "+", "+post_val+" "+nation_val);
 	}
 
 $(document).ready(function(){

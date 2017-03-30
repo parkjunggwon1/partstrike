@@ -787,10 +787,12 @@ if ($typ =="odramendconfirm"){ // 확정 발주서(P.O Amendment)12_07 처리 --
 
 if ($typ =="odramendconfirm2"){ //구매자: 수정발주서(P.O Amendment)12_07 처리 / 2016-04-15 : Log 기록 -------------------------------------------------------------
 
-        $ship_idx = get_any("ship" , "ship_idx", "odr_idx= $odr_idx");
+        //$ship_idx = get_any("ship" , "ship_idx", "odr_idx= $odr_idx");
 
-        //2017-01-10 : ship 정보를 임시테이블에서 복사
-        $sql = "
+        //2017-01-10 : 임시테이블에서 ship 정보를 저장
+        $sql = "insert into ship (ship_type,odr_idx,delivery_addr_idx,ship_info,ship_account_no,insur_yn,memo,reg_date) select '1',$odr_idx,delivery_addr_idx,ship_info,ship_account_no,insur_yn,memo,now() from ship_temp where odr_idx = $odr_idx ";
+
+        /*$sql = "
                 UPDATE ship AS a
                     JOIN ship_temp AS b
                         ON a.odr_idx=b.odr_idx
@@ -801,12 +803,20 @@ if ($typ =="odramendconfirm2"){ //구매자: 수정발주서(P.O Amendment)12_07
                     a.delivery_addr_idx = b.delivery_addr_idx
                 WHERE a.ship_idx=$ship_idx
                 ";
+        */
 
         $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+        $ship_idx = mysql_insert_id();
 
         //2016-12-06 : 재고 UPDATE('UQ'에서 Upate 것을 여기서 Update) - ccolle
         $result =QRY_ODR_DET_LIST(0," and odr_idx=$odr_idx ",0,"","asc");
         while($row = mysql_fetch_array($result)){
+            //임시 수량 실제 주문에 업데이트 2017-03-30 박정권
+            $odr_qty_real = get_any("odr_det_temp", "odr_quantity" , "odr_det_idx =".$row['odr_det_idx']);
+            $qty_sql = "update odr_det set odr_quantity=".$odr_qty_real." where odr_det_idx =".$row['odr_det_idx'];
+
+            $qty_update_result=mysql_query($qty_sql,$conn) or die ("SQL ERROR : ".mysql_error());
+           
             $part_idx = replace_out($row["part_idx"]);
             $stock_qty = replace_out($row["quantity"]);
             $odr_qty = replace_out($row["odr_quantity"]);
@@ -830,7 +840,8 @@ if ($typ =="odramendconfirm2"){ //구매자: 수정발주서(P.O Amendment)12_07
         //1. odr_status 변경
         update_val("odr","odr_status","3", "odr_idx", $odr_idx);
         update_val("odr","status_edit_mem_idx",$session_mem_idx, "odr_idx", $odr_idx);
-        update_val("odr","amend_no",$poa_no, "odr_idx", $odr_idx);     
+        update_val("odr","amend_no",$poa_no, "odr_idx", $odr_idx); 
+        update_val("odr","ship_idx",$ship_idx, "odr_idx", $odr_idx);     
 
         //수정발주서 번호 가져오기 - 이전 단계 Sheet(12_07)에서 생성하여 odr 테이블에 Update 했음.  2016-04-18 : Sheet 호출 전에 'poano'에서 번호 생성
         //$amend_no = get_any("odr", "amend_no", "odr_idx = $odr_idx");
