@@ -3586,6 +3586,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 	//****************************************************************************************************************************
 	function GET_CHG_ODR_DELIVERY_ADDR($delivery_addr_idx,$loadPage="",$odr_idx=""){
 
+
 		if ($delivery_addr_idx){
 			$result = QRY_DELIVERY_ADDR_VIEW($delivery_addr_idx);
 			$row = mysql_fetch_array($result);
@@ -3687,8 +3688,9 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 				
 			});
 			
+			<?if (!$delivery_addr_idx){?>
 			chgnation($("#nation").val());
-			
+			<?}?>
 			//회사구분 선택 ---------------------------------------------------------------
 			$(".company-info-wrap select[name=com_type]").change(function(){
 				$(".company-info-wrap select[name=nation]").attr("disabled",false);
