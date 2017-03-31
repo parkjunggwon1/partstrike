@@ -173,7 +173,7 @@ $(document).ready(function(){
 			});
 		}
 
-		if ($(this).attr("loadPage") != "")
+		/*if ($(this).attr("loadPage") != "")
 		{		
 			var odr_idx;
 			var qty_type;
@@ -198,7 +198,7 @@ $(document).ready(function(){
 					}
 			});		
 			$(".btn-close").removeAttr("loadPage");
-		}
+		}*/
 
 	});
 	
@@ -2857,8 +2857,6 @@ function updateQty_temp(){
 	//2016-04-08 form 'f' 를 'f_05_04'로 변경
 	//if($("#delivery_chg").is(":checked") && f.com_name.value!=""){			
 	if($("#delivery_chg").is(":checked")){		
-
-	//alert($("#delivery_addr_idx").val());	
 			if($("#delivery_addr_idx").val()==""){   //save_yn='N'으로 먼저 저장해야 함.
 				$("#delivery_save_yn").val("N");
 				$("#typ").val("delivery_save");		

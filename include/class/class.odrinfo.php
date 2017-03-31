@@ -1810,6 +1810,8 @@ function GET_ODR_DET_LIST_VT($loadPage, $part_type, $searchand){   //part_type�
 function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=0){   //sheet용
 	global $charge_type;
 	global $session_mem_idx;
+	global $sheets_no;
+
 ?>
 	<table>
 	<thead>
@@ -1870,6 +1872,9 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 				$odr_quantity = $fault_quantity;
 			}
 
+			if ($loadPage=="12_07" && !$sheets_no){ //수정발주서 Sheet(Purchase Order Amendment)
+				$odr_quantity = get_any("odr_det_temp" , "odr_quantity", "odr_det_idx= '$odr_det_idx' ");
+			}
 
 			//금액이 정수면 ,2 실수면 ,4 포멧 20161202 박정권
 			if( ($price == (int)$price) )
