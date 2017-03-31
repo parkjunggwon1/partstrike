@@ -72,9 +72,13 @@ $(document).ready(function(){
 						<img src="/kor/images/nation_title_<?=$b_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$b_nation)?>"> <span class="name"><?=$b_mem[mem_nm_en]?></span>
 						</td>
 						<td class="c-red2" style="font-size:14px;">
+							<?if($det_cnt>1){	//여러개?>
+							아래의 모든 품목이 일괄 취소됩니다.<br>
+							선택한 품목은 당신의 재고 목록에서 삭제됩니다. <br>
+							<?}else{	//한개?>
 							취소 시 해당 품목은 당신의 재고 목록에서 삭제됩니다. <br>
-							만약 해당 품목을 판매하고 싶다면 재 등록해 주시기 바랍니다.
-						
+							<?}?>
+							만약 해당 품목을 판매하고 싶다면 재 등록해 주시기 바랍니다
 						</td>
 					</tr>
 				</tbody>
@@ -98,6 +102,9 @@ $(document).ready(function(){
 						<th scope="col" class="t-orderoty t-rt" lang="ko">발주수량</th>
 						<th scope="col" class="t-supplyoty t-rt" style="width:66px;" lang="ko">공급수량</th>
 						<th scope="col" lang="ko" class="t-period">납기</th>
+						<?if($det_cnt>1){?>
+						<th scope="col" class="t-ct" style="width:30px">취소</th>
+						<?}?>
 					</tr>
 				</thead>
 				<?	for ($i = 1; $i<=7; $i++){

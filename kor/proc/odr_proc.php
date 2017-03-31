@@ -354,34 +354,35 @@ if ($typ == "edit"){
      }
 
 
-    for ($j = 0 ; $j<count($ary_part_idx); $j++){
+     for ($j = 0 ; $j<count($ary_part_idx); $j++){
 
-        if ($part_type== "2"){
-        $option = ", price = '".$ary_price[$j]."'";
-        }elseif($part_type =="7"){ //turnkey
-        $option = ", quantity = '".$ary_quantity[$j]."'";
-        if ($i <=4){
-        }
-        }else{
-        $option = ", quantity       = '".$ary_quantity[$j]."'
-                   , price          = '".$ary_price[$j]."' ";
-        }
+          if ($part_type== "2"){
+            $option = ", price = '".$ary_price[$j]."'";
+          }elseif($part_type =="7"){ //turnkey
+            $option = ", quantity = '".$ary_quantity[$j]."'";
+            if ($i <=4){
+            }
+          }else{
+            $option = ", quantity       = '".$ary_quantity[$j]."'
+                       , price          = '".$ary_price[$j]."' ";
+          }
 
-        $sql = "update part set
-            mem_idx ='".$_SESSION["MEM_IDX"]."'
-            ,rel_idx='".$_SESSION["REL_IDX"]."'
-            , part_no       = '".$ary_part_no[$j]."'
-            , manufacturer  = '".$ary_manufacturer[$j]."'
-            , package       = '".$ary_package[$j]."'
-            ,  dc           = '".$ary_dc[$j]."'
-            , rhtype        = '".$ary_rhtype[$j]."'
-            $option
-            where part_idx = $ary_part_idx[$j]";
 
-        //echo $sql."<BR>";
-        $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+            $sql = "update part set
+                mem_idx ='".$_SESSION["MEM_IDX"]."'
+                ,rel_idx='".$_SESSION["REL_IDX"]."'
+                , part_no       = '".$ary_part_no[$j]."'
+                , manufacturer  = '".$ary_manufacturer[$j]."'
+                , package       = '".$ary_package[$j]."'
+                ,  dc           = '".$ary_dc[$j]."'
+                , rhtype        = '".$ary_rhtype[$j]."'
+                $option
+                where part_idx = $ary_part_idx[$j]";
 
-    }
+                //echo $sql."<BR>";
+                $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+
+     }
     if($result){
         PageReLoad("저장되었습니다.",$part_type);
     }

@@ -128,7 +128,10 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 	   break;	
 	   case "1304_accept":
 		   $colspan="15";
-	   break;	 
+	   break;
+		case "3016_cancel":
+		   $colspan = ($det_cnt>1)? "12":"11";
+	   break;	
 	 }
 	
 	if ($cnt > 0){	
@@ -889,7 +892,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								</tbody>
 							</table>
 						</td>
-				<?}elseif  ($loadPage== "po_cancel" || $loadPage== "3016_cancel"){ //-------------- 판매자 송장(30_08) 품목 취소, 구매자 송장(Invoice)받고 취소(삭제)?>
+				<?}elseif  ($loadPage== "po_cancel"){ //-------------- 판매자 송장(30_08)화면 품목 취소?>
 					<td>
 						<?=$i?><input type="hidden" name="odr_det_idx[]" value="<?=$odr_det_idx;?>">
 						<input type="hidden" name="part_idx[]" value="<?=$part_idx;?>">
@@ -935,6 +938,93 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<tr class="bg-none">
 								<td></td>
 								<td class="c-red" colspan="10" style="text-align:left;">	
+									부품상태 : 
+									<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span>&nbsp&nbsp
+									포장상태 : 
+									<span class="c-blue"><?=GF_Common_GetSingleList("PACKCOND1",$pack_condition1)?> / <?=GF_Common_GetSingleList("PACKCOND2",$pack_condition2)?> </span>
+								</td>
+							</tr>						
+						<?}?>		
+						<?if(strlen($memo)>0){?>
+							<tr class="noinput" >
+								<td></td>
+								<td colspan="10" style="text-align:left;"><strong class="c-black" >Memo : </strong><font color="#00759e"><?=$memo?></font> </td>
+							</tr>	
+						<?}?>	
+					<?}?>		
+					<tr>
+						<td></td>
+						<td colspan="15" style="padding:0">
+							<table class="detail-table w100" style="margin:0;">
+								<tbody>
+									<tr>
+										<td lang="en" class="t-lt">
+											<strong lang="ko" class="c-black">&nbsp;사유&nbsp;&nbsp;</strong>
+											<input type="text" class="i-txt2 c-blue" name="reason[]" value="" style="width:350px">
+										</td>
+									</tr>
+									<tr>
+										<td lang="ko" class="c-red2" style="padding-left:43px;padding-top:0;font-size:11px;" >취소 시 ‘발주 취소’ 항목의 숫자가 증가할 것입니다.</td>
+									</tr>
+								</tbody>
+							</table>
+						</td>
+				<?}elseif  ($loadPage== "3016_cancel"){ //-------------- 판매자 선적(30_16)화면에서 취소?>
+					<td>
+						<?=$i?>
+						<input type="hidden" name="part_idx[]" value="<?=$part_idx;?>">
+					</td>
+					<?if ($part_type=="7"){ //턴키--?>
+						<td colspan="6"><input type="text" name="part_no[]" class="i-txt4" value="<?=$part_no?>" maxlength="30" style="width:584px; ime-mode:disabled" ></td>
+					<?}else{?>
+					<?if($sell_mem_idx != $_SESSION['MEM_IDX']){?>
+					<td class="t-lt"><img src="/kor/images/nation_title2_<?=$nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$nation)?>"></td>
+					<?}?>
+					<td class="t-lt"><?=$part_no?></td>
+					<td class="t-lt"><?=$manufacturer?></td>
+					<td><?=$package?></td>
+					<td><?=$dc?></td>
+					<td><?=$rhtype?></td>
+					<td class="t-rt"><?=$odr_stock==0?"":number_format($odr_stock)?></td>
+					<?}?>
+					<td class="t-rt">$<?=$price_val?></td>					
+					<td class="t-rt"><span class="c-blue"><?=$odr_quantity==0?"":number_format($odr_quantity)?></span></td>
+					<?
+					global $load_page;					
+					?>
+					<?
+						$modify_in_odr = QRY_CNT("odr_history", "and odr_idx = $odr_idx  and status in (3)") > 0 ? "Y": "N";  //판매자 취소인지 구매자 취소인지 확인
+					?>
+					<?if($sell_mem_idx != $_SESSION['MEM_IDX'] || ($loadPage== "3016_cancel")){?>
+					<td class="t-rt"><span class="c-red"><?=$supply_quantity==""?"0":number_format($supply_quantity)?></span></td>		
+					<?}?>			
+					<?=($period)?"<td class=''>".$period:(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
+					<?if($loadPage== "3016_cancel" && $det_cnt>1){// 선적화면에서 취소시.... 재고삭제 선택?>
+						<td class="t-ct">
+							<label class="ipt-chk chk2 t-ct">
+								<input type="checkbox" name="odr_det_idx[]" class="stock" value="<?=$odr_det_idx?>"><span></span>
+							</label>
+						</td>
+					<?}else{?>
+						<input type="hidden" name="odr_det_idx[]" value="<?=$odr_det_idx;?>">
+					<?}?>
+
+					<?if($sell_mem_idx != $_SESSION['MEM_IDX']){?>
+					<td >
+					<?
+					$com_idx = $rel_idx==0 ? $sell_mem_idx : $rel_idx;
+					$company_nm = get_any("member","mem_nm_en", "mem_idx=$com_idx"); 	
+					?>
+					<a class="c-blue" href="javascript:layer_company_det('<?=$com_idx?>');"><?=cut_len($company_nm,8,".")?></a>
+					</td>
+					<?}?>
+					</tr>	
+					<?$invoice_cnt = QRY_CNT("odr_history", "and odr_idx = $odr_idx  and status =18") > 0 ? "1": "0";  //첫번째 송장여부?>
+					<?if ($invoice_cnt > 0){?>
+						<?if($part_condition!=""){?>
+							<tr class="bg-none">
+								<td></td>
+								<td class="c-red" colspan="<?=($colspan - 1)?>" style="text-align:left;">	
 									부품상태 : 
 									<span class="c-blue"><?=GF_Common_GetSingleList("PARTCOND",$part_condition)?></span>&nbsp&nbsp
 									포장상태 : 
