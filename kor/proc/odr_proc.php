@@ -426,7 +426,7 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
     }else{
         //턴키가 아닐 경우 odr_det 정보 업데이트
          for ($j = 0 ; $j<count($ary_odr_det_idx); $j++){
-            $sql = "update odr_det set
+            /*$sql = "update odr_det_temp set
                  supply_quantity            = '".$ary_supply_quantity[$j]."'
                 , part_condition            = '".$ary_part_condition[$j]."'
                 , pack_condition1           = '".$ary_pack_condition1[$j]."'
@@ -434,7 +434,32 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
                 , memo                      = '".$ary_memo[$j]."'
                 where odr_det_idx = $ary_odr_det_idx[$j]";
                 //echo $sql."<BR>";
-                $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+                $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());*/
+
+                //임시테이블에 데이터 존재여부
+                $odr_det_temp_idx = get_any("odr_det_temp", "odr_det_idx", "odr_det_idx=$ary_odr_det_idx[$j]");
+                //$supply_quantity = str_replace(",","",$ary_supply_quantity[$j]);
+
+                if($odr_det_temp_idx>0){
+                    $sql = "update odr_det_temp set 
+                        supply_quantity = '$ary_supply_quantity[$j]',
+                        part_condition = '$ary_part_condition[$j]',
+                        pack_condition1 = '$ary_pack_condition1[$j]',
+                        pack_condition2 = '$ary_pack_condition2[$j]',
+                        memo = '$ary_memo[$j]' 
+                        where odr_det_idx =$odr_det_temp_idx";
+                        echo $sql;
+                }else{
+                    $sql = "insert odr_det_temp set 
+                        supply_quantity = '$ary_supply_quantity[$j]',
+                        part_condition = '$ary_part_condition[$j]',
+                        pack_condition1 = '$ary_pack_condition1[$j]',
+                        pack_condition2 = '$ary_pack_condition2[$j]',
+                        memo = '$ary_memo[$j]' 
+                        odr_det_idx = '$odr_det_temp_idx'";
+                }
+                
+                $ship_result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());  
 
                 //송장에서도 개별 파트정보 업데이트 가능
                 $part_idx =get_any("odr_det", "part_idx" ,"odr_det_idx=$ary_odr_det_idx[$j]");
@@ -531,6 +556,13 @@ if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : �
     //2016-12-06 : 재고 Update (기존 'invreg' 에서 처리 하던 것을 여기서 처리) - ccolle
     $result =QRY_ODR_DET_LIST(0," and odr_idx=$odr_idx ",0,"","asc");
     while($row = mysql_fetch_array($result)){
+        
+        $odr_det_temp_row = get_odr_det_temp($row['odr_det_idx']);
+
+        $odr_det_temp_sql = "update odr_det set supply_quantity=".$odr_det_temp_row['supply_quantity'].", part_condition=".$odr_det_temp_row['part_condition'].", pack_condition1=".$odr_det_temp_row['pack_condition1'].", pack_condition2=".$odr_det_temp_row['pack_condition2'].", memo='".$odr_det_temp_row['memo']."' where odr_det_idx=".$row['odr_det_idx'];
+        
+        $odr_det_temp_result=mysql_query($odr_det_temp_sql,$conn) or die ("SQL ERROR : ".mysql_error());
+
         $part_idx = replace_out($row["part_idx"]);
         $stock_qty = replace_out($row["quantity"]);
         $odr_qty = replace_out($row["odr_quantity"]);

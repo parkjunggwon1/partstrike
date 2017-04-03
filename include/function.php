@@ -1863,4 +1863,8 @@ function Update_Invoce_Data($odr_idx){
 		$result=mysql_query($sql);
 	}
 }
+
+function get_odr_det_temp($odr_idx, $fields='*'){
+		return sql_fetch("select $fields from odr_det_temp where odr_det_idx = trim('$odr_idx')");
+}
 ?>

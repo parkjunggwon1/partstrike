@@ -418,7 +418,7 @@ function commaNum(num) {
    return me
 
   }
-function numOffMask(me){
+function numOffMask(me){	
 	    var tmp=me.split(",");
  	    tmp=tmp.join("");
 	    return tmp;

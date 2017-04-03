@@ -219,4 +219,19 @@ function DEL_ORIGIN_PERIOD($actkind){
 	$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 	return $result;
 }
+
+function ODR_DET_TEMP_LIST_V1($idx){
+	$conn = dbconn();	
+	$sql = "
+			SELECT * FROM 
+				odr_det_temp
+			WHERE
+				1=1 and odr_det_idx='$idx' 
+			";                      
+			echo $sql;
+	mysql_query( "SET NAMES utf8");		
+	$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+	return $result;
+}
+
 ?>

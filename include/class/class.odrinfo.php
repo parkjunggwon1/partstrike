@@ -1876,6 +1876,14 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 				$odr_quantity = get_any("odr_det_temp" , "odr_quantity", "odr_det_idx= '$odr_det_idx' ");
 			}
 
+			if ($loadPage=="30_09" && !$sheets_no){ //수정발주서 Sheet(Purchase Order Amendment)
+				$supply_quantity = get_any("odr_det_temp" , "supply_quantity", "odr_det_idx= '$odr_det_idx' ");
+				$part_condition = get_any("odr_det_temp" , "part_condition", "odr_det_idx= '$odr_det_idx' ");
+				$pack_condition1 = get_any("odr_det_temp" , "pack_condition1", "odr_det_idx= '$odr_det_idx' ");
+				$pack_condition2 = get_any("odr_det_temp" , "pack_condition2", "odr_det_idx= '$odr_det_idx' ");
+				$memo = get_any("odr_det_temp" , "memo", "odr_det_idx= '$odr_det_idx' ");
+			}
+
 			//금액이 정수면 ,2 실수면 ,4 포멧 20161202 박정권
 			if( ($price == (int)$price) )
 			{					
