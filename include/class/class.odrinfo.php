@@ -170,6 +170,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 			$odr_status= replace_out($row["odr_status"]);
 			$det_reason= replace_out($row["reason"]);
 			$part_stock= replace_out($row["part_stock"]);
+			$del_chk= replace_out($row["del_chk"]);
 
 			if( ($price == (int)$price) )
 			{					
@@ -708,13 +709,21 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td><?=$dc?></td>
 					<td><?=$rhtype?></td>
 					<?
-					if ($part_type =="2"){
-						$quantity="I";				
+					if ($del_chk=="0")
+					{
+						$quantity="0";
 					}
 					else
 					{
-						$quantity= $quantity==0?"":number_format($quantity);
+						if ($part_type =="2"){
+							$quantity="I";				
+						}
+						else
+						{
+							$quantity= $quantity==0?"":number_format($quantity);
+						}
 					}
+					
 					?>
 					<td class="t-rt"><input name="quantity[]" type="hidden" value="<?=$quantity;?>"> <?=$quantity?></td>
 						<?if ($loadPage== "05_04"){?>

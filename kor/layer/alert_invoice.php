@@ -69,7 +69,7 @@ else
 
 ?>	
 
-<div class="layer-content" style="padding:0;width:100%;padding-left: 130px;padding-top: 30px;">	
+<div class="layer-content" style="padding:0;width:100%;padding-left: 80px;padding-top: 30px;">	
 	<a href="#" class="btn-close" style="position: absolute;right: 10px;top: 1px;padding: 5px;text-decoration:underline;"><img src="/kor/images/btn_layer_close.png" alt="close"></a>	
 	<?
 	if ($etc2=="DHL" || $etc2=="UPS" || $etc2=="Fedex" || $etc2=="TNT")
@@ -83,7 +83,7 @@ else
 			if ($row["file1"])
 			{
 		?>
-				<div><?=$row["part_no"]?> - 
+				<div style="color:#00759e;cursor: default;"><?=$row["part_no"]?> - 
 		<?					
 				for ($i = 1;$i <= 3; $i++ ){
 					$file = replace_out($row["file$i"]);		

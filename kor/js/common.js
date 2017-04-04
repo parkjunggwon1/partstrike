@@ -2,8 +2,10 @@
 *** 2016-03-31 : updateQty() 함수 수정, ready 밖으로 빼냄
 *** 2016-04-04 : updateQty() 함수 수정, form 'f'를 'f_04_05'로 변경
 *********************************************************************************/
-$(document).ready(function(){
-	
+
+
+$(document).ready(function(){	
+
 	//gnb
 	$("#gnb>ul>li>a").on("mouseover",function(){
 		$li = $(this).parent("li");
@@ -167,37 +169,16 @@ $(document).ready(function(){
 				dataType : "html" ,
 				async : false ,
 				success: function(data){ 
-					showajax(".col-right", "side_order");
+					//showajax(".col-right", "side_order");
+					document.location.href="/kor/";
 				}
 			});
 		}
-
-		if ($(this).attr("loadPage") != "")
-		{		
-			var odr_idx;
-			var qty_type;
-
-			if ($(this).attr("loadPage")=="30_08")
-			{
-				odr_idx=$("#odr_idx_30_09").val();
-				qty_type="supply_quantity";
-			}
-			else if ($(this).attr("loadPage")=="09_01")
-			{
-				odr_idx=$("#odr_idx_12_07").val();
-				qty_type="odr_quantity";
-			}
-			
-			$.ajax({
-					url: "/kor/proc/odr_proc.php", 
-					data: "typ=return_qty&odr_idx="+odr_idx+"&qty_type="+qty_type,
-					encType:"multipart/form-data",
-					success: function (data) {	
-						
-					}
-			});		
-			$(".btn-close").removeAttr("loadPage");
+		if($(this).hasClass("refresh_chk")){  // 기존 데이터중 납기품목 제외하고 amend 된 데이터 모두 삭제. (저장 발주서) 2016-04-03
+			document.location.href="/kor/";
 		}
+
+		
 
 	});
 	
@@ -245,7 +226,7 @@ $(document).ready(function(){
 		$("body").removeClass("open-layer");
 	});
 
-		$('.onlynum').css("ime-mode","disabled").keydown(function(event){ 		//숫자만 입력하게.(.도 포함) 		
+	$('.onlynum').css("ime-mode","disabled").keydown(function(event){ 		//숫자만 입력하게.(.도 포함) 		
 	  if (event.which && (event.which == 190 || event.which == 110 || event.which > 45 && event.which < 58 || event.which == 8 || event.which > 95 && event.which < 106)) {			
 	   } else { 
 	   event.preventDefault(); 
@@ -259,8 +240,8 @@ $(document).ready(function(){
 	  } 
 	 });
 		 
-	 $('.numfmt').css("ime-mode","disabled").keyup( function(event){   // 숫자 입력 하면 ,로 단위 끊어 표시하게.
-			check_value(this);
+	 $('.numfmt').css("ime-mode","disabled").keyup( function(event){   // 숫자 입력 하면 ,로 단위 끊어 표시하게.	 	
+	 		check_value(this);
 	 });
 
 	 $('.onlyEngNum').css("ime-mode","disabled").keydown(function(event){ 		//ENG, 숫자만 입력하게.(.도 포함) 		 
@@ -269,6 +250,7 @@ $(document).ready(function(){
 	   event.preventDefault(); 
 	  } 
 	 });
+
 	//-- 레이어 창 열기 ------------------------------------
 	function openLayer(layerNum,loadPage,varNum){
 		$layer = $("."+layerNum+"-section");
@@ -2800,6 +2782,88 @@ function updateQty(){
 	}
 	return err;
 }
+
+function updateQty_temp(){
+	var err = false;
+	var qty, amd_yn, quantity;
+	
+	//-- Row 수량만큼 반복--------------------
+	$("input[name^=odr_quantity]").each(function(){
+		
+		if($(this).val()==""){
+			qty = 0;
+		}else{
+			qty = $(this).val();
+			amd_yn = $(this).attr("amd_yn"); //수정발주서 여부
+			quantity = $(this).attr("quantity"); //기존 재고
+			supply_quantity = $(this).attr("supply_quantity"); //공급 수량
+		}
+		//alert("qty:"+qty);
+		if(parseInt($(this).parent().prev().prev().text().replace(/,/gi,"")) < parseInt($(this).val())){
+			alert_msg("수량을 다시 확인해 주세요.");
+			$(this).focus();
+			err = true;
+			return false;
+		}else{
+			maskoff();
+			//alert("qty:"+qty+", det_idx:"+$(this).attr("odr_det_idx"));
+
+			$.ajax({ 
+				type: "GET", 
+				url: "/ajax/proc_ajax.php", 
+				data: { actty : "UQ_TEMP", //Update QUANTITY
+						actidx : $(this).attr("odr_det_idx"),
+						actkind : qty,
+						amd_yn : amd_yn,	//수정발주서 여부
+						//supply_quantity : supply_quantity,	//공급 수량
+						load_page : $("#load_page").val(),
+						quantity : quantity	//발주가능 재고
+				},
+				dataType : "html" ,
+				async : false ,
+				success: function(data){ 		
+						maskoff();
+				}
+			});
+		}
+	});	//-- end of Row 수량만큼 반복--------------------
+	
+	//-- 배송지 변경--------------------
+	//2016-04-08 form 'f' 를 'f_05_04'로 변경
+	//if($("#delivery_chg").is(":checked") && f.com_name.value!=""){			
+	if($("#delivery_chg").is(":checked")){		
+
+	//alert($("#delivery_addr_idx").val());	
+			if($("#delivery_addr_idx").val()==""){   //save_yn='N'으로 먼저 저장해야 함.
+				$("#delivery_save_yn").val("N");
+				$("#typ").val("delivery_save");		
+				delivery_save();
+			}			
+	}else{
+		$("#delivery_addr_idx").val("");
+	}
+	//-- ship 정보 Update-----------------------------
+	if (err == false)
+	{
+		if($("section[class^='layer3']").hasClass("open")){ //2016-04-04
+			$("#f_05_04 input[name=typ]").val("odredit");
+			var formData = $("#f_05_04").serialize(); 
+		}else{
+			$("#f input[name=typ]").val("odredit");
+			var formData = $("#f").serialize(); 
+		}
+		$.ajax({
+				url: "/kor/proc/odr_proc.php", 
+				data: formData,
+				encType:"multipart/form-data",
+				success: function (data) {
+					err=false;
+				}
+		});		
+	}
+	return err;
+}
+
 function Refresh_MainSh(){
 	if ($("input[name=top_part_no]").val().length>1){
 		main_srch();

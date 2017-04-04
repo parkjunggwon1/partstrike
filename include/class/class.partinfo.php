@@ -159,10 +159,10 @@ function change_select()
 									?>
 								<tr>
 									<td class="pd-0"><input type="hidden" name="mod_part_idx[]" value="<?=$part_idx?>"><!--<?=$ListNO?>--></td>
-									<td class="pd-l0 t-lt"><input type="text" name="mod_part_no[]" class="i-txt2 t-lt" <?=$no_modify?> maxlength="24" style="<?=$no_modify_border?>width:190px; ime-mode:disabled;" value="<?=$part_no?>"></td>
-									<td class="t-lt"><input type="text" name="mod_manufacturer[]" class="i-txt2  t-lt"  <?=$no_modify?> maxlength="20" style="<?=$no_modify_border?>width:155px; ime-mode:disabled;" value="<?=$manufacturer?>"></td>
-									<td><input type="text" name="mod_package[]" class="i-txt2  t-ct" <?=$no_modify?> style="<?=$no_modify_border?>width:76px; ime-mode:disabled;" maxlength="10" value="<?=$package?>"></td>
-									<td><input type="text" name="mod_dc[]" class="i-txt<?=$part_type=="2"?"6":"2"?>" <?=$no_modify?> style="<?=$no_modify_border?>width:45px" maxlength="4" value="<?=$dc?>"></td>
+									<td class="pd-l0 t-lt"><input type="text" name="mod_part_no[]" class="i-txt2 t-lt" <?=$no_modify?> maxlength="24" style="<?=$no_modify_border?>width:190px; ime-mode:disabled;" value="<?=$part_no?>" onkeyup='removeChar(event)'></td>
+									<td class="t-lt"><input type="text" name="mod_manufacturer[]" class="i-txt2  t-lt"  <?=$no_modify?> maxlength="20" style="<?=$no_modify_border?>width:155px; ime-mode:disabled;" value="<?=$manufacturer?>" onkeyup='removeChar(event)'></td>
+									<td><input type="text"  name="mod_package[]" class="i-txt2  t-ct" <?=$no_modify?> style="<?=$no_modify_border?>width:76px; ime-mode:disabled;" maxlength="10" value="<?=$package?>" onkeyup='removeChar(event)'></td>
+									<td><input type="text" name="mod_dc[]" class="i-txt<?=$part_type=="2"?"6":"2"?> onlynum" <?=$no_modify?> style="<?=$no_modify_border?>width:45px" maxlength="4" value="<?=$dc?>" onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'></td>
 									<?if ($no_modify !="readonly"){?>
 									<td>
 										<div class="select type4" lang="en" style="width:60px">
@@ -197,9 +197,9 @@ function change_select()
 										$price_val= $price;
 									}
 									?>									
-									<td class="t-rt"><?=$test?><?if ($part_type==2){?><input type="text" name="quantity_tmp" readonly class="i-txt6 onlynum numfmt t-rt" maxlength="10" style="width:66px" value="I"><?}else{?><input type="text" name="mod_quantity[]" class="i-txt2 onlynum numfmt t-rt" maxlength="10" style="width:66px" value="<?echo number_format($quantity);?>"> <?}?></td>
+									<td class="t-rt"><?if ($part_type==2){?><input type="text" name="quantity_tmp" readonly class="i-txt6 onlynum numfmt t-rt" maxlength="10" style="width:66px" value="I"><?}else{?><input type="text" name="mod_quantity[]" class="i-txt2 onlynum numfmt t-rt" maxlength="10" style="width:66px" value="<?echo number_format($quantity);?>" onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'> <?}?></td>
 									
-									<td class="t-rt"><input type="text" name="mod_price[]" id="mod_price_<?=$i?>" onkeyup="javascript:doller_add('<?=$i?>');" class="i-txt2 onlynum numfmt t-rt price_fmt" style="width:76px" maxlength="9" value="<?if($price){echo "$".$price_val;}?>"></td>
+									<td class="t-rt"><input type="text" name="mod_price[]" id="mod_price_<?=$i?>" onkeyup="javascript:doller_add('<?=$i?>');" class="i-txt2 onlynum numfmt t-rt price_fmt" style="width:76px" maxlength="9" value="<?if($price){echo "$".$price_val;}?>" onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'></td>
 									<td class="td_c"><label class="ipt-chk chk2"><input type="checkbox" name="delchk[]" value="<?=$part_idx?>" <?if ($del_chk=="0"){echo "disabled";}?>><span></span></label></td>
 
 								</tr>	

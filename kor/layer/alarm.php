@@ -2,7 +2,7 @@
 include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";?>
 <div class="layer-hd">
 	<h1>Alarm</h1>
-	<a href="#" class="btn-close"><img src="/kor/images/btn_layer_close_w.png" alt="close"></a>
+	<!--<a href="#" class="btn-close"><img src="/kor/images/btn_layer_close_w.png" alt="close"></a>-->
 </div>
 <div class="layer-content">
 	<?	

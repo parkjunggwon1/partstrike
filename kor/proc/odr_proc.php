@@ -426,6 +426,7 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
     }else{
         //턴키가 아닐 경우 odr_det 정보 업데이트
          for ($j = 0 ; $j<count($ary_odr_det_idx); $j++){
+
             /*$sql = "update odr_det_temp set
                  supply_quantity            = '".$ary_supply_quantity[$j]."'
                 , part_condition            = '".$ary_part_condition[$j]."'
@@ -447,18 +448,17 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
                         pack_condition1 = '$ary_pack_condition1[$j]',
                         pack_condition2 = '$ary_pack_condition2[$j]',
                         memo = '$ary_memo[$j]' 
-                        where odr_det_idx =$odr_det_temp_idx";
-                        echo $sql;
+                        where odr_det_idx ='$ary_odr_det_idx[$j]'";                     
                 }else{
                     $sql = "insert odr_det_temp set 
                         supply_quantity = '$ary_supply_quantity[$j]',
                         part_condition = '$ary_part_condition[$j]',
                         pack_condition1 = '$ary_pack_condition1[$j]',
                         pack_condition2 = '$ary_pack_condition2[$j]',
-                        memo = '$ary_memo[$j]' 
-                        odr_det_idx = '$odr_det_temp_idx'";
+                        memo = '$ary_memo[$j]' ,
+                        odr_det_idx = '$ary_odr_det_idx[$j]'";
                 }
-                
+              
                 $ship_result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());  
 
                 //송장에서도 개별 파트정보 업데이트 가능
