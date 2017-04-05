@@ -159,9 +159,9 @@ function change_select()
 									?>
 								<tr>
 									<td class="pd-0"><input type="hidden" name="mod_part_idx[]" value="<?=$part_idx?>"><!--<?=$ListNO?>--></td>
-									<td class="pd-l0 t-lt"><input type="text" name="mod_part_no[]" class="i-txt2 t-lt" <?=$no_modify?> maxlength="24" style="<?=$no_modify_border?>width:190px; ime-mode:disabled;" value="<?=$part_no?>" onkeyup='removeChar(event)'></td>
-									<td class="t-lt"><input type="text" name="mod_manufacturer[]" class="i-txt2  t-lt"  <?=$no_modify?> maxlength="20" style="<?=$no_modify_border?>width:155px; ime-mode:disabled;" value="<?=$manufacturer?>" onkeyup='removeChar(event)'></td>
-									<td><input type="text"  name="mod_package[]" class="i-txt2  t-ct" <?=$no_modify?> style="<?=$no_modify_border?>width:76px; ime-mode:disabled;" maxlength="10" value="<?=$package?>" onkeyup='removeChar(event)'></td>
+									<td class="pd-l0 t-lt"><input type="text" name="mod_part_no[]" class="i-txt2 t-lt" <?=$no_modify?> maxlength="24" style="<?=$no_modify_border?>width:190px; ime-mode:disabled;" value="<?=$part_no?>" onkeyup='removeChar2(event)'></td>
+									<td class="t-lt"><input type="text" name="mod_manufacturer[]" class="i-txt2  t-lt"  <?=$no_modify?> maxlength="20" style="<?=$no_modify_border?>width:155px; ime-mode:disabled;" value="<?=$manufacturer?>" onkeyup='removeChar2(event)'></td>
+									<td><input type="text"  name="mod_package[]" class="i-txt2  t-ct" <?=$no_modify?> style="<?=$no_modify_border?>width:76px; ime-mode:disabled;" maxlength="10" value="<?=$package?>" onkeyup='removeChar2(event)'></td>
 									<td><input type="text" name="mod_dc[]" class="i-txt<?=$part_type=="2"?"6":"2"?> onlynum" <?=$no_modify?> style="<?=$no_modify_border?>width:45px" maxlength="4" value="<?=$dc?>" onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'></td>
 									<?if ($no_modify !="readonly"){?>
 									<td>

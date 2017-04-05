@@ -370,25 +370,37 @@ function ready(){
 }
 
 function onlyNumber(event){
-			event = event || window.event;
-			var keyID = (event.which) ? event.which : event.keyCode;
-			
-			if ( (keyID >= 48 && keyID <= 57) || (keyID >= 96 && keyID <= 105) || keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39 || keyID == 110 || keyID == 190 ) 
-				return;
-			else
-				return false;
-		}
-		function removeChar(event) {
-			event = event || window.event;
-			var keyID = (event.which) ? event.which : event.keyCode;		
+	event = event || window.event;
+	var keyID = (event.which) ? event.which : event.keyCode;
+	
+	if ( (keyID >= 48 && keyID <= 57) || (keyID >= 96 && keyID <= 105) || keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39 || keyID == 110 || keyID == 190 ) 
+		return;
+	else
+		return false;
+}
+function removeChar(event) {
+	event = event || window.event;
+	var keyID = (event.which) ? event.which : event.keyCode;		
 
-			if ( keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39 || keyID == 110 || keyID == 190 ) 
+	if ( keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39 || keyID == 110 || keyID == 190 ) 
 
-				return;
-			else
+		return;
+	else
 
-				event.target.value = event.target.value.replace(/[^(0-9)|\$|\,|\.]/gi, '');
-		}
+		event.target.value = event.target.value.replace(/[^(0-9)|\$|\,|\.]/gi, '');
+}
+
+function removeChar2(event) {
+	event = event || window.event;
+	var keyID = (event.which) ? event.which : event.keyCode;		
+
+	if ( keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39 || keyID == 10 || keyID == 190 ) 
+
+		return;
+	else
+
+		event.target.value = event.target.value.replace(/[\ㄱ-ㅎㅏ-ㅣ가-힣]/g, '');
+}
 
 function saveExtraInfo(formNm, ProcUrl){
 		var formData = $("#"+formNm).serialize(); 

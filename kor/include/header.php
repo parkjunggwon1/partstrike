@@ -132,15 +132,15 @@
 				<tbody>
 					<tr>
 						<th scope="row" lang="en">Part No.</th>
-						<td><input type="text" name="top_part_no" class="w100 onlyEngNum" style="ime-mode:disabled"  onKeyPress="check_key(main_srch);" ></td>
+						<td><input type="text" name="top_part_no" class="w100 onlyEngNum" style="ime-mode:disabled"  onKeyPress="check_key(main_srch);" onkeyup='removeChar2(event)'></td>
 					</tr>
 					<tr>
 						<th scope="row" lang="en">Manufacturer</th>
-						<td><input type="text" name="top_manufacturer" style="ime-mode:disabled" class="w100 onlyEngNum"  onKeyPress="check_key(main_srch);" ></td>
+						<td><input type="text" name="top_manufacturer" style="ime-mode:disabled" class="w100 onlyEngNum"  onKeyPress="check_key(main_srch);" onkeyup='removeChar2(event)'></td>
 					</tr>
 					<tr>
 						<th scope="row">요청수량</th>
-						<td><input type="text" class="w50 onlynum numfmt" name="top_qty" style="ime-mode:disabled" onKeyPress="check_key(main_srch);" maxlength="10" >
+						<td><input type="text" class="w50 onlynum numfmt" name="top_qty" style="ime-mode:disabled" onKeyPress="check_key(main_srch);" onkeyup='removeChar(event)' maxlength="10" >
 							<label class="<?=($_SESSION["MEM_IDX"]=="") ?"":"ipt-chk"?> chk1">
 								<input type="checkbox" name="area" <?=($_SESSION["MEM_IDX"]=="") ? "disabled style='border-color:#ff8080;'":""?>  >
 								<span></span><img src="/kor/images/top_srch_chck<?=($_SESSION["MEM_IDX"]=="") ?"02":""?>.gif" alt="근접지역"></label></td>

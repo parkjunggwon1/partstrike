@@ -172,9 +172,9 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td class="pd-0 t-lt"><input type="text" name= "part_no" class="i-txt2 t-lt" style="width:190px;ime-mode:disabled" maxlength="24" value="" onkeyup='removeChar(event)'></td>
-							<td class="t-lt"><input type="text" name= "manufacturer" class="i-txt2 t-lt" style="width:155px; ime-mode:disabled" maxlength="20" value="" onkeyup='removeChar(event)'></td>
-							<td><input type="text" name= "package" class="i-txt2 w-50 t-ct" style="width:76px; ime-mode:disabled" maxlength="10" value="" onkeyup='removeChar(event)'></td>
+							<td class="pd-0 t-lt"><input type="text" name= "part_no" class="i-txt2 t-lt" style="width:190px;ime-mode:disabled" maxlength="24" value="" onkeyup='removeChar2(event)'></td>
+							<td class="t-lt"><input type="text" name= "manufacturer" class="i-txt2 t-lt" style="width:155px; ime-mode:disabled" maxlength="20" value="" onkeyup='removeChar2(event)'></td>
+							<td><input type="text" name= "package" class="i-txt2 w-50 t-ct" style="width:76px; ime-mode:disabled" maxlength="10" value="" onkeyup='removeChar2(event)'></td>
 							<td><input type="text" name= "dc" class="i-txt<?=$part_type=="2"?"6":"2"?> onlynum" maxlength="4" style="width:45px" value="<?if ($part_type=="2"){?>NEW <?}?>" onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'></td>
 							<td>
 								<div class="select type4" lang="en" style="width:60px">

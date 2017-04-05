@@ -283,8 +283,8 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<td class="t-rt">
 							<?if ($loadPage == "30_22"){
 								echo $supply_quantity==0?"":number_format($supply_quantity);
-							}elseif($loadPage == "09_03"){	//What's New(판매자:수정발주서)
-								echo number_format($quantity + $odr_quantity);
+							}elseif($loadPage == "09_03" || $loadPage == "30_06"){	//What's New(판매자:수정발주서)
+								echo number_format($part_stock + $odr_quantity);
 							}elseif($loadPage == "31_04"){	//What's New(판매자:수정발주서)
 								if ($part_type =="2"){									
 									$quantity="I";				
@@ -600,7 +600,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td><?=$dc?></td>
 					<td><?=$rhtype?></td>					
 					<?}?>
-					<td class="t-rt"><?=$quantity==0?$supply_quantity:number_format($quantity + $supply_quantity)?></td>
+					<td class="t-rt"><?=$part_stock==0?$supply_quantity:number_format($part_stock + $supply_quantity)?></td>
 					<td class="t-rt">$<?=$price==0?"":$price_val?></td>
 					<td>
 						<?
@@ -1479,7 +1479,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								<?if($loadPage == "30_10" || $loadPage == "13_04s" || $loadPage == "13_02s"){	//What'sNew(구매자:송장)
 									//2016-12-25 : 수정발주서가 있는 경우에는 '실수량+공급수량
 									$poa_cnt = QRY_CNT("odr_history", "and odr_idx=$odr_idx and status='3'");
-									$qty = ($poa_cnt>0)? $quantity+$supply_quantity : $odr_stock;
+									$qty = ($poa_cnt>0)? $part_stock+$supply_quantity : $odr_stock;
 								?>
 									<?if($part_type=="2"){?>
 										<td class="t-rt" style="width:60px;">I</td>
