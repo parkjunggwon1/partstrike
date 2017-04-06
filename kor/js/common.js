@@ -129,6 +129,8 @@ $(document).ready(function(){
 				}
 				
 			}
+
+			var mybox= $(this).hasClass("mybox");
 			//기존 데이터 사라지게.(단, 납기 확인 중인 데이터 제외하고.)
 				$.ajax({ 
 				type: "GET", 
@@ -140,7 +142,15 @@ $(document).ready(function(){
 					dataType : "html" ,
 					async : false ,
 					success: function(data){ 
-						main_srch();
+						if(mybox)
+						{							
+							showajax(".col-right", "side_order");
+						}
+						else
+						{							
+							main_srch();
+						}
+						
 						//showajax(".col-right", "side_order");
 					}
 				});
@@ -169,8 +179,9 @@ $(document).ready(function(){
 				dataType : "html" ,
 				async : false ,
 				success: function(data){ 
-					//showajax(".col-right", "side_order");
-					document.location.href="/kor/";
+					showajax(".col-right", "side_order");
+					
+					//document.location.href="/kor/";
 				}
 			});
 		}
@@ -1868,7 +1879,7 @@ $(document).ready(function(){
 	$("body").on("click",".btn-dialog-save",function(){
 		var err = false;
 		var varNum;
-		var f =  document.f_05_04;  //2016-04-02 layer4에 <form name='f' ... 가 또 있음
+		var f =  document.f_05_04;  //2016-04-02 layer4에 <form name='f' ... 가 또 있음d
 		//var f =  ("#f_05_04");
 		maskoff();		
 		err = updateQty();
@@ -2751,9 +2762,10 @@ function updateQty(){
 	
 	//-- 배송지 변경--------------------
 	//2016-04-08 form 'f' 를 'f_05_04'로 변경
-	//if($("#delivery_chg").is(":checked") && f.com_name.value!=""){			
+	//if($("#delivery_chg").is(":checked") && f.com_name.value!=""){	
+
 	if($("#delivery_chg").is(":checked")){
-			if($("#delivery_addr_idx").val()==""){   //save_yn='N'으로 먼저 저장해야 함.
+			if($("#delivery_addr_idx").val()=="" || $("#delivery_addr_idx").val()=="0"){   //save_yn='N'으로 먼저 저장해야 함.
 				$("#delivery_save_yn").val("N");
 				$("#typ").val("delivery_save");		
 				delivery_save();

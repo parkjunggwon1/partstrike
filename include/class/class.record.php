@@ -71,6 +71,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			$odr_stock= replace_out($row2["odr_stock"]);
 			$odr_det_status = replace_out($row2["odr_det_status"]);
 			$part_stock = replace_out($row2["part_stock"]);
+			$imsi_odr_no = replace_out($row2["imsi_odr_no"]);
 		
 			$com_idx = $rel_idx==0 ? $sell_mem_idx : $rel_idx;
 			$company_nm = get_any("member","mem_nm_en", "mem_idx=$com_idx"); 	
@@ -203,7 +204,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				}else{
 					
 					if ($odr_type =="B" && $save_yn =="Y"){
-						$goJump = "title=\"저장\" style='cursor:pointer;padding:0;' onclick=\"javascript:openCommLayer('layer3','05_04', '?odr_idx=".$odr_idx."')\" ";
+						$goJump = "title=\"발주서 저장\" style='cursor:pointer;padding:0;' onclick=\"javascript:openCommLayer('layer3','05_04', '?odr_idx=".$odr_idx."')\" ";
 					}else{
 						
 						if ($odr_det_status==6)
@@ -253,10 +254,18 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				<?if ($part_type==2){?>
 					<td  <?=$goJump?>  class="t-rt">I</td>
 				<?}else{?>
-					<td  <?=$goJump?>  class="t-rt"><?=$part_stock<=0?"":number_format($part_stock+$odr_quantity)?></td>
+					<?if ($imsi_odr_no){?>
+						<td  <?=$goJump?>  class="t-rt"><?=$part_stock<=0?"":number_format($part_stock)?></td>
+					<?}else{?>
+						<td  <?=$goJump?>  class="t-rt"><?=$part_stock<=0?"":number_format($part_stock+$odr_quantity)?></td>
+					<?}?>
 				<?}?>			
 			<?}else if ($odr_status==7){?>
-				<td  <?=$goJump?>  class="t-rt"><?=$part_stock<=0?"":number_format($part_stock+$odr_quantity)?></td>
+				<?if ($imsi_odr_no){?>
+					<td  <?=$goJump?>  class="t-rt"><?=$part_stock<=0?"":number_format($part_stock)?></td>
+				<?}else{?>
+					<td  <?=$goJump?>  class="t-rt"><?=$part_stock<=0?"":number_format($part_stock+$odr_quantity)?></td>
+				<?}?>
 			<?}else{?>
 				<td  <?=$goJump?>  class="t-rt"><?=$supply_quantity<=0?"":number_format($supply_quantity)?></td>
 			<?}?>

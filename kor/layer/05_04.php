@@ -34,6 +34,8 @@ if (!$_SESSION["MEM_IDX"]){ReopenLayer("layer6","alert","?alert=sessionend");exi
 	$imsi_odr_no = $odr[imsi_odr_no];
 	$save_yn = $odr[save_yn];
 
+	$part_idx = get_any("odr_det", "part_idx", "odr_idx = $odr_idx ");
+	$mybox = get_any("mybox", "part_idx", "part_idx = $part_idx ");	
 	
 	$s_nation = get_any("member","nation", "mem_idx=$sell_mem_idx");
 	$b_nation = get_any("member","nation", "mem_idx=$session_mem_idx");
@@ -527,7 +529,7 @@ function dlvr_click(obj){
 	});		
 }
 $(document).ready(function(){
-	new_addr();
+	//new_addr();
 	var delivery_chg=$("input:checkbox[id='delivery_chg']").is(":checked");
 	var select = $("select");
 	select.change(function(){
@@ -551,7 +553,7 @@ $(document).ready(function(){
 	//$(".detail-table").css('margin-top','2px');
 
 	var odr_idx = '<?=$odr_idx?>';
-	<?if (odr_idx == "")
+	<?if ($odr_idx == "")
 	{
 	?>
 		add_change_sel();
@@ -1053,7 +1055,7 @@ function checkActive(){
 
 <div class="layer-hd">
 	<h1>발주서</h1>
-	<a href="#" class="btn-close<?=($save_yn =="Y")? " save":" odr";?>" odr_idx="<?=$odr_idx;?>" odr_status="<?=$odr_status;?>" imsi_odr_no="<?=$imsi_odr_no?>" part_type="<?=$part_type?>"><img src="/kor/images/btn_layer_close_w.png" alt="close"></a>
+	<a href="#" class="btn-close<?=($save_yn =="Y")? " save":" odr";?> <?=($mybox !="")? "mybox":"";?>" odr_idx="<?=$odr_idx;?>" odr_status="<?=$odr_status;?>" imsi_odr_no="<?=$imsi_odr_no?>" part_type="<?=$part_type?>"><img src="/kor/images/btn_layer_close_w.png" alt="close"></a>
 </div>
 <div class="layer-content">
 

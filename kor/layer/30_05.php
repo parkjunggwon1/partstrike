@@ -335,7 +335,7 @@ if($sheets_no){ //2016-05-19 : What's New 에서 Sheet 클릭 시 Log 호출을 
 		<?
 		if($forread==""){		
 			if ($row_odr["sell_mem_idx"]!=$session_mem_idx){?>
-				<button type="button" class="f-rt orderConfirm"><img src="/kor/images/btn_ok.gif" alt="확정 발주서"></button>
+				<button type="button" class="f-rt orderConfirm"><img src="/kor/images/btn_fix_order.gif" alt="확정 발주서"></button>
 			<?}else{?>				
 				<button type="button" class="btn-invoice-3008 f-rt"  odr_idx="<?=$odr_idx?>"><img src="/kor/images/btn_invoice.gif" alt="송장"></button>
 			<?}

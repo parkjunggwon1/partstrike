@@ -3800,7 +3800,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 				
 			});
 			
-			<?if (!$delivery_addr_idx){?>
+			<?if (!$delivery_addr_idx || $loadPage !="05_04"){?>
 			chgnation($("#nation").val());
 			<?}?>
 			//회사구분 선택 ---------------------------------------------------------------
