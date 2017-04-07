@@ -187,6 +187,8 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					$quantity="I";
 				}
 
+			$invoice_chk = get_any("odr_history","status_name", "odr_idx=$odr_idx  and (status_name='송장' or status_name='수정발주서' or status_name='발주서') order by odr_history_idx desc limit 1");
+
 			if ($i == 1){
 			?>
 				<tbody id="tbd_<?=$part_type?>">
@@ -917,7 +919,13 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td><?=$package?></td>
 					<td><?=$dc?></td>
 					<td><?=$rhtype?></td>
-					<td class="t-rt"><?=$odr_stock==0?"":number_format($odr_stock)?></td>
+					<td class="t-rt">
+					<?
+						$poa_cnt = get_any("odr_history","status_name", "odr_idx=$odr_idx  and (status_name='송장' or status_name='수정발주서' or status_name='발주서') order by odr_history_idx desc limit 1");
+						$qty = ($poa_cnt == "송장")? $part_stock+$supply_quantity : $part_stock+$odr_quantity;
+					?>
+					<?=$qty==0?"":number_format($qty)?>						
+					</td>
 					<?}?>
 					<td class="t-rt">$<?=$price_val?></td>					
 					<td class="t-rt"><span class="c-blue"><?=$odr_quantity==0?"":number_format($odr_quantity)?></span></td>
@@ -2107,7 +2115,7 @@ if ($for_readonly != "P") {?>
 		{	
 			$tot_vat_minus = $tot;
 
-			$vat_price = get_any("ship" ,"tax", "odr_idx=$odr_idx limit 1");	//부가세
+			$vat_price = get_any("ship" ,"tax", "odr_idx=".$_GET['odr_idx']." limit 1");	//부가세
 
 			if($vat_price==0)
 			{
@@ -3293,7 +3301,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 	<?}elseif ($loadPage =="13_02"){
 	?><a href="#" class="btn-pop-1303" odr_history_idx="<?=$odr_history_idx?>"><img src="/kor/images/btn_accept.gif" alt="수락"></a>
 	<?}elseif ($loadPage =="13_02s"){
-	?><a href="#" class="btn-confirm-1304s" odr_history_idx="<?=$odr_history_idx?>"><img src="/kor/images/btn_accept.gif" alt="수락"></a>
+	?><a href="#" class="btn-confirm-1304s" odr_history_idx="<?=$odr_history_idx?>"><img src="/kor/images/btn_complete.gif" alt="완료"></a>
 	<?}elseif ($loadPage =="10_02"){
 	?><a href="#" class="btn-pop-1003" odr_history_idx="<?=$odr_history_idx?>"><img src="/kor/images/btn_accept.gif" alt="수락"></a>
 		<a href="#" class="btn-pop-1301"><img src="/kor/images/btn_order_cancel.gif" alt="발주 취소"></a>
@@ -3940,7 +3948,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 			<tr>
 				<th scope="row"><strong class="c-red">*</strong> 회사구분</th>
 				<td colspan="2">
-					<div class="select type5" lang="ko">
+					<div class="select type5" >
 						<label class="c-blue"><?=($com_type)?GF_Common_GetSingleList("MEM",$com_type):""?></label>
 						<?echo GF_Common_SetComboList("com_type", "MEM", "", 1, "True",  "", $com_type,"lang='ko'"  );?>
 					</div>

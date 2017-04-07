@@ -737,10 +737,11 @@ Function GF_Common_SetComboList($CheckBoxName,$CommTy, $ParCode, $Depth, $IsBlan
 			$GF_Common_SetComboList .="<option value='' ".($CheckValue==null?"selected":"").">" .$BlankString ."</option>\n";
 		}
 		If ($Depth == "") {$Depth = " =1";}else{ $Depth = "=".$Depth;}		
+		$lang = "";
 		if ($lang==""){
 			$result =QRY_COMMON_LIST($CommTy ,$ParCode, $Depth);		
 		}else{
-			$result =QRY_COMMON_LIST_LANG($CommTy ,$ParCode, $Depth,$lang);		
+			$result =QRY_COMMON_LIST_LANG($CommTy ,$ParCode, $Depth);		
 		}
 		while($row = mysql_fetch_array($result)){
 			$dtl_code = replace_out($row["dtl_code"]);

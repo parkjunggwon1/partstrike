@@ -564,12 +564,14 @@ if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : �
         $odr_det_temp_result=mysql_query($odr_det_temp_sql,$conn) or die ("SQL ERROR : ".mysql_error());
 
         $part_idx = replace_out($row["part_idx"]);
-        $stock_qty = replace_out($row["quantity"]);
+        //$stock_qty = replace_out($row["quantity"]);
+        $stock_qty = replace_out($row["part_stock"]);
         $odr_qty = replace_out($row["odr_quantity"]);
         //$supp_qty = replace_out($row["supply_quantity"]);
         $supp_qty = replace_out($odr_det_temp_row['supply_quantity']);
         $real_stock = $stock_qty + $odr_qty;    //공급 가능수량(실재고+발주수량)
         //2016-12-11 : 재고수량보다 공급수량이 클 경우 BACK!!
+       
         if ($part_type != 2)
         {
             if($real_stock < $supp_qty){
@@ -585,6 +587,7 @@ if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : �
                 }
             }
         }
+      
         //2017-01-19 : parts 정보Update(임시테이블에서 가져오기)
         $temp_cnt = QRY_CNT("part_temp"," and odr_idx=$odr_idx and part_idx=$part_idx");
         if($temp_cnt>0){
@@ -853,9 +856,12 @@ if ($typ =="odramendconfirm2"){ //구매자: 수정발주서(P.O Amendment)12_07
            
             $part_idx = replace_out($row["part_idx"]);
             $stock_qty = replace_out($row["quantity"]);
-            $odr_qty = replace_out($row["odr_quantity"]);
+            //$odr_qty = replace_out($row["odr_quantity"]);
+            $odr_qty = $odr_qty_real;
             $supp_qty = replace_out($row["supply_quantity"]);
             $real_stock = $stock_qty + $supp_qty;
+
+           
             //2016-12-11 : 재고 변동여부 체크하여 BACK~
             if($real_stock < $odr_qty){
                 echo "ERR";
@@ -916,10 +922,13 @@ if($typ == "poano"){
         $_quantity = replace_out($row["quantity"]);
         $_odr_stock = replace_out($row["odr_stock"]);
         $_odr_quantity = replace_out($row["odr_quantity"]);
+        $_part_quantity = replace_out($row["part_stock"]);
         $_supp_quantity = replace_out($row["supply_quantity"]);
         $_part_price = replace_out($row["price"]);
         $_odr_price = replace_out($row["odr_price"]);
-        if(($_quantity+$_supp_quantity)<$_odr_quantity) $quantity_cnt++;        
+        
+        if(($_part_quantity)<$_odr_quantity) $quantity_cnt++;
+        //if(($_part_quantity+$_supp_quantity)<$_odr_quantity) $quantity_cnt++;        
     }
     if($quantity_cnt>0){
         echo "STOCK";

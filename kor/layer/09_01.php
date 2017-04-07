@@ -69,13 +69,13 @@ $("input[name^=odr_det_idx]").click(function(e){
 function chgnation(obj){	
 		if (obj=="")
 		{
-			$("#nation").parent().attr("lang","en");
+			//$("#nation").parent().attr("lang","en");
 		}else{
 			if(obj ==$("#s_nation").val() && obj ==$("#b_nation").val()){
 				$(".company-info-wrap [lang=en]").attr("lang","ko");
 				$(".company-info-wrap input").css("ime-mode","active");
 			}else{
-				$(".company-info-wrap [lang=ko]").attr("lang","en");
+				//$(".company-info-wrap [lang=ko]").attr("lang","en");
 				$(".company-info-wrap input").css("ime-mode","disabled");
 			}
 		}

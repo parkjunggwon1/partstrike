@@ -257,14 +257,22 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 					<?if ($imsi_odr_no){?>
 						<td  <?=$goJump?>  class="t-rt"><?=$part_stock<=0?"":number_format($part_stock)?></td>
 					<?}else{?>
-						<td  <?=$goJump?>  class="t-rt"><?=$part_stock<=0?"":number_format($part_stock+$odr_quantity)?></td>
+						<?
+							$poa_cnt = get_any("odr_history","status_name", "odr_idx=$odr_idx  and (status_name='송장' or status_name='수정발주서' or status_name='발주서') order by odr_history_idx desc limit 1");							
+							$qty = ($poa_cnt == "송장")? $part_stock+$supply_quantity : $part_stock+$odr_quantity;
+						?>
+						<td  <?=$goJump?>  class="t-rt"><?=$part_stock<=0?"":number_format($qty)?></td>
 					<?}?>
 				<?}?>			
 			<?}else if ($odr_status==7){?>
 				<?if ($imsi_odr_no){?>
 					<td  <?=$goJump?>  class="t-rt"><?=$part_stock<=0?"":number_format($part_stock)?></td>
 				<?}else{?>
-					<td  <?=$goJump?>  class="t-rt"><?=$part_stock<=0?"":number_format($part_stock+$odr_quantity)?></td>
+					<?
+						$poa_cnt = get_any("odr_history","status_name", "odr_idx=$odr_idx order by odr_history_idx desc limit 1");
+						$qty = ($poa_cnt == "송장")? $part_stock+$supply_quantity : $part_stock+$odr_quantity;
+					?>
+					<td  <?=$goJump?>  class="t-rt"><?=$part_stock<=0?"":number_format($qty)?></td>
 				<?}?>
 			<?}else{?>
 				<td  <?=$goJump?>  class="t-rt"><?=$supply_quantity<=0?"":number_format($supply_quantity)?></td>
