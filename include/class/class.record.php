@@ -192,12 +192,12 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 					
 					if ($odr_det_status==6)
 					{						
-						$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$odr_det_status.":".$sell_mem_idx.":odr:Y:".$page."')\" ";
+						$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$odr_det_status.":".$sell_mem_idx.":odr:Y:".$page.":".$fr."')\" ";
 					}
 					else
 					{
 
-						$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$status.":".$sell_mem_idx.":odr:Y:".$page."')\" ";
+						$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$status.":".$sell_mem_idx.":odr:Y:".$page.":".$fr."')\" ";
 					}	
 					
 				

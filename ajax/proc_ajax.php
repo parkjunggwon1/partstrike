@@ -23,7 +23,6 @@ $page = replace_in($page);
 $mode = replace_in($mode);
 $idx = replace_in($idx);
 
-
 switch($actty) {
    case "terms":
    case "joinus":
@@ -1911,10 +1910,12 @@ function fnturnkeyedit($page){
 }
 
 function fnSel($actty,$rel_idx,$mem_type,$mode){
+	$_SESSION["menu"] = $actty;
 	 include ($_SERVER["DOCUMENT_ROOT"]."/kor/include/$actty.php");
 }
 
 function fnSelPart($actty,$part_type){
+	$_SESSION["menu"] = $actty."_".$part_type;
 	 include ($_SERVER["DOCUMENT_ROOT"]."/kor/include/$actty.php");
 }
 function fnboard($actty,$board_idx){
@@ -1936,6 +1937,7 @@ function fnSelturnkey($actty,$turnkey_idx){
 }
 
 function fnSelRecord($actty,$odr_type){
+	$_SESSION["menu"] = $actty."_".$odr_type;
 	 include ($_SERVER["DOCUMENT_ROOT"]."/kor/include/$actty.php");
 }
 function fnSelMem($rel_idx, $mem_type,$idx){

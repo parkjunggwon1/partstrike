@@ -437,6 +437,22 @@ function goMenuJump(data){
 // splData[0] : status splData[1] : sellmem_idx splData[2] : (odr or fty ) splData[3] : validyn (72시간 적용), splData[4] : paging
 	var splData = data.split(":");		
 	var page="1";
+	
+	if (splData[5])
+	{
+		var menu_chk = splData[5];
+	}	
+	var menu_type_chk;
+	$.ajax({ 
+		type: "GET", 
+		url: "/ajax/cookie_get.php?menu="+menu_chk, 
+		dataType : "text" ,
+		async : false ,
+		success: function(data){ 
+				menu_type_chk = data;
+		}
+	});
+
 	if(typeof(splData[4])!="undefined"){
 		page=splData[4];
 	}

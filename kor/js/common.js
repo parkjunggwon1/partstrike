@@ -114,82 +114,114 @@ $(document).ready(function(){
 	});
 	$(".collapse-panel .panel-hd:first-child").click();
 	//---- 발주창(0504) 닫기(X) --------------------------------------------------------------
-	$("section[class^='layer']").on("click",".btn-close",function(){		
-		if($(this).hasClass("odr")){
-			
-			if($(".layer-section").hasClass("open")){
-				if ($(this).attr("part_type") == "256")
-				{					
-					closeCommLayer("layer4");
-				}
-				else
-				{
-					closeCommLayer("layer");
-					Refresh_Right();
-				}
-				
+	$("section[class^='layer']").on("click",".btn-close",function(){
+
+		var load_page = $("#loadPage").val();
+
+		var menu_type_chk;
+		$.ajax({ 
+			type: "GET", 
+			url: "/ajax/cookie_get.php", 
+			dataType : "text" ,
+			async : false ,
+			success: function(data){ 
+					menu_type_chk = data;
 			}
+		});
+				
+		switch (menu_type_chk) {
+			case "order_S"    : if(chkLogin()){order('S'); }
+			           break;
+			case "order_B"    : if(chkLogin()){order('b'); }
+			           break;
+			case "mybox"    : if(chkLogin()){showajax(".col-left", "mybox"); }
+			           break;
+			case "record_S"    : if(chkLogin()){record('S'); }
+			           break;
+			case "record_B"    : if(chkLogin()){record('B'); }
+			           break;
+			case "remit"    : if(chkLogin()){remit('C'); }
+			           break;
+			case "side_order"    : showajax(".col-right", "side_order");
+			           break;
+			default    : 
+							if($(this).hasClass("odr")){
+			
+								if($(".layer-section").hasClass("open")){
+									if ($(this).attr("part_type") == "256")
+									{					
+										closeCommLayer("layer4");
+									}
+									else
+									{
+										closeCommLayer("layer");
+										Refresh_Right();
+									}
+									
+								}
 
-			var mybox= $(this).hasClass("mybox");
-			//기존 데이터 사라지게.(단, 납기 확인 중인 데이터 제외하고.)
-				$.ajax({ 
-				type: "GET", 
-				url: "/ajax/proc_ajax.php", 
-				data: { actty : "RM", //Remove
-						actidx : $(this).attr("imsi_odr_no"),
-						odrstat : $(this).attr("odr_status")//2016-03-27
-				},
-					dataType : "html" ,
-					async : false ,
-					success: function(data){ 
-						if(mybox)
-						{							
-							showajax(".col-right", "side_order");
-						}
-						else
-						{							
-							main_srch();
-						}
-						
-						//showajax(".col-right", "side_order");
-					}
-				});
-		}else if ($(this).hasClass("amend")){  // 기존 데이터 제외하고 amend 된 데이터 모두 삭제.
-			
-			$.ajax({ 
-				type: "GET", 
-				url: "/ajax/proc_ajax.php", 
-				data: { actty : "RMA", //Remove amend data
-						actidx : $(this).attr("odr_idx")
-				},
-					dataType : "html" ,
-					async : false ,
-					success: function(data){ 
-//						document.location.href="/kor/";
-					}
-				});
-		}else if($(this).hasClass("save")){  // 기존 데이터중 납기품목 제외하고 amend 된 데이터 모두 삭제. (저장 발주서) 2016-04-03
-			
-			$.ajax({ 
-				type: "GET", 
-				url: "/ajax/proc_ajax.php", 
-				data: { actty : "RMS", //Remove amend data
-						actidx : $(this).attr("odr_idx")
-						},
-				dataType : "html" ,
-				async : false ,
-				success: function(data){ 
-					showajax(".col-right", "side_order");
-					
-					//document.location.href="/kor/";
-				}
-			});
+								var mybox= $(this).hasClass("mybox");
+								//기존 데이터 사라지게.(단, 납기 확인 중인 데이터 제외하고.)
+									$.ajax({ 
+									type: "GET", 
+									url: "/ajax/proc_ajax.php", 
+									data: { actty : "RM", //Remove
+											actidx : $(this).attr("imsi_odr_no"),
+											odrstat : $(this).attr("odr_status")//2016-03-27
+									},
+										dataType : "html" ,
+										async : false ,
+										success: function(data){ 
+											if(mybox)
+											{							
+												showajax(".col-right", "side_order");
+											}
+											else
+											{							
+												main_srch();
+											}
+											
+											//showajax(".col-right", "side_order");
+										}
+									});
+							}else if ($(this).hasClass("amend")){  // 기존 데이터 제외하고 amend 된 데이터 모두 삭제.
+								
+								$.ajax({ 
+									type: "GET", 
+									url: "/ajax/proc_ajax.php", 
+									data: { actty : "RMA", //Remove amend data
+											actidx : $(this).attr("odr_idx")
+									},
+										dataType : "html" ,
+										async : false ,
+										success: function(data){ 
+					//						document.location.href="/kor/";
+										}
+									});
+							}else if($(this).hasClass("save")){  // 기존 데이터중 납기품목 제외하고 amend 된 데이터 모두 삭제. (저장 발주서) 2016-04-03
+								
+								$.ajax({ 
+									type: "GET", 
+									url: "/ajax/proc_ajax.php", 
+									data: { actty : "RMS", //Remove amend data
+											actidx : $(this).attr("odr_idx")
+											},
+									dataType : "html" ,
+									async : false ,
+									success: function(data){ 
+										showajax(".col-right", "side_order");
+										
+										//document.location.href="/kor/";
+									}
+								});
+							}
+
+               break;
 		}
-		if($(this).hasClass("refresh_chk")){  // 기존 데이터중 납기품목 제외하고 amend 된 데이터 모두 삭제. (저장 발주서) 2016-04-03
+				
+		/*if($(this).hasClass("refresh_chk")){  // 기존 데이터중 납기품목 제외하고 amend 된 데이터 모두 삭제. (저장 발주서) 2016-04-03
 			document.location.href="/kor/";
-		}
-
-		
+		}*/	
 
 	});
 	
@@ -768,7 +800,35 @@ $(document).ready(function(){
 				success: function (data) {	
 					if (trim(data) == "SUCCESS"){		
 //						alert_msg("구매자에게 송장을 발송했습니다.");
-						document.location.href="/kor/";
+						var menu_type_chk;
+						$.ajax({ 
+							type: "GET", 
+							url: "/ajax/cookie_get.php", 
+							dataType : "text" ,
+							async : false ,
+							success: function(data){ 
+									menu_type_chk = data;
+							}
+						});
+						closeCommLayer("layer5");	//invoic 닫고
+						closeCommLayer("layer3");	//송장(3008) 닫고
+						closeCommLayer("layer");
+						
+						switch (menu_type_chk) {
+							case "order_S"    : if(chkLogin()){order('S'); showajax(".col-right", "side_order");}
+							           break;
+							case "order_B"    : if(chkLogin()){order('b'); showajax(".col-right", "side_order");}
+							           break;
+							case "mybox"    : if(chkLogin()){showajax(".col-left", "mybox"); showajax(".col-right", "side_order");}
+							           break;
+							case "record_S"    : if(chkLogin()){record('S'); showajax(".col-right", "side_order");}
+							           break;
+							case "record_B"    : if(chkLogin()){record('B'); showajax(".col-right", "side_order");}
+							           break;
+							case "remit"    : if(chkLogin()){remit('C'); showajax(".col-right", "side_order");}
+							           break;
+						}
+						//document.location.href="/kor/";
 					}else{
 						//2016-12-11 : 재고 경고
 						closeCommLayer("layer5");	//invoic 닫고
@@ -3078,3 +3138,27 @@ function data_del()
 {
 	location.href="/odr_data_del.php";
 }
+function getCookie(cName) {
+	cName = cName + '=';
+	var cookieData = document.cookie;
+	var start = cookieData.indexOf(cName);
+	var cValue = '';
+	if(start != -1){
+	   start += cName.length;
+	   var end = cookieData.indexOf(';', start);
+	   if(end == -1)end = cookieData.length;
+	   cValue = cookieData.substring(start, end);
+	}
+	return unescape(cValue);
+}
+
+
+
+function setCookie(cookieName, value, exdays){
+    var exdate = new Date();
+    exdate.setDate(exdate.getDate() + exdays);
+    var cookieValue = escape(value) + ((exdays==null) ? "" : "; expires=" + exdate.toGMTString());
+    document.cookie = cookieName + "=" + cookieValue;
+}
+
+
