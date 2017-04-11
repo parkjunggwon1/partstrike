@@ -192,12 +192,12 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 					
 					if ($odr_det_status==6)
 					{						
-						$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$odr_det_status.":".$sell_mem_idx.":odr:Y:".$page.":".$fr."')\" ";
+						$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$odr_det_status.":".$sell_mem_idx.":odr:Y:".$page.":".$fr.":".$_GET['actty']."')\" ";
 					}
 					else
 					{
 
-						$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$status.":".$sell_mem_idx.":odr:Y:".$page.":".$fr."')\" ";
+						$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$status.":".$sell_mem_idx.":odr:Y:".$page.":".$fr.":".$_GET['actty']."')\" ";
 					}	
 					
 				
@@ -258,10 +258,10 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 						<td  <?=$goJump?>  class="t-rt"><?=$part_stock<=0?"":number_format($part_stock)?></td>
 					<?}else{?>
 						<?
-							$poa_cnt = get_any("odr_history","status_name", "odr_idx=$odr_idx  and (status_name='송장' or status_name='수정발주서' or status_name='발주서') order by odr_history_idx desc limit 1");							
+							$poa_cnt = get_any("odr_history","status_name", "odr_idx=$odr_idx  and (status_name='송장' or status_name='수정발주서' or status_name='발주서') order by odr_history_idx desc limit 1");	
 							$qty = ($poa_cnt == "송장")? $part_stock+$supply_quantity : $part_stock+$odr_quantity;
 						?>
-						<td  <?=$goJump?>  class="t-rt"><?=$part_stock<=0?"":number_format($qty)?></td>
+						<td  <?=$goJump?>  class="t-rt"><?=number_format($qty)?></td>
 					<?}?>
 				<?}?>			
 			<?}else if ($odr_status==7){?>
@@ -272,7 +272,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 						$poa_cnt = get_any("odr_history","status_name", "odr_idx=$odr_idx order by odr_history_idx desc limit 1");
 						$qty = ($poa_cnt == "송장")? $part_stock+$supply_quantity : $part_stock+$odr_quantity;
 					?>
-					<td  <?=$goJump?>  class="t-rt"><?=$part_stock<=0?"":number_format($qty)?></td>
+					<td  <?=$goJump?>  class="t-rt"><?=number_format($qty)?></td>
 				<?}?>
 			<?}else{?>
 				<td  <?=$goJump?>  class="t-rt"><?=$supply_quantity<=0?"":number_format($supply_quantity)?></td>

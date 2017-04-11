@@ -68,7 +68,7 @@
 				<?if ($part_type=="2" || $part_type=="5" || $part_type=="6"){?>
 				<tbody class="btn-dialog-3102" href="javascript:;" sell_com_idx="<?=$sell_com_idx?>" sell_mem_idx="<?=$sell_mem_idx?>" id="<?=$part_idx?>" style="cursor:pointer;">
 				<?}else{?>
-				<tbody class="btn-order" href="javascript:;" sell_com_idx="<?=$sell_com_idx?>" sell_mem_idx="<?=$sell_mem_idx?>" id="<?=$part_idx?>" style="cursor:pointer;">
+				<tbody class="btn-order" href="javascript:;" sell_com_idx="<?=$sell_com_idx?>" sell_mem_idx="<?=$sell_mem_idx?>" id="<?=$part_idx?>" style="cursor:pointer;" menu_type='M'>
 				<?}?>
 				<?if($i>1){?><tr><td colspan='15' style='padding-top:20px; background-color:#FFFFFF;'></td></tr><?}?>
 				<tr > 

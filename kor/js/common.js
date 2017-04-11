@@ -118,8 +118,11 @@ $(document).ready(function(){
 
 		var load_page = $("#loadPage").val();
 
-		var menu_type_chk;
-		$.ajax({ 
+		//alert(getCookie('menu'));
+
+		var menu_type_chk = getCookie('menu');
+		
+		/*$.ajax({ 
 			type: "GET", 
 			url: "/ajax/cookie_get.php", 
 			dataType : "text" ,
@@ -127,20 +130,21 @@ $(document).ready(function(){
 			success: function(data){ 
 					menu_type_chk = data;
 			}
-		});
+		});*/
+
 				
 		switch (menu_type_chk) {
-			case "order_S"    : if(chkLogin()){order('S'); }
+			case "order_S"    : if(chkLogin()){order('S'); showajax(".col-right", "side_order");}
 			           break;
-			case "order_B"    : if(chkLogin()){order('b'); }
+			case "order_B"    : if(chkLogin()){order('B'); showajax(".col-right", "side_order");}
 			           break;
-			case "mybox"    : if(chkLogin()){showajax(".col-left", "mybox"); }
+			case "mybox"    : if(chkLogin()){showajax(".col-left", "mybox"); showajax(".col-right", "side_order");}
 			           break;
-			case "record_S"    : if(chkLogin()){record('S'); }
+			case "record_S"    : if(chkLogin()){record('S'); showajax(".col-right", "side_order");}
 			           break;
-			case "record_B"    : if(chkLogin()){record('B'); }
+			case "record_B"    : if(chkLogin()){record('B'); showajax(".col-right", "side_order");}
 			           break;
-			case "remit"    : if(chkLogin()){remit('C'); }
+			case "remit"    : if(chkLogin()){remit('C'); showajax(".col-right", "side_order");}
 			           break;
 			case "side_order"    : showajax(".col-right", "side_order");
 			           break;
@@ -800,16 +804,8 @@ $(document).ready(function(){
 				success: function (data) {	
 					if (trim(data) == "SUCCESS"){		
 //						alert_msg("구매자에게 송장을 발송했습니다.");
-						var menu_type_chk;
-						$.ajax({ 
-							type: "GET", 
-							url: "/ajax/cookie_get.php", 
-							dataType : "text" ,
-							async : false ,
-							success: function(data){ 
-									menu_type_chk = data;
-							}
-						});
+						var menu_type_chk = getCookie('menu');
+						
 						closeCommLayer("layer5");	//invoic 닫고
 						closeCommLayer("layer3");	//송장(3008) 닫고
 						closeCommLayer("layer");
@@ -817,7 +813,7 @@ $(document).ready(function(){
 						switch (menu_type_chk) {
 							case "order_S"    : if(chkLogin()){order('S'); showajax(".col-right", "side_order");}
 							           break;
-							case "order_B"    : if(chkLogin()){order('b'); showajax(".col-right", "side_order");}
+							case "order_B"    : if(chkLogin()){order('B'); showajax(".col-right", "side_order");}
 							           break;
 							case "mybox"    : if(chkLogin()){showajax(".col-left", "mybox"); showajax(".col-right", "side_order");}
 							           break;
@@ -1554,6 +1550,17 @@ $(document).ready(function(){
 	
 	////////////////////////* dialog *///////////////////////////////////
 	$("body").on("click",".btn-order , .btn-dialog-3102",function(){
+		
+		var menu_type_chk = $(this).attr("menu_type");
+		if (menu_type_chk=="M")
+		{			
+			setCookie("menu","side_order");
+		}
+		else if (menu_type_chk=="S")
+		{			
+			setCookie("menu","mybox");
+		}
+		
 		var loadPage  = $(this).attr("class")=="btn-dialog-3102" ? "31_02" : "05_04";
 		if (mem_idx=="")
 		{

@@ -82,8 +82,8 @@ function GET_MYBOX_PART($titleyn, $part_type, $page, $style,$recordcnt){   //$ti
 				<?}else{?>
 					<!--<td>stock</td>-->
 				<?if ($style=="main"){?>
-					<td class="pd-0 t-rt"><a href="#layerPop3" class="btn-order" sell_com_idx="<?=$sell_com_idx?>" sell_mem_idx="<?=$sell_mem_idx?>" id="<?=$part_idx?>"><img src="/kor/images/btn_order.gif" alt="발주"></a></td>
-					<td class="pd-0 t-rt"><a href="#layerPop3" class="btn-mybox" sell_com_idx="<?=$sell_com_idx?>" sell_mem_idx="<?=$sell_mem_idx?>" id="<?=$part_idx?>" work="del"><img src="/kor/images/btn_delete2.gif" alt="삭제"></a></td>
+					<td class="pd-0 t-rt"><a href="#layerPop3" class="btn-order" sell_com_idx="<?=$sell_com_idx?>" sell_mem_idx="<?=$sell_mem_idx?>" id="<?=$part_idx?>" menu_type='S'><img src="/kor/images/btn_order.gif" alt="발주"></a></td>
+					<td class="pd-0 t-rt"><a href="#layerPop3" class="btn-mybox" sell_com_idx="<?=$sell_com_idx?>" sell_mem_idx="<?=$sell_mem_idx?>" id="<?=$part_idx?>" work="del" menu_type='S'><img src="/kor/images/btn_delete2.gif" alt="삭제"></a></td>
 				<?}?>
 				<?}?>
 				</td>

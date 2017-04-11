@@ -125,6 +125,7 @@ function delivery_save(){
 
 
 function editmyinfo(rel_idx) {	
+	deleteCookie('menu');
 	if (rel_idx =="")
 	{
 		alert_msg("로그인 후 이용하여 주시기 바랍니다.");
@@ -158,6 +159,7 @@ function delivery_load(idx,loadpage,odr_idx){
 }
 
 function partreg(part) {	
+	deleteCookie('menu');
 	if (mem_idx =="")
 	{
 		alert_msg("로그인 후 이용하여 주시기 바랍니다.");
@@ -182,6 +184,7 @@ function right_side(){
 
 
 function agreement() {	
+	deleteCookie('menu');
 	showajax(".col-left", "terms");
 	//showajax(".col-left", "agreement");
 //	showajax(".col-right", mem_idx==""?"side":"side_order");
@@ -189,12 +192,14 @@ function agreement() {
 }
 
 function guide() {	
+	deleteCookie('menu');
 	showajax(".col-left", "guide");
 //	showajax(".col-right", mem_idx==""?"side":"side_order");
 	setMenu(6, 3);
 }
 
 function memfee(){
+	deleteCookie('menu');
 	if (mem_idx =="")
 	{
 		alert_msg("로그인 후 이용하여 주시기 바랍니다.");
@@ -208,6 +213,7 @@ function memfee(){
 }
 
 function board(mode) {	
+	deleteCookie('menu');
 	if (mode!="AA001" &&mem_idx =="")
 	{
 		alert_msg("로그인 후 이용하여 주시기 바랍니다.");
@@ -247,11 +253,13 @@ function mybox(){
 }
 
 function remit(ty){
+	setCookie("menu","remit");
 	showajaxParam(".col-left", "remit", "rel_idx="+ty);
 	//-->showajax(".col-right", "side_order");
 	setMenu(2, 3);
 }
 function agent(){
+	deleteCookie('menu');
 	showajax(".col-left", "agent");
 	//showajax(".col-right", mem_idx==""?"side":"side_order");
 	setMenu(5, 2);
@@ -263,11 +271,13 @@ function agentview(idx,nat,strsearch) {
 }
 
 function lab(){
+	deleteCookie('menu');
 	showajax(".col-left", "lab");
 //	showajax(".col-right", mem_idx==""?"side":"side_order");
 	setMenu(5, 3);
 }
 function contact(){
+	deleteCookie('menu');
 	showajax(".col-left", "contact");	
 //	showajax(".col-right", mem_idx==""?"side":"side_order");
 	setMenu(6, 5);
@@ -287,6 +297,9 @@ function companyback(rel_idx){
 }
 
 function record(odr_type){
+		
+	setCookie("menu","record_" +odr_type);	
+
 	showajaxParam(".col-left", "record", "odr_type="+odr_type);
 	//-->showajax(".col-right", "side_order");
 	setMenu(2, odr_type=="S"?"1":"2");
@@ -334,6 +347,7 @@ function layer_company_det(rel_idx){
 }
 
 function turnkeyreg() {	
+	deleteCookie('menu');
 	if (mem_idx =="")
 	{
 		alert_msg("로그인 후 이용하여 주시기 바랍니다.");
@@ -437,21 +451,28 @@ function goMenuJump(data){
 // splData[0] : status splData[1] : sellmem_idx splData[2] : (odr or fty ) splData[3] : validyn (72시간 적용), splData[4] : paging
 	var splData = data.split(":");		
 	var page="1";
-	
-	if (splData[5])
+	var get_cookie = getCookie('menu');
+
+	if (splData[5] !="M" && splData[6])
 	{
 		var menu_chk = splData[5];
+		var menu_type = splData[6];
+
+		setCookie("menu",menu_type + "_" +menu_chk);
 	}	
-	var menu_type_chk;
-	$.ajax({ 
-		type: "GET", 
-		url: "/ajax/cookie_get.php?menu="+menu_chk, 
-		dataType : "text" ,
-		async : false ,
-		success: function(data){ 
-				menu_type_chk = data;
+	else
+	{
+		if (get_cookie=="remit" || get_cookie=="record_S" || get_cookie=="record_B")
+		{
+
 		}
-	});
+		else
+		{
+			setCookie("menu","side_order");
+		}
+		
+	}
+	
 
 	if(typeof(splData[4])!="undefined"){
 		page=splData[4];
@@ -771,4 +792,30 @@ function pay_pop(form) {
   form.action="/paypal/paypopup.php";
   form.target = "Win" ;
   form.submit();
+}
+
+function setCookie(cookieName, value, exdays){
+    var exdate = new Date();
+    exdate.setDate(exdate.getDate() + exdays);
+    var cookieValue = escape(value) + ((exdays==null) ? "" : "; expires=" + exdate.toGMTString());
+    document.cookie = cookieName + "=" + cookieValue;
+}
+
+function getCookie(cookieName) {
+    cookieName = cookieName + '=';
+    var cookieData = document.cookie;
+    var start = cookieData.indexOf(cookieName);
+    var cookieValue = '';
+    if(start != -1){
+        start += cookieName.length;
+        var end = cookieData.indexOf(';', start);
+        if(end == -1)end = cookieData.length;
+        cookieValue = cookieData.substring(start, end);
+    }
+    return unescape(cookieValue);
+}
+function deleteCookie(cookieName){
+    var expireDate = new Date();
+    expireDate.setDate(expireDate.getDate() - 1);
+    document.cookie = cookieName + "= " + "; expires=" + expireDate.toGMTString();
 }
