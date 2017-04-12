@@ -117,10 +117,9 @@ $(document).ready(function(){
 	$("section[class^='layer']").on("click",".btn-close",function(){
 
 		var load_page = $("#loadPage").val();
+		var menu_type_chk = getCookie('menu');
 
 		//alert(getCookie('menu'));
-
-		var menu_type_chk = getCookie('menu');
 		
 		/*$.ajax({ 
 			type: "GET", 
@@ -131,7 +130,6 @@ $(document).ready(function(){
 					menu_type_chk = data;
 			}
 		});*/
-
 				
 		switch (menu_type_chk) {
 			case "order_S"    : if(chkLogin()){order('S'); showajax(".col-right", "side_order");}
@@ -476,7 +474,30 @@ $(document).ready(function(){
 				success: function (data) {	
 					if (trim(data) == "SUCCESS"){		
 						//alert_msg("판매자에게 확정 발주서를 전송했습니다.");
-						document.location.href="/kor/";
+						//alert_msg("구매자에게 송장을 발송했습니다.");
+						var menu_type_chk = getCookie('menu');
+
+						closeCommLayer("layer5");	//invoic 닫고
+						closeCommLayer("layer3");	//송장(3008) 닫고
+						closeCommLayer("layer");
+						
+						switch (menu_type_chk) {
+							case "order_S"    : if(chkLogin()){order('S'); showajax(".col-right", "side_order");}
+							           break;
+							case "order_B"    : if(chkLogin()){order('B'); showajax(".col-right", "side_order");}
+							           break;
+							case "mybox"    : if(chkLogin()){showajax(".col-left", "mybox"); showajax(".col-right", "side_order");}
+							           break;
+							case "record_S"    : if(chkLogin()){record('S'); showajax(".col-right", "side_order");}
+							           break;
+							case "record_B"    : if(chkLogin()){record('B'); showajax(".col-right", "side_order");}
+							           break;
+							case "remit"    : if(chkLogin()){remit('C'); showajax(".col-right", "side_order");}
+							           break;
+							case "side_order"    : showajax(".col-right", "side_order");
+			           					break;
+						}
+						//document.location.href="/kor/";
 					}else if(trim(data) == "ERR"){
 						//재고 경고
 						closeCommLayer("layer5");	//invoic 닫고
@@ -805,7 +826,7 @@ $(document).ready(function(){
 					if (trim(data) == "SUCCESS"){		
 //						alert_msg("구매자에게 송장을 발송했습니다.");
 						var menu_type_chk = getCookie('menu');
-						
+
 						closeCommLayer("layer5");	//invoic 닫고
 						closeCommLayer("layer3");	//송장(3008) 닫고
 						closeCommLayer("layer");
@@ -823,6 +844,8 @@ $(document).ready(function(){
 							           break;
 							case "remit"    : if(chkLogin()){remit('C'); showajax(".col-right", "side_order");}
 							           break;
+							case "side_order"    : showajax(".col-right", "side_order");
+			           					break;
 						}
 						//document.location.href="/kor/";
 					}else{
@@ -1978,6 +2001,8 @@ $(document).ready(function(){
 			f.action = "/kor/proc/odr_proc.php";
 			f.submit();
 		}
+
+		showajax(".col-right", "side_order");
 	});
 
 	//-- 배송지 변경 : 저장 버튼 ---------------------------------
@@ -2339,6 +2364,29 @@ $(document).ready(function(){
 			f.target = "proc";
 			f.action = "/kor/proc/odr_proc.php";
 			f.submit();
+
+			var menu_type_chk = getCookie('menu');
+
+			closeCommLayer("layer5");	//invoic 닫고
+			closeCommLayer("layer3");	//송장(3008) 닫고
+			closeCommLayer("layer");
+			
+			switch (menu_type_chk) {
+				case "order_S"    : if(chkLogin()){order('S'); showajax(".col-right", "side_order");}
+				           break;
+				case "order_B"    : if(chkLogin()){order('B'); showajax(".col-right", "side_order");}
+				           break;
+				case "mybox"    : if(chkLogin()){showajax(".col-left", "mybox"); showajax(".col-right", "side_order");}
+				           break;
+				case "record_S"    : if(chkLogin()){record('S'); showajax(".col-right", "side_order");}
+				           break;
+				case "record_B"    : if(chkLogin()){record('B'); showajax(".col-right", "side_order");}
+				           break;
+				case "remit"    : if(chkLogin()){remit('C'); showajax(".col-right", "side_order");}
+				           break;
+				case "side_order"    : showajax(".col-right", "side_order");
+           					break;
+			}
 		}
 
 		/** 2016-05-18 주석처리.

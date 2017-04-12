@@ -84,12 +84,13 @@ function joinus() {
 }
 //--- 오른쪽 section id="orderDraft" 새로고침(전체 새로고침 없이) 2016-03-30
 function Refresh_Right(){
-	$.ajax({
+	/*$.ajax({
 		url:"/kor/include/aj_side_order.php",
 		success: function (data) {
 			$("#orderDraft").html(data);
 		}
-	});
+	});*/
+	showajax(".col-right", "side_order");
 }
 //--- 배송지변경 -> 저장 ---------------------------------------------------------------
 function delivery_save(){
@@ -455,10 +456,19 @@ function goMenuJump(data){
 
 	if (splData[5] !="M" && splData[6])
 	{
+
 		var menu_chk = splData[5];
 		var menu_type = splData[6];
 
-		setCookie("menu",menu_type + "_" +menu_chk);
+		if (menu_type=="side_order")
+		{
+			setCookie("menu","side_order");
+		}
+		else
+		{
+			setCookie("menu",menu_type + "_" +menu_chk);
+		}
+		
 	}	
 	else
 	{

@@ -14,7 +14,29 @@ if ($alert =="sessionend"){
 <Script Language="javascript">
 $(document).ready(function(){
 	$("body").on("click",".btn-close-payment",function(){
-		document.location.href="/kor/";
+		var menu_type_chk = getCookie('menu');
+
+		closeCommLayer("layer6");
+		closeCommLayer("layer5");	//invoic 닫고
+		closeCommLayer("layer3");	//송장(3008) 닫고
+		closeCommLayer("layer");
+		
+		switch (menu_type_chk) {
+			case "order_S"    : if(chkLogin()){order('S'); showajax(".col-right", "side_order");}
+			           break;
+			case "order_B"    : if(chkLogin()){order('B'); showajax(".col-right", "side_order");}
+			           break;
+			case "mybox"    : if(chkLogin()){showajax(".col-left", "mybox"); showajax(".col-right", "side_order");}
+			           break;
+			case "record_S"    : if(chkLogin()){record('S'); showajax(".col-right", "side_order");}
+			           break;
+			case "record_B"    : if(chkLogin()){record('B'); showajax(".col-right", "side_order");}
+			           break;
+			case "remit"    : if(chkLogin()){remit('C'); showajax(".col-right", "side_order");}
+			           break;
+			case "side_order"    : showajax(".col-right", "side_order");
+       					break;
+		}
 	});
 });
 </script>
