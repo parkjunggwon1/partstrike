@@ -116,7 +116,25 @@ $dlvr_cnt = QRY_CNT("freight_charge"," and trade_type=$trade_type and rel_idx = 
 			//alert("det_cnt:"+det_cnt);
 			if(del_cnt == det_cnt && det_cnt>0){  //모두 삭제 시
 				if($(".layer-section").hasClass("open")) closeCommLayer("layer");
-				Refresh_MainSh(); //메인 검색 실행
+				//Refresh_MainSh(); //메인 검색 실행
+				var menu_type_chk = getCookie('menu');
+				
+				switch (menu_type_chk) {
+					case "order_S"    : if(chkLogin()){order('S'); showajax(".col-right", "side_order");}
+					           break;
+					case "order_B"    : if(chkLogin()){order('B'); showajax(".col-right", "side_order");}
+					           break;
+					case "mybox"    : if(chkLogin()){showajax(".col-left", "mybox"); showajax(".col-right", "side_order");}
+					           break;
+					case "record_S"    : if(chkLogin()){record('S'); showajax(".col-right", "side_order");}
+					           break;
+					case "record_B"    : if(chkLogin()){record('B'); showajax(".col-right", "side_order");}
+					           break;
+					case "remit"    : if(chkLogin()){remit('C'); showajax(".col-right", "side_order");}
+					           break;
+					case "side_order"    : showajax(".col-right", "side_order");
+		       					break;
+				}
 				closeCommLayer("layer3"); //발주창
 			} else if(delv_cnt==0){  //삭제한게 있고, 납기 삭제할게 없을때만 새로고침
 				openCommLayer("layer3","05_04","?odr_idx="+$("#odr_idx_05_04").val());

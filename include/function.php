@@ -94,7 +94,32 @@ function Search_Refresh(){
 function Parent_Search_Refresh(){
 	echo "
 	<script language='javascript'>
-		parent.Refresh_MainSh();
+		var menu_type_chk = getCookie('menu');
+
+		closeCommLayer('layer5');	//invoic 닫고
+		closeCommLayer('layer3');	//송장(3008) 닫고
+		closeCommLayer('layer');
+		
+		switch (menu_type_chk) {
+			case 'order_S'    : if(chkLogin()){order('S'); showajax('.col-right', 'side_order');}
+			           break;
+			case 'order_B'    : if(chkLogin()){order('B'); showajax('.col-right', 'side_order');}
+			           break;
+			case 'mybox'    : if(chkLogin()){showajax('.col-left', 'mybox'); showajax('.col-right', 'side_order');}
+			           break;
+			case 'record_S'    : if(chkLogin()){record('S'); showajax('.col-right', 'side_order');}
+			           break;
+			case 'record_B'    : if(chkLogin()){record('B'); showajax('.col-right', 'side_order');}
+			           break;
+			case 'remit'    : if(chkLogin()){remit('C'); showajax('.col-right', 'side_order');}
+			           break;
+			case 'side_order'    : showajax('.col-right', 'side_order');
+       					break;
+       		default    : 			parent.Refresh_MainSh();
+       					break;
+       									
+		}
+		
 	</script>
 	";
 }

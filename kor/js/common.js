@@ -1583,6 +1583,10 @@ $(document).ready(function(){
 		{			
 			setCookie("menu","mybox");
 		}
+		else
+		{
+			setCookie("menu","side_order");
+		}
 		
 		var loadPage  = $(this).attr("class")=="btn-dialog-3102" ? "31_02" : "05_04";
 		if (mem_idx=="")
@@ -1987,6 +1991,7 @@ $(document).ready(function(){
 					
 				}
 			});	
+			
 		}
 
 		if (err == false){
@@ -1999,10 +2004,27 @@ $(document).ready(function(){
 			f.save_yn.value = "Y";
 			f.target = "proc";
 			f.action = "/kor/proc/odr_proc.php";
-			f.submit();
+			f.submit();			
 		}
 
-		showajax(".col-right", "side_order");
+		var menu_type_chk = getCookie('menu');
+				
+		switch (menu_type_chk) {
+			case "order_S"    : if(chkLogin()){order('S'); showajax(".col-right", "side_order");}
+			           break;
+			case "order_B"    : if(chkLogin()){order('B'); showajax(".col-right", "side_order");}
+			           break;
+			case "mybox"    : if(chkLogin()){showajax(".col-left", "mybox"); showajax(".col-right", "side_order");}
+			           break;
+			case "record_S"    : if(chkLogin()){record('S'); showajax(".col-right", "side_order");}
+			           break;
+			case "record_B"    : if(chkLogin()){record('B'); showajax(".col-right", "side_order");}
+			           break;
+			case "remit"    : if(chkLogin()){remit('C'); showajax(".col-right", "side_order");}
+			           break;
+			case "side_order"    : showajax(".col-right", "side_order");
+       					break;
+		}
 	});
 
 	//-- 배송지 변경 : 저장 버튼 ---------------------------------
