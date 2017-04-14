@@ -1059,7 +1059,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<tr>
 						<td></td>
 						<td colspan="15" style="padding:0">
-							<table class="detail-table w100" style="margin:0;">
+							<table class="detail-table w100" style="margin:0; display:none;" id="desc_<?=$odr_det_idx?>">
 								<tbody>
 									<tr>
 										<td lang="en" class="t-lt">
@@ -1076,13 +1076,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<!---------------------------------------------------------------------------------------------------------------------------------------------------->
 					<?}elseif ($loadPage == "30_16" ||$loadPage=="18R_21"){ //[판매자] 선적(30_16)/교환선적시 보여지는 내용?>
 						<?if($loadPage == "30_16"){?>
-						<?if ($det_cnt>1){?>
-							<td>
-								<label class="ipt-chk chk2">
-									<input type="<?=($det_cnt>1)? "checkbox":"hidden";?>" name="odr_det_idx[]" style="padding-right:0px;" class="stock" odr_quantity="<?=$odr_quantity;?>" value="<?=$odr_det_idx?>"><span></span>
-								</label>
-							</td>
-						<?}?>
+							<input type="hidden" name="odr_det_idx[]" style="padding-right:0px;" class="stock" odr_quantity="<?=$odr_quantity;?>" value="<?=$odr_det_idx?>"><span></span>
 						<?}else{	//-- 18R_21 --------?>
 							<input type="hidden" name="odr_det_idx" class="stock" odr_quantity="<?=$odr_quantity;?>" value="<?=$odr_det_idx?>">
 						<?}?>

@@ -2,10 +2,8 @@
 *** 2016-03-31 : updateQty() 함수 수정, ready 밖으로 빼냄
 *** 2016-04-04 : updateQty() 함수 수정, form 'f'를 'f_04_05'로 변경
 *********************************************************************************/
-
-
-$(document).ready(function(){	
-
+$(document).ready(function(){
+	
 	//gnb
 	$("#gnb>ul>li>a").on("mouseover",function(){
 		$li = $(this).parent("li");
@@ -115,115 +113,63 @@ $(document).ready(function(){
 	$(".collapse-panel .panel-hd:first-child").click();
 	//---- 발주창(0504) 닫기(X) --------------------------------------------------------------
 	$("section[class^='layer']").on("click",".btn-close",function(){
-
-		var load_page = $("#loadPage").val();
-		var menu_type_chk = getCookie('menu');
-
-		//alert(getCookie('menu'));
-		
-		/*$.ajax({ 
-			type: "GET", 
-			url: "/ajax/cookie_get.php", 
-			dataType : "text" ,
-			async : false ,
-			success: function(data){ 
-					menu_type_chk = data;
-			}
-		});*/
-				
-		switch (menu_type_chk) {
-			case "order_S"    : if(chkLogin()){order('S'); showajax(".col-right", "side_order");}
-			           break;
-			case "order_B"    : if(chkLogin()){order('B'); showajax(".col-right", "side_order");}
-			           break;
-			case "mybox"    : if(chkLogin()){showajax(".col-left", "mybox"); showajax(".col-right", "side_order");}
-			           break;
-			case "record_S"    : if(chkLogin()){record('S'); showajax(".col-right", "side_order");}
-			           break;
-			case "record_B"    : if(chkLogin()){record('B'); showajax(".col-right", "side_order");}
-			           break;
-			case "remit"    : if(chkLogin()){remit('C'); showajax(".col-right", "side_order");}
-			           break;
-			case "side_order"    : showajax(".col-right", "side_order");
-			           break;
-			default    : 
-							if($(this).hasClass("odr")){
+		if($(this).hasClass("odr")){
 			
-								if($(".layer-section").hasClass("open")){
-									if ($(this).attr("part_type") == "256")
-									{					
-										closeCommLayer("layer4");
-									}
-									else
-									{
-										closeCommLayer("layer");
-										Refresh_Right();
-									}
-									
-								}
-
-								var mybox= $(this).hasClass("mybox");
-								//기존 데이터 사라지게.(단, 납기 확인 중인 데이터 제외하고.)
-									$.ajax({ 
-									type: "GET", 
-									url: "/ajax/proc_ajax.php", 
-									data: { actty : "RM", //Remove
-											actidx : $(this).attr("imsi_odr_no"),
-											odrstat : $(this).attr("odr_status")//2016-03-27
-									},
-										dataType : "html" ,
-										async : false ,
-										success: function(data){ 
-											if(mybox)
-											{							
-												showajax(".col-right", "side_order");
-											}
-											else
-											{							
-												main_srch();
-											}
-											
-											//showajax(".col-right", "side_order");
-										}
-									});
-							}else if ($(this).hasClass("amend")){  // 기존 데이터 제외하고 amend 된 데이터 모두 삭제.
-								
-								$.ajax({ 
-									type: "GET", 
-									url: "/ajax/proc_ajax.php", 
-									data: { actty : "RMA", //Remove amend data
-											actidx : $(this).attr("odr_idx")
-									},
-										dataType : "html" ,
-										async : false ,
-										success: function(data){ 
-					//						document.location.href="/kor/";
-										}
-									});
-							}else if($(this).hasClass("save")){  // 기존 데이터중 납기품목 제외하고 amend 된 데이터 모두 삭제. (저장 발주서) 2016-04-03
-								
-								$.ajax({ 
-									type: "GET", 
-									url: "/ajax/proc_ajax.php", 
-									data: { actty : "RMS", //Remove amend data
-											actidx : $(this).attr("odr_idx")
-											},
-									dataType : "html" ,
-									async : false ,
-									success: function(data){ 
-										showajax(".col-right", "side_order");
-										
-										//document.location.href="/kor/";
-									}
-								});
-							}
-
-               break;
-		}
+			if($(".layer-section").hasClass("open")){
+				if ($(this).attr("part_type") == "256")
+				{					
+					closeCommLayer("layer4");
+				}
+				else
+				{
+					closeCommLayer("layer");
+					Refresh_Right();
+				}
 				
-		/*if($(this).hasClass("refresh_chk")){  // 기존 데이터중 납기품목 제외하고 amend 된 데이터 모두 삭제. (저장 발주서) 2016-04-03
-			document.location.href="/kor/";
-		}*/	
+			}
+			//기존 데이터 사라지게.(단, 납기 확인 중인 데이터 제외하고.)
+				$.ajax({ 
+				type: "GET", 
+				url: "/ajax/proc_ajax.php", 
+				data: { actty : "RM", //Remove
+						actidx : $(this).attr("imsi_odr_no"),
+						odrstat : $(this).attr("odr_status")//2016-03-27
+				},
+					dataType : "html" ,
+					async : false ,
+					success: function(data){ 
+						showajax(".col-right", "side_order");
+					}
+				});
+		}else if ($(this).hasClass("amend")){  // 기존 데이터 제외하고 amend 된 데이터 모두 삭제.
+			
+			$.ajax({ 
+				type: "GET", 
+				url: "/ajax/proc_ajax.php", 
+				data: { actty : "RMA", //Remove amend data
+						actidx : $(this).attr("odr_idx")
+				},
+					dataType : "html" ,
+					async : false ,
+					success: function(data){ 
+//						document.location.href="/kor/";
+					}
+				});
+		}else if($(this).hasClass("save")){  // 기존 데이터중 납기품목 제외하고 amend 된 데이터 모두 삭제. (저장 발주서) 2016-04-03
+			
+			$.ajax({ 
+				type: "GET", 
+				url: "/ajax/proc_ajax.php", 
+				data: { actty : "RMS", //Remove amend data
+						actidx : $(this).attr("odr_idx")
+						},
+				dataType : "html" ,
+				async : false ,
+				success: function(data){ 
+					showajax(".col-right", "side_order");
+				}
+			});
+		}
 
 	});
 	
@@ -233,18 +179,7 @@ $(document).ready(function(){
 
 	$("section[class^='layer']").on("click",".btn-close",function(){
 		
-		//po-cancel 닫기(X)
-		if ($(this).hasClass("po-cancel")){			
-			var load_page = $("#load_page_30_08").val();
-			openLayer("layer3",load_page,"?odr_idx="+$("#odr_idx_30_08").val());
-		}
-		//3016_cancel 닫기(X)
-		if ($(this).hasClass("3016_cancel")){			
-			var load_page = $("#load_page_3016_cancel").val();
-			openLayer("layer3",load_page,"?odr_idx="+$("#odr_idx_3016_cancel").val());
-		}
-
-		else if (!$(this).hasClass("btn-order-periodconfirm"))
+		if (!$(this).hasClass("btn-order-periodconfirm"))
 		{			
 			$(this).parents("section[class^='layer']").removeClass("open");
 			$("body").removeClass("open-layer");
@@ -257,7 +192,11 @@ $(document).ready(function(){
 			}
 			
 		}
-		
+		//po-cancel 닫기(X)
+		if ($(this).hasClass("po-cancel")){
+			var load_page = $("#load_page_30_08").val();
+			openCommLayer("layer3",load_page,"?odr_idx="+$("#odr_idx_30_08").val());
+		}
 	});
 	//---모든레이어 닫고 페이지 새로고침(from:alert2.php)---------------------------------
 	$("section[class^='layer']").on("click",".btn-close-refresh",function(){
@@ -276,7 +215,7 @@ $(document).ready(function(){
 		$("body").removeClass("open-layer");
 	});
 
-	$('.onlynum').css("ime-mode","disabled").keydown(function(event){ 		//숫자만 입력하게.(.도 포함) 		
+		$('.onlynum').css("ime-mode","disabled").keydown(function(event){ 		//숫자만 입력하게.(.도 포함) 		
 	  if (event.which && (event.which == 190 || event.which == 110 || event.which > 45 && event.which < 58 || event.which == 8 || event.which > 95 && event.which < 106)) {			
 	   } else { 
 	   event.preventDefault(); 
@@ -290,17 +229,16 @@ $(document).ready(function(){
 	  } 
 	 });
 		 
-	 $('.numfmt').css("ime-mode","disabled").keyup( function(event){   // 숫자 입력 하면 ,로 단위 끊어 표시하게.	 	
-	 		check_value(this);
+	 $('.numfmt').css("ime-mode","disabled").keyup( function(event){   // 숫자 입력 하면 ,로 단위 끊어 표시하게.
+			check_value(this);
 	 });
 
-	 $('.onlyEngNum').css("ime-mode","disabled").keydown(function(event){ 		//ENG, 숫자만 입력하게.(.도 포함) 		 
+	  $('.onlyEngNum').css("ime-mode","disabled").keydown(function(event){ 		//ENG, 숫자만 입력하게.(.도 포함) 		 
 	  if (event.which && (event.which == 13 || event.which == 32 ||event.which == 189 ||event.which == 190 || event.which == 110 || event.which > 45 && event.which < 58 || event.which == 8 || event.which > 64 && event.which < 91|| event.which > 95 && event.which < 123)) {			
 	   } else { 
 	   event.preventDefault(); 
 	  } 
 	 });
-
 	//-- 레이어 창 열기 ------------------------------------
 	function openLayer(layerNum,loadPage,varNum){
 		$layer = $("."+layerNum+"-section");
@@ -404,27 +342,7 @@ $(document).ready(function(){
 	});
 	//--P.O Sheet(30_05) 화면 : '확정 발주서' 클릭 --------------------------------------------
 	$("body").on("click",".orderConfirm",function(){
-		//2017-03-16 : 별도 처리없이 그냥 닫음(1분후 전송기능 없애고, 앞에서 이미 전송했으므로...)
-			if ($("#odr_idx_05_04").val() != $("#odr_idx_30_05").val())
-			{	
-				openLayer('layer3','05_04','?odr_idx='+$("#odr_idx_05_04").val());
-			}else{
-				//모두 닫기
-				closeCommLayer("layer3"); //발주서창(05_04))
-				//document.location.href="/kor/";
-			}
-			closeCommLayer("layer5");	//sheet
-			closeCommLayer("layer4"); //공지창(30_05)
-			if($(".layer-section").hasClass("open")){ //What's New 창 있으면 닫기
-				closeCommLayer("layer");
-			}
-			//좌우화면 모두 새로고침
-			if ($("input[name=top_part_no]").val().length>1){
-				main_srch();
-			} else{
-				showajaxParam('.col-right','side_order','');
-			}
-		/**
+		//openLayer("layer","30_06","?mn=02");
 		$.ajax({
 				url: "/kor/proc/odr_proc.php", 
 				//data: "typ=odrconfirm&odr_idx="+$("#odr_idx_30_05").val()+"&sell_mem_idx="+$("#sell_mem_idx").val(), //JSJ
@@ -464,8 +382,7 @@ $(document).ready(function(){
 						alert_msg(data);
 					}
 				}
-		});
-		**/
+		});		
 	});	 
 	//수정발주서 Sheet(P.O Amendment) 12_07 '확정 발주서' 클릭
 	$("body").on("click",".odrAmendConfirm",function(){
@@ -474,35 +391,12 @@ $(document).ready(function(){
 		$.ajax({
 				url: "/kor/proc/odr_proc.php", 
 				//data: "typ=odramendconfirm&odr_idx="+$(this).attr("odr_idx"),  //JSJ
-				data: "typ=odramendconfirm2&odr_idx="+$(this).attr("odr_idx")+"&amend_no="+$(this).attr("amend_no")+"&poa_no="+$("#poa_no_1207").val(),  //2016-04-15 : odramendconfirm2(Log 기록)으로 수정
+				data: "typ=odramendconfirm2&odr_idx="+$(this).attr("odr_idx"),  //2016-04-15 : odramendconfirm2(Log 기록)으로 수정
 				encType:"multipart/form-data",
 				success: function (data) {	
 					if (trim(data) == "SUCCESS"){		
 						//alert_msg("판매자에게 확정 발주서를 전송했습니다.");
-						//alert_msg("구매자에게 송장을 발송했습니다.");
-						var menu_type_chk = getCookie('menu');
-
-						closeCommLayer("layer5");	//invoic 닫고
-						closeCommLayer("layer3");	//송장(3008) 닫고
-						closeCommLayer("layer");
-						
-						switch (menu_type_chk) {
-							case "order_S"    : if(chkLogin()){order('S'); showajax(".col-right", "side_order");}
-							           break;
-							case "order_B"    : if(chkLogin()){order('B'); showajax(".col-right", "side_order");}
-							           break;
-							case "mybox"    : if(chkLogin()){showajax(".col-left", "mybox"); showajax(".col-right", "side_order");}
-							           break;
-							case "record_S"    : if(chkLogin()){record('S'); showajax(".col-right", "side_order");}
-							           break;
-							case "record_B"    : if(chkLogin()){record('B'); showajax(".col-right", "side_order");}
-							           break;
-							case "remit"    : if(chkLogin()){remit('C'); showajax(".col-right", "side_order");}
-							           break;
-							case "side_order"    : showajax(".col-right", "side_order");
-			           					break;
-						}
-						//document.location.href="/kor/";
+						document.location.href="/kor/";
 					}else if(trim(data) == "ERR"){
 						//재고 경고
 						closeCommLayer("layer5");	//invoic 닫고
@@ -830,29 +724,7 @@ $(document).ready(function(){
 				success: function (data) {	
 					if (trim(data) == "SUCCESS"){		
 //						alert_msg("구매자에게 송장을 발송했습니다.");
-						var menu_type_chk = getCookie('menu');
-
-						closeCommLayer("layer5");	//invoic 닫고
-						closeCommLayer("layer3");	//송장(3008) 닫고
-						closeCommLayer("layer");
-						
-						switch (menu_type_chk) {
-							case "order_S"    : if(chkLogin()){order('S'); showajax(".col-right", "side_order");}
-							           break;
-							case "order_B"    : if(chkLogin()){order('B'); showajax(".col-right", "side_order");}
-							           break;
-							case "mybox"    : if(chkLogin()){showajax(".col-left", "mybox"); showajax(".col-right", "side_order");}
-							           break;
-							case "record_S"    : if(chkLogin()){record('S'); showajax(".col-right", "side_order");}
-							           break;
-							case "record_B"    : if(chkLogin()){record('B'); showajax(".col-right", "side_order");}
-							           break;
-							case "remit"    : if(chkLogin()){remit('C'); showajax(".col-right", "side_order");}
-							           break;
-							case "side_order"    : showajax(".col-right", "side_order");
-			           					break;
-						}
-						//document.location.href="/kor/";
+						document.location.href="/kor/";
 					}else{
 						//2016-12-11 : 재고 경고
 						closeCommLayer("layer5");	//invoic 닫고
@@ -981,11 +853,9 @@ $(document).ready(function(){
 			$.ajax({ 
 				type: "GET", 
 				url: "/ajax/proc_ajax.php", 
-				//data: { actty : "MRO", //Move to Real order Process
-				data: { actty : "MRO_ONCE", //Move to Real order at once 2017-03-16
+				data: { actty : "MRO", //Move to Real order Process				
 						delivery_addr_idx : $("#delivery_addr_idx").val(),
 						session_mem_idx : $("#session_mem_idx").val(),
-						sell_mem_idx : $("#sell_mem_idx").val(),	//2017-03-16
 						delivery_save_yn : $("#delivery_save_yn").val(),
 						nation : $("#nation").val(),
 						com_name : $("#com_name").val(),
@@ -1036,38 +906,29 @@ $(document).ready(function(){
 
 	//--------------------------------------------------------------------------------
 	$("body").on("click",".btn-view-amend-sheet-forread",function(){
-		openLayer("layer5","12_07","?odr_idx="+$(this).attr("odr_idx")+"&load_page=09_01");
+		openLayer("layer5","12_07","?odr_idx="+$(this).attr("odr_idx"));
 	});
 	
 	//What's New(구매자) 취소(13_04)화면 '수락' 버튼------
 	$("body").on("click",".btn-confirm-1304s",function(){ //실제 취소 처리(DB)
-
-		var part_type = $(this).attr("part_type");
-
-		if (part_type ==2)
-		{
-			openCommLayer("layer4","13_04_1","?&actidx="+$(this).attr("odr_history_idx"));
-		}
-		else
-		{
-			$.ajax({ 
-			type: "GET", 
-			url: "/ajax/proc_ajax.php", 
-			data: { actty : "CF", //ConFirm
-					actidx : $(this).attr("odr_history_idx")
-			},
-				dataType : "html" ,
-				async : false ,
-				success: function(data){ 
-					//document.location.href="/kor/";
-					closeCommLayer("layer");
-					Refresh_Right();
-				}
-			});
-		}
 		
+		/*$.ajax({ 
+		type: "GET", 
+		url: "/ajax/proc_ajax.php", 
+		data: { actty : "CF", //ConFirm
+				actidx : $(this).attr("odr_history_idx")
+		},
+			dataType : "html" ,
+			async : false ,
+			success: function(data){ 
+				//document.location.href="/kor/";
+				closeCommLayer("layer");
+				Refresh_Right();
+			}
+		});*/
 
-		//openCommLayer("layer4","13_04_1","?&actidx="+$(this).attr("odr_history_idx"));		
+		openCommLayer("layer4","13_04_1","?&actidx="+$(this).attr("odr_history_idx"));
+		
 
 	});
 
@@ -1085,7 +946,6 @@ $(document).ready(function(){
 			success: function(data){ 
 				//document.location.href="/kor/";
 				closeCommLayer("layer");
-				closeCommLayer("layer4");
 				Refresh_Right();
 			}
 		});
@@ -1135,16 +995,13 @@ $(document).ready(function(){
 	});
 	//선적(3016)화면에서 취소 버튼 -> '취소' 화면에서 '환불' 버튼
 	$("body").on("click",".btn-refund-cancel",function(){
-		/** 기존(바로DB처리)
+		/**
 		var f = document.f_pocancel;
 		f.target = "proc";
 		//f.target = "_blank";
 		f.action = "/ajax/proc_ajax.php";
 		f.submit();	
 		**/
-		//INVOICE SHEET 필요
-		var extraVal="" , odr_idx="";
-		openLayer("layer5","30_16_04","?odr_idx="+$("#odr_idx_3016_cancel").val()+"&odr_det_idx="+$("#cancel_det_idx").val());
 	});
 	//판매자 송장화면(30_08), 수정발주서(09_01) : '취소' 버튼 -----------------------------------------2016-04-12
 	$("body").on("click",".btn-cancel-3008, .btn-cancel-0901",function(){
@@ -1162,10 +1019,21 @@ $(document).ready(function(){
 		});
 		openCommLayer("layer3","po_cancel","?odr_idx="+$("#odr_idx_"+load_page).val()+"&cancel_det_idx="+cancel_det_idx+"&load_page="+load_page);
 	});
-	//판매자 선적화면(30_16) : '취소' 버튼 -----------------------------------------2017-04-11
+	//판매자 선적화면(30_16) : '취소' 버튼 -----------------------------------------2016-12-22
 	$("body").on("click",".btn-cancel-3016",function(){
 		var load_page = $("#load_page").val();
-		openCommLayer("layer3","3016_cancel","?odr_idx="+$("#odr_idx_"+load_page).val()+"&load_page="+load_page);
+		var det_cnt = $("#det_cnt_"+load_page).val(); //det 수량
+
+		if(det_cnt==1){
+			var $chked_det = $("input[name^=odr_det_idx]");//품목 1개일때
+		}else{
+			var $chked_det = $("input[name^=odr_det_idx]:checked");//품목 2개 이상
+		}
+		var cancel_det_idx = [];
+		$chked_det.each(function(e){
+			cancel_det_idx.push($(this).val());
+		});
+		openCommLayer("layer3","3016_cancel","?odr_idx="+$("#odr_idx_"+load_page).val()+"&cancel_det_idx="+cancel_det_idx+"&load_page="+load_page);
 	});
 	//판매자 송장화면(30_08) : '송장 확인' 버튼 ----------------------------------2016-04-12
 	$("body").on("click",".btn-view-sheet-3009",function(){		
@@ -1445,39 +1313,39 @@ $(document).ready(function(){
 			insur_chk = "";
 		}
 
-		//alert($("#ship_info").val();
+		$("#ship_info").val();
 		
 		if($chked_odr.length==0){ 
 			alert_msg("발주서를 선택해 주세요.");
 		}else{
 			var err = false; 
 			maskoff();
-			//err = updateQty();
-			err = updateQty_temp();
+			err = updateQty();
 			maskon();
 			//err = true;
-			
-			//2016-04-18 : 송장번호 생성 및 저장
-			$.ajax({
-					url: "/kor/proc/odr_proc.php", 
-					data: "typ=poano&odr_idx="+odr_idx+"&ship_info="+$("#ship_info").val()+"&ship_account_no="+$("#ship_account_no").val()+"&memo="+encodeURIComponent($("#memo").val())+"&insur_yn="+insur_chk+"&delivery_addr_idx="+$("#delivery_addr_idx").val(),
-					encType:"multipart/form-data",
-					success: function (data) {							
-						if($.trim(data)=="STOCK"){
-							//alert("재고수량 변경 경고!!");
-							closeCommLayer("layer4");
-							openLayer('layer3','09_01','?odr_idx='+odr_idx);
-							openLayer('layer4','alarm','?odr_idx='+odr_idx);
-						}else{
-							if($.trim(data)=="SUCCESS"){
-								openLayer("layer5","12_07","?odr_idx="+odr_idx+"&loadPage=09_01"); //12_07에서의 번호생성은 삭제
+			if (err == false)
+			{
+				//2016-04-18 : 송장번호 생성 및 저장
+				$.ajax({
+						url: "/kor/proc/odr_proc.php", 
+						data: "typ=poano&odr_idx="+odr_idx+"&ship_info="+$("#ship_info").val()+"&ship_account_no="+$("#ship_account_no").val()+"&memo="+encodeURIComponent($("#memo").val())+"&insur_yn="+insur_chk+"&delivery_addr_idx="+$("#delivery_addr_idx").val(),
+						encType:"multipart/form-data",
+						success: function (data) {							
+							if($.trim(data)=="STOCK"){
+								//alert("재고수량 변경 경고!!");
+								closeCommLayer("layer4");
+								openLayer('layer3','09_01','?odr_idx='+odr_idx);
+								openLayer('layer4','alarm','?odr_idx='+odr_idx);
 							}else{
-								alert($.trim(data));
-							}
-						}							
-					}
-			});
-		
+								if($.trim(data)=="SUCCESS"){
+									openLayer("layer5","12_07","?odr_idx="+odr_idx); //12_07에서의 번호생성은 삭제
+								}else{
+									alert($.trim(data));
+								}
+							}							
+						}
+				});
+			}
 		}
 
 	});
@@ -1570,21 +1438,6 @@ $(document).ready(function(){
 	
 	////////////////////////* dialog *///////////////////////////////////
 	$("body").on("click",".btn-order , .btn-dialog-3102",function(){
-		
-		var menu_type_chk = $(this).attr("menu_type");
-		if (menu_type_chk=="M")
-		{			
-			setCookie("menu","side_order");
-		}
-		else if (menu_type_chk=="S")
-		{			
-			setCookie("menu","mybox");
-		}
-		else
-		{
-			setCookie("menu","side_order");
-		}
-		
 		var loadPage  = $(this).attr("class")=="btn-dialog-3102" ? "31_02" : "05_04";
 		if (mem_idx=="")
 		{
@@ -1970,7 +1823,7 @@ $(document).ready(function(){
 	$("body").on("click",".btn-dialog-save",function(){
 		var err = false;
 		var varNum;
-		var f =  document.f_05_04;  //2016-04-02 layer4에 <form name='f' ... 가 또 있음d
+		var f =  document.f_05_04;  //2016-04-02 layer4에 <form name='f' ... 가 또 있음
 		//var f =  ("#f_05_04");
 		maskoff();		
 		err = updateQty();
@@ -1988,7 +1841,6 @@ $(document).ready(function(){
 					
 				}
 			});	
-			
 		}
 
 		if (err == false){
@@ -2001,26 +1853,7 @@ $(document).ready(function(){
 			f.save_yn.value = "Y";
 			f.target = "proc";
 			f.action = "/kor/proc/odr_proc.php";
-			f.submit();			
-		}
-
-		var menu_type_chk = getCookie('menu');
-				
-		switch (menu_type_chk) {
-			case "order_S"    : if(chkLogin()){order('S'); showajax(".col-right", "side_order");}
-			           break;
-			case "order_B"    : if(chkLogin()){order('B'); showajax(".col-right", "side_order");}
-			           break;
-			case "mybox"    : if(chkLogin()){showajax(".col-left", "mybox"); showajax(".col-right", "side_order");}
-			           break;
-			case "record_S"    : if(chkLogin()){record('S'); showajax(".col-right", "side_order");}
-			           break;
-			case "record_B"    : if(chkLogin()){record('B'); showajax(".col-right", "side_order");}
-			           break;
-			case "remit"    : if(chkLogin()){remit('C'); showajax(".col-right", "side_order");}
-			           break;
-			case "side_order"    : showajax(".col-right", "side_order");
-       					break;
+			f.submit();
 		}
 	});
 
@@ -2383,29 +2216,6 @@ $(document).ready(function(){
 			f.target = "proc";
 			f.action = "/kor/proc/odr_proc.php";
 			f.submit();
-
-			var menu_type_chk = getCookie('menu');
-
-			closeCommLayer("layer5");	//invoic 닫고
-			closeCommLayer("layer3");	//송장(3008) 닫고
-			closeCommLayer("layer");
-			
-			switch (menu_type_chk) {
-				case "order_S"    : if(chkLogin()){order('S'); showajax(".col-right", "side_order");}
-				           break;
-				case "order_B"    : if(chkLogin()){order('B'); showajax(".col-right", "side_order");}
-				           break;
-				case "mybox"    : if(chkLogin()){showajax(".col-left", "mybox"); showajax(".col-right", "side_order");}
-				           break;
-				case "record_S"    : if(chkLogin()){record('S'); showajax(".col-right", "side_order");}
-				           break;
-				case "record_B"    : if(chkLogin()){record('B'); showajax(".col-right", "side_order");}
-				           break;
-				case "remit"    : if(chkLogin()){remit('C'); showajax(".col-right", "side_order");}
-				           break;
-				case "side_order"    : showajax(".col-right", "side_order");
-           					break;
-			}
 		}
 
 		/** 2016-05-18 주석처리.
@@ -2896,90 +2706,8 @@ function updateQty(){
 	
 	//-- 배송지 변경--------------------
 	//2016-04-08 form 'f' 를 'f_05_04'로 변경
-	//if($("#delivery_chg").is(":checked") && f.com_name.value!=""){	
-
-	if($("#delivery_chg").is(":checked")){
-			if($("#delivery_addr_idx").val()=="" || $("#delivery_addr_idx").val()=="0"){   //save_yn='N'으로 먼저 저장해야 함.
-				$("#delivery_save_yn").val("N");
-				$("#typ").val("delivery_save");		
-				delivery_save();
-			}			
-	}else{
-		$("#delivery_addr_idx").val("");
-	}
-	//-- ship 정보 Update-----------------------------
-	if (err == false)
-	{
-		if($("section[class^='layer3']").hasClass("open")){ //2016-04-04
-			$("#f_05_04 input[name=typ]").val("odredit");
-			var formData = $("#f_05_04").serialize(); 
-		}else{
-			$("#f input[name=typ]").val("odredit");
-			var formData = $("#f").serialize(); 
-		}
-		$.ajax({
-				url: "/kor/proc/odr_proc.php", 
-				data: formData,
-				encType:"multipart/form-data",
-				success: function (data) {
-					err=false;
-				}
-		});		
-	}
-	return err;
-}
-
-function updateQty_temp(){
-	var err = false;
-	var qty, amd_yn, quantity;
-	
-	//-- Row 수량만큼 반복--------------------
-	$("input[name^=odr_quantity]").each(function(){
-		
-		if($(this).val()==""){
-			qty = 0;
-		}else{
-			qty = $(this).val();
-			amd_yn = $(this).attr("amd_yn"); //수정발주서 여부
-			quantity = $(this).attr("quantity"); //기존 재고
-			supply_quantity = $(this).attr("supply_quantity"); //공급 수량
-		}
-		//alert("qty:"+qty);
-		if(parseInt($(this).parent().prev().prev().text().replace(/,/gi,"")) < parseInt($(this).val())){
-			alert_msg("수량을 다시 확인해 주세요.");
-			$(this).focus();
-			err = true;
-			return false;
-		}else{
-			maskoff();
-			//alert("qty:"+qty+", det_idx:"+$(this).attr("odr_det_idx"));
-
-			$.ajax({ 
-				type: "GET", 
-				url: "/ajax/proc_ajax.php", 
-				data: { actty : "UQ_TEMP", //Update QUANTITY
-						actidx : $(this).attr("odr_det_idx"),
-						actkind : qty,
-						amd_yn : amd_yn,	//수정발주서 여부
-						//supply_quantity : supply_quantity,	//공급 수량
-						load_page : $("#load_page").val(),
-						quantity : quantity	//발주가능 재고
-				},
-				dataType : "html" ,
-				async : false ,
-				success: function(data){ 		
-						maskoff();
-				}
-			});
-		}
-	});	//-- end of Row 수량만큼 반복--------------------
-	
-	//-- 배송지 변경--------------------
-	//2016-04-08 form 'f' 를 'f_05_04'로 변경
 	//if($("#delivery_chg").is(":checked") && f.com_name.value!=""){			
-	if($("#delivery_chg").is(":checked")){		
-
-	//alert($("#delivery_addr_idx").val());	
+	if($("#delivery_chg").is(":checked")){			
 			if($("#delivery_addr_idx").val()==""){   //save_yn='N'으로 먼저 저장해야 함.
 				$("#delivery_save_yn").val("N");
 				$("#typ").val("delivery_save");		
@@ -3009,7 +2737,6 @@ function updateQty_temp(){
 	}
 	return err;
 }
-
 function Refresh_MainSh(){
 	if ($("input[name=top_part_no]").val().length>1){
 		main_srch();
@@ -3212,27 +2939,3 @@ function data_del()
 {
 	location.href="/odr_data_del.php";
 }
-function getCookie(cName) {
-	cName = cName + '=';
-	var cookieData = document.cookie;
-	var start = cookieData.indexOf(cName);
-	var cValue = '';
-	if(start != -1){
-	   start += cName.length;
-	   var end = cookieData.indexOf(';', start);
-	   if(end == -1)end = cookieData.length;
-	   cValue = cookieData.substring(start, end);
-	}
-	return unescape(cValue);
-}
-
-
-
-function setCookie(cookieName, value, exdays){
-    var exdate = new Date();
-    exdate.setDate(exdate.getDate() + exdays);
-    var cookieValue = escape(value) + ((exdays==null) ? "" : "; expires=" + exdate.toGMTString());
-    document.cookie = cookieName + "=" + cookieValue;
-}
-
-

@@ -2,7 +2,6 @@
 /********************************************************************************
 *** 서류 : 환불(Invoice)-구매자 '결재' 후, 판매자 '선적'단계에서 [취소] 시 30_16_04
 *** 원본 : 19_1_04 에서 카피
-*** 2017-04-11 : det 단위에서 odr 단위로 변경
 ********************************************************************************/
 @header("Content-Type: text/html; charset=utf-8");
 include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";
@@ -16,15 +15,13 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
   $result_odr = QRY_ODR_VIEW($odr_idx);    
   $row_odr = mysql_fetch_array($result_odr);
 
-  $result_odr_det =QRY_ODR_DET_LIST(0,"and odr_idx=$odr_idx",0); 
+  $result_odr_det =QRY_ODR_DET_LIST(0,"and odr_det_idx IN($odr_det_idx)",0); 
   $row_odr_det = mysql_fetch_array($result_odr_det);
 
  if($row_odr_det["refund_invoice"]==""){ 
-	  //$sql = "update odr_det set refund_invoice= '".get_auto_no("RI", "odr_det" , "refund_invoice")."', refund_date = now() where odr_det_idx IN($odr_det_idx)";
-	  $sql = "update odr_det set refund_invoice= '".get_auto_no("RI", "odr_det" , "refund_invoice")."', refund_date = now() where odr_idx=$odr_idx";
+	  $sql = "update odr_det set refund_invoice= '".get_auto_no("RI", "odr_det" , "refund_invoice")."', refund_date = now() where odr_det_idx IN($odr_det_idx)";
 	  $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
-	  //$result_odr_det =QRY_ODR_DET_LIST(0,"and odr_det_idx IN($odr_det_idx)",0); 
-	  $result_odr_det =QRY_ODR_DET_LIST(0,"and odr_idx=$odr_idx",0); 
+	  $result_odr_det =QRY_ODR_DET_LIST(0,"and odr_det_idx IN($odr_det_idx)",0); 
 	  $row_odr_det = mysql_fetch_array($result_odr_det);
   }
 
@@ -158,8 +155,8 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 		<h2><img src="/kor/images/st_tit_<?if ($for_readonly=="Y"){?>commercial_invoice<?}elseif($for_readonly=="P"){?>packing_list<?}else{?>invoice<?}?>.gif" alt="Invoice"></h2>
 		<span class="currency">( Currency : US$ ) </span>
 		<?$for_readonly = $forgenl=="Y" ? "" : $for_readonly;?>
-		<?//echo GET_ODR_DET_LIST_V2(" and odr_idx=$odr_idx and odr_det_idx IN($odr_det_idx)" ,"19_1_04",$for_readonly); ?>
-		<?echo GET_ODR_DET_LIST_V2(" and odr_idx=$odr_idx" ,"30_16_04",$for_readonly); ?>
+		<?//echo GET_ODR_DET_LIST_V2(" and odr_idx=$odr_idx and odr_det_idx =$odr_det_idx" ,"19_1_04",$for_readonly); ?>
+		<?echo GET_ODR_DET_LIST_V2(" and odr_idx=$odr_idx and odr_det_idx IN($odr_det_idx)" ,"19_1_04",$for_readonly); ?>
 	</div>
 	<!-- //order-table -->
 	

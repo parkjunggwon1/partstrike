@@ -12,15 +12,19 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/class/class.odrinfo.php";
 <script>ready();</script>
 <SCRIPT LANGUAGE="JavaScript">
 function checkActive(){
-	//alert("check");
 	var det_cnt = $(".po-cancel input[name^=odr_det_idx]").length;
+	var selCnt = 0;
 	var sqty = 0;
+
+	sel_box = $("input[name^=odr_det_idx]:checked");
+	selCnt = sel_box.length;
 	//필수 값 체크
 
 	$("input[name^=reason]").each(function(e){ //사유
 		if($(this).val().length>0) sqty++;
 	});
-	if(sqty == det_cnt){
+
+	if((sqty == selCnt && selCnt>0) || det_cnt==1){
 		$("#btn_refund_cancel").css("cursor","pointer").addClass("btn-refund-cancel").attr("src","/kor/images/btn_refund.gif");
 	}else{
 		$("#btn_refund_cancel").css("cursor","").removeClass("btn-refund-cancel").attr("src","/kor/images/btn_refund_1.gif");
@@ -36,6 +40,16 @@ $(document).ready(function(){
 		checkActive();
 	});
 	$("input[name^=reason]").click(function(e){
+		checkActive();
+	});
+	//-- 옵션(체크박스) 클릭
+	$("#layerPop3 .stock-list-table input[name^=odr_det_idx]").click(function(e){
+		var det_idx = $(this).val();
+		if($(this).is(':checked')){
+			$("#desc_"+det_idx).show();
+		}else{
+			$("#desc_"+det_idx).hide();
+		}
 		checkActive();
 	});
 	checkActive();
@@ -54,14 +68,14 @@ $(document).ready(function(){
 ?>
 <div class="layer-hd">
 	<h1>취소</h1>
-	<a href="#" class="btn-close po-cancel"><img src="/kor/images/btn_layer_close_w.png" alt="close"></a>
+	<a href="#" class="btn-close 3016_cancel"><img src="/kor/images/btn_layer_close_w.png" alt="close"></a>
 </div>
 <div class="layer-content po-cancel">
 	<form name="f_pocancel" id="f_pocancel" method="post" >
 	<input type="hidden" name="actty" value="POCS">	
-	<input type="hidden" name="odr_idx" id="odr_idx_30_08" value="<?=$odr_idx?>">
+	<input type="hidden" name="odr_idx" id="odr_idx_3016_cancel" value="<?=$odr_idx?>">
 	<input type="hidden" name="cancel_det_idx" id="cancel_det_idx" value="<?=$cancel_det_idx?>">
-	<input type="hidden" name="load_page" id="load_page_30_08" value="<?=$load_page?>">
+	<input type="hidden" name="load_page" id="load_page_3016_cancel" value="<?=$load_page?>">
 		<!-- layer-file -->
 		<?if($load_page == "30_08" || $load_page == "30_16"){?>
 		<div class="layer-file">
@@ -91,29 +105,23 @@ $(document).ready(function(){
 			<table class="stock-list-table bg-type2">
 				<thead>
 					<tr>
-						<th scope="col" class="t-no">No. </th>
-						<th scope="col" class="t-lt" Style="width:280px;">Part No.</th>
-						<th scope="col" class="t-Manufacturer">Manufacturer</th>
-						<th scope="col" class="t-Package">Package</th>
-						<th scope="col" class="t-dc">D/C</th>
-						<th scope="col" class="t-rohs">RoHS</th>
-						<th scope="col" class="t-oty">O'ty</th>
-						<th scope="col" class="t-unitprice">Unit Price</th>
-						<th scope="col" class="t-orderoty t-rt" lang="ko">발주수량</th>
-						<th scope="col" class="t-supplyoty t-rt" style="width:66px;" lang="ko">공급수량</th>
-						<th scope="col" lang="ko" class="t-period">납기</th>
+						<th scope="col" style="width:20px">No. </th>
+						<th scope="col" class="t-lt" style="width:280px;">Part No.</th>
+						<th scope="col" class="t-lt">Manufacturer</th>
+						<th scope="col" style="width:80px;">Package</th>
+						<th scope="col" style="width:36px;">D/C</th>
+						<th scope="col" style="width:36px;">RoHS</th>
+						<th scope="col" style="width:60px;" class="t-rt">O'ty</th>
+						<th scope="col" class="t-rt" style="width:61px;">Unit Price</th>
+						<th scope="col" class="t-rt" style="width:80px;">Amount</th>
+						<th scope="col" lang="ko"style="width:36px;">납기</th>
 						<?if($det_cnt>1){?>
 						<th scope="col" class="t-ct" style="width:30px">취소</th>
 						<?}?>
 					</tr>
 				</thead>
 				<?	for ($i = 1; $i<=7; $i++){
-						//echo GET_ODR_DET_LIST("30_08", $i," and odr_idx=$odr_idx ", $det_cnt); //기존 30_08
-						//맨 처음인걸 가리기 위해... 2016-04-28
-						$q_cnt = QRY_CNT("odr_det a left outer join part b on  a.part_idx = b.part_idx "," and odr_det_idx IN ($cancel_det_idx) and b.part_type =$i ");
-						if($q_cnt>0) $first_yn++;
-						echo GET_ODR_DET_LIST("3016_cancel", $i," and odr_det_idx IN ($cancel_det_idx) ", $det_cnt, $first_yn);
-						if($q_cnt>0) $first_yn++;
+						echo GET_ODR_DET_LIST("3016_cancel",$i," and odr_idx=$odr_idx ", $det_cnt);
 				}?>
 			</table>
 		</div>

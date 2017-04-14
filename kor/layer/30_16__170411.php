@@ -2,7 +2,6 @@
 /***************************************************************************************************************
 **** 선적 : 30_16
 **** 2016-03-08 : '전송' 버튼 활성 비활성
-**** 2017-04-11 : det 단위 '취소'에서 전체 '취소'로 변경되어 'Option' 단추 없어짐('취소'버튼 상시 활성)
 **************************************************************************************************************/
 @header("Content-Type: text/html; charset=utf-8");
 include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";
@@ -87,8 +86,8 @@ if($ship[delivery_addr_idx] > 0){
 		//alert("check");
 		var det_cnt = $("#det_cnt_30_16").val();
 		var selCnt=0;
-		//var checked;
-		/**
+		var checked;
+
 		if(det_cnt>1){ //-- 여러개 일때 --------------------------
 			sel_box = $("input[name^=odr_det_idx]:checked");
 			selCnt = sel_box.length;
@@ -105,11 +104,13 @@ if($ship[delivery_addr_idx] > 0){
 			selCnt=1;
 			checked = true;
 		}
-		**/
 
 		//취소 버튼
-		$("#btn_cancel_3016").css("cursor","pointer").addClass("btn-cancel-3016").attr("src","/kor/images/btn_cancel.gif");
-
+		if(selCnt > 0){
+			$("#btn_cancel_3016").css("cursor","pointer").addClass("btn-cancel-3016").attr("src","/kor/images/btn_cancel.gif");
+		}else{
+			$("#btn_cancel_3016").css("cursor","").removeClass("btn-cancel-3016").attr("src","/kor/images/btn_cancel_1.gif");
+		}
 		//선적 버튼
 		var delv_no = $("#layerPop3 #delivery_no").val();
 		var delv_shop = "none";
@@ -130,7 +131,7 @@ if($ship[delivery_addr_idx] > 0){
 		}
 
 		//alert("delv_no.length:"+delv_no.length);
-		if(delv_no.length>0 && delv_shop != ""){  //활성
+		if(delv_no.length>0 && checked==true && delv_shop != ""){  //활성
 			$("#btn_submit_3016").attr("src","/kor/images/btn_shipping.gif");
 			$("#btn_submit_3016").attr("onclick","shipping();");
 			$("#btn_submit_3016").css("cursor","pointer");
@@ -139,7 +140,19 @@ if($ship[delivery_addr_idx] > 0){
 			$("#btn_submit_3016").attr("onclick","");
 			$("#btn_submit_3016").css("cursor","");
 		}
-
+		
+		/** JSJ
+		var delv_no = $("#layerPop3 #delivery_no").val();
+		if(delv_no.length>0){  //활성
+			$("#btn_3016").attr("src","/kor/images/btn_transmit.gif");
+			$("#btn_3016").attr("onclick","shipping();");
+			$("#btn_3016").css("cursor","pointer");
+		}else{	//비활성
+			$("#btn_3016").attr("src","/kor/images/btn_transmit_1.gif");
+			$("#btn_3016").attr("onclick","");
+			$("#btn_3016").css("cursor","");
+		}
+		**/
 	}
 
 	function fileChange(){
@@ -256,7 +269,10 @@ if($ship[delivery_addr_idx] > 0){
 		$("#layerPop3 #delivery_no").keyup(function(e){
 			checkActive();
 		});
-
+		//-- 옵션(체크박스) 클릭
+		$("#layerPop3 .stock-list-table input[name^=odr_det_idx]").click(function(e){
+			checkActive();
+		});
 
 		 $(".arrow_bottom").click(function () {
 					var f = document.f;
@@ -394,6 +410,11 @@ if($ship[delivery_addr_idx] > 0){
 			<table class="stock-list-table">
 				<thead>
 					<tr>						
+						<?if ($det_cnt>1){ ?>
+						<th scope="col" style="width:20px">
+							Option 
+						</th>
+						<?}?>
 						<th scope="col" style="width:20px">No. </th>
 						<th scope="col" class="t-lt" style="width:280px;">Part No.</th>
 						<th scope="col" class="t-lt">Manufacturer</th>
