@@ -234,16 +234,15 @@ $(document).ready(function(){
 	$("section[class^='layer']").on("click",".btn-close",function(){
 		
 		//po-cancel 닫기(X)
-		if ($(this).hasClass("po-cancel")){			
+		/*if ($(this).hasClass("po-cancel")){			
 			var load_page = $("#load_page_30_08").val();
 			openLayer("layer3",load_page,"?odr_idx="+$("#odr_idx_30_08").val());
-		}
+		}*/
 		//3016_cancel 닫기(X)
 		if ($(this).hasClass("3016_cancel")){			
 			var load_page = $("#load_page_3016_cancel").val();
 			openLayer("layer3",load_page,"?odr_idx="+$("#odr_idx_3016_cancel").val());
 		}
-
 		else if (!$(this).hasClass("btn-order-periodconfirm"))
 		{			
 			$(this).parents("section[class^='layer']").removeClass("open");
@@ -1135,13 +1134,14 @@ $(document).ready(function(){
 	});
 	//선적(3016)화면에서 취소 버튼 -> '취소' 화면에서 '환불' 버튼
 	$("body").on("click",".btn-refund-cancel",function(){
-		/** 기존(바로DB처리)
+		/**
 		var f = document.f_pocancel;
 		f.target = "proc";
 		//f.target = "_blank";
 		f.action = "/ajax/proc_ajax.php";
 		f.submit();	
 		**/
+
 		//INVOICE SHEET 필요
 		var extraVal="" , odr_idx="";
 		openLayer("layer5","30_16_04","?odr_idx="+$("#odr_idx_3016_cancel").val()+"&odr_det_idx="+$("#cancel_det_idx").val());
@@ -1162,10 +1162,22 @@ $(document).ready(function(){
 		});
 		openCommLayer("layer3","po_cancel","?odr_idx="+$("#odr_idx_"+load_page).val()+"&cancel_det_idx="+cancel_det_idx+"&load_page="+load_page);
 	});
-	//판매자 선적화면(30_16) : '취소' 버튼 -----------------------------------------2017-04-11
+	//판매자 선적화면(30_16) : '취소' 버튼 -----------------------------------------2016-04-11
 	$("body").on("click",".btn-cancel-3016",function(){
 		var load_page = $("#load_page").val();
 		openCommLayer("layer3","3016_cancel","?odr_idx="+$("#odr_idx_"+load_page).val()+"&load_page="+load_page);
+		var det_cnt = $("#det_cnt_"+load_page).val(); //det 수량
+
+		if(det_cnt==1){
+			var $chked_det = $("input[name^=odr_det_idx]");//품목 1개일때
+		}else{
+			var $chked_det = $("input[name^=odr_det_idx]:checked");//품목 2개 이상
+		}
+		var cancel_det_idx = [];
+		$chked_det.each(function(e){
+			cancel_det_idx.push($(this).val());
+		});
+		openCommLayer("layer3","3016_cancel","?odr_idx="+$("#odr_idx_"+load_page).val()+"&cancel_det_idx="+cancel_det_idx+"&load_page="+load_page);
 	});
 	//판매자 송장화면(30_08) : '송장 확인' 버튼 ----------------------------------2016-04-12
 	$("body").on("click",".btn-view-sheet-3009",function(){		
@@ -1949,6 +1961,33 @@ $(document).ready(function(){
 		}else{
 			maskoff();
 			if($(this).attr("class")=="btn-dialog-add"){ //Stock 품목 추가
+
+				/*$.ajax({ 
+					type: "GET", 
+					url: "/ajax/proc_ajax.php?actty=part_info_chk&part_idx="+$part_idx.val(), 					
+					dataType : "text" ,
+					async : false ,
+					success: function(data){
+						if($.trim(data)=="PRICE"){	//가격변동 경고!!
+								closeCommLayer("layer3");
+								closeCommLayer("layer4");
+								openCommLayer('layer3','05_01','?odr_idx='+odr_idx);
+								openLayer('layer4','alarm2','?odr_idx='+odr_idx);	//가격변동 경고창
+						}else{
+							if($.trim(data)=="ERR"){
+								//alert("재고수량 변경 경고!!");
+								closeCommLayer("layer4");
+								openLayer('layer3','05_04','?odr_idx='+odr_idx);
+								openLayer('layer4','alarm','?odr_idx='+odr_idx);
+							}else{
+								openLayer("layer5","30_05","?odr_idx="+data); //P.O Sheet
+								$(".layer5-section .btn-close img").css("display","none"); //X버튼 숨기기
+							}
+						}
+					}//success
+				});*/
+
+
 				 var f =  document.f_addproc;
 				 f.typ.value="write";
 				 f.part_idx.value=$part_idx.val();

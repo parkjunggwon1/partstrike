@@ -92,7 +92,7 @@ $(document).ready(function(){
 	$sell_rel_idx = $odr[sell_rel_idx];
 	$odr_status = $odr[odr_status];
 ?>
-<!----------- Stock parts --------------------------------->
+<!----------- Stock parts ---------------------------------->
 <form name="f_addproc" id = "f_addproc">
 	<input type="hidden" name="odr_idx" value="<?=$odr_idx?>">
 	<input type="hidden" name="part_idx" value="">	
@@ -104,7 +104,7 @@ $(document).ready(function(){
 	<input type="hidden" id="fromLoadPage" name="fromLoadPage" value="<?=$fromLoadPage?>">
 	<input type="hidden" name="addsearch_part_no" value="<?=$addsearch_part_no?>">
 </form>
-<!----------- Period parts --------------------------------->
+<!----------- Period parts ---------------------------------->
 <form name="f_add" id="f_add">
 	<input type="hidden" name="odr_idx" id="odr_idx_05_01" value="<?=$odr_idx?>">
 	<input type="hidden" name="part_idx" value="">	

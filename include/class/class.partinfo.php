@@ -715,7 +715,7 @@ function GET_ADDPART_LIST($part_type,$searchand){
 				$price= replace_out($row["price"]);			
 				if ($part_type =="2"){
 						$dc = "NEW";
-						$quantity="";
+						$quantity="I";
 				}
 
 				if( ($price == (int)$price) )
@@ -740,7 +740,7 @@ function GET_ADDPART_LIST($part_type,$searchand){
 						<td><?=$package?></td>
 						<td><?=$dc?></td>
 						<td><?=$rhtype?></td>
-						<td class="t-rt"><?=$quantity=="" || $quantity==0 ?"-":number_format($quantity)?></td>
+						<td class="t-rt"><?=$quantity=="I"  ?"I":number_format($quantity)?></td>
 						<td class="t-rt">$<?=$price_val?></td>
 						<td style="width:60px;">
 							<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" name="odr_quantity"  id="odr_quantity" stock_qty="<?=$quantity;?>" value="" style="width:58px;" maxlength="10">

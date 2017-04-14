@@ -1150,11 +1150,13 @@ function checkActive(){
 			<img src="/kor/images/btn_order_add.gif" class="btn-dialog-0501" alt="발주 추가" style="cursor:pointer">
 			<img id="btn-confirm" src="/kor/images/btn_order_confirm_1.gif" alt="발주서 확인" style="cursor:pointer"><!--class="btn-order-confirm" -->
 			
-			<?if ($save_yn =="Y"){?>
-				<img src="/kor/images/btn_order_save_1.gif" save_key="" alt="발주 저장">
-				<!--img src="/kor/images/btn_delete2.gif" alt="발주 삭제" style="cursor:pointer" class="btn-close odr" imsi_odr_no="<?=$imsi_odr_no?>"-->
-			<?}else{?>
-				<img src="/kor/images/btn_order_save.gif" alt="발주 저장" save_key="on" style="cursor:pointer" class="btn-dialog-save"><!--class="btn-dialog-save" -->
+			<?if ($det_cnt > 1){?>
+				<?if ($save_yn =="Y"){?>
+					<img src="/kor/images/btn_order_save_1.gif" save_key="" alt="발주 저장">
+					<!--img src="/kor/images/btn_delete2.gif" alt="발주 삭제" style="cursor:pointer" class="btn-close odr" imsi_odr_no="<?=$imsi_odr_no?>"-->
+				<?}else{?>
+					<img src="/kor/images/btn_order_save.gif" alt="발주 저장" save_key="on" style="cursor:pointer" class="btn-dialog-save"><!--class="btn-dialog-save" -->
+				<?}?>
 			<?}?>
 			<img src="/kor/images/btn_delete2_1.gif" alt="삭제" id="btn_del_0504">
 		<?}?>

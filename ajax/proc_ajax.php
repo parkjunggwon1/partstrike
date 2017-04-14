@@ -1803,6 +1803,15 @@ switch($actty) {
 	fnSelectArea($actkind, $actidx,$lang);  
 	break;
 
+	case "part_info_chk" : //sigungu 다시 뿌려주기
+
+	//2016-12-28 : 가격변동 체크
+	//$part_price_chk = QRY_PART_PRICE($actkind);
+	//$part_stock_chk = QRY_PART_STOCK($actkind);
+
+
+	break;
+
 	//2017-01-09 : odr_det 테이블의 데이터를 Invoice 데이터로 Update
 	case "DIU":
 		$invoice_no = get_any("odr", "invoice_no", "odr_idx=$odr_idx");

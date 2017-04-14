@@ -94,31 +94,29 @@ function Search_Refresh(){
 function Parent_Search_Refresh(){
 	echo "
 	<script language='javascript'>
-		var menu_type_chk = getCookie('menu');
-
-		closeCommLayer('layer5');	//invoic 닫고
-		closeCommLayer('layer3');	//송장(3008) 닫고
-		closeCommLayer('layer');
+		var menu_type_chk = parent.getCookie('menu');
 		
 		switch (menu_type_chk) {
-			case 'order_S'    : if(chkLogin()){order('S'); showajax('.col-right', 'side_order');}
+			case 'order_S'    : if(parent.chkLogin()){parent.order('S'); parent.showajax('.col-right', 'side_order');}
 			           break;
-			case 'order_B'    : if(chkLogin()){order('B'); showajax('.col-right', 'side_order');}
+			case 'order_B'    : if(parent.chkLogin()){parent.order('B'); parent.showajax('.col-right', 'side_order');}
 			           break;
-			case 'mybox'    : if(chkLogin()){showajax('.col-left', 'mybox'); showajax('.col-right', 'side_order');}
+			case 'mybox'    : if(parent.chkLogin()){parent.showajax('.col-left', 'mybox'); parent.showajax('.col-right', 'side_order');}
 			           break;
-			case 'record_S'    : if(chkLogin()){record('S'); showajax('.col-right', 'side_order');}
+			case 'record_S'    : if(parent.chkLogin()){parent.record('S'); parent.showajax('.col-right', 'side_order');}
 			           break;
-			case 'record_B'    : if(chkLogin()){record('B'); showajax('.col-right', 'side_order');}
+			case 'record_B'    : if(parent.chkLogin()){parent.record('B'); parent.showajax('.col-right', 'side_order');}
 			           break;
-			case 'remit'    : if(chkLogin()){remit('C'); showajax('.col-right', 'side_order');}
+			case 'remit'    : if(parent.chkLogin()){parent.remit('C'); parent.showajax('.col-right', 'side_order');}
 			           break;
-			case 'side_order'    : showajax('.col-right', 'side_order');
+			case 'side_order'    : parent.showajax('.col-right', 'side_order');
        					break;
        		default    : 			parent.Refresh_MainSh();
        					break;
        									
 		}
+
+
 		
 	</script>
 	";
