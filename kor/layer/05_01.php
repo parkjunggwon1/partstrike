@@ -23,7 +23,7 @@ $(document).ready(function(){
 		$("#layerPop3 tbody[id^=adtb]").each(function(e){						
 			if (typeof($(this).find("tr:eq(1) td:eq(7)").html())=="string")
 			{
-				ary.push($(this).find("tr:eq(1) td:eq(7)").html());
+				ary.push($(this).find("tr:eq(1) td:eq(7)").html().replace(/(<([^>]+)>)/gi, ""));
 			}else{
 				ary.push("$99999999");
 			}

@@ -1805,10 +1805,30 @@ switch($actty) {
 
 	case "part_info_chk" : //sigungu 다시 뿌려주기
 
-	//2016-12-28 : 가격변동 체크
-	//$part_price_chk = QRY_PART_PRICE($actkind);
-	//$part_stock_chk = QRY_PART_STOCK($actkind);
+	//2017-04-17 : 가격변동 체크
+	$part_info_chk = QRY_PART_CHECK($_GET['part_idx']);
+	$real_price=$part_info_chk->price;
+	$real_qty=$part_info_chk->quantity;
+	$real_type=$part_info_chk->part_type;
+	$real_status=$part_info_chk->del_chk;
 
+	if ($real_price != $_GET['price'])
+	{
+		echo "price";
+	}
+	else if ($real_qty < $_GET['qty'])
+	{
+		if ($real_type !="2")
+		{
+			echo "qty";
+		}
+	}
+	else if ($real_status=="0")
+	{
+		echo "delete";
+	}
+
+	//echo $part_info_chk->price."<br>".$part_info_chk->quantity;
 
 	break;
 

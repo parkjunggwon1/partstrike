@@ -207,7 +207,8 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				}else{
 					
 					if ($odr_type =="B" && $save_yn =="Y"){
-						$goJump = "title=\"발주서 저장\" style='cursor:pointer;padding:0;' onclick=\"javascript:openCommLayer('layer3','05_04', '?odr_idx=".$odr_idx."')\" ";
+						$goJump = "title=\"발주서 저장\" style='padding:0;' ";
+						//$goJump = "title=\"발주서 저장\" style='cursor:pointer;padding:0;' onclick=\"javascript:openCommLayer('layer3','05_04', '?odr_idx=".$odr_idx."')\" ";
 					}else{
 						
 						if ($odr_det_status==6)
@@ -320,7 +321,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 					
 				}
 			?>
-			<td class="delivery" <?=$goJump?>><?=($period)?"<span class='$period_style'>".$period."</span>":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='stock'>확인</span>":"Stock")?></td>
+			<td class="delivery" <?=$goJump?>><?=($period)?"<span class='$period_style'>".$period."</span>":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<font color='#ff0000' lang='ko'>확인</font>":"Stock")?></td>
 			<?if ($odr_type == "B") {  //--구매자 화면일경우?>
 				<?//if ((($part_type=="2"||$part_type=="5"||$part_type=="6") && $period=="") || ($save_yn=="Y")){?>
 				<?if ((($part_type=="2"||$part_type=="5"||$part_type=="6") && ($status ==1 || $status ==16 || $status ==7 )) || ($save_yn=="Y")){  //2016-04-04?>

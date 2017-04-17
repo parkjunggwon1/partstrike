@@ -729,6 +729,15 @@ function GET_ADDPART_LIST($part_type,$searchand){
 					$price_val = $price;
 				}
 
+				if ($_GET['change'] == "price".$part_idx)
+				{
+					$change_style_price="style='border-bottom:1px solid red'";
+				}
+				else if ($_GET['change'] == "qty".$part_idx)
+				{
+					$change_style_qty="style='border-bottom:1px solid red'";
+				}
+
 				//지속적 공급가능 품목외에 모든 품목은 수량 있는 것만 노출 - 2016-04-08
 				if($part_type == "2" || ($part_type != "2" && $quantity>0)){
 					$i++;
@@ -740,8 +749,8 @@ function GET_ADDPART_LIST($part_type,$searchand){
 						<td><?=$package?></td>
 						<td><?=$dc?></td>
 						<td><?=$rhtype?></td>
-						<td class="t-rt"><?=$quantity=="I"  ?"I":number_format($quantity)?></td>
-						<td class="t-rt">$<?=$price_val?></td>
+						<td class="t-rt"><span <?=$change_style_qty?>><?=$quantity=="I"  ?"I":number_format($quantity)?></span></td>
+						<td class="t-rt"><span <?=$change_style_price?>>$<?=$price_val?></span></td>
 						<td style="width:60px;">
 							<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" name="odr_quantity"  id="odr_quantity" stock_qty="<?=$quantity;?>" value="" style="width:58px;" maxlength="10">
 							<input type="hidden" class="i-txt2 c-blue onlynum t-rt" name="quantity" value="<?=$quantity?>" maxlength="10">
@@ -750,8 +759,8 @@ function GET_ADDPART_LIST($part_type,$searchand){
 							<input type="hidden" name="price" value="<?=$price?>">
 						</td>
 						<td style="width:50px; padding-right:0px;">
-							<?if($part_type =="2" || $part_type == "5" || $part_type =="6"){?><span><img src="/kor/images/btn_ok2_1.gif" alt="확인"></span><button type="button"  class="btn-dialog-addperiodreq" style="display:none;"><img src="/kor/images/btn_ok2.gif" alt="확인"></button>
-							<?}else{?><span><img src="/kor/images/btn_add_1.gif" alt="추가"></span><button type="button" class="btn-dialog-add" style="display:none;"><img src="/kor/images/btn_add.gif" alt="추가"></button><?}?>
+							<?if($part_type =="2" || $part_type == "5" || $part_type =="6"){?><span><img src="/kor/images/btn_ok2_1.gif" alt="확인"></span><button type="button"  class="btn-dialog-addperiodreq" style="display:none;" price="<?=$price_val?>" quantity="<?=$quantity?>"><img src="/kor/images/btn_ok2.gif" alt="확인"></button>
+							<?}else{?><span><img src="/kor/images/btn_add_1.gif" alt="추가"></span><button type="button" class="btn-dialog-add" style="display:none;" price="<?=$price_val?>" quantity="<?=$quantity?>"><img src="/kor/images/btn_add.gif" alt="추가" ></button><?}?>
 						</td>
 						
 					</tr>

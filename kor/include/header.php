@@ -106,7 +106,7 @@
 						<li><a href="javascript:board('AA001');">공지사항</a></li>
 						<li><a href="javascript:agreement();">이용약관</a></li>
 						<li><a href="javascript:guide();">이용방법</a></li>
-						<li><a <?if ($_SESSION["MEM_IDX"]){?>href="javascript:memfee();"<?}?>">회원 가입비</a></li>
+						<li><a <?if ($_SESSION["MEM_IDX"]){?>href="javascript:memfee();"<?}?>>회원 가입비</a></li>
 						<li><a href="javascript:contact();">연락처</a></li>
 					</ul>
 				</div>
