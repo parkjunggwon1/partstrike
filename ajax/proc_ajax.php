@@ -1219,6 +1219,7 @@ switch($actty) {
 		$_part_price = replace_out($row["price"]);
 		$_odr_price = replace_out($row["odr_price"]);
 		$_part_type = replace_out($row["part_type"]);
+		$_part_idx = replace_out($row["part_idx"]);
 		
 		//재고수량정보Update
 		//if($_quantity != $_odr_stock){	//변경되었을 경우 무조건..
@@ -1240,11 +1241,11 @@ switch($actty) {
 	}
 
 	if($price_check>0){	//-- 가격 변동 -----
-		echo "PRICE";
+		echo "PRICE_".$_part_idx;
 	}elseif($safe_stock>0){ //-- 재고 부족 -------------------------------------------------
-		echo "ERR";
+		echo "ERR_".$_part_idx;
 	}elseif($part_chk>0){ //-- 파트 존재 여부 -------------------------------------------------
-		echo "ERR";
+		echo "delete_".$_part_idx;
 	}else{
 		//-- 배송지 변경-------------
 		if ($delivery_addr_idx == "0" && $delivery_save_yn != "Y")
@@ -1812,21 +1813,27 @@ switch($actty) {
 	$real_type=$part_info_chk->part_type;
 	$real_status=$part_info_chk->del_chk;
 
-	if ($real_price != $_GET['price'])
+	$cnt=QRY_CNT("part","and part_idx='".$_GET['part_idx']."'");
+
+	if ($cnt > 0)
 	{
-		echo "price";
-	}
-	else if ($real_qty < $_GET['qty'])
-	{
-		if ($real_type !="2")
+		if ($real_price != $_GET['price'])
 		{
-			echo "qty";
+			echo "price";
 		}
+		else if ($real_qty < $_GET['qty'])
+		{
+			if ($real_type !="2")
+			{
+				echo "qty";
+			}
+		}		
 	}
-	else if ($real_status=="0")
+	else
 	{
 		echo "delete";
 	}
+	
 
 	//echo $part_info_chk->price."<br>".$part_info_chk->quantity;
 

@@ -2003,7 +2003,8 @@ if ($typ =="periodcfrm"){
     $sql = "update part set part_no = '$part_no',
             manufacturer = '$manufacturer',
             package= '$package',
-            dc = '$dc'
+            dc = '$dc',
+            rhtype = '$rhtype'
             where part_idx = $part_idx";
     $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 

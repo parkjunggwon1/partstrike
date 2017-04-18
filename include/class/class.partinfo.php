@@ -728,14 +728,22 @@ function GET_ADDPART_LIST($part_type,$searchand){
 					$price_val = $price;
 					$price_val = $price;
 				}
-
-				if ($_GET['change'] == "price".$part_idx)
+				
+				$change_part_idx = $_GET['part_idx'];
+				$change_style_price = "";
+				$change_style_qty = "";
+				if ($_GET['change'] == "price" && $change_part_idx == $part_idx)
 				{
 					$change_style_price="style='border-bottom:1px solid red'";
 				}
-				else if ($_GET['change'] == "qty".$part_idx)
+				else if ($_GET['change'] == "qty" && $change_part_idx == $part_idx)
 				{
 					$change_style_qty="style='border-bottom:1px solid red'";
+				}
+				else if ($_GET['change'] == "delete" && $change_part_idx == $part_idx)
+				{
+					$change_style_qty="style='border-bottom:1px solid red'";
+					$quantity="0";
 				}
 
 				//지속적 공급가능 품목외에 모든 품목은 수량 있는 것만 노출 - 2016-04-08

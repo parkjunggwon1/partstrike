@@ -207,8 +207,14 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				}else{
 					
 					if ($odr_type =="B" && $save_yn =="Y"){
-						$goJump = "title=\"발주서 저장\" style='padding:0;' ";
-						//$goJump = "title=\"발주서 저장\" style='cursor:pointer;padding:0;' onclick=\"javascript:openCommLayer('layer3','05_04', '?odr_idx=".$odr_idx."')\" ";
+						if ($fr=="M")
+						{
+							$goJump = "title=\"발주서 저장\" style='cursor:pointer;padding:0;' onclick=\"javascript:openCommLayer('layer3','05_04', '?odr_idx=".$odr_idx."')\" ";
+						}
+						else
+						{
+							$goJump = "title=\"발주서 저장\" style='padding:0;' ";
+						}	
 					}else{
 						
 						if ($odr_det_status==6)
@@ -297,7 +303,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			<?}?>
 
 			<?
-				if($part_type =="2")
+				if($part_type =="2" || $part_type =="5" || $part_type =="6")
 				{
 					if ($period)
 					{
@@ -308,7 +314,15 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 						}
 						else
 						{
-							$period = str_replace("WK","",$period)."WK";
+							if ($part_type =="2")
+							{
+								$period = str_replace("WK","",$period)."WK";
+							}
+							else
+							{
+								$period = str_replace("Days","",$period)."Days";
+							}
+							
 							$period_style="c-red";
 						}
 					}

@@ -57,7 +57,7 @@ Function QRY_TURNKEY_LIST($recordcnt,$searchand,$page){
 function QRY_PART_CHECK($part_idx)
 {
 	$conn = dbconn();
-	$sql = "select price,quantity from part where part_idx = $part_idx";
+	$sql = "select price,quantity,del_chk,part_type from part where part_idx = $part_idx";
 			//echo $sql;
 	mysql_query( "SET NAMES utf8");	
 

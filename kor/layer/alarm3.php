@@ -9,7 +9,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";?>
 //	$part_type=get_any("odr_det", "part_type", "odr_idx=$odr_idx");
 	?>
 	<p class="txt-warning t-ct">
-	Unit Price가 변경되었습니다. 확인 후 발주바랍니다.
+	판매자가 해당 품목을 삭제하였습니다.
 	</p>
 
 	<input type="hidden" name="odr_idx" id="odr_idx_30_06" value="<?=$odr_idx?>">
