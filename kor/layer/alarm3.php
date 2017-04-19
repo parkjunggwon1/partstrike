@@ -6,10 +6,13 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";?>
 </div>
 <div class="layer-content">
 	<?	
-//	$part_type=get_any("odr_det", "part_type", "odr_idx=$odr_idx");
+	$part_no=get_any("part", "part_no", "part_idx=$part_idx");
 	?>
 	<p class="txt-warning t-ct">
 	판매자가 해당 품목을 삭제하였습니다.
+	</p>
+	<p class="txt-warning t-ct" style="margin-top:10px;">
+		<span class='c-blue'><?=$part_no?></span>
 	</p>
 
 	<input type="hidden" name="odr_idx" id="odr_idx_30_06" value="<?=$odr_idx?>">

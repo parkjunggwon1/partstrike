@@ -1244,7 +1244,10 @@ switch($actty) {
 		echo "PRICE_".$_part_idx;
 	}elseif($safe_stock>0){ //-- 재고 부족 -------------------------------------------------
 		echo "ERR_".$_part_idx;
-	}elseif($part_chk>0){ //-- 파트 존재 여부 -------------------------------------------------
+	}elseif($part_chk>0){ //-- 파트 존재 여부 -------------------------------------------------		
+		$sql = "delete from odr_det where odr_det_idx =".$_det_idx;
+		//	echo $sql;
+		$result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
 		echo "delete_".$_part_idx;
 	}else{
 		//-- 배송지 변경-------------

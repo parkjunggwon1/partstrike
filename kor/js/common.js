@@ -1062,7 +1062,7 @@ $(document).ready(function(){
 						{
 							closeCommLayer("layer4");
 							openLayer('layer3','05_04','?odr_idx='+odr_idx+'&change=delete&change_part_idx='+data_split[1]);
-							openLayer('layer4','alarm3','?odr_idx='+odr_idx);
+							openLayer('layer4','alarm3','?odr_idx='+odr_idx+"&part_idx="+data_split[1]);
 							return;
 						}	
 					}
@@ -2088,19 +2088,22 @@ $(document).ready(function(){
 			
 		}
 
-		if (err == false){
-			//What's New 창에서 납기 받은 제품 저장 시 별도 Proc.
-			if($("#odr_status").val() == 16){ //납기받은 품목
-				f.typ.value = "persave";
-			}else{
-				f.typ.value = "odredit";
+		if ($(this).attr("onclick") != "del_sel();")
+		{
+			if (err == false){
+				//What's New 창에서 납기 받은 제품 저장 시 별도 Proc.
+				if($("#odr_status").val() == 16){ //납기받은 품목
+					f.typ.value = "persave";
+				}else{
+					f.typ.value = "odredit";
+				}
+				f.save_yn.value = "Y";
+				f.target = "proc";
+				f.action = "/kor/proc/odr_proc.php";
+				f.submit();			
 			}
-			f.save_yn.value = "Y";
-			f.target = "proc";
-			f.action = "/kor/proc/odr_proc.php";
-			f.submit();			
 		}
-
+		
 		var menu_type_chk = getCookie('menu');
 				
 		switch (menu_type_chk) {

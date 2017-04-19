@@ -694,14 +694,14 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						$quantity="0";
 					}
 					?>
-					<!--05_04------------------>
+					<!--05_04-->
 					<?if($loadPage== "05_04" && $det_cnt==1){?>
 								<input type="hidden" name="odr_det_idx[]" odr_status="<?=$odr_status;?>" part_type="<?=$part_type?>" quantity="<?=$quantity;?>" amend_yn="<?=$amend_yn?>" class="<?=($part_type=="2" && $period*1> 2 && QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")<=0) ? "endure":"stock"?>" value="<?=$odr_det_idx?>" <?if(($part_type=="2"||$part_type=="5"||$part_type=="6") && $period ==""){?>disabled<?}?> part_type="<?=$part_type?>"><span style="margin-right:0"></span>
 							</label>
 					<?}else{?>
 						<td>
 							<label class="ipt-chk chk2" >
-								<input type="<?=($det_cnt>1)? "checkbox":"hidden";?>" style="margin-right:0" name="odr_det_idx[]" part_type="<?=$part_type?>" odr_status="<?=$odr_status;?>" quantity="<?=$quantity;?>" amend_yn="<?=$amend_yn?>" class="<?=($part_type=="2" && $period*1> 2 && QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")<=0) ? "endure":"stock"?>" value="<?=$odr_det_idx?>" <?if( ($quantity=="0" || $part_type=="2"||$part_type=="5"||$part_type=="6") && $period ==""){?>disabled<?}?> part_type="<?=$part_type?>"><span  style="margin-right:0"></span>
+								<input type="<?=($det_cnt>1)? "checkbox":"hidden";?>" style="margin-right:0" name="odr_det_idx[]" part_type="<?=$part_type?>" odr_status="<?=$odr_status;?>" quantity="<?=$quantity;?>" amend_yn="<?=$amend_yn?>" class="<?=($part_type=="2" && $period*1> 2 && QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")<=0) ? "endure":"stock"?>" value="<?=$odr_det_idx?>" <?if( ($part_type=="2"||$part_type=="5"||$part_type=="6") && $period ==""){?>disabled<?}?> part_type="<?=$part_type?>"><span  style="margin-right:0"></span>
 							</label>
 						</td>
 					<?}?>
@@ -787,7 +787,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						$day_val = "WK";
 					}
 					?>
-					<?=($period)?"<td class=''>".(QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"Stock":str_replace("WK","",$period).$day_val.""):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
+					<?=($period)?"<td class=''>".(QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"Stock":"<span class='c-red'>".str_replace("WK","",$period).$day_val."</span>"):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
 					<?if ($loadPage=="09_01") {
 					$com_idx = $rel_idx==0 ? $sell_mem_idx : $rel_idx;
 					$company_nm = get_any("member","mem_nm_en", "mem_idx=$com_idx"); 	
@@ -1587,7 +1587,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 									$day_val = "WK";
 								}
 								?>
-								<?=($period)?(QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"<td>Stock":"<td class=''>".str_replace("WK","",$period).$day_val.""):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
+								<?=($period)?(QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"<td>Stock":"<td class='c-red'>".str_replace("WK","",$period).$day_val.""):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
 								<?}?>
 						<?}?>
 						<?if($loadPage=="19_1_05" || $loadPage=="19_1_06"  ){

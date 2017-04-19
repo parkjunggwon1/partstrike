@@ -394,6 +394,9 @@ if($ship[delivery_addr_idx] > 0){
 			<table class="stock-list-table">
 				<thead>
 					<tr>						
+						<?if ($det_cnt > 1){?>
+						<th scope="col" style="width:20px">Option. </th>
+						<?}?>
 						<th scope="col" style="width:20px">No. </th>
 						<th scope="col" class="t-lt" style="width:280px;">Part No.</th>
 						<th scope="col" class="t-lt">Manufacturer</th>
@@ -403,7 +406,7 @@ if($ship[delivery_addr_idx] > 0){
 						<th scope="col" style="width:60px;" class="t-rt">O'ty</th>
 						<th scope="col" class="t-rt" style="width:61px;">Unit Price</th>
 						<th scope="col" class="t-rt" style="width:80px;">Amount</th>
-						<th scope="col" lang="ko"style="width:36px;">납기</th>
+						<th scope="col" lang="ko" style="width:36px;">납기</th>
 					</tr>
 				</thead>
 				<?	for ($i = 1; $i<=7; $i++){

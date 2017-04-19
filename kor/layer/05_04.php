@@ -115,7 +115,7 @@ $dlvr_cnt = QRY_CNT("freight_charge"," and trade_type=$trade_type and rel_idx = 
 			//alert("del_cnt:"+del_cnt);
 			//alert("det_cnt:"+det_cnt);
 			if(del_cnt == det_cnt && det_cnt>0){  //모두 삭제 시
-				if($(".layer-section").hasClass("open")) closeCommLayer("layer");
+				//if($(".layer-section").hasClass("open")) closeCommLayer("layer");
 				//Refresh_MainSh(); //메인 검색 실행
 				var menu_type_chk = getCookie('menu');
 				
@@ -135,12 +135,13 @@ $dlvr_cnt = QRY_CNT("freight_charge"," and trade_type=$trade_type and rel_idx = 
 					case "side_order"    : showajax(".col-right", "side_order");
 		       					break;
 				}
-				closeCommLayer("layer3"); //발주창
+				//closeCommLayer("layer3"); //발주창
 			} else if(delv_cnt==0){  //삭제한게 있고, 납기 삭제할게 없을때만 새로고침
 				openCommLayer("layer3","05_04","?odr_idx="+$("#odr_idx_05_04").val());
 			}
-			if(delv_cnt>0){
+			if(delv_cnt>0){			
 				alert_del("삭제","삭제하시겠습니까?","btn_ok");
+				return;
 			}
 		}
 	}

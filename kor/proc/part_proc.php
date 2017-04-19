@@ -206,8 +206,8 @@ if($typ=="alldel"){
 		if($det_cnt>0){	//--- 거래 있다.(del_chk='0')
 			update_val("part","del_chk",'0', "part_idx", $del_part_idx);
 		}else{	//--------------- 거래 없다.(실제 레코드 삭제)
-			$sql="delete from part where part_idx=$del_part_idx";
-			$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+			update_val("part","del_chk",'0', "part_idx", $del_part_idx);
+			//$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 		}
 	 }
 
