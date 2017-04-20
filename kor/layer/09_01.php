@@ -436,40 +436,56 @@ $(document).ready(function(){
 			
 			var chk_val;
 
-			chk_val = $(this).is(":checked")
+			chk_val = $(this).is(":checked");		
+
+			
 			if (chk_val==true)
 			{
-				amend_yn = amend_yn + $(this).attr("amend_yn");
-				if (amend_yn.indexOf("Y"))
-				{		
-					if(amend_yn == "N")
-					{
-						$("#btn_cancel_09_01").css("cursor","pointer").addClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel.gif");
-					}
-					else
-					{
-						$("#btn_del_09_01").hide();
-						$("#btn_del_09_01").css("cursor","").attr("onclick","").attr("src","/kor/images/btn_delete2_1.gif");
-						$("#btn_cancel_09_01").css("cursor","").removeClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel_1.gif");	
-					}						
-					
-				}
-				else
-				{				
-					$("#btn_del_09_01").show();
-					$("#btn_del_09_01").css("cursor","pointer").attr("onclick","del_sel();").attr("src","/kor/images/btn_delete2.gif");	
-					$("#btn_cancel_09_01").css("cursor","").removeClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel_1.gif");
-				}
+				//alert($(this).attr("amend_yn"));
+				amend_yn = amend_yn + $(this).attr("amend_yn");				
 			}
 			else
-			{
-				$("#btn_del_09_01").hide();
-				$("#btn_del_09_01").css("cursor","").attr("onclick","del_sel();").attr("src","/kor/images/btn_delete2_1.gif");	
+			{				
+				//$("#btn_del_09_01").hide();
+				if ($("input:checkbox[name^=odr_det_idx]:checked").length==0)
+				{
+					$("#btn_del_09_01").css("cursor","").attr("onclick","del_sel();").attr("src","/kor/images/btn_delete2_1.gif");	
+				}				
 
 			}
 			
 
 		});
+
+		if (amend_yn.indexOf("Y") == -1)
+		{	
+			
+			if(amend_yn.indexOf("N") == 0)
+			{
+				$("#btn_cancel_09_01").css("cursor","pointer").addClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel.gif");
+			}
+			else
+			{
+				//$("#btn_del_09_01").hide();
+				$("#btn_del_09_01").css("cursor","").attr("onclick","").attr("src","/kor/images/btn_delete2_1.gif");
+				$("#btn_cancel_09_01").css("cursor","").removeClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel_1.gif");	
+			}						
+			
+		}
+		else
+		{	
+			if(amend_yn.indexOf("N") == 0)
+			{
+				$("#btn_del_09_01").css("cursor","pointer").attr("onclick","del_sel();").attr("src","/kor/images/btn_delete2_1.gif");	
+				$("#btn_cancel_09_01").css("cursor","").removeClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel_1.gif");
+			}
+			else
+			{
+				$("#btn_del_09_01").css("cursor","pointer").attr("onclick","del_sel();").attr("src","/kor/images/btn_delete2.gif");
+			}
+			//$("#btn_del_09_01").show();
+			
+		}
 		
 	});
 
@@ -515,6 +531,8 @@ function checkActive(){
 	{
 		ErchkCnt = false;	
 	}
+
+
 	//발주서 확인 버튼 활성
 	if(okCnt == det_cnt && ErchkCnt && selCnt == det_cnt && supp_qty <= odr_qty){
 		$("#layerPop3 .btn-area :eq(1)").css("cursor","pointer").addClass("btn-view-sheet-1207").attr("src","/kor/images/btn_order_confirm.gif");
@@ -522,11 +540,11 @@ function checkActive(){
 		$("#layerPop3 .btn-area :eq(1)").css("cursor","").removeClass("btn-view-sheet-1207").attr("src","/kor/images/btn_order_confirm_1.gif");
 	}
 	//취소버튼 활성
-	if(selCnt>0){
+	/*if(selCnt>0){
 		$("#btn_cancel_09_01").css("cursor","pointer").addClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel.gif");
 	}else{
 		$("#btn_cancel_09_01").css("cursor","").removeClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel_1.gif");
-	}
+	}*/
 
 	/**
 	$("#layerPop3 .stock-list-table").find("tr[id^=tr]").each(function(e){
@@ -670,7 +688,7 @@ $det_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx ");  //odr_det 수량
 		<img src="/kor/images/btn_order_add.gif" alt="발주 추가" style="cursor:pointer"  class="btn-dialog-0501-from_0901">
 		<img src="/kor/images/btn_order_confirm.gif" alt="발주서 확인" odr_idx="<?=$odr_idx?>" class="btn-view-sheet-1207">
 		<img src="/kor/images/btn_cancel_1.gif" id="btn_cancel_09_01" alt="취소">
-		<img src="/kor/images/btn_delete2_1.gif" style="display: none;" alt="삭제" id="btn_del_09_01">
+		<img src="/kor/images/btn_delete2_1.gif"  alt="삭제" id="btn_del_09_01">
 	</div>
 </div>
 

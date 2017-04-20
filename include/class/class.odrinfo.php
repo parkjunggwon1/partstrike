@@ -687,11 +687,13 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					else if ($_GET['change'] == "qty" && $change_part_idx == $real_part_idx)
 					{
 						$change_style_qty="style='border-bottom:1px solid red'";
+						$odr_quantity="";
 					}
 					else if ($_GET['change'] == "delete" && $change_part_idx == $real_part_idx)
 					{
 						$change_style_qty="style='border-bottom:1px solid red'";
 						$quantity="0";
+						$odr_quantity="";
 					}
 					?>
 					<!--05_04-->
@@ -956,7 +958,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					</td>
 					<?}?>
 					<td class="t-rt">$<?=$price_val?></td>					
-					<td class="t-rt"><span class="c-blue"><?=$odr_quantity==0?"":number_format($odr_quantity)?></span></td>
+					<td class="t-rt"><span class="c-blue"><?=$odr_quantity==0?"0":number_format($odr_quantity)?></span></td>
 					<?
 					global $load_page;					
 					?>
@@ -1517,6 +1519,10 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 									//2016-12-25 : 수정발주서가 있는 경우에는 '실수량+공급수량
 									$poa_cnt = QRY_CNT("odr_history", "and odr_idx=$odr_idx and status='3'");
 									$qty = ($poa_cnt>0)? $part_stock+$supply_quantity : $odr_stock;
+									if ($del_chk=="0")
+									{
+										$qty = "0";
+									}
 								?>
 									<?if($part_type=="2"){?>
 										<td class="t-rt" style="width:60px;">I</td>

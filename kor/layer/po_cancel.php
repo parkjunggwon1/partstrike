@@ -94,7 +94,7 @@ $(document).ready(function(){
 						<th scope="col" class="t-nation">Nation</th>
 						<?}?>
 						<th scope="col" class="t-lt" Style="width:280px;">Part No.</th>
-						<th scope="col" class="t-Manufacturer" Style="width:220px;">Manufacturer</th>
+						<th scope="col" class="t-Manufacturer" Style="width:210px;">Manufacturer</th>
 						<th scope="col" class="t-Package">Package</th>
 						<th scope="col" class="t-dc">D/C</th>
 						<th scope="col" class="t-rohs">RoHS</th>

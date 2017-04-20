@@ -135,6 +135,38 @@ $(document).ready(function(){
 		{
 			return;
 		}
+
+		if ($(this).hasClass("amend")){  // 기존 데이터 제외하고 amend 된 데이터 모두 삭제.
+								
+			$.ajax({ 
+				type: "GET", 
+				url: "/ajax/proc_ajax.php", 
+				data: { actty : "RMA", //Remove amend data
+						actidx : $(this).attr("odr_idx")
+				},
+					dataType : "html" ,
+					async : false ,
+					success: function(data){ 
+//						document.location.href="/kor/";
+					}
+				});
+		}else if($(this).hasClass("save")){  // 기존 데이터중 납기품목 제외하고 amend 된 데이터 모두 삭제. (저장 발주서) 2016-04-03
+			
+			$.ajax({ 
+				type: "GET", 
+				url: "/ajax/proc_ajax.php", 
+				data: { actty : "RMS", //Remove amend data
+						actidx : $(this).attr("odr_idx")
+						},
+				dataType : "html" ,
+				async : false ,
+				success: function(data){ 
+					showajax(".col-right", "side_order");
+					
+					//document.location.href="/kor/";
+				}
+			});
+		}
 		
 		//alert(getCookie('menu'));
 		
@@ -260,10 +292,12 @@ $(document).ready(function(){
 	$("section[class^='layer']").on("click",".btn-close",function(){
 		
 		//po-cancel 닫기(X)
-		/*if ($(this).hasClass("po-cancel")){			
+		if ($(this).hasClass("po-cancel")){			
 			var load_page = $("#load_page_30_08").val();
 			openLayer("layer3",load_page,"?odr_idx="+$("#odr_idx_30_08").val());
-		}*/
+			return;
+		}
+
 		//3016_cancel 닫기(X)
 		if ($(this).hasClass("3016_cancel")){			
 			var load_page = $("#load_page_3016_cancel").val();
@@ -1004,6 +1038,8 @@ $(document).ready(function(){
 	//order sheet 실 발주 처리 [공지]화면의 '발주서 확인' 버튼 -----------------------
 	$("body").on("click",".btn-view-sheet",function(){		
 			var odr_idx = $(this).attr("odr_idx");
+			$("#det_cnt").val()
+
 			$.ajax({ 
 				type: "GET", 
 				url: "/ajax/proc_ajax.php", 
@@ -1061,7 +1097,10 @@ $(document).ready(function(){
 						else if(data_split[0]=="delete")
 						{
 							closeCommLayer("layer4");
-							openLayer('layer3','05_04','?odr_idx='+odr_idx+'&change=delete&change_part_idx='+data_split[1]);
+							if ($("#det_cnt").val()!=1)
+							{
+								openLayer('layer3','05_04','?odr_idx='+odr_idx+'&change=delete&change_part_idx='+data_split[1]);
+							}	
 							openLayer('layer4','alarm3','?odr_idx='+odr_idx+"&part_idx="+data_split[1]);
 							return;
 						}	
