@@ -1420,8 +1420,9 @@ switch($actty) {
 		$sell_mem_idx = $odr[sell_mem_idx];
 		$buy_mem_idx = $odr[mem_idx];
 		//1. 넘어온 odr_det이 전체인지 일부인지 판단하기 위해 각각 갯수 체크
-		$odr_det_cnt = QRY_CNT("odr_det", "and odr_idx = $odr_idx");	//기존PO det 갯수
-		$del_det_cnt = QRY_CNT("odr_det", "and odr_det_idx IN ($cancel_det_idx)");	//삭제할 det 갯수
+		//발주 추가된 상품은 삭제됨
+		$odr_det_cnt = QRY_CNT("odr_det", "and odr_idx = $odr_idx and amend_yn='N'");	//기존PO det 갯수
+		$del_det_cnt = QRY_CNT("odr_det", "and odr_det_idx IN ($cancel_det_idx) and amend_yn='N'");	//삭제할 det 갯수
 		//2. 삭제할게 PO 전체가 아니라면, 신규 odr 생성
 		if($odr_det_cnt >$del_det_cnt){ //-- 일부 취소 일경우 -----------------------------------------------------------
 			//1. odr 복제
@@ -1448,6 +1449,9 @@ switch($actty) {
 			$up_odr_idx = $odr_idx;
 			//기존 history 확인처리
 			update_val("odr_history","confirm_yn","Y", "odr_idx", $odr_idx);	//상태
+			$odt_det_sql = "delete from odr_det where odr_idx = $odr_idx and amend_yn='Y' and odr_status=0 ";
+			$conn = dbconn();
+			$result = mysql_query($odt_det_sql,$conn) or die ("SQL Error : ". mysql_error());	
 		}
 		//공통1. odr_det 에 사유 입력 ----------------------------------<<
 		for($i=0; $i<count($odr_det_idx); $i++){

@@ -1953,13 +1953,12 @@ $(document).ready(function(){
 	
 	$("body").on("click",".btn-dialog-0501-from_0901",function(){
 		var err = false; 
-		err = updateQty();
-		if (err == false)
-		{
-			saveExtraInfo();
-			openLayer("layer3","05_01","?odr_idx="+$("#odr_idx_"+$("#loadPage").val()).val()+"&fromLoadPage=09_01");
-			$("#addsearch_part_no").focus();
-		}
+		//err = updateQty();
+		
+		saveExtraInfo();
+		openLayer("layer3","05_01","?odr_idx="+$("#odr_idx_"+$("#loadPage").val()).val()+"&fromLoadPage=09_01");
+		$("#addsearch_part_no").focus();
+		
 	});
 
 	//지연 period가 없으면 자동 1주일 지연 처리. period가 있으면 period만큼 지연 확인 요청

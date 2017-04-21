@@ -540,12 +540,15 @@ function checkActive(){
 		$("#layerPop3 .btn-area :eq(1)").css("cursor","").removeClass("btn-view-sheet-1207").attr("src","/kor/images/btn_order_confirm_1.gif");
 	}
 	//취소버튼 활성
-	/*if(selCnt>0){
-		$("#btn_cancel_09_01").css("cursor","pointer").addClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel.gif");
-	}else{
-		$("#btn_cancel_09_01").css("cursor","").removeClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel_1.gif");
-	}*/
-
+	if (det_cnt==1)
+	{
+		if(selCnt>0){
+			$("#btn_cancel_09_01").css("cursor","pointer").addClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel.gif");
+		}else{
+			$("#btn_cancel_09_01").css("cursor","").removeClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel_1.gif");
+		}
+	}
+	
 	/**
 	$("#layerPop3 .stock-list-table").find("tr[id^=tr]").each(function(e){
 		if($(this).find("input[name^=odr_det_idx]").prop("checked")==true){
@@ -659,12 +662,12 @@ $det_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx ");  //odr_det 수량
 		<thead>
 			<tr>
 				<?if($det_cnt>1){?>
-				<th scope="col" style="width:50px">Option</th>
+				<th scope="col" style="width:30px">Option</th>
 				<?}?>
 				<th scope="col" class="t-no" style="width:23px">No. </th>
 				<th scope="col" class="t-nation">Nation</th>
-				<th scope="col" class="t-partno" style="width:300px;">Part No.</th>
-				<th scope="col" class="t-Manufacturer" style="width:180px;">Manufacturer</th>
+				<th scope="col" class="t-partno" style="width:270px;">Part No.</th>
+				<th scope="col" class="t-Manufacturer" style="width:150px;">Manufacturer</th>
 				<th scope="col" class="t-Package" style="width:80px">Package</th>
 				<th scope="col" class="t-dc" style="width:36px">D/C</th>
 				<th scope="col" class="t-rohs" style="width:36px">RoHS</th>
