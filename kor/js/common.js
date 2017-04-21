@@ -2035,7 +2035,7 @@ $(document).ready(function(){
 		var $qty = $odr_qty.next();
 		var $part_idx = $qty.next();
 		var $part_type = $part_idx.next();
-		var price_chk = $(this).attr("price");
+		var price_chk = $(this).attr("price").replace(",","");
 		var qty_chk = $(this).attr("quantity");
 		var stock_type=$(this).attr("class");
 		if($odr_qty.val()==""){
