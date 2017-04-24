@@ -19,9 +19,9 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";?>
 	<hr>
 	<br>
 	<p class="txt-warning">
-	'발주서' 확인시 '확정 발주서'만 선택할 수 있으며 미 선택시에도 한 시간 후 자동 전송됩니다.
+	'발주서 확인'시 '확정 발주서'만 선택할 수 있으며 미 선택시에도 자동 전송됩니다.
 	<?}else{?>
-	'발주서' 확인시 '확정 발주서'만 선택할 수 있으며 미 선택시에도 자동 전송됩니다.
+	'발주서 확인'시 '확정 발주서'만 선택할 수 있으며 미 선택시에도 자동 전송됩니다.
 	<?}?>
 	</p>
 
@@ -31,6 +31,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";?>
 	<input type="hidden" name="new_odr_idx" id="new_odr_idx" value="<?=$new_odr_idx?>">
 	<input type="hidden" name="delivery_addr_idx" id="delivery_addr_idx" value="<?=$delivery_addr_idx?>">
 	<input type="hidden" name="session_mem_idx" id="session_mem_idx" value="<?=$session_mem_idx?>">
+	<input type="hidden" name="sell_mem_idx" id="sell_mem_idx" value="<?=$sell_mem_idx?>">
 	<input type="hidden" name="delivery_save_yn" id="delivery_save_yn" value="<?=$delivery_save_yn?>">
 	<input type="hidden" name="nation" id="nation" value="<?=$nation?>">
 	<input type="hidden" name="com_name" id="com_name" value="<?=$com_name?>">

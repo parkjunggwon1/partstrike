@@ -22,6 +22,30 @@ if ($load_page =="30_16")
 		form_f.target = "proc";
 		form_f.action = "/kor/proc/odr_proc.php";
 		form_f.submit();	
+
+		var menu_type_chk = getCookie('menu');
+
+		closeCommLayer("layer6");
+		closeCommLayer("layer5");	//invoic 닫고
+		closeCommLayer("layer3");	//송장(3008) 닫고
+		closeCommLayer("layer");
+		
+		switch (menu_type_chk) {
+			case "order_S"    : if(chkLogin()){order('S'); showajax(".col-right", "side_order");}
+			           break;
+			case "order_B"    : if(chkLogin()){order('B'); showajax(".col-right", "side_order");}
+			           break;
+			case "mybox"    : if(chkLogin()){showajax(".col-left", "mybox"); showajax(".col-right", "side_order");}
+			           break;
+			case "record_S"    : if(chkLogin()){record('S'); showajax(".col-right", "side_order");}
+			           break;
+			case "record_B"    : if(chkLogin()){record('B'); showajax(".col-right", "side_order");}
+			           break;
+			case "remit"    : if(chkLogin()){remit('C'); showajax(".col-right", "side_order");}
+			           break;
+			case "side_order"    : showajax(".col-right", "side_order");
+       					break;
+		}
 	}
 </script>
 	<form name="form_f" id="form_f"  method="post">
@@ -54,7 +78,7 @@ if ($load_page =="30_16")
 		<div class="layer-content">
 			<p class="txt-warning t-ct"><?=$alert_msg?></p>
 			<div class="btn-area t-rt"> <!-- periodreq-->
-				<a class="btn-refresh" href="javascript:sunjuk();"><img alt="확인" src="/kor/images/<?=$btn;?>.gif"></a>
+				<a href="javascript:sunjuk();"><img alt="확인" src="/kor/images/<?=$btn;?>.gif"></a>
 			</div>
 		</div>
 	</form>

@@ -6,7 +6,7 @@ header("Content-Type: text/html; charset=UTF-8");
 function agency_won()
 {
 
-	$json_string = 'http://fx.keb.co.kr/FER1101M.web';
+	$json_string = 'http://fx.kebhana.com/FER1101M.web';
 
 	$jsondata = file_get_contents($json_string);
 	$jsondata  = iconv("euc-kr", "utf-8", $jsondata );
@@ -146,6 +146,8 @@ function agency_won()
 
 			";
 
+			
+
 			if ($country_code [$k2]=="USD")
 			{
 				$won_change = $remittance_send[$k2];
@@ -154,7 +156,6 @@ function agency_won()
 
 	}
 
-	
 	return $won_change;
 	exit;
 

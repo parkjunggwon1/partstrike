@@ -14,7 +14,29 @@ if ($alert =="sessionend"){
 <Script Language="javascript">
 $(document).ready(function(){
 	$("body").on("click",".btn-close-payment",function(){
-		document.location.href="/kor/";
+		var menu_type_chk = getCookie('menu');
+
+		closeCommLayer("layer6");
+		closeCommLayer("layer5");	//invoic 닫고
+		closeCommLayer("layer3");	//송장(3008) 닫고
+		closeCommLayer("layer");
+		
+		switch (menu_type_chk) {
+			case "order_S"    : if(chkLogin()){order('S'); showajax(".col-right", "side_order");}
+			           break;
+			case "order_B"    : if(chkLogin()){order('B'); showajax(".col-right", "side_order");}
+			           break;
+			case "mybox"    : if(chkLogin()){showajax(".col-left", "mybox"); showajax(".col-right", "side_order");}
+			           break;
+			case "record_S"    : if(chkLogin()){record('S'); showajax(".col-right", "side_order");}
+			           break;
+			case "record_B"    : if(chkLogin()){record('B'); showajax(".col-right", "side_order");}
+			           break;
+			case "remit"    : if(chkLogin()){remit('C'); showajax(".col-right", "side_order");}
+			           break;
+			case "side_order"    : showajax(".col-right", "side_order");
+       					break;
+		}
 	});
 });
 </script>
@@ -23,7 +45,7 @@ $(document).ready(function(){
 	<!--a href="#" class="btn-close payment"><img src="/kor/images/btn_layer_close_w.png" alt="close"></a-->
 </div>
 <div class="layer-content">
-	<p class="txt-warning t-ct"><span class="c-blue">My Bank  - $<?=$amt?></span> 충전 되었습니다.</p>
+	<p class="txt-warning t-ct"><span class="c-blue">My Bank  - $<?=round_down($amt,4)?></span> 충전 되었습니다.</p>
 	<div class="btn-area t-rt">
 		<button class="btn-close-payment" type="button"><img alt="button" src="/kor/images/btn_complete.gif"></button>
 	</div>

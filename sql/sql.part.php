@@ -54,4 +54,16 @@ Function QRY_TURNKEY_LIST($recordcnt,$searchand,$page){
 	return $result;
 }
 
+function QRY_PART_CHECK($part_idx)
+{
+	$conn = dbconn();
+	$sql = "select price,quantity,del_chk,part_type from part where part_idx = $part_idx";
+			//echo $sql;
+	mysql_query( "SET NAMES utf8");	
+
+	$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+	$part_info = mysql_fetch_object($result);
+	return $part_info;
+}
+
 ?>

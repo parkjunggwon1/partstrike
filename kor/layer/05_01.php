@@ -15,6 +15,7 @@ if (!$_SESSION["MEM_IDX"]){ReopenLayer("layer6","alert","?alert=sessionend");exi
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 $(document).ready(function(){
+	
 	$("#addsearch_part_no").focus();
 	if($("#addsearch_part_no").val()){
 		var ary = new Array();
@@ -22,7 +23,7 @@ $(document).ready(function(){
 		$("#layerPop3 tbody[id^=adtb]").each(function(e){						
 			if (typeof($(this).find("tr:eq(1) td:eq(7)").html())=="string")
 			{
-				ary.push($(this).find("tr:eq(1) td:eq(7)").html());
+				ary.push($(this).find("tr:eq(1) td:eq(7)").html().replace(/(<([^>]+)>)/gi, ""));
 			}else{
 				ary.push("$99999999");
 			}
@@ -91,7 +92,7 @@ $(document).ready(function(){
 	$sell_rel_idx = $odr[sell_rel_idx];
 	$odr_status = $odr[odr_status];
 ?>
-<!----------- Stock parts --------------------------------->
+<!----------- Stock parts ---------------------------------->
 <form name="f_addproc" id = "f_addproc">
 	<input type="hidden" name="odr_idx" value="<?=$odr_idx?>">
 	<input type="hidden" name="part_idx" value="">	
@@ -103,7 +104,7 @@ $(document).ready(function(){
 	<input type="hidden" id="fromLoadPage" name="fromLoadPage" value="<?=$fromLoadPage?>">
 	<input type="hidden" name="addsearch_part_no" value="<?=$addsearch_part_no?>">
 </form>
-<!----------- Period parts --------------------------------->
+<!----------- Period parts ---------------------------------->
 <form name="f_add" id="f_add">
 	<input type="hidden" name="odr_idx" id="odr_idx_05_01" value="<?=$odr_idx?>">
 	<input type="hidden" name="part_idx" value="">	

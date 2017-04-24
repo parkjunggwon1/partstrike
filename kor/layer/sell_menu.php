@@ -9,7 +9,7 @@ $mn = $_GET['mn']; ?>
 		<li class="sell-mn02<? if($mn=='02'){ ?> current this<? } ?>"><?=get_menu_view_sell("발주서","odr", 2)?></li>
 		<li class="sell-mn03<? if($mn=='03'){ ?> current this<? } ?>"><?=get_menu_view_sell("수정 발주서","odr", 3)?></li>
 		<li class="sell-mn04<? if($mn=='04'){ ?> current this<? } ?>"><?=get_menu_view_sell("납기 연장","odr", 4)?></li>
-		<li class="sell-mn05<? if($mn=='05'){ ?> current this<? } ?>"><?=get_menu_view_sell("결제 완료","odr", 5)?></li>
+		<li class="sell-mn05<? if($mn=='05'){ ?> current this<? } ?>"><?=get_menu_view_sell("결제 완료","odr", 5)?></li>		
 		<li class="sell-mn06<? if($mn=='06'){ ?> current this<? } ?>"><?=get_menu_view_sell("수령","odr", 6)?></li>
 		<li class="sell-mn07<? if($mn=='07'){ ?> current this<? } ?>"><?=get_menu_view_sell("삭제","odr", 7)?></li>
 		<li class="sell-mn08-1302<? if($mn=='08'){ ?> current this<? } ?>"><?=get_menu_view_sell("취소","odr", 8)?></li>

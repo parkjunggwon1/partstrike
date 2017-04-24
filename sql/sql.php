@@ -104,6 +104,22 @@ Function QRY_CNT_FLUC($arrDet){
 	return $total;
 }
 
+//2017-03-28 : 파트 존재 여부
+Function QRY_CNT_PART($arrDet){
+	$conn = dbconn();	
+	$sql="
+			SELECT COUNT(a.part_idx) AS CNT FROM part AS a
+			LEFT JOIN odr_det AS b
+			ON(a.part_idx = b.part_idx)
+			WHERE b.odr_det_idx IN($arrDet) AND a.del_chk=0
+		";
+	mysql_query( "SET NAMES utf8");
+	$result=mysql_query($sql,$conn) or die ("SQL ERROR(QRY_CNT) : ".mysql_error());
+	$row=mysql_fetch_array($result);
+	$total=$row[CNT];
+	return $total;
+}
+
 //총페이지수
 Function QRY_TOTALPAGE($cnt,$recordcnt){
 	$total_page = (int)($cnt%$recordcnt);

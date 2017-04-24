@@ -7,18 +7,31 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";
 include  $_SERVER["DOCUMENT_ROOT"]."/include/class/class.odrinfo.php";
 include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.record.php";
+
 ?>
 <div class="layer-hd">
 	<h1>환불</h1>
 	<?if ($ty == ""){ $ty = "succEnd";}?>
+	<a href="#" class="btn-close"><img src="/kor/images/btn_layer_close_w.png" alt="close"></a>
 	<!--a href="#" class="btn-close"><img src="/kor/images/btn_layer_close_w.png" alt="close"></a-->
 </div>
 <div class="layer-content">
-	<form name="f" id="f">
+	<form name="f_19_1_05" id="f_19_1_05">
 		<!-- form1 -->
-		<input type="hidden" name="typ" id="typ" value="<?=$ty?>">
-		<input type="hidden" name="odr_idx" id="odr_idx" value="<?=$odr_idx?>">		
-		<input type="hidden" name="odr_det_idx" id="odr_det_idx" value="<?=$odr_det_idx?>">		
+		<input type="hidden" name="typ" id="typ" value="<?=$_GET['typ']?>">
+		<input type="hidden" name="odr_idx" id="odr_idx" value="<?=$_GET['odr_idx']?>">		
+		<input type="hidden" name="odr_det_idx" id="odr_det_idx" value="<?=$_GET['odr_det_idx']?>">
+		<input type="hidden" name="typ" value="refund2">
+		<input type="hidden" name="odr_history_idx" id="odr_history_idx" value="<?=$_GET['odr_history_idx']?>">
+		<input type="hidden" name="mem_idx" value="<?=$_GET['mem_idx']?>">
+		<input type="hidden" name="rel_idx" value="<?=$_GET['rel_idx']?>">
+		<input type="hidden" name="sell_mem_idx" value="<?=$_GET['sell_mem_idx']?>">
+		<input type="hidden" name="sell_rel_idx" value="<?=$_GET['sell_rel_idx']?>">
+		<input type="hidden" name="tot_amt" value="<?=$_GET['tot_amt']?>">
+		<input type="hidden" name="fault_select" value="<?=$_GET['fault_select']?>">
+		<input type="hidden" name="charge_method" value="<?=$_GET['charge_method']?>">
+		
+		<input type="hidden" name="invoice_no" value="<?=$row_odr_det["invoice_no"]?>">		
 		<!-- //form1 -->
 	</form>
 	<?
@@ -39,7 +52,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.record.php";
 				<tr>
 					<td class="company" colspan="2"><img src="/kor/images/nation_title_<?=$buy_com_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$buy_com_nation)?>"> <span class="name"><?=$buy_com_name?></span></td>
 					<td class="c-red2 t-ct">환불(<span class="c-blue" lang="en">US<span id="amt"></span> - MyBank</span>)이 완료되었습니다.</td>
-					<td class="t-rt"><div class="re-select"><strong>선택</strong><em><?=GF_Common_GetSingleList("FAULT",$fault_select)?></em></div></td>
+					<td class="t-rt"><div class="re-select"><strong>선택</strong><em>환불</em></div></td>
 				</tr>
 			</tbody>
 		</table>
@@ -86,6 +99,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.record.php";
 				$fault_sum = $price * $fault_quantity;
 				//충전(판매대금) 금액 계산
 				$buy_amt = $price * $receive_qty;
+				
 			?>
 				<tr>
 					<td colspan="10" class="title-box first">
@@ -104,6 +118,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.record.php";
 					<td class="c-red t-rt">$<?=number_format($fault_sum,2);?></td>
 					<td class="c-red t-ct" lang="ko">환불</td>
 				</tr>
+				<!--
 				<tr>
 					<td class="t-ct">1</td>
 					<td class="t-lt"><?=$part_no;?></td>
@@ -116,11 +131,12 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.record.php";
 					<td class="c-blue t-rt">$<?=number_format($buy_amt,2);?></td>
 					<td class="c-blue t-ct" lang="ko">수령</td>
 				</tr>
+				-->
 				<?}?>
 		</table>        
 	</div>
 	<div class="btn-area t-rt">
-		<button type="button" onclick="refund2_ok(<?=$buy_amt;?>);"><img src="/kor/images/btn_end.gif" alt="종료"></button>
+		<button type="button" onclick="refund2_ok('<?=$buy_amt;?>','<?=$fault_sum;?>');"><img src="/kor/images/btn_end.gif" alt="종료"></button>
 	</div>
 </div>
 
@@ -129,8 +145,10 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.record.php";
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 
-function refund2_ok(buy_amt){
-	openCommLayer("layer6","alarm_payment","?amt="+buy_amt);
+function refund2_ok(buy_amt,fault_sum){
+	var formData = $("#f_19_1_05").serialize();
+
+	openCommLayer("layer6","alarm_payment2","?amt=<?=$buy_amt?>&fault_sum="+fault_sum+"&"+formData);
 }
 
 $(document).ready(function(){

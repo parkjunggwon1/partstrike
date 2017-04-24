@@ -63,14 +63,14 @@ function GET_MYBOX_PART($titleyn, $part_type, $page, $style,$recordcnt){   //$ti
 				<td align="center"><?=$package?></td>
 				<td align="center"><?=$dc?></td>
 				<td align="center"><?=$rhtype?></td>
-				<td class="t-rt"><?=$quantity==0?"":number_format($quantity)?></td>
+				<td class="t-rt"><?=$quantity==0 || $quantity==""?"I":number_format($quantity)?></td>
 				<td class="t-rt">$<?=$price_val?></td>
 				
 				<?if ($part_type=="2" || $part_type=="5" || $part_type=="6"){?>
 						
 						<?if ($style=="main"){?>
-						<td class="pd-0 t-rt">
-						<a class="btn-dialog-3102" href="javascript:;" sell_com_idx="<?=$sell_com_idx?>" sell_mem_idx="<?=$sell_mem_idx?>" id="<?=$part_idx?>"><img alt="확인" src="/kor/images/btn_ok.gif"></a></td>
+						<td class="pd-0" align="center">
+						<?=($period)?"<span class='$period_style'>".$period."</span>":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<font color='#ff0000' lang='ko'>확인</font>":"Stock")?></td>
 						<td class="pd-0 t-rt">
 						<a href="#layerPop3" class="btn-mybox" sell_com_idx="<?=$sell_com_idx?>" sell_mem_idx="<?=$sell_mem_idx?>" id="<?=$part_idx?>" work="del"><img src="/kor/images/btn_delete2.gif" alt="삭제"></a>
 						</td>
@@ -82,8 +82,8 @@ function GET_MYBOX_PART($titleyn, $part_type, $page, $style,$recordcnt){   //$ti
 				<?}else{?>
 					<!--<td>stock</td>-->
 				<?if ($style=="main"){?>
-					<td class="pd-0 t-rt"><a href="#layerPop3" class="btn-order" sell_com_idx="<?=$sell_com_idx?>" sell_mem_idx="<?=$sell_mem_idx?>" id="<?=$part_idx?>"><img src="/kor/images/btn_order.gif" alt="발주"></a></td>
-					<td class="pd-0 t-rt"><a href="#layerPop3" class="btn-mybox" sell_com_idx="<?=$sell_com_idx?>" sell_mem_idx="<?=$sell_mem_idx?>" id="<?=$part_idx?>" work="del"><img src="/kor/images/btn_delete2.gif" alt="삭제"></a></td>
+					<td class="pd-0" align="center"><?=($period)?"<span class='$period_style'>".$period."</span>":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<font color='#ff0000' lang='ko'>확인</font>":"Stock")?></td>
+					<td class="pd-0 t-rt"><a href="#layerPop3" class="btn-mybox" sell_com_idx="<?=$sell_com_idx?>" sell_mem_idx="<?=$sell_mem_idx?>" id="<?=$part_idx?>" work="del" menu_type='S'><img src="/kor/images/btn_delete2.gif" alt="삭제"></a></td>
 				<?}?>
 				<?}?>
 				</td>

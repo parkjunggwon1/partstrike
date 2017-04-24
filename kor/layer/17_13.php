@@ -156,7 +156,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 				</tr>
 			</tbody>
 		</table>
-		<input type="hidden" name="tot" id="tot_<?=$odr_idx?>" value="<?=$tot_amt?>">test
+		<input type="hidden" name="tot" id="tot_<?=$odr_idx?>" value="<?=$tot_amt?>">
 		<ul class="total-price left">
 			<?if ($_SESSION["NATION"]=="1"){?>
 				<li class="total t-lt"><strong>Total :</strong><span><td>￦<?=number_format($tot_amt*getExchangeRate())?></td></span></li>

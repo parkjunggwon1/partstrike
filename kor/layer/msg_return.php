@@ -27,6 +27,10 @@ if ($alert =="sessionend"){
   $status = "9";
   $status_name = "거절";
   $refuse_num = QRY_CNT("odr_history", "and odr_idx = $odr_idx and odr_det_idx = $odr_det_idx and status= $status and reg_mem_idx = $session_mem_idx");
+  if (!$fault_quantity || $fault_quantity=="undefined")
+  {
+  	$fault_quantity = get_any("odr_det", "fault_quantity", "odr_det_idx = $odr_det_idx");  //odr_det 부족수량
+  }
 ?>
 <form name="f6" id="f6" method="post">
 <input type="hidden" name="typ" value="refuse">
@@ -40,6 +44,7 @@ if ($alert =="sessionend"){
 <input type="hidden" name="sell_mem_idx" value="<?=$sell_mem_idx?>">
 <input type="hidden" name="buy_mem_idx" value="<?=$buy_mem_idx?>">
 <input type="hidden" name="fault_select" value="2">
+<input type="hidden" name="fault_quantity" value="10">
 <input type="hidden" name="title" value="승인">
 <input type="hidden" name="memo" value="승인">
 </form>

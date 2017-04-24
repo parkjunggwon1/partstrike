@@ -73,7 +73,7 @@ $(document).ready(function(){
 		<li><a href="#" class="view-sell"><img src="/kor/images/layer_tab_sell_off.png" alt="판매"></a><a href="#" class="btn-close"><img src="/kor/images/btn_layer_close.png" alt="close"></a></li>
 		<li class="current"><a href="#" class="view-buy"><img src="/kor/images/layer_tab_buy_on.png" alt="구매"></a></li>
 	</ul>
-	<a href="#" class="btn-close"><img src="/kor/images/btn_layer_close.png" alt="close"></a>
+	<a href="#" class="btn-close refresh_chk"><img src="/kor/images/btn_layer_close.png" alt="close"></a>
 </div>
 <!-- //layer-tab -->
 
@@ -121,7 +121,9 @@ if ($cnt == 0 ){?>
 		</div>
 		<!-- //layer-pagination -->
 		<?
+		
 		if($fault_yn == 'Y'){
+
 			//echo "/FAULT=Y";
 			echo GET_ODR_HISTORY_LIST("30_20_F", $odr_idx, $odr_det_idx);
 		}else{

@@ -33,12 +33,21 @@ if (!$_SESSION["MEM_IDX"]){ReopenLayer("layer6","alert","?alert=sessionend");exi
 	$memo= $odr[memo];
 	$imsi_odr_no = $odr[imsi_odr_no];
 	$save_yn = $odr[save_yn];
+
+	$part_idx = get_any("odr_det", "part_idx", "odr_idx = $odr_idx ");
+	$mybox = get_any("mybox", "part_idx", "part_idx = $part_idx ");	
 	
 	$s_nation = get_any("member","nation", "mem_idx=$sell_mem_idx");
 	$b_nation = get_any("member","nation", "mem_idx=$session_mem_idx");
 	$det_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx ");  //odr_det 수량
 	$per_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and odr_status=16 ");  //납기 받은 품목 수
 	$turnkey_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and part_type=7 ");  //턴키
+
+	$part2_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and (part_type=2 or part_type=5 or part_type=6)");  //턴키
+	
+	if ($part2_cnt>0){
+		$part_type="256";
+	}
 }
 //국제 배송비 관련
 $trade_type = ($s_nation == $b_nation)? 1:0;
@@ -107,13 +116,32 @@ $dlvr_cnt = QRY_CNT("freight_charge"," and trade_type=$trade_type and rel_idx = 
 			//alert("det_cnt:"+det_cnt);
 			if(del_cnt == det_cnt && det_cnt>0){  //모두 삭제 시
 				if($(".layer-section").hasClass("open")) closeCommLayer("layer");
-				Refresh_MainSh(); //메인 검색 실행
+				//Refresh_MainSh(); //메인 검색 실행
+				var menu_type_chk = getCookie('menu');
+				
+				switch (menu_type_chk) {
+					case "order_S"    : if(chkLogin()){order('S'); showajax(".col-right", "side_order");}
+					           break;
+					case "order_B"    : if(chkLogin()){order('B'); showajax(".col-right", "side_order");}
+					           break;
+					case "mybox"    : if(chkLogin()){showajax(".col-left", "mybox"); showajax(".col-right", "side_order");}
+					           break;
+					case "record_S"    : if(chkLogin()){record('S'); showajax(".col-right", "side_order");}
+					           break;
+					case "record_B"    : if(chkLogin()){record('B'); showajax(".col-right", "side_order");}
+					           break;
+					case "remit"    : if(chkLogin()){remit('C'); showajax(".col-right", "side_order");}
+					           break;
+					case "side_order"    : showajax(".col-right", "side_order");
+		       					break;
+				}
 				closeCommLayer("layer3"); //발주창
 			} else if(delv_cnt==0){  //삭제한게 있고, 납기 삭제할게 없을때만 새로고침
 				openCommLayer("layer3","05_04","?odr_idx="+$("#odr_idx_05_04").val());
 			}
-			if(delv_cnt>0){
+			if(delv_cnt>0){			
 				alert_del("삭제","삭제하시겠습니까?","btn_ok");
+				return;
 			}
 		}
 	}
@@ -198,11 +226,11 @@ function chgnation(obj){
 		$("#addr_full").val("");
 
 		$("#zipcode").val("");
-		if (obj.value=="")
+		if (obj=="")
 		{
 			//$("#nation").parent().attr("lang","en");
 		}else{
-			if(obj.value ==$("#s_nation").val() && obj.value ==$("#b_nation").val()){
+			if(obj ==$("#s_nation").val() && obj ==$("#b_nation").val()){
 				//$(".company-info-wrap [lang=en]").attr("lang","ko");
 				$(".company-info-wrap input").css("ime-mode","active");
 			}else{
@@ -210,7 +238,7 @@ function chgnation(obj){
 				$(".company-info-wrap input").css("ime-mode","disabled");
 			}
 		}
-		if(obj.value== "1"){	//한국---------
+		if(obj== "1"){	//한국---------
 			$(".roadname").show();
 			$(".roadname_1").hide();
 		}else{	//그 외 국가-----------------
@@ -218,7 +246,7 @@ function chgnation(obj){
 			$(".roadname").hide();
 		}
 		//국가번호 세팅~
-		if (obj.value=="")
+		if (obj=="")
 		{
 			$("input[name=nation_nm]").val("");		
 		}else{
@@ -226,7 +254,7 @@ function chgnation(obj){
 			type: "GET", 
 			url: "/ajax/proc_ajax.php", 
 			data: { actty : "STC",
-					actidx : obj.value
+					actidx : obj
 			},
 				dataType : "html" ,
 				async : false ,
@@ -236,14 +264,14 @@ function chgnation(obj){
 			});		
 		}
 
-		$("#nation").val(obj.value).attr("selected", "selected");
+		$("#nation").val(obj).attr("selected", "selected");
 		$("#nation").siblings("label").text($("#nation").children("option:selected").text());
 		
 		$.ajax({ 
 			type: "GET", 
 			url: "/ajax/proc_ajax.php", 
 			data: { actty : "NPT",
-					actidx : obj.value
+					actidx : obj
 			},
 				dataType : "text" ,
 				async : false ,
@@ -268,7 +296,7 @@ function chgnation(obj){
 		});	
 
 		var same_nation = "";
-		if (s_nation==obj.value)
+		if (s_nation==obj)
 		{
 			same_nation = "";
 		}
@@ -282,7 +310,7 @@ function chgnation(obj){
 		url: "/ajax/proc_ajax.php", 
 		data: { actty : "SDA",
 				lang : same_nation , //language
-				actidx : obj.value
+				actidx : obj
 		},
 			dataType : "html" ,
 			async : false ,
@@ -294,7 +322,7 @@ function chgnation(obj){
 			$("input[name=zipcode]").val("");			
 			$("#korea_chk").val(same_nation);
 			$("#addr").val($("#nation").children("option:selected").text());
-			if(obj.value == $("#s_nation").val()){
+			if(obj == $("#s_nation").val()){
 				$("#sp_addr").html("");
 			}else{
 				$("#sp_addr").html(""+$("#nation").children("option:selected").text()+"");
@@ -520,7 +548,7 @@ function dlvr_click(obj){
 	});		
 }
 $(document).ready(function(){
-
+	//new_addr();
 	var delivery_chg=$("input:checkbox[id='delivery_chg']").is(":checked");
 	var select = $("select");
 	select.change(function(){
@@ -544,7 +572,7 @@ $(document).ready(function(){
 	//$(".detail-table").css('margin-top','2px');
 
 	var odr_idx = '<?=$odr_idx?>';
-	<?if (odr_idx == "")
+	<?if ($odr_idx == "")
 	{
 	?>
 		add_change_sel();
@@ -619,11 +647,34 @@ $(document).ready(function(){
 	//발주 수량 키업~
 	$("#layerPop3 .stock-list-table input[name^=odr_quantity]").keyup(function(e){
 		maskoff();	
-		var quantity = $(this).parent().parent().find("input[name^=quantity]").val();
-		//alert(quantity);
-		if(parseInt($(this).val()) > parseInt(quantity)){
-			$(this).val("");
+		var quantity = $(this).parent().parent().find("input[name^=quantity]").val().replace(",","").replace(",","");
+		var part_type = $(this).attr("part_type");
+		var supp_qty = $(this).attr("supp_qty");
+		if (supp_qty=="")
+		{
+			supp_qty ="0";
 		}
+
+		if (part_type != 2){
+			if(parseInt($(this).val()) > parseInt(quantity.replace(",", ""))){
+				$(this).val("");
+			}
+		}
+
+		if (part_type == 2 || part_type == 5 || part_type == 6)
+		{
+			if(parseInt(supp_qty) <= parseInt($(this).val()))
+			{
+				$("#layerPop3 #btn-confirm").css("cursor","pointer").addClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm.gif");
+			}
+			else
+			{
+				$("#layerPop3 #btn-confirm").css("cursor","").removeClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm_1.gif");		
+			}
+		}
+
+		
+		
 		maskon();
 	});
 	//-- 선적 선택
@@ -708,12 +759,14 @@ $(document).ready(function(){
 //------------ 버튼 활성 or 비활성 ------------------------------------------------------------------
 function checkActive(){
 
+
 		var Erchkbox = false , ErchkCnt = true, FailCnt = 0;
 		var det_cnt = $("#det_cnt").val();
 		var dlvr_cnt = $("#dlvr_cnt").val();
 		var turnkey_cnt = $("#turnkey_cnt").val();
 		var chk_val=$("input:checkbox[id='delivery_chg']").is(":checked");
 		$("#layerPop3 .btn-area :eq(2)").css("cursor","pointer").addClass("btn-dialog-save").attr("src","/kor/images/btn_order_save.gif"); //저장버튼
+		$("#layerPop3 .btn-area :eq(2)").attr("save_key","on")
 		//2016-03-30 ccolle-------------------------------------------------------------------
 		if(det_cnt>1){ //-- 여러개 일때 --------------------------
 			sel_box = $("input[name^=odr_det_idx]:checked");
@@ -728,6 +781,7 @@ function checkActive(){
 				$("#layerPop3 .btn-area :eq(2)").css("cursor","pointer").addClass("btn-dialog-save").attr("src","/kor/images/btn_order_save.gif");
 			}**/
 		}
+	
 		var odr_qty=0, stock_qty=0;
 		sel_box.each(function(e){ //선택 갯수만큼 반복--------------------
 			Erchkbox = true;
@@ -951,27 +1005,46 @@ function checkActive(){
 		$(".company-info-wrap select:eq(0)").attr("disabled",false);
 		$("#ship_info").attr("disabled",false);	
 		$(".company-info-wrap select:eq(1)").attr("disabled",true);
-		$("#layerPop3 #btn-confirm").css("cursor","").removeClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm_1.gif");
+		$("#layerPop3 #btn-confirm").css("cursor","").removeClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm_1.gif");		
 	}
 
-	function add_change_sel()
-	{
-		var chk_val=$("input:checkbox[id='delivery_chg']").is(":checked");
-		//alert(chk_val);
-		if (chk_val==true)
+	function add_change_sel(val)
+	{		
+		if (val)
 		{
-			$("#delivery_addr_idx").val("0");
-			$("#ship_account_no").val("");	
-			$("#ship_info option:eq(0)").attr("selected", "selected");
-			$(".text_lang").text("");
+
 		}
 		else
 		{
-			$("#delivery_addr_idx").val("aaaa");
-			$("#ship_account_no").val("");	
-			$("#ship_info option:eq(0)").attr("selected", "selected");
-			$(".text_lang").text("");
-		}		
+			var chk_val=$("input:checkbox[id='delivery_chg']").is(":checked");
+			//alert(chk_val);
+			if (chk_val==true)
+			{
+				$("#delivery_addr_idx").val("0");
+				$("#ship_account_no").val("");	
+				$("#ship_info option:eq(0)").attr("selected", "selected");
+				$(".text_lang").text("");
+				$(".company-info-wrap input").val("");
+				$(".company-info-wrap select").val("");
+				$("#sp_addr").html("");
+				$("#delv_load").val("05_04");
+				$("#delivery_addr_idx").val("0");
+				$(".company-rank td").attr('class',"");
+				$(".company-info-wrap input,select").attr("disabled",true);
+				$(".company-info-wrap select:eq(0)").attr("disabled",false);
+				$("#ship_info").attr("disabled",false);	
+				$(".company-info-wrap select:eq(1)").attr("disabled",true);
+				$("#layerPop3 #btn-confirm").css("cursor","").removeClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm_1.gif");	
+			}
+			else
+			{
+				$("#delivery_addr_idx").val("aaaa");
+				$("#ship_account_no").val("");	
+				$("#ship_info option:eq(0)").attr("selected", "selected");
+				$(".text_lang").text("");
+			}
+		}
+				
 	}
 
 
@@ -1001,7 +1074,7 @@ function checkActive(){
 
 <div class="layer-hd">
 	<h1>발주서</h1>
-	<a href="#" class="btn-close<?=($save_yn =="Y")? " save":" odr";?>" odr_idx="<?=$odr_idx;?>" odr_status="<?=$odr_status;?>" imsi_odr_no="<?=$imsi_odr_no?>"><img src="/kor/images/btn_layer_close_w.png" alt="close"></a>
+	<a href="#" class="btn-close<?=($save_yn =="Y")? " save":" odr";?> <?=($mybox !="")? "mybox":"";?>" odr_idx="<?=$odr_idx;?>" odr_status="<?=$odr_status;?>" imsi_odr_no="<?=$imsi_odr_no?>" part_type="<?=$part_type?>"><img src="/kor/images/btn_layer_close_w.png" alt="close"></a>
 </div>
 <div class="layer-content">
 
@@ -1078,11 +1151,13 @@ function checkActive(){
 			<img src="/kor/images/btn_order_add.gif" class="btn-dialog-0501" alt="발주 추가" style="cursor:pointer">
 			<img id="btn-confirm" src="/kor/images/btn_order_confirm_1.gif" alt="발주서 확인" style="cursor:pointer"><!--class="btn-order-confirm" -->
 			
-			<?if ($save_yn =="Y"){?>
-				<img src="/kor/images/btn_order_save_1.gif" alt="발주 저장">
-				<!--img src="/kor/images/btn_delete2.gif" alt="발주 삭제" style="cursor:pointer" class="btn-close odr" imsi_odr_no="<?=$imsi_odr_no?>"-->
-			<?}else{?>
-				<img src="/kor/images/btn_order_save.gif" alt="발주 저장" style="cursor:pointer" class="btn-dialog-save"><!--class="btn-dialog-save" -->
+			<?if ($det_cnt > 1){?>
+				<?if ($save_yn =="Y"){?>
+					<img src="/kor/images/btn_order_save_1.gif" save_key="" alt="발주 저장">
+					<!--img src="/kor/images/btn_delete2.gif" alt="발주 삭제" style="cursor:pointer" class="btn-close odr" imsi_odr_no="<?=$imsi_odr_no?>"-->
+				<?}else{?>
+					<img src="/kor/images/btn_order_save.gif" alt="발주 저장" save_key="on" style="cursor:pointer" class="btn-dialog-save"><!--class="btn-dialog-save" -->
+				<?}?>
 			<?}?>
 			<img src="/kor/images/btn_delete2_1.gif" alt="삭제" id="btn_del_0504">
 		<?}?>

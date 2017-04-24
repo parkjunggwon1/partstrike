@@ -10,9 +10,20 @@ function GF_GET_PART_LIST($page, $part_type,$part_no){
 		$(".pagination a.link").click(function(){
 				showajaxParam("#f3 #partlist", "partlist", "page="+$(this).attr("num")+"&part_type="+$("#part_type").val()+"&part_no="+document.f3.srch_part_no.value);
 		});
-		$("#partlist input:text").keyup(function(){				
-			$("#partlist .save span").hide();
-			$("#partlist .save button").show();
+		$("#partlist input:text").keyup(function(){	
+			
+			var text_check = txtFieldCheck();
+						
+			if (text_check == "true")
+			{				
+				$("#partlist .save span").hide();
+				$("#partlist .save button").show();
+			}		
+			else
+			{
+				$("#partlist .save span").show();
+				$("#partlist .save button").hide();	
+			}
 		});
 		
 		$("#partlist input[name^=delchk]").click(function(e){
@@ -51,10 +62,40 @@ function doller_add(nm)
 	//$문자 검증 end
 }
 
+function txtFieldCheck(){
+// partlist안의 모든 text type 조회
+	var txtEle = $("#partlist input[type=text]");
+  	var text_chk = "";
+	for(var i = 0; i < txtEle.length; i ++){
+		if("" == $(txtEle[i]).val() || null == $(txtEle[i]).val())
+		{
+			text_chk = "false";
+			break;
+		}
+		else
+		{
+			text_chk = "true";
+		}
+	}
+	return text_chk; 
+}
+
+
+
 function change_select()
 {
-	$("#partlist .save span").hide();
-	$("#partlist .save button").show();
+	var text_check = txtFieldCheck();
+						
+	if (text_check == "true")
+	{				
+		$("#partlist .save span").hide();
+		$("#partlist .save button").show();
+	}		
+	else
+	{
+		$("#partlist .save span").show();
+		$("#partlist .save button").hide();	
+	}
 }
 
 </SCRIPT>
@@ -118,10 +159,10 @@ function change_select()
 									?>
 								<tr>
 									<td class="pd-0"><input type="hidden" name="mod_part_idx[]" value="<?=$part_idx?>"><!--<?=$ListNO?>--></td>
-									<td class="pd-l0 t-lt"><input type="text" name="mod_part_no[]" class="i-txt2 t-lt" <?=$no_modify?> maxlength="24" style="<?=$no_modify_border?>width:190px; ime-mode:disabled;" value="<?=$part_no?>"></td>
-									<td class="t-lt"><input type="text" name="mod_manufacturer[]" class="i-txt2  t-lt"  <?=$no_modify?> maxlength="20" style="<?=$no_modify_border?>width:155px; ime-mode:disabled;" value="<?=$manufacturer?>"></td>
-									<td><input type="text" name="mod_package[]" class="i-txt2  t-ct" <?=$no_modify?> style="<?=$no_modify_border?>width:76px; ime-mode:disabled;" maxlength="10" value="<?=$package?>"></td>
-									<td><input type="text" name="mod_dc[]" class="i-txt<?=$part_type=="2"?"6":"2"?>" <?=$no_modify?> style="<?=$no_modify_border?>width:45px" maxlength="4" value="<?=$dc?>"></td>
+									<td class="pd-l0 t-lt"><input type="text" name="mod_part_no[]" class="i-txt2 t-lt" <?=$no_modify?> maxlength="24" style="<?=$no_modify_border?>width:190px; ime-mode:disabled;" value="<?=$part_no?>" onkeyup='removeChar2(event)'></td>
+									<td class="t-lt"><input type="text" name="mod_manufacturer[]" class="i-txt2  t-lt"  <?=$no_modify?> maxlength="20" style="<?=$no_modify_border?>width:155px; ime-mode:disabled;" value="<?=$manufacturer?>" onkeyup='removeChar2(event)'></td>
+									<td><input type="text"  name="mod_package[]" class="i-txt2  t-ct" <?=$no_modify?> style="<?=$no_modify_border?>width:76px; ime-mode:disabled;" maxlength="10" value="<?=$package?>" onkeyup='removeChar2(event)'></td>
+									<td><input type="text" name="mod_dc[]" class="i-txt<?=$part_type=="2"?"6":"2"?> onlynum" <?=$no_modify?> style="<?=$no_modify_border?>width:45px" maxlength="4" value="<?=$dc?>" onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'></td>
 									<?if ($no_modify !="readonly"){?>
 									<td>
 										<div class="select type4" lang="en" style="width:60px">
@@ -156,9 +197,9 @@ function change_select()
 										$price_val= $price;
 									}
 									?>									
-									<td class="t-rt"><?=$test?><?if ($part_type==2){?><input type="text" name="quantity_tmp" readonly class="i-txt6 onlynum numfmt t-rt" maxlength="10" style="width:66px" value="I"><?}else{?><input type="text" name="mod_quantity[]" class="i-txt2 onlynum numfmt t-rt" maxlength="10" style="width:66px" value="<?echo number_format($quantity);?>"> <?}?></td>
+									<td class="t-rt"><?if ($part_type==2){?><input type="text" name="quantity_tmp" readonly class="i-txt6 onlynum numfmt t-rt" maxlength="10" style="width:66px" value="I"><?}else{?><input type="text" name="mod_quantity[]" class="i-txt2 onlynum numfmt t-rt" maxlength="10" style="width:66px" value="<?echo number_format($quantity);?>" onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'> <?}?></td>
 									
-									<td class="t-rt"><input type="text" name="mod_price[]" id="mod_price_<?=$i?>" onkeyup="javascript:doller_add('<?=$i?>');" class="i-txt2 onlynum numfmt t-rt price_fmt" style="width:76px" maxlength="9" value="<?if($price){echo "$".$price_val;}?>"></td>
+									<td class="t-rt"><input type="text" name="mod_price[]" id="mod_price_<?=$i?>" onkeyup="javascript:doller_add('<?=$i?>');" class="i-txt2 onlynum numfmt t-rt price_fmt" style="width:76px" maxlength="9" value="<?if($price){echo "$".$price_val;}?>" onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'></td>
 									<td class="td_c"><label class="ipt-chk chk2"><input type="checkbox" name="delchk[]" value="<?=$part_idx?>" <?if ($del_chk=="0"){echo "disabled";}?>><span></span></label></td>
 
 								</tr>	
@@ -175,14 +216,14 @@ function change_select()
 							}else{
 							?></tbody>					
 					</table>
-					<div class="btn-area save" >
+					<div class="btn-area save">
 						<span class="f-rt" style="display:none;"><img src="/kor/images/btn_stock_save_1.gif" alt="저장"></span>
 						<button type="button" class="f-rt" onclick="del();" style="display:none;"><img src="/kor/images/btn_stock_save.gif" alt="저장"></button>
 					</div>
 						  <?}?>
 
 						
-					<div class="pagination">
+					<div class="pagination" style="margin-left:100px;width:600px;">
 						<? include $_SERVER["DOCUMENT_ROOT"]."/include/paging2.php"; ?>									
 					</div>
 <?}				
@@ -557,7 +598,7 @@ function GET_MAIN_LIST($titleyn, $part_type, $page, $searchand , $area =""){   /
 				if(($already_idx and $_SESSION["MEM_IDX"] ) ){$already="1";}else{$already="";}
 				if ($part_type =="2"){
 						$dc = "NEW";
-						$quantity="";
+						$quantity="I";
 					}
 				$nation_nm = ($area == "on" || strpos($searchand,"nation")==true)?$nation."_".$dosi:$nation;
 				//지속적 공급가능 품목외에 모든 품목은 수량 0 이상인 것만 노출 - 2016-04-08 ->개수를 위에서 계산해 놨는데, 여기에서 제약하면 출력 되는 개수가 줄어들어 버림. searchand 조건에 걸었음. (2016-11-10)
@@ -571,7 +612,11 @@ function GET_MAIN_LIST($titleyn, $part_type, $page, $searchand , $area =""){   /
 					<td><?=$package?></td>
 					<td><?=$dc?></td>
 					<td><?=$rhtype?></td>
-					<td class="t-rt"><?=$quantity==0?"":number_format($quantity)?></td>
+					<?if($part_type == "2"){?>
+						<td class="t-rt"><?=$quantity?></td>
+					<?}else{?>
+						<td class="t-rt"><?=$quantity==0?"":number_format($quantity)?></td>
+					<?}?>
 					<td class="t-rt">$<?=$price_val?></td>
 					<td class="delivery t-ct">
 					<?if ($part_type=="2" || $part_type=="5" || $part_type=="6"){?>
@@ -623,7 +668,8 @@ function GET_ADDPART_LIST($part_type,$searchand){
 		<!--
 			$(document).ready(function(){
 				$('.onlynum').css("ime-mode","disabled").keypress(function(event){ 		//숫자만 입력하게.(.도 포함) 
-				  if (event.which && (event.which > 45 && event.which < 58 || event.which == 8)) {			
+					
+				  if (event.which && (event.which == 190 || event.which == 110 || event.which > 45 && event.which < 58 || event.which == 8 || event.which > 95 && event.which < 106)) {			
 				   } else { 
 				   event.preventDefault(); 
 				  } 
@@ -669,7 +715,7 @@ function GET_ADDPART_LIST($part_type,$searchand){
 				$price= replace_out($row["price"]);			
 				if ($part_type =="2"){
 						$dc = "NEW";
-						$quantity="";
+						$quantity="I";
 				}
 
 				if( ($price == (int)$price) )
@@ -681,6 +727,23 @@ function GET_ADDPART_LIST($part_type,$searchand){
 				else {			
 					$price_val = $price;
 					$price_val = $price;
+				}
+				
+				$change_part_idx = $_GET['part_idx'];
+				$change_style_price = "";
+				$change_style_qty = "";
+				if ($_GET['change'] == "price" && $change_part_idx == $part_idx)
+				{
+					$change_style_price="style='border-bottom:1px solid red'";
+				}
+				else if ($_GET['change'] == "qty" && $change_part_idx == $part_idx)
+				{
+					$change_style_qty="style='border-bottom:1px solid red'";
+				}
+				else if ($_GET['change'] == "delete" && $change_part_idx == $part_idx)
+				{
+					$change_style_qty="style='border-bottom:1px solid red'";
+					$quantity="0";
 				}
 
 				//지속적 공급가능 품목외에 모든 품목은 수량 있는 것만 노출 - 2016-04-08
@@ -694,8 +757,8 @@ function GET_ADDPART_LIST($part_type,$searchand){
 						<td><?=$package?></td>
 						<td><?=$dc?></td>
 						<td><?=$rhtype?></td>
-						<td class="t-rt"><?=$quantity=="" || $quantity==0 ?"-":number_format($quantity)?></td>
-						<td class="t-rt">$<?=$price_val?></td>
+						<td class="t-rt"><span <?=$change_style_qty?>><?=$quantity=="I"  ?"I":number_format($quantity)?></span></td>
+						<td class="t-rt"><span <?=$change_style_price?>>$<?=$price_val?></span></td>
 						<td style="width:60px;">
 							<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" name="odr_quantity"  id="odr_quantity" stock_qty="<?=$quantity;?>" value="" style="width:58px;" maxlength="10">
 							<input type="hidden" class="i-txt2 c-blue onlynum t-rt" name="quantity" value="<?=$quantity?>" maxlength="10">
@@ -704,8 +767,8 @@ function GET_ADDPART_LIST($part_type,$searchand){
 							<input type="hidden" name="price" value="<?=$price?>">
 						</td>
 						<td style="width:50px; padding-right:0px;">
-							<?if($part_type =="2" || $part_type == "5" || $part_type =="6"){?><span><img src="/kor/images/btn_ok2_1.gif" alt="확인"></span><button type="button"  class="btn-dialog-addperiodreq" style="display:none;"><img src="/kor/images/btn_ok2.gif" alt="확인"></button>
-							<?}else{?><span><img src="/kor/images/btn_add_1.gif" alt="추가"></span><button type="button" class="btn-dialog-add" style="display:none;"><img src="/kor/images/btn_add.gif" alt="추가"></button><?}?>
+							<?if($part_type =="2" || $part_type == "5" || $part_type =="6"){?><span><img src="/kor/images/btn_ok2_1.gif" alt="확인"></span><button type="button"  class="btn-dialog-addperiodreq" style="display:none;" price="<?=$price_val?>" quantity="<?=$quantity?>"><img src="/kor/images/btn_ok2.gif" alt="확인"></button>
+							<?}else{?><span><img src="/kor/images/btn_add_1.gif" alt="추가"></span><button type="button" class="btn-dialog-add" style="display:none;" price="<?=$price_val?>" quantity="<?=$quantity?>"><img src="/kor/images/btn_add.gif" alt="추가" ></button><?}?>
 						</td>
 						
 					</tr>

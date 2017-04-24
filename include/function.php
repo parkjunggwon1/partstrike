@@ -94,7 +94,30 @@ function Search_Refresh(){
 function Parent_Search_Refresh(){
 	echo "
 	<script language='javascript'>
-		parent.Refresh_MainSh();
+		var menu_type_chk = parent.getCookie('menu');
+		
+		switch (menu_type_chk) {
+			case 'order_S'    : if(parent.chkLogin()){parent.order('S'); parent.showajax('.col-right', 'side_order');}
+			           break;
+			case 'order_B'    : if(parent.chkLogin()){parent.order('B'); parent.showajax('.col-right', 'side_order');}
+			           break;
+			case 'mybox'    : if(parent.chkLogin()){parent.showajax('.col-left', 'mybox'); parent.showajax('.col-right', 'side_order');}
+			           break;
+			case 'record_S'    : if(parent.chkLogin()){parent.record('S'); parent.showajax('.col-right', 'side_order');}
+			           break;
+			case 'record_B'    : if(parent.chkLogin()){parent.record('B'); parent.showajax('.col-right', 'side_order');}
+			           break;
+			case 'remit'    : if(parent.chkLogin()){parent.remit('C'); parent.showajax('.col-right', 'side_order');}
+			           break;
+			case 'side_order'    : parent.showajax('.col-right', 'side_order');
+       					break;
+       		default    : 			parent.Refresh_MainSh();
+       					break;
+       									
+		}
+
+
+		
 	</script>
 	";
 }
@@ -737,10 +760,11 @@ Function GF_Common_SetComboList($CheckBoxName,$CommTy, $ParCode, $Depth, $IsBlan
 			$GF_Common_SetComboList .="<option value='' ".($CheckValue==null?"selected":"").">" .$BlankString ."</option>\n";
 		}
 		If ($Depth == "") {$Depth = " =1";}else{ $Depth = "=".$Depth;}		
+		$lang = "";
 		if ($lang==""){
 			$result =QRY_COMMON_LIST($CommTy ,$ParCode, $Depth);		
 		}else{
-			$result =QRY_COMMON_LIST_LANG($CommTy ,$ParCode, $Depth,$lang);		
+			$result =QRY_COMMON_LIST_LANG($CommTy ,$ParCode, $Depth);		
 		}
 		while($row = mysql_fetch_array($result)){
 			$dtl_code = replace_out($row["dtl_code"]);
@@ -756,29 +780,38 @@ Function GF_Common_SetComboList($CheckBoxName,$CommTy, $ParCode, $Depth, $IsBlan
 }
 
 
-Function GF_Common_SetComboListSrch($CheckBoxName,$CommTy, $ParCode, $Depth, $IsBlank, $BlankString, $CheckValue, $StyleOption,$srch, $lang=""){		
-		$GF_Common_SetComboList .="<select ".$StyleOption." name='".$CheckBoxName."' id='".$CheckBoxName."'>\n";
-		If($IsBlank=="True"){			
-			$GF_Common_SetComboList .="<option value='' ".($CheckValue==null?"selected":"").">" .$BlankString ."</option>\n";
-		}
-		If ($Depth == "") {$Depth = " =1";}else{ $Depth = "=".$Depth;}
+Function GF_Common_SetComboListSrch($CheckBoxName,$CommTy, $ParCode, $Depth, $IsBlank, $BlankString, $CheckValue, $StyleOption,$srch, $lang=""){
 		
-		if ($lang==""){
-			$result =QRY_COMMON_LIST_SRCH($CommTy ,$ParCode, $Depth , $srch);		
-		}else{
-			$result =QRY_COMMON_LIST_SRCH_LANG($CommTy ,$ParCode, $Depth,$srch, $lang);		
+		if ($StyleOption=="disabled")
+		{
+			$GF_Common_SetComboList ="<input type='hidden' name='".$CheckBoxName."' value='".$CheckValue."'";
 		}
-		while($row = mysql_fetch_array($result)){
-			$dtl_code = replace_out($row["dtl_code"]);
-			$code_desc = replace_out($row["code_desc"]);
-			$code_desc_en = replace_out($row["code_desc_en"]);
-			If(strcmp($CheckValue,$dtl_code)==0){
-				$GF_Common_SetComboList .="<option value='".$dtl_code."' selected>".$code_desc."</option>\n";
-			}else{
-				$GF_Common_SetComboList .="<option value='".$dtl_code."'>".$code_desc."</option>\n";
+		else
+		{
+			$GF_Common_SetComboList ="<select ".$StyleOption." name='".$CheckBoxName."' id='".$CheckBoxName."'>\n";
+			If($IsBlank=="True"){			
+				$GF_Common_SetComboList .="<option value='' ".($CheckValue==null?"selected":"").">" .$BlankString ."</option>\n";
 			}
+			If ($Depth == "") {$Depth = " =1";}else{ $Depth = "=".$Depth;}
+			
+			if ($lang==""){
+				$result =QRY_COMMON_LIST_SRCH($CommTy ,$ParCode, $Depth , $srch);		
+			}else{
+				$result =QRY_COMMON_LIST_SRCH_LANG($CommTy ,$ParCode, $Depth,$srch, $lang);		
+			}
+			while($row = mysql_fetch_array($result)){
+				$dtl_code = replace_out($row["dtl_code"]);
+				$code_desc = replace_out($row["code_desc"]);
+				$code_desc_en = replace_out($row["code_desc_en"]);
+				If(strcmp($CheckValue,$dtl_code)==0){
+					$GF_Common_SetComboList .="<option value='".$dtl_code."' selected>".$code_desc."</option>\n";
+				}else{
+					$GF_Common_SetComboList .="<option value='".$dtl_code."'>".$code_desc."</option>\n";
+				}
+			}
+			$GF_Common_SetComboList .="</select>\n";	
 		}
-		$GF_Common_SetComboList .="</select>\n";	
+		
 		return $GF_Common_SetComboList;
 }
 
@@ -875,7 +908,7 @@ Function GF_warea_SetComboList($CheckBoxName,$ParCode, $Depth, $IsBlank, $BlankS
 // 작 성 일 시 :
 // 수 정 이 력 : 2013-10-01 (정선진)
 //-------------------------------------------------------------------------------
-Function GF_Common_GetSingleList($CommTy, $CheckValue){
+Function GF_Common_GetSingleList($CommTy, $CheckValue){	
 	If ($CheckValue ==""){
 			$GF_Common_GetSingleList = "";
 	}else{
@@ -1152,27 +1185,45 @@ function get_odr_det_no($ty){  //agreement no
 }
 
 
-function get_auto_no($ty, $table, $column){  // 통합 no 생성
+function get_auto_no($ty, $table, $column, $update=""){  // 통합 no 생성
 	global $odr_idx;
+	global $part_type;
 
 	if ($ty == "TFI"){
 		//$addCl = " or testB_invoice like '".$ty.date("y")."%'"; //error에의한 주석처리.아래도 수정 2016-10-16
-		$addCl = " or invoice_no like '".$ty.date("y")."%'";
+		//$addCl = " or invoice_no like '".$ty.date("y")."%'";
 	}
 	//2016-04-18 : odr 테이블을 경우 odr_status=99 카운트에서 제외
 	if($table == 'odr'){
 		//$cnt = QRY_CNT($table,"and odr_status NOT IN(8,99) AND ($column like '".$ty.date("y")."%'".$addCl.")"); //JSJ : 수량으로 되어있어서 번호 늘지 않는다.
 		//cnt 아닌 최대번호 가져오자. 2016-04-19
 		$cut_bit = strlen($ty) + 6; //ty 문자열 길이에따라 자르는 시작 위치 바뀌어야 한다.
+
 		$odr_no_cnt = QRY_CNT("odr","and ($column like '".$ty.date("y")."%'".$addCl.") and odr_idx = '".$odr_idx."' ");
 		$cnt = get_any("odr","IFNULL(CAST(SUBSTR(MAX($column),$cut_bit,5) AS UNSIGNED),0)", "odr_status NOT IN(8,99) AND ($column like '".$ty.date("y")."%'".$addCl.")");
 		if ($odr_no_cnt)
-		{
-			$result_value = $ty.date("y")."-PS".str_pad(fmod($cnt,99999),5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
+		{	
+			if ($update=="Y")
+			{
+				$result_value = $ty.date("y")."-PS".str_pad(fmod($cnt,99999)+1,5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
+			}
+			else
+			{
+				$result_value = $ty.date("y")."-PS".str_pad(fmod($cnt,99999),5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
+			}
+			
 		}
 		else
-		{
-			$result_value = $ty.date("y")."-PS".str_pad(fmod($cnt,99999)+1,5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
+		{	
+			if ($part_type==2)
+			{				
+				$result_value = $ty.date("y")."-PS".str_pad(fmod($cnt,99999)+2,5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
+			}
+			else
+			{
+				$result_value = $ty.date("y")."-PS".str_pad(fmod($cnt,99999)+1,5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
+			}			
+			
 		}
 		
 	}else{
@@ -1180,6 +1231,7 @@ function get_auto_no($ty, $table, $column){  // 통합 no 생성
 		$result_value = $ty.date("y")."-PS".str_pad(fmod($cnt,99999)+1,5,"0",STR_PAD_LEFT).chr(65+floor($cnt/99999));
 	}
 	return $result_value;
+
 }
 
 function get_memfee_no($ty, $table, $column){     //memfee no
@@ -1299,7 +1351,7 @@ function GET_SAVE_CNT(){
 function SumMyBank($mem_idx, $rel_idx){
 	$com_idx = ($rel_idx ==0 ? $mem_idx : $rel_idx);
 	
-	$pay = get_any("mybank" ,"sum( charge_amt )", "(mem_idx =$com_idx or rel_idx =$com_idx) and (charge_method = 'MyBank' or invoice_no like 'CMBI%')");
+	$pay = get_any("mybank" ,"TRUNCATE(sum( charge_amt ),4)", "(mem_idx =$com_idx or rel_idx =$com_idx) and (charge_method = 'MyBank' or invoice_no like 'CMBI%')");
 	return number_format($pay,2);
 }
 
@@ -1307,7 +1359,7 @@ function SumMyBank($mem_idx, $rel_idx){
 function SumMyBank2($mem_idx, $rel_idx, $ty=2){
 	$com_idx = ($rel_idx ==0 ? $mem_idx : $rel_idx);
 
-	$pay = get_any("mybank" ,"sum( charge_amt )", "(mem_idx =$com_idx or rel_idx =$com_idx) and mybank_yn = 'Y'");
+	$pay = get_any("mybank" ,"TRUNCATE(sum( charge_amt ),4)", "(mem_idx =$com_idx or rel_idx =$com_idx) and mybank_yn = 'Y'");
 	if($ty>0){
 		$pay_val = round_down($pay,4);
 		$pay_val = number_format($pay,4);
@@ -1320,7 +1372,8 @@ function SumMyBank2($mem_idx, $rel_idx, $ty=2){
 function SumBankHold($mem_idx, $rel_idx, $ty=2){
 	$com_idx = ($rel_idx ==0 ? $mem_idx : $rel_idx);
 
-	$pay = get_any("mybank" ,"sum(mybank_hold)", "(mem_idx =$com_idx or rel_idx =$com_idx) and mybank_yn = 'Y'");
+	$pay = get_any("mybank" ,"TRUNCATE(sum(mybank_hold),4)", "(mem_idx =$com_idx or rel_idx =$com_idx) and mybank_yn = 'Y'");
+
 	if($ty>0){
 		$pay_val = round_down($pay,4);
 		$pay_val = number_format($pay,4);
@@ -1331,8 +1384,10 @@ function SumBankHold($mem_idx, $rel_idx, $ty=2){
 }
 
 function GetDeposit($mem_idx, $rel_idx, $charge_type){
+	
 	$com_idx = ($rel_idx ==0 ? $mem_idx : $rel_idx);
-	$pay = get_any("mybank" ,"sum( charge_amt )", "(mem_idx =$com_idx or rel_idx =$com_idx) and charge_type in ($charge_type)");
+	$pay = get_any("mybank" ,"TRUNCATE(sum( charge_amt ),4)", "(mem_idx =$com_idx or rel_idx =$com_idx) and charge_type in ($charge_type) and mybank_yn = 'N'");
+	
 	return number_format(round_down(abs($pay),4),4);
 }
 
@@ -1407,6 +1462,10 @@ function get_odr_history2($odr_idx, $fields='*'){
 
 function get_ship($ship_idx, $fields='*'){
 		return sql_fetch("select $fields from ship where ship_idx = trim('$ship_idx')");
+}
+
+function get_ship_temp($odr_idx, $fields='*'){
+		return sql_fetch("select $fields from ship_temp where odr_idx = trim('$odr_idx')");
 }
 
 function get_fty_history($fty_history_idx, $fields='*'){
@@ -1549,7 +1608,7 @@ function GET_WhatsNew($ty,$viewty){
 				$tb_type= replace_out($row["tb_type"]);
 				if($viewty=="whatsnew"){
 				?>
-				<a href="javascript:goMenuJump('<?=$status?>:<?=$sell_mem_idx?>:<?=$tb_type?>:Y');"><img src="/kor/images/btn_new_new.gif" alt="What’s New"></a>	
+				<a href="javascript:goMenuJump('<?=$status?>:<?=$sell_mem_idx?>:<?=$tb_type?>:Y:1:M:side_order');"><img src="/kor/images/btn_new_new.gif" alt="What’s New"></a>	
 			<?
 				}else{
 					echo $status.":".$sell_mem_idx.":".$tb_type.":Y";
@@ -1565,11 +1624,10 @@ function GET_WhatsNew($ty,$viewty){
 
 
 
-function openSheet($status, $etc1, $odr_idx,$etc_change){
-	
-
+function openSheet($status, $etc1, $odr_idx,$etc_change,$odr_history_idx=""){
+		//echo $status."<BR>";
 	if ($etc_change)
-	{
+	{				
 
 		switch ($status) {
 		   case "2":  //발주서
@@ -1579,16 +1637,24 @@ function openSheet($status, $etc1, $odr_idx,$etc_change){
 		   case "3":  //수정발주서
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"12_07\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>"; //JSJ
 			 $return_val = "<a style='color:#00759e;text-decoration:underline;' href='javascript:openCommLayer(\"layer5\",\"12_07\",\"?sheets_no=".$etc1."&odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>"; //2016-04-18
-			 break;
+			 break;			
 			case "5":  //결제완료
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"12_07\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>"; //JSJ
-			 $return_val = "<a style='color:#00759e;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"payment_ok\",\"?odr_idx=".$odr_idx."\")'>".$etc1."</a>"; //2016-04-18
+			 $return_val = "<a style='color:#00759e;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"payment_ok\",\"?odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."\")'>".$etc1."</a>"; //2016-04-18
+			 break;
+			case "10":  //수량부족
+			 $etc2 = get_any("odr_history", "etc2", "odr_history_idx = $odr_history_idx");
+			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"12_07\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>"; //JSJ
+			 $return_val = "<a style='color:#00759e;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"alert_qty_minus\",\"?odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."\")'>".$etc1."-".$etc2."</a>"; //2016-04-18
 			 break;
 		   case "18": //송장
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>";  //JSJ
-			 $return_val = "<a style='color:#00759e !important;text-decoration:underline;' href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?sheets_no=".$etc1."&odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>";
+			 $return_val = "<a style='color:#00759e !important;text-decoration:underline;' href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?sheets_no=".$etc1."&odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."&forread=Y\")'>".$etc1."</a>";
 			 break;
+		   case "11": //반품선적완료
 		   case "21": //선적
+		   case "22": //반품방법
+		   case "23": //추가선적
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>";  //JSJ
 			
 			if($etc1 == "DHL" || $etc1 == "UPS" || $etc1 == "Fedex" || $etc1 == "TNT")
@@ -1600,8 +1666,14 @@ function openSheet($status, $etc1, $odr_idx,$etc_change){
 				$change_val = $etc1;
 			}
 			
-			 $return_val = "<a style='color:#00759e;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"alert_invoice\",\"?odr_idx=".$odr_idx."\")'>".$change_val."</a>";
+			 $return_val = "<a style='color:#00759e;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"alert_invoice\",\"?odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."\")'>".$change_val."</a>";
 			 
+			 break;
+			case "24":  //환불
+			 $odr_det_idx = get_any("odr_history", "odr_det_idx", "odr_history_idx = $odr_history_idx");
+			 $new_etc1 = get_any("odr_det", "refund_invoice", "odr_det_idx = $odr_det_idx");
+
+			 $return_val = "<a style='color:#00759e;text-decoration:underline;' href='javascript:openCommLayer(\"layer5\",\"19_1_04\",\"?odr_det_idx=".$odr_det_idx."&read_chk=Y&odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."&forread=Y\")'>".$new_etc1."</a>"; //2016-04-18
 			 break;
 			default:
 				$return_val = $etc1;
@@ -1610,6 +1682,7 @@ function openSheet($status, $etc1, $odr_idx,$etc_change){
 	}
 	else
 	{
+
 		switch ($status) {		
 			
 		   case 2:  //발주서
@@ -1620,16 +1693,19 @@ function openSheet($status, $etc1, $odr_idx,$etc_change){
 		   case "3":  //수정발주서
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"12_07\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>"; //JSJ
 			 $return_val = "<a style='color:#000 !important;text-decoration:underline;' href='javascript:openCommLayer(\"layer5\",\"12_07\",\"?sheets_no=".$etc1."&odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>"; //2016-04-18
-			 break;
+			 break;			
 			case "5":  //결제완료
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"12_07\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>"; //JSJ
-			 $return_val = "<a style='color:#000;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"payment_ok\",\"?odr_idx=".$odr_idx."\")'>".$etc1."</a>"; //2016-04-18
+			 $return_val = "<a style='color:#000;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"payment_ok\",\"?odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."\")'>".$etc1."</a>"; //2016-04-18
 			 break;
 		   case "18": //송장		   
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>";  //JSJ
-			 $return_val = "<a style='color:#000;text-decoration:underline;' href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?sheets_no=".$etc1."&odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>";
+			 $return_val = "<a style='color:#000;text-decoration:underline;' href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?sheets_no=".$etc1."&odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."&forread=Y\")'>".$etc1."</a>";
 			 break;
+			case "11": //반품선적완료
 		   case "21": //선적
+		   case "22": //반품방법
+		   case "23": //추가선적		 
 			 //$return_val = "<a href='javascript:openCommLayer(\"layer5\",\"30_09\",\"?odr_idx=".$odr_idx."&forread=Y\")'>".$etc1."</a>";  //JSJ
 			 if($etc1 == "DHL" || $etc1 == "UPS" || $etc1 == "Fedex" || $etc1 == "TNT")
 			{			
@@ -1640,7 +1716,13 @@ function openSheet($status, $etc1, $odr_idx,$etc_change){
 				$change_val = $etc1;
 			}
 
-			 $return_val = "<a style='color:#000 !important;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"alert_invoice\",\"?odr_idx=".$odr_idx."\")'>".$change_val."</a>";
+			 $return_val = "<a style='color:#000 !important;text-decoration:underline;' href='javascript:openCommLayer(\"layer6\",\"alert_invoice\",\"?odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."\")'>".$change_val."</a>";
+			 break;
+			case "24":  //환불
+			 $odr_det_idx = get_any("odr_history", "odr_det_idx", "odr_history_idx = $odr_history_idx");
+			 $new_etc1 = get_any("odr_det", "refund_invoice", "odr_det_idx = $odr_det_idx");
+
+			 $return_val = "<a style='color:#000 !important;text-decoration:underline;' href='javascript:openCommLayer(\"layer5\",\"19_1_04\",\"?odr_det_idx=".$odr_det_idx."&odr_idx=".$odr_idx."&odr_history_idx=".$odr_history_idx."&forread=Y\")'>".$new_etc1."</a>"; //2016-04-18
 			 break;
 			default:
 
@@ -1721,6 +1803,11 @@ function round_down($val,$d)
 	$re_price = str_replace("$","",$val);
 
 	
+	if (str_replace("-","",$val)=="-0.0000")
+	{
+		$val = "0.0000";
+	}
+	
 	if (str_replace("$","",$val)==(int)str_replace("$","",$re_price))
 	{
 		
@@ -1755,8 +1842,15 @@ function round_down($val,$d)
 			if ($d==4)
 			{
 
+				if (strlen($price)<=4)
+				{
+					$price = "0".$price;
+				}
+
 				$price_sosu = substr($val_explode[1],0,4);			
 				$price = substr_replace($price,'.',-4,0);
+
+				
 			}
 			else
 			{
@@ -1792,5 +1886,9 @@ function Update_Invoce_Data($odr_idx){
 				WHERE odr_idx = $odr_idx AND part_idx=$part_idx";
 		$result=mysql_query($sql);
 	}
+}
+
+function get_odr_det_temp($odr_idx, $fields='*'){
+		return sql_fetch("select $fields from odr_det_temp where odr_det_idx = trim('$odr_idx')");
 }
 ?>

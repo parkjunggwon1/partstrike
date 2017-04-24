@@ -14,7 +14,8 @@ if ($alert =="sessionend"){
 	$alert_msg = "세션이 종료되었습니다. 다시 로그인이 필요합니다.";
 }
 
-$sql = "select * from odr left join odr_history on odr_history.odr_idx = odr.odr_idx and `status` = 21 where odr.odr_idx = '".$odr_idx."'";
+$sql = "select * from odr left join odr_history on odr_history.odr_idx = odr.odr_idx  where odr.odr_idx = '".$odr_idx."' and odr_history_idx='".$odr_history_idx."'";
+
 $conn = dbconn();	
 $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());	
 while($row = mysql_fetch_array($result)){
@@ -68,19 +69,45 @@ else
 
 ?>	
 
-<div class="layer-content" style="padding:0;width:100%;padding-left: 140px;padding-top: 30px;">	
-	<a href="#" class="btn-close" style="position: absolute;right: 10px;top: 1px;padding: 5px;text-decoration:underline;"><img src="/kor/images/btn_layer_close.png" alt="close"></a>
-	<?if ($sell_nation_idx != $ship_nation){?>
-	<span>Commercial Invoice : <a href="#" class="btn-view-sheet-3011" for_readonly="Y" style="color:#00759e;text-decoration:underline;"><?=$invoice_val?></a></span><br>
-	<span>Packing List : <a href="#" class="btn-view-sheet-3011" for_readonly="P" style="color:#00759e;text-decoration:underline;"><?=$odr_val?></a></span><br>
-	<?}?>
+<div class="layer-content" style="padding:0;width:100%;padding-left: 80px;padding-top: 30px;">	
+	<a href="#" class="btn-close" style="position: absolute;right: 10px;top: 1px;padding: 5px;text-decoration:underline;"><img src="/kor/images/btn_layer_close.png" alt="close"></a>	
 	<?
 	if ($etc2=="DHL" || $etc2=="UPS" || $etc2=="Fedex" || $etc2=="TNT")
 	{	
 	?>	
-		<span><img src="/kor/images/icon_<?=strtolower($etc2)?>.gif" height="15">-<a href="#" style="color:#00759e;cursor: default;"><?=$etc1?></a></span>		
+		<span><img src="/kor/images/icon_<?=strtolower($etc2)?>.gif" height="15"> - <a href="#" style="color:#00759e;cursor: default;"><?=$etc1?></a></span><br><br>		
+		<?
+		$result =QRY_ODR_DET_LIST(0,"and odr_idx=".$odr_idx."",0,"","asc");
+		while($row = mysql_fetch_array($result))
+		{
+			if ($row["file1"])
+			{
+		?>
+				<div style="color:#00759e;cursor: default;"><?=$row["part_no"]?> - 
+		<?					
+				for ($i = 1;$i <= 3; $i++ ){
+					$file = replace_out($row["file$i"]);		
+
+				if ($file){
+		?>
+				<span><img <?=get_noimg_photo($file_path, $file, "/kor/images/file_pt.gif")?> height="15"></span>
+				
+				
+		<?
+				}
+			}
+		?>
+		</div> 
+		<?
+			}//파일 있는지 확인
+		}
+		?>	
 	<?}else{?>
-		<span><?=$etc2?>-<a href="#" style="color:#00759e;cursor: default;"><?=$etc1?></a></span>
+		<span><span class='c-red'><?=$etc2?></span> - <a href="#" style="color:#00759e;cursor: default;"><?=$etc1?></a></span>
+	<?}?>
+	<?if ($sell_nation_idx != $ship_nation){?>
+	<span>Commercial Invoice : <a href="#" class="btn-view-sheet-3011" for_readonly="Y" style="color:#00759e;text-decoration:underline;"><?=$invoice_val?></a></span><br>
+	<span>Packing List : <a href="#" class="btn-view-sheet-3011" for_readonly="P" style="color:#00759e;text-decoration:underline;"><?=$odr_val?></a></span><br>
 	<?}?>
 	
 	<!--<span><?=$etc2?>-<a href="#" style="color:#00759e;text-decoration:underline;"><?=$etc1?></a></span>-->

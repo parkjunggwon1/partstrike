@@ -18,7 +18,7 @@ $(document).ready(function(){
 		<li class="current"><a href="#" class="view-sell"><img src="/kor/images/layer_tab_sell_on.png" alt="판매"></a></li>
 		<li><a href="#" class="view-buy"><img src="/kor/images/layer_tab_buy_off.png" alt="구매"></a></li>
 	</ul>
-	<a href="#" class="btn-close"><img src="/kor/images/btn_layer_close_w.png" alt="close"></a>
+	<a href="#" class="btn-close refresh_chk"><img src="/kor/images/btn_layer_close_w.png" alt="close"></a>
 </div>
 <!-- //layer-tab -->
 

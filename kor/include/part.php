@@ -109,7 +109,7 @@
 		var f =  document.f2;
 		//var f =  $("#f2");
 		//if (f.part_no.value!="" &&f.manufacturer.value!="" &&f.package.value!="" &&f.dc.value!="" &&f.price.value!="")
-		if (f.part_no.value != "" && f.manufacturer.value != "" && f.dc.value != "" && f.price.value != "" && f.price.value!=0)
+		if (f.part_no.value != "" && f.manufacturer.value != "" && f.package.value != "" && f.dc.value != "" && f.price.value != "" && f.price.value!=0)
 		{
 			$("#f2 .reg span").hide();
 			$("#f2 .reg button").show();
@@ -125,6 +125,14 @@
 			
 		}
 	}
+
+	$('.onlynum9').css("ime-mode","disabled").keypress(function(event){ 		//숫자만 입력하게.(.도 포함) 
+		if (event.which && (event.which == 190 || event.which == 110 || event.which > 45 && event.which < 58 || event.which == 8 || event.which > 95 && event.which < 106)) {			
+		} else { 
+			event.preventDefault(); 
+		} 
+	});
+	
 //-->
 </SCRIPT>
 
@@ -143,7 +151,7 @@
 			</section>
 			
 			<section id="stockManageTop" class="box-type1">
-				<form name="f2" id="f2" method="post">
+				<form name="f2" id="f2" method="post" onsubmit="return false;">
 				<input type="hidden" name="typ" value="write">
 				<input type="hidden" name="part_type" value="<?=$part_type?>">
 				<div class="box-top bg2">
@@ -164,24 +172,24 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td class="pd-0 t-lt"><input type="text" name= "part_no" class="i-txt2 t-lt" style="width:190px;ime-mode:disabled" maxlength="24" value=""></td>
-							<td class="t-lt"><input type="text" name= "manufacturer" class="i-txt2 t-lt" style="width:155px; ime-mode:disabled" maxlength="20" value=""></td>
-							<td><input type="text" name= "package" class="i-txt2 w-50 t-ct" style="width:76px; ime-mode:disabled" maxlength="10" value=""></td>
-							<td><input type="text" name= "dc" class="i-txt<?=$part_type=="2"?"6":"2"?> onlynum" maxlength="4" style="width:45px" value="<?if ($part_type=="2"){?>NEW <?}?>"></td>
+							<td class="pd-0 t-lt"><input type="text" name= "part_no" class="i-txt2 t-lt" style="width:190px;ime-mode:disabled" maxlength="24" value="" onkeyup='removeChar2(event)'></td>
+							<td class="t-lt"><input type="text" name= "manufacturer" class="i-txt2 t-lt" style="width:155px; ime-mode:disabled" maxlength="20" value="" onkeyup='removeChar2(event)'></td>
+							<td><input type="text" name= "package" class="i-txt2 w-50 t-ct" style="width:76px; ime-mode:disabled" maxlength="10" value="" onkeyup='removeChar2(event)'></td>
+							<td><input type="text" name= "dc" class="i-txt<?=$part_type=="2"?"6":"2"?> onlynum" maxlength="4" style="width:45px" value="<?if ($part_type=="2"){?>NEW <?}?>" onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'></td>
 							<td>
 								<div class="select type4" lang="en" style="width:60px">
-									<label>None</label>
+									<label>None</label> 
 									<select id="rhtype" name="rhtype">
-										<option lang="en" value="">None</option>
+										<option lang="en" value="None">None</option>
 										<option lang="en" value="RoHS">RoHS</option>
 										<option lang="en" value="HF">HF</option>
 									</select>
 								</div>
 							</td>
 							
-							<td class="t-rt"><?if ($part_type==2){?><input type="text" class="i-txt6 onlynum numfmt t-rt" name="quantity_tmp" style="width:66px" maxlength="11" value="I"><?}else{?><input type="text" class="i-txt2 onlynum numfmt t-rt" name="quantity" style="width:66px" maxlength="10" value=""><?}?></td>
+							<td class="t-rt"><?if ($part_type==2){?><input type="text" class="i-txt6 onlynum numfmt t-rt" name="quantity_tmp" style="width:66px" maxlength="11" value="I"><?}else{?><input type="text" class="i-txt2 onlynum numfmt t-rt" name="quantity" style="width:66px" maxlength="10" value="" onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'><?}?></td>
 							
-							<td class="t-rt"><input type="text" class="i-txt2 onlynum numfmt t-rt" name="price" style="width:76px" maxlength="9" value=""></td>
+							<td class="t-rt"><input type="text" class="i-txt2 onlynum numfmt t-rt" name="price" style="width:76px" maxlength="9" value="" onkeydown='return onlyNumber(event)' onkeyup='removeChar(event)'></td>
 							<td class="pd-0 reg">
 							<span><img src="/kor/images/btn_form_apply_1.gif" alt="등록"></span>
 							<button style="display:none;" type="button" onclick="check();"><img src="/kor/images/btn_form_apply.gif" alt="등록"></button></td>

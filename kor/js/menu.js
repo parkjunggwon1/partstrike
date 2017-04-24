@@ -84,12 +84,13 @@ function joinus() {
 }
 //--- 오른쪽 section id="orderDraft" 새로고침(전체 새로고침 없이) 2016-03-30
 function Refresh_Right(){
-	$.ajax({
+	/*$.ajax({
 		url:"/kor/include/aj_side_order.php",
 		success: function (data) {
 			$("#orderDraft").html(data);
 		}
-	});
+	});*/
+	showajax(".col-right", "side_order");
 }
 //--- 배송지변경 -> 저장 ---------------------------------------------------------------
 function delivery_save(){
@@ -125,6 +126,7 @@ function delivery_save(){
 
 
 function editmyinfo(rel_idx) {	
+	deleteCookie('menu');
 	if (rel_idx =="")
 	{
 		alert_msg("로그인 후 이용하여 주시기 바랍니다.");
@@ -158,6 +160,7 @@ function delivery_load(idx,loadpage,odr_idx){
 }
 
 function partreg(part) {	
+	deleteCookie('menu');
 	if (mem_idx =="")
 	{
 		alert_msg("로그인 후 이용하여 주시기 바랍니다.");
@@ -182,6 +185,7 @@ function right_side(){
 
 
 function agreement() {	
+	deleteCookie('menu');
 	showajax(".col-left", "terms");
 	//showajax(".col-left", "agreement");
 //	showajax(".col-right", mem_idx==""?"side":"side_order");
@@ -189,12 +193,14 @@ function agreement() {
 }
 
 function guide() {	
+	deleteCookie('menu');
 	showajax(".col-left", "guide");
 //	showajax(".col-right", mem_idx==""?"side":"side_order");
 	setMenu(6, 3);
 }
 
 function memfee(){
+	deleteCookie('menu');
 	if (mem_idx =="")
 	{
 		alert_msg("로그인 후 이용하여 주시기 바랍니다.");
@@ -208,6 +214,7 @@ function memfee(){
 }
 
 function board(mode) {	
+	deleteCookie('menu');
 	if (mode!="AA001" &&mem_idx =="")
 	{
 		alert_msg("로그인 후 이용하여 주시기 바랍니다.");
@@ -247,11 +254,13 @@ function mybox(){
 }
 
 function remit(ty){
+	setCookie("menu","remit");
 	showajaxParam(".col-left", "remit", "rel_idx="+ty);
 	//-->showajax(".col-right", "side_order");
 	setMenu(2, 3);
 }
 function agent(){
+	deleteCookie('menu');
 	showajax(".col-left", "agent");
 	//showajax(".col-right", mem_idx==""?"side":"side_order");
 	setMenu(5, 2);
@@ -263,11 +272,13 @@ function agentview(idx,nat,strsearch) {
 }
 
 function lab(){
+	deleteCookie('menu');
 	showajax(".col-left", "lab");
 //	showajax(".col-right", mem_idx==""?"side":"side_order");
 	setMenu(5, 3);
 }
 function contact(){
+	deleteCookie('menu');
 	showajax(".col-left", "contact");	
 //	showajax(".col-right", mem_idx==""?"side":"side_order");
 	setMenu(6, 5);
@@ -287,6 +298,9 @@ function companyback(rel_idx){
 }
 
 function record(odr_type){
+		
+	setCookie("menu","record_" +odr_type);	
+
 	showajaxParam(".col-left", "record", "odr_type="+odr_type);
 	//-->showajax(".col-right", "side_order");
 	setMenu(2, odr_type=="S"?"1":"2");
@@ -334,6 +348,7 @@ function layer_company_det(rel_idx){
 }
 
 function turnkeyreg() {	
+	deleteCookie('menu');
 	if (mem_idx =="")
 	{
 		alert_msg("로그인 후 이용하여 주시기 바랍니다.");
@@ -366,9 +381,41 @@ function ready(){
 		 
 	 $('.numfmt').css("ime-mode","disabled").keyup( function(event){   // 숫자 입력 하면 ,로 단위 끊어 표시하게.
 			check_value(this);
-	 });
+	 });	
 }
 
+function onlyNumber(event){
+	event = event || window.event;
+	var keyID = (event.which) ? event.which : event.keyCode;
+	
+	if ( (keyID >= 48 && keyID <= 57) || (keyID >= 96 && keyID <= 105) || keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39 || keyID == 110 || keyID == 190 ) 
+		return;
+	else
+		return false;
+}
+function removeChar(event) {
+	event = event || window.event;
+	var keyID = (event.which) ? event.which : event.keyCode;		
+
+	if ( keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39 || keyID == 110 || keyID == 190 ) 
+
+		return;
+	else
+
+		event.target.value = event.target.value.replace(/[^(0-9)|\$|\,|\.]/gi, '');
+}
+
+function removeChar2(event) {
+	event = event || window.event;
+	var keyID = (event.which) ? event.which : event.keyCode;		
+
+	if ( keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39 || keyID == 10 || keyID == 190 ) 
+
+		return;
+	else
+
+		event.target.value = event.target.value.replace(/[\ㄱ-ㅎㅏ-ㅣ가-힣]/g, '');
+}
 
 function saveExtraInfo(formNm, ProcUrl){
 		var formData = $("#"+formNm).serialize(); 
@@ -405,6 +452,38 @@ function goMenuJump(data){
 // splData[0] : status splData[1] : sellmem_idx splData[2] : (odr or fty ) splData[3] : validyn (72시간 적용), splData[4] : paging
 	var splData = data.split(":");		
 	var page="1";
+	var get_cookie = getCookie('menu');
+
+	if (splData[5] !="M" && splData[6])
+	{
+
+		var menu_chk = splData[5];
+		var menu_type = splData[6];
+
+		if (menu_type=="side_order")
+		{
+			setCookie("menu","side_order");
+		}
+		else
+		{
+			setCookie("menu",menu_type + "_" +menu_chk);
+		}
+		
+	}	
+	else
+	{
+		if (get_cookie=="remit" || get_cookie=="record_S" || get_cookie=="record_B")
+		{
+
+		}
+		else
+		{
+			setCookie("menu","side_order");
+		}
+		
+	}
+	
+
 	if(typeof(splData[4])!="undefined"){
 		page=splData[4];
 	}
@@ -579,6 +658,10 @@ function goMenuJump(data){
 	case("9"): //거절(구매자탭)
 		openCommLayer('layer','18R_06','?mn=0'+splData[0]+'&status='+splData[0]+'&page='+page+'&validyn='+splData[3]);
 	break; 
+	case("32"): //수락(구매자 탭)
+		openCommLayer("layer","1304_accept",'?mn=32&status='+splData[0]+'&page='+page+'&validyn='+splData[3]);
+		
+	break; 
 	default:					
 	break;
 	} 
@@ -719,4 +802,30 @@ function pay_pop(form) {
   form.action="/paypal/paypopup.php";
   form.target = "Win" ;
   form.submit();
+}
+
+function setCookie(cookieName, value, exdays){
+    var exdate = new Date();
+    exdate.setDate(exdate.getDate() + exdays);
+    var cookieValue = escape(value) + ((exdays==null) ? "" : "; expires=" + exdate.toGMTString());
+    document.cookie = cookieName + "=" + cookieValue;
+}
+
+function getCookie(cookieName) {
+    cookieName = cookieName + '=';
+    var cookieData = document.cookie;
+    var start = cookieData.indexOf(cookieName);
+    var cookieValue = '';
+    if(start != -1){
+        start += cookieName.length;
+        var end = cookieData.indexOf(';', start);
+        if(end == -1)end = cookieData.length;
+        cookieValue = cookieData.substring(start, end);
+    }
+    return unescape(cookieValue);
+}
+function deleteCookie(cookieName){
+    var expireDate = new Date();
+    expireDate.setDate(expireDate.getDate() - 1);
+    document.cookie = cookieName + "= " + "; expires=" + expireDate.toGMTString();
 }

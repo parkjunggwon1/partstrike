@@ -25,7 +25,30 @@ if ($alert =="sessionend"){
 							openCommLayer("layer3","18_2_12","?odr_idx=<?=$odr_idx?>&odr_det_idx=<?=$odr_det_idx?>&tot_amt=<?=$tot_amt?>");
 						<?}else{?>
 							//alert_msg("결제가 완료되었습니다.");
-							location.href='/kor/';						
+							var menu_type_chk = getCookie('menu');
+
+							closeCommLayer("layer6");	
+							closeCommLayer("layer5");	//invoic 닫고
+							closeCommLayer("layer4");	//송장(3008) 닫고
+							closeCommLayer("layer");
+
+							
+							switch (menu_type_chk) {
+								case "order_S"    : if(chkLogin()){order('S'); showajax(".col-right", "side_order");}
+								           break;
+								case "order_B"    : if(chkLogin()){order('B'); showajax(".col-right", "side_order");}
+								           break;
+								case "mybox"    : if(chkLogin()){showajax(".col-left", "mybox"); showajax(".col-right", "side_order");}
+								           break;
+								case "record_S"    : if(chkLogin()){record('S'); showajax(".col-right", "side_order");}
+								           break;
+								case "record_B"    : if(chkLogin()){record('B'); showajax(".col-right", "side_order");}
+								           break;
+								case "remit"    : if(chkLogin()){remit('C'); showajax(".col-right", "side_order");}
+								           break;
+								case "side_order"    : showajax(".col-right", "side_order");
+				           					break;
+							}				
 						<?}?>
 						
 					}else if (trim(data) == "SUCCESS-Deposit")

@@ -17,6 +17,7 @@ $mn = $_GET['mn']; ?>
 		<li class="buy-mn06<? if($mn=='06'){ ?> current this<? } ?>"><?=get_menu_view_buy("납기 연장","odr", 4)?></li>
 		<li class="buy-mn07<? if($mn=='07'){ ?> current this<? } ?>"><?=get_menu_view_buy("결제 완료","odr", 5)?></li>
 		<li class="buy-mn08<? if($mn=='08'){ ?> current this<? } ?>"><?=get_menu_view_buy("선적 완료","odr", 21)?></li>
+		<li class="buy-mn32<? if($mn=='32'){ ?> current this<? } ?>"><?=get_menu_view_buy("수락","odr", 32)?></li>
 		<li class="buy-mn09<? if($mn=='09'){ ?> current this<? } ?>"><?=get_menu_view_buy("삭제","odr", 7)?></li>
 		<li class="buy-mn10<? if($mn=='10'){ ?> current this<? } ?>"><?=get_menu_view_buy("취소","odr", 8)?></li>
 		<li class="buy-mn11<? if($mn=='11'){ ?> current this<? } ?>"><?=get_menu_view_buy("거절","odr", 9)?></li>

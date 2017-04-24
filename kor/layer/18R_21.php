@@ -1,4 +1,5 @@
 <?
+
 /**************************************************************************************
 *** 교환 or 추가 선적(판매자) 18R_21
 *** 2016-05-22 : 선적버튼 활성/비활성 처리
@@ -10,15 +11,27 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 ?>
 <SCRIPT LANGUAGE="JavaScript">
 <!--
-	function ActiveCheck(){
-		var f = document.f6;
+	function checkActive(){
+		
+		var f = document.f_18R_21;
 		var ck_ship=false, ch_delv=false, ck_dc=false, ck_qty=false, ck_pack=false, ck_photo=false;
 		var img_cnt=0;
+		var delivery_chk_val = $('input:checkbox[id="delivery_chg"]').is(":checked");
 		
 		if($("#ship_info").val().length>0) ck_ship=true;
-		if($("#delivery_no").val().length>5) ch_delv=true;
-		if(f.fault_dc.value.length>3) ck_dc=true;
-		if(f.fault_quantity.value>0) ck_qty=true;
+		if($("#delivery_no").val().length>0) ch_delv=true;
+		if($("input[name=fault_dc]").val() !="") ck_dc=true;
+		if($("input[name=fault_quantity]").val() !="") ck_qty=true;
+
+		if (delivery_chk_val==true)
+		{
+			var delivery_chk = MustChk();
+		}
+		else
+		{
+			var delivery_chk = true;
+		}
+
 		/** 이미지 1개이상 필수
 		img_file = $("input[name^=file_o<?=$odr_det_idx;?>_]");
 
@@ -29,7 +42,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 		alert("img_cnt:"+img_cnt);
 		**/
 
-		if(ck_ship && ch_delv && ck_dc && ck_qty){
+		if(ck_ship && ch_delv && ck_dc && ck_qty && delivery_chk==true){			
 			$("#btn_shipping").css("cursor","pointer").addClass("btn-ship-18R21").attr("src","/kor/images/btn_shipping.gif");
 		}else{
 			$("#btn_shipping").css("cursor","").removeClass("btn-ship-18R21").attr("src","/kor/images/btn_shipping_1.gif");
@@ -37,7 +50,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 	}
 	function shipping(){
 		//alert("shipping");
-		var f =  document.f6;
+		var f =  document.f_18R_21;
 		if (nullchk(f.delivery_no,"운송장 번호를 입력해주세요.")== false) return ;			
 		//if (nullchk(f.memo,"메모를 입력해주세요.")== false) return ; //2016-05-16 : 메모는 필수사항이 아닌듯...;;
 		maskoff();
@@ -48,9 +61,24 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 		f.action = "/kor/proc/odr_proc.php";
 		f.submit();		
 	}
-
+	function new_addr()
+	{
+		$(".company-info-wrap input").val("");
+		$(".company-info-wrap select").val("");
+		$("#sp_addr").html("");
+		$("#delv_load").val("18R_15");
+		$("#delivery_addr_idx").val("0");
+		$(".company-rank td").attr('class',"");
+		$(".company-info-wrap input,select").attr("disabled",true);
+		$(".company-info-wrap select:eq(0)").attr("disabled",false);
+		$("#ship_info").attr("disabled",false);	
+		$(".company-info-wrap select:eq(1)").attr("disabled",true);
+		$(".return_chk").children("img").attr("src","/kor/images/btn_transmit_1.gif");
+		$(".return_chk").attr("onclick","");	
+		$("#typ").val("delivery_save");
+	}
 	$(document).ready(function(){
-		ActiveCheck();
+		checkActive();
 		$("#layerPop3 .stock-list-table tbody:eq(0) tr:eq(0) td").addClass("first");
 		$(".yesinput").css("display","");
 		$("body").on("click",".btn-ship-18R21",function(){
@@ -58,36 +86,36 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 		});
 		//운송회사
 		$("#ship_info").change(function () {
-			ActiveCheck();
+			checkActive();
 		});
 		//운송장번호
 		$("#delivery_no").keyup(function () {
-			ActiveCheck();
+			checkActive();
 		});
 		//DC
 		$("input[name=fault_dc]").keyup(function(){
-			ActiveCheck();
+			checkActive();
 		});
 		//수량
 		$("input[name=fault_quantity]").keyup(function(){
-			ActiveCheck();
+			checkActive();
 		});
 		//이미지
 		$("input[name^=file_o]").change(function () {
-			ActiveCheck();
+			checkActive();
 		});
 		$(".editimgbtn").click(function () {
 			$(this).prev().click();
 		});
 		$("input[type=file]").change(function(){	
 			if ($(this).val()){
-				var f =  document.f6; 
+				var f =  document.f_18R_21; 
 				f.typ.value="imgfileup";
 				f.no.value = $(this).attr("name").replace("file","");
 				f.target = "proc";
 				f.action = "/kor/proc/odr_proc.php";
 				f.submit();
-				ActiveCheck();
+				checkActive();
 			}
 		});
 		//운송보험
@@ -131,11 +159,12 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 			update_val("odr_det","ship_idx",$odr[ship_idx], "odr_det_idx", $odr_det_idx);	
 		}
 	
-		$ship_info = $ship[ship_info];
+		$ship_info = $ship[ship_info];	
   }
+
 ?>
 
-		<form name="f6" id="f"  method="post" enctype="multipart/form-data">
+		<form name="f_18R_21" id="f"  method="post" enctype="multipart/form-data">
 		<input type="hidden" name="typ" id="typ" value="shipping2">		
 		<input type="hidden" name="status" value="21">
 		<input type="hidden" name="fault_yn" value="Y">
@@ -154,12 +183,18 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 				<tbody>
 					<tr>
 					<td class="company"><img src="/kor/images/nation_title2_<?=$buy_com_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$buy_com_nation)?>"> <span class="name"><?=$buy_com_name?></span></td>
-						<td class="c-red2 t-rt">운송회사 : 
-						<div class="select type4" lang="en" style="width:70px">
-							<label class="c-blue">선택</label>
-							<?//echo GF_Common_SetComboList("ship_info", "DLVR", "", 1, "True",  "선택", $ship_info , ""); //기본선택 해지?>
-							<?echo GF_Common_SetComboList("ship_info", "DLVR", "", 1, "True",  "선택", "" , "");?>
-						</div>
+						<td class="c-red2 t-rt">운송회사 :
+							<?							
+								$ship_img = get_any("code_group_detail", "code_desc", "grp_idx=11 and grp_code='DLVR' and dtl_code='$ship_info'");
+							?>
+							<?if ($ship_info=="1" || $ship_info=="2" || $ship_info=="3" || $ship_info=="4"){?>
+							<img src="/kor/images/icon_<?=$ship_img?>.gif" alt="">
+							<?}else if($ship_info=="5"){?>
+								<span class='c-blue'>다른 운송업체</span>
+							<?}else if($ship_info=="6"){?>
+								<span class='c-blue'>직접 수령</span>
+							<?}?>
+							<input type='hidden' id='ship_info' name='ship_info' value='<?=$ship_info?>'/>
 						&nbsp;&nbsp;&nbsp;운송장번호: <input type="text" class="i-txt2 c-blue" name="delivery_no" id="delivery_no" value="" style="width:96px"></td>
 					</tr>
 					<tr>
