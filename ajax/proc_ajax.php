@@ -1811,7 +1811,9 @@ switch($actty) {
 	fnSelectArea($actkind, $actidx,$lang);  
 	break;
 
+
 	case "part_info_chk" : 
+
 
 	//2017-04-17 : 가격변동 체크
 	$part_info_chk = QRY_PART_CHECK($_GET['part_idx']);
@@ -1819,7 +1821,6 @@ switch($actty) {
 	$real_qty=$part_info_chk->quantity;
 	$real_type=$part_info_chk->part_type;
 	$real_status=$part_info_chk->del_chk;
-//echo "실제수량:".$real_qty."<BR>리스트수량:".$_GET['qty']."<br>발주수량:".$_GET['odr_qty'];
 
 	$cnt=QRY_CNT("part","and part_idx='".$_GET['part_idx']."'");
 
@@ -1829,9 +1830,12 @@ switch($actty) {
 		{
 			echo "price";
 		}
+
 		else if ($real_qty != $_GET['qty'])
 		{
 			if ($real_type !="2" && $real_qty < $_GET['odr_qty'])
+
+			else if ($real_qty < $_GET['qty'])
 			{
 				echo "qty";
 			}

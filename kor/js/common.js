@@ -119,6 +119,7 @@ $(document).ready(function(){
 		var load_page = $("#loadPage").val();
 		var menu_type_chk = getCookie('menu');
 
+
 		//alert(getCookie('menu'));
 		
 		/*$.ajax({ 
@@ -224,6 +225,172 @@ $(document).ready(function(){
 		/*if($(this).hasClass("refresh_chk")){  // 기존 데이터중 납기품목 제외하고 amend 된 데이터 모두 삭제. (저장 발주서) 2016-04-03
 			document.location.href="/kor/";
 		}*/	
+=======
+		var main_search_chk;
+		
+		if ($("input[name=top_part_no]").val().length>1)
+		{
+			setCookie('main_search',"y");	
+			main_search_chk = getCookie('main_search');
+		}
+		else
+		{
+			setCookie('main_search',"n");	
+			main_search_chk = getCookie('main_search');
+		}
+
+		if($(this).hasClass("0501"))
+		{
+			return;
+		}
+
+		if ($(this).hasClass("amend")){  // 기존 데이터 제외하고 amend 된 데이터 모두 삭제.
+								
+			$.ajax({ 
+				type: "GET", 
+				url: "/ajax/proc_ajax.php", 
+				data: { actty : "RMA", //Remove amend data
+						actidx : $(this).attr("odr_idx")
+				},
+					dataType : "html" ,
+					async : false ,
+					success: function(data){ 
+//						document.location.href="/kor/";
+					}
+				});
+		}else if($(this).hasClass("save")){  // 기존 데이터중 납기품목 제외하고 amend 된 데이터 모두 삭제. (저장 발주서) 2016-04-03
+			
+			$.ajax({ 
+				type: "GET", 
+				url: "/ajax/proc_ajax.php", 
+				data: { actty : "RMS", //Remove amend data
+						actidx : $(this).attr("odr_idx")
+						},
+				dataType : "html" ,
+				async : false ,
+				success: function(data){ 
+					showajax(".col-right", "side_order");
+					
+					//document.location.href="/kor/";
+				}
+			});
+		}
+		
+		//alert(getCookie('menu'));
+		
+		/*$.ajax({ 
+			type: "GET", 
+			url: "/ajax/cookie_get.php", 
+			dataType : "text" ,
+			async : false ,
+			success: function(data){ 
+					menu_type_chk = data;
+			}
+		});*/
+				
+		switch (menu_type_chk) {
+			case "order_S"    : if(chkLogin()){order('S'); showajax(".col-right", "side_order");}
+			           break;
+			case "order_B"    : if(chkLogin()){order('B'); showajax(".col-right", "side_order");}
+			           break;
+			case "mybox"    : if(chkLogin()){showajax(".col-left", "mybox"); showajax(".col-right", "side_order");}
+			           break;
+			case "record_S"    : if(chkLogin()){record('S'); showajax(".col-right", "side_order");}
+			           break;
+			case "record_B"    : if(chkLogin()){record('B'); showajax(".col-right", "side_order");}
+			           break;
+			case "remit"    : if(chkLogin()){remit('C'); showajax(".col-right", "side_order");}
+			           break;
+			case "side_order"    : 
+									if (main_search_chk=="y")
+									{
+										main_srch();
+									}
+									else
+									{
+										showajax(".col-right", "side_order");
+									}
+									
+			           break;
+			default    : 
+							if($(this).hasClass("odr")){
+			
+								if($(".layer-section").hasClass("open")){
+									if ($(this).attr("part_type") == "256")
+									{					
+										closeCommLayer("layer4");
+									}
+									else
+									{
+										closeCommLayer("layer");
+										Refresh_Right();
+									}
+									
+								}
+
+								var mybox= $(this).hasClass("mybox");
+								//기존 데이터 사라지게.(단, 납기 확인 중인 데이터 제외하고.)
+									$.ajax({ 
+									type: "GET", 
+									url: "/ajax/proc_ajax.php", 
+									data: { actty : "RM", //Remove
+											actidx : $(this).attr("imsi_odr_no"),
+											odrstat : $(this).attr("odr_status")//2016-03-27
+									},
+										dataType : "html" ,
+										async : false ,
+										success: function(data){ 
+											if(mybox)
+											{							
+												showajax(".col-right", "side_order");
+											}
+											else
+											{							
+												main_srch();
+											}
+											
+											//showajax(".col-right", "side_order");
+										}
+									});
+							}else if ($(this).hasClass("amend")){  // 기존 데이터 제외하고 amend 된 데이터 모두 삭제.
+								
+								$.ajax({ 
+									type: "GET", 
+									url: "/ajax/proc_ajax.php", 
+									data: { actty : "RMA", //Remove amend data
+											actidx : $(this).attr("odr_idx")
+									},
+										dataType : "html" ,
+										async : false ,
+										success: function(data){ 
+					//						document.location.href="/kor/";
+										}
+									});
+							}else if($(this).hasClass("save")){  // 기존 데이터중 납기품목 제외하고 amend 된 데이터 모두 삭제. (저장 발주서) 2016-04-03
+								
+								$.ajax({ 
+									type: "GET", 
+									url: "/ajax/proc_ajax.php", 
+									data: { actty : "RMS", //Remove amend data
+											actidx : $(this).attr("odr_idx")
+											},
+									dataType : "html" ,
+									async : false ,
+									success: function(data){ 
+										showajax(".col-right", "side_order");
+										
+										//document.location.href="/kor/";
+									}
+								});
+							}
+
+               break;
+		}
+				
+		if($(this).hasClass("refresh_chk")){  // 기존 데이터중 납기품목 제외하고 amend 된 데이터 모두 삭제. (저장 발주서) 2016-04-03
+			document.location.href="/kor/";
+		}
+
 
 	});
 	
@@ -234,10 +401,14 @@ $(document).ready(function(){
 	$("section[class^='layer']").on("click",".btn-close",function(){
 		
 		//po-cancel 닫기(X)
-		/*if ($(this).hasClass("po-cancel")){			
+
+		if ($(this).hasClass("po-cancel")){			
 			var load_page = $("#load_page_30_08").val();
 			openLayer("layer3",load_page,"?odr_idx="+$("#odr_idx_30_08").val());
-		}*/
+			return;
+		}
+
+
 		//3016_cancel 닫기(X)
 		if ($(this).hasClass("3016_cancel")){			
 			var load_page = $("#load_page_3016_cancel").val();
@@ -419,7 +590,10 @@ $(document).ready(function(){
 			}
 			//좌우화면 모두 새로고침
 			if ($("input[name=top_part_no]").val().length>1){
-				main_srch();
+
+				//main_srch();
+				showajaxParam('.col-right','side_order','');
+
 			} else{
 				showajaxParam('.col-right','side_order','');
 			}
@@ -674,7 +848,7 @@ $(document).ready(function(){
 			$.ajax({
 				url: "/kor/proc/odr_proc.php", 
 				//data: "typ=periodcfrm&odr_det_idx="+$("#odr_det_idx_31_05").val()+"&part_type="+$("#part_type_31_05").val()+"&part_no="+$("#part_no").val()+"&manufacturer="+encodeURIComponent($("#manufacturer").val())+"&package="+$("#package").val()+"&dc="+$("#dc").val()+"&supply_quantity="+$("#supply_quantity").val()+"&period="+$("#period").val()+"&pkind="+$(".layer-pagination.red .c-red2").text(),
-				data: "typ=periodcfrm&odr_det_idx="+$("#odr_det_idx_31_05").val()+"&part_type="+$("#part_type_31_05").val()+"&part_no="+$("#part_no").val()+"&manufacturer="+encodeURIComponent($("#manufacturer").val())+"&package="+$("#package").val()+"&dc="+$("#dc").val()+"&supply_quantity="+$("#supply_quantity").val()+"&period="+period+"&pkind="+$(".layer-pagination.red .c-red2").text(),
+				data: "typ=periodcfrm&odr_det_idx="+$("#odr_det_idx_31_05").val()+"&part_type="+$("#part_type_31_05").val()+"&part_no="+$("#part_no").val()+"&manufacturer="+encodeURIComponent($("#manufacturer").val())+"&package="+$("#package").val()+"&dc="+$("#dc").val()+"&rhtype="+$("select[name='rhtype[]']").val()+"&supply_quantity="+$("#supply_quantity").val()+"&period="+period+"&pkind="+$(".layer-pagination.red .c-red2").text(),
 				encType:"multipart/form-data",
 				success: function (data) {	
 					if (trim(data) == "SUCCESS ALL" || trim(data) == "SUCCESS"){		
@@ -977,6 +1151,8 @@ $(document).ready(function(){
 	//order sheet 실 발주 처리 [공지]화면의 '발주서 확인' 버튼 -----------------------
 	$("body").on("click",".btn-view-sheet",function(){		
 			var odr_idx = $(this).attr("odr_idx");
+			$("#det_cnt").val()
+
 			$.ajax({ 
 				type: "GET", 
 				url: "/ajax/proc_ajax.php", 
@@ -1008,25 +1184,47 @@ $(document).ready(function(){
 						actidx : $(this).attr("odr_idx"),
 						actkind : $(this).attr("new_odr_idx")
 					},
-				dataType : "html" ,
+				dataType : "text" ,
 				async : false ,
 				success: function(data){
-					if($.trim(data)=="PRICE"){	//가격변동 경고!!
+					regNumber = /^[0-9]*$/;
+					if(!regNumber.test($.trim(data))) {
+
+						var data_string = $.trim(data);
+						var data_split = data_string.split( '_' );
+
+						if(data_split[0]=="PRICE"){	//가격변동 경고!!
 							closeCommLayer("layer3");
 							closeCommLayer("layer4");
-							openCommLayer('layer3','05_04','?odr_idx='+odr_idx);
+							openCommLayer('layer3','05_04','?odr_idx='+odr_idx+'&change=price&change_part_idx='+data_split[1]);
 							openLayer('layer4','alarm2','?odr_idx='+odr_idx);	//가격변동 경고창
-					}else{
-						if($.trim(data)=="ERR"){
-							//alert("재고수량 변경 경고!!");
-							closeCommLayer("layer4");
-							openLayer('layer3','05_04','?odr_idx='+odr_idx);
-							openLayer('layer4','alarm','?odr_idx='+odr_idx);
-						}else{
-							openLayer("layer5","30_05","?odr_idx="+data); //P.O Sheet
-							$(".layer5-section .btn-close img").css("display","none"); //X버튼 숨기기
+							return;
 						}
+						else if(data_split[0]=="ERR")
+						{
+							closeCommLayer("layer4");
+							openLayer('layer3','05_04','?odr_idx='+odr_idx+'&change=qty&change_part_idx='+data_split[1]);
+							openLayer('layer4','alarm','?odr_idx='+odr_idx);
+							return;
+						}
+						else if(data_split[0]=="delete")
+						{
+							closeCommLayer("layer4");
+							if ($("#det_cnt").val()!=1)
+							{
+								openLayer('layer3','05_04','?odr_idx='+odr_idx+'&change=delete&change_part_idx='+data_split[1]);
+							}	
+							openLayer('layer4','alarm3','?odr_idx='+odr_idx+"&part_idx="+data_split[1]);
+							return;
+						}	
 					}
+					else
+					{
+						openLayer("layer5","30_05","?odr_idx="+data); //P.O Sheet
+						$(".layer5-section .btn-close img").css("display","none"); //X버튼 숨기기
+					}
+						
+					
 				}//success
 			});
 		
@@ -1085,6 +1283,7 @@ $(document).ready(function(){
 				//document.location.href="/kor/";
 				closeCommLayer("layer");
 				closeCommLayer("layer4");
+
 				Refresh_Right();
 			}
 		});
@@ -1116,10 +1315,45 @@ $(document).ready(function(){
 				//document.location.href="/kor/";
 				closeCommLayer("layer");
 				closeCommLayer("layer4");
+
 				Refresh_Right();
 				document.location.href="/kor/";			
 			}
 		});
+
+
+	});
+
+	//What's New(구매자) (1304_accept)계약금 재 입금화면 '입금' 버튼------
+	$("body").on("click",".btn-confirm-1304_accept",function(){ //실제 취소 처리(DB)
+		
+		openCommLayer("layer4","13_04_2","?&actidx="+$(this).attr("odr_history_idx")+"&down_payment="+$(this).attr("down_payment"));
+		
+
+	});
+
+	//What's New(구매자) 판매자 구매자 계약금 복구화면 '수락' 버튼------
+	$("body").on("click",".btn-confirm-1304_2_ok",function(){ //실제 취소 처리(DB)
+		
+		$.ajax({ 
+		type: "GET", 
+		url: "/ajax/proc_ajax.php", 
+		data: { actty : "13_04_OK", //ConFirm
+				actidx : $(this).attr("odr_history_idx"),
+				pay_amt : $(this).attr("pay_amt")
+		},
+			dataType : "html" ,
+			async : false ,
+			success: function(data){ 
+				//document.location.href="/kor/";
+				closeCommLayer("layer");
+				closeCommLayer("layer4");
+				Refresh_Right();
+				document.location.href="/kor/";			
+			}
+		});
+=======
+>>>>>>> origin/master
 			
 	});
 
@@ -1868,13 +2102,12 @@ $(document).ready(function(){
 	
 	$("body").on("click",".btn-dialog-0501-from_0901",function(){
 		var err = false; 
-		err = updateQty();
-		if (err == false)
-		{
-			saveExtraInfo();
-			openLayer("layer3","05_01","?odr_idx="+$("#odr_idx_"+$("#loadPage").val()).val()+"&fromLoadPage=09_01");
-			$("#addsearch_part_no").focus();
-		}
+		//err = updateQty();
+		
+		saveExtraInfo();
+		openLayer("layer3","05_01","?odr_idx="+$("#odr_idx_"+$("#loadPage").val()).val()+"&fromLoadPage=09_01");
+		$("#addsearch_part_no").focus();
+		
 	});
 
 	//지연 period가 없으면 자동 1주일 지연 처리. period가 있으면 period만큼 지연 확인 요청
@@ -1951,6 +2184,9 @@ $(document).ready(function(){
 		var $qty = $odr_qty.next();
 		var $part_idx = $qty.next();
 		var $part_type = $part_idx.next();
+		var price_chk = $(this).attr("price").replace(",","");
+		var qty_chk = $(this).attr("quantity");
+		var stock_type=$(this).attr("class");
 		if($odr_qty.val()==""){
 				$odr_qty.focus();
 		}else if ($part_type!="2" && parseInt(numOffMask($odr_qty.val())) > parseInt(numOffMask($qty.val())))
@@ -1960,48 +2196,58 @@ $(document).ready(function(){
 				return false;
 		}else{
 			maskoff();
-			if($(this).attr("class")=="btn-dialog-add"){ //Stock 품목 추가
 
-				/*$.ajax({ 
-					type: "GET", 
-					url: "/ajax/proc_ajax.php?actty=part_info_chk&part_idx="+$part_idx.val(), 					
-					dataType : "text" ,
-					async : false ,
-					success: function(data){
-						if($.trim(data)=="PRICE"){	//가격변동 경고!!
-								closeCommLayer("layer3");
-								closeCommLayer("layer4");
-								openCommLayer('layer3','05_01','?odr_idx='+odr_idx);
-								openLayer('layer4','alarm2','?odr_idx='+odr_idx);	//가격변동 경고창
-						}else{
-							if($.trim(data)=="ERR"){
-								//alert("재고수량 변경 경고!!");
-								closeCommLayer("layer4");
-								openLayer('layer3','05_04','?odr_idx='+odr_idx);
-								openLayer('layer4','alarm','?odr_idx='+odr_idx);
-							}else{
-								openLayer("layer5","30_05","?odr_idx="+data); //P.O Sheet
-								$(".layer5-section .btn-close img").css("display","none"); //X버튼 숨기기
-							}
+			$.ajax({ 
+				type: "GET", 
+				url: "/ajax/proc_ajax.php?actty=part_info_chk&part_idx="+$part_idx.val()+"&price="+price_chk+"&qty="+qty_chk, 					
+				dataType : "text" ,
+				async : false ,
+				success: function(data){
+					if($.trim(data)=="price"){	//가격변동 경고!!
+							closeCommLayer("layer3");
+							closeCommLayer("layer4");
+							openCommLayer('layer3','05_01','?odr_idx='+$("#odr_idx_05_01").val()+'&addsearch_part_no='+$("#addsearch_part_no").val()+'&change=price&part_idx='+$part_idx.val());
+							openLayer('layer4','alarm2','?odr_idx='+$("#odr_idx_05_01").val());	//가격변동 경고창
+							return;
+					}else if ($.trim(data)=="qty"){							
+							//alert("재고수량 변경 경고!!");
+							closeCommLayer("layer4");
+							openLayer('layer3','05_01','?odr_idx='+$("#odr_idx_05_01").val()+'&addsearch_part_no='+$("#addsearch_part_no").val()+'&change=qty&part_idx='+$part_idx.val());
+							openLayer('layer4','alarm','?odr_idx='+$("#odr_idx_05_01").val());
+							return;							
+					}
+					else if ($.trim(data)=="delete"){							
+							//alert("재고수량 변경 경고!!");
+							closeCommLayer("layer4");
+							openLayer('layer3','05_01','?odr_idx='+$("#odr_idx_05_01").val()+'&addsearch_part_no='+$("#addsearch_part_no").val()+'&change=delete&part_idx='+$part_idx.val());
+							openLayer('layer4','alarm3','?odr_idx='+$("#odr_idx_05_01").val());
+							return;							
+					}		
+					else
+					{
+
+						if(stock_type=="btn-dialog-add"){ //Stock 품목 추가
+				
+							var f =  document.f_addproc;
+							f.typ.value="write";
+							f.part_idx.value=$part_idx.val();
+							f.part_type.value=$part_type.val(); 
+							//f.odr_quantity.value=$odr_qty.val();  //2016-03-25 SCRIPT5007 때문에 원문 주석처리
+							$('#odr_quantity_0501').val($odr_qty.val());  //2016-03-25 SCRIPT5007 때문에 신규 작성
+							f.target = "proc";
+							f.action = "/kor/proc/odr_proc.php";
+							f.submit();
+											 		
+						}else{ //--------------------------------------납기품목 확인 메세지창							
+							//openLayer("layer4","31_03","?part_idx="+$part_idx.val()+"&odr_idx="+$("#odr_idx_31_06").val()+"&odr_quantity="+$odr_qty.val()+"&fromPage=add&fromLoadPage="+$("#fromLoadPage").val()+"&addsearch_part_no="+$("#addsearch_part_no").val());
+							//2015-04-05 위에꺼에서 odr_idx 가져오는 객체를 $("#odr_idx_05_01") 로 변경
+							openLayer("layer4","31_03","?part_idx="+$part_idx.val()+"&odr_idx="+$("#odr_idx_05_01").val()+"&odr_quantity="+$odr_qty.val()+"&fromPage=add&fromLoadPage="+$("#fromLoadPage").val()+"&addsearch_part_no="+$("#addsearch_part_no").val());
 						}
-					}//success
-				});*/
+					}			
+				}//success
+			});		
 
 
-				 var f =  document.f_addproc;
-				 f.typ.value="write";
-				 f.part_idx.value=$part_idx.val();
-				 f.part_type.value=$part_type.val(); 
-				 //f.odr_quantity.value=$odr_qty.val();  //2016-03-25 SCRIPT5007 때문에 원문 주석처리
-				 $('#odr_quantity_0501').val($odr_qty.val());  //2016-03-25 SCRIPT5007 때문에 신규 작성
-				 f.target = "proc";
-				 f.action = "/kor/proc/odr_proc.php";
-				 f.submit();		
-			}else{ //--------------------------------------납기품목 확인 메세지창
-				//openLayer("layer4","31_03","?part_idx="+$part_idx.val()+"&odr_idx="+$("#odr_idx_31_06").val()+"&odr_quantity="+$odr_qty.val()+"&fromPage=add&fromLoadPage="+$("#fromLoadPage").val()+"&addsearch_part_no="+$("#addsearch_part_no").val());
-				//2015-04-05 위에꺼에서 odr_idx 가져오는 객체를 $("#odr_idx_05_01") 로 변경
-				openLayer("layer4","31_03","?part_idx="+$part_idx.val()+"&odr_idx="+$("#odr_idx_05_01").val()+"&odr_quantity="+$odr_qty.val()+"&fromPage=add&fromLoadPage="+$("#fromLoadPage").val()+"&addsearch_part_no="+$("#addsearch_part_no").val());
-			}
 		}				
 	});
 
@@ -2028,19 +2274,6 @@ $(document).ready(function(){
 				}
 			});	
 			
-		}
-
-		if (err == false){
-			//What's New 창에서 납기 받은 제품 저장 시 별도 Proc.
-			if($("#odr_status").val() == 16){ //납기받은 품목
-				f.typ.value = "persave";
-			}else{
-				f.typ.value = "odredit";
-			}
-			f.save_yn.value = "Y";
-			f.target = "proc";
-			f.action = "/kor/proc/odr_proc.php";
-			f.submit();			
 		}
 
 		var menu_type_chk = getCookie('menu');
@@ -2376,7 +2609,8 @@ $(document).ready(function(){
 		 f.submit();
 		 if(frompage != "add"){
 			 //Refresh_Right();
-			 Refresh_MainSh(); //2016-04-08
+			 //Refresh_MainSh(); //2016-04-08
+			 showajax(".col-right", "side_order"); //2017-0417
 		 }
 	});
 
@@ -2545,7 +2779,7 @@ $(document).ready(function(){
 
 	//납기 확인 요청시 삭제 버튼 클릭 팝업
 	$("body").on("click",".btn-pop-0201",function(){
-		alert3("삭제","삭제 시 해당 품목은 당신의 재고 목록에서 삭제됩니다. 만약 해당 품목을 판매하고 싶다면 재 등록해 주시기 바랍니다.","btn_end","31_05","Y"); //2016-04-07
+		alert3("삭제","삭제 시 해당 품목은 당신의 재고 목록에서 삭제됩니다. <br>만약 해당 품목을 판매하고 싶다면 재 등록해 주시기 바랍니다.","btn_end","31_05","Y"); //2016-04-07
 		//openLayer("layer4","02_01");  //기존
 	});
 
@@ -3059,7 +3293,8 @@ function Refresh_MainSh(){
 //---------------------------------------------------- 메인 검색 ------------------------------------------------------------------
 function main_srch(){
 	if ($("input[name=top_part_no]").val().length>1)
-	{
+	{		
+		setCookie("main_search","y");
 		$("#sel_nation").val($("#opt1 option:selected").length==0?"":$("#opt1 option:selected").val());
 	$("#sel_manufacturer").val($("#opt2 option:selected").length==0?"":$("#opt2 option:selected").val());
 	$("#ftop_sch input[name=actty]").val("mainsrch");
@@ -3078,12 +3313,16 @@ function main_srch(){
 					
 					var ary = new Array();
 					var idx, newidx;
-					$("#stockList tbody[id^=tbd]").each(function(e){						
+					// 2017-04-17 검색 금액 부분 스트링-> FLOAT 타입으로 변경 - 박정권
+					$("#stockList tbody[id^=tbd]").each(function(e){							
 						if (typeof($(this).find("tr:eq(1) td:eq(8)").html())=="string")
 						{
-							ary.push($(this).find("tr:eq(1) td:eq(8)").html());
+							var price = $(this).find("tr:eq(1) td:eq(8)").html().replace("$","");
+							price = price.replace(",","");
+							//alert(parseFloat(price));
+							ary.push(parseFloat(price));
 						}else{
-							ary.push("$99999999");
+							ary.push(parseFloat("999999999999"));							
 						}
 					});
 
@@ -3145,7 +3384,8 @@ function main_srch(){
 					
 				}
 		});		
-	}else{
+	}else{		
+		setCookie("main_search","n");
 		alert_msg("2자 이상 입력바랍니다");
 	}	
 }
