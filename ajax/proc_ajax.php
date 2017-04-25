@@ -1834,10 +1834,8 @@ switch($actty) {
 		else if ($real_qty != $_GET['qty'])
 		{
 			if ($real_type !="2" && $real_qty < $_GET['odr_qty'])
-
-			else if ($real_qty < $_GET['qty'])
-			{
-				echo "qty";
+			{				
+				echo "qty";				
 			}
 		}		
 	}
