@@ -1811,9 +1811,7 @@ switch($actty) {
 	fnSelectArea($actkind, $actidx,$lang);  
 	break;
 
-
-	case "part_info_chk" : 
-
+	case "part_info_chk" : //sigungu 다시 뿌려주기
 
 	//2017-04-17 : 가격변동 체크
 	$part_info_chk = QRY_PART_CHECK($_GET['part_idx']);
@@ -1830,12 +1828,11 @@ switch($actty) {
 		{
 			echo "price";
 		}
-
-		else if ($real_qty != $_GET['qty'])
+		else if ($real_qty < $_GET['qty'])
 		{
-			if ($real_type !="2" && $real_qty < $_GET['odr_qty'])
-			{				
-				echo "qty";				
+			if ($real_type !="2")
+			{
+				echo "qty";
 			}
 		}		
 	}

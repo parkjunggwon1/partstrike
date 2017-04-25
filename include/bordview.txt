@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<?include $_SERVER["DOCUMENT_ROOT"]."/include/header.php";?>
+<?
+$mobilechk = '/(iPod|iPhone|Android|BlackBerry|SymbianOS|SCH-M\d+|Opera Mini|Windows CE|Nokia|SonyEricsson|webOS|PalmOS)/i'; 
+?>
+<style>
+.board_wrap {
+    float: left;
+    width: 100%;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    table-layout: fixed;
+    width: 100%;
+}
+.board_view {
+    width: 100%;
+    border-top: 1px solid #c1c1c1;
+    font-size: 16px;
+}
+.board_view > * > tr > th {
+    background: #f6f6f6;
+    padding: 20px 30px;
+}
+.board_view > * > tr > th, .board_view > * > tr > td {
+    padding: 30px;
+    border-bottom: 1px solid #dfdfdf;
+}
+caption, th {
+    border: 0;
+    font-weight: 400;
+}
+.board_view > * > tr > th > .tit {
+    padding-right: 300px;
+    position: relative;
+    float: left;
+    width: 100%;
+}
+.board_view > * > tr > th p {
+    float: left;
+    width: 100%;
+    text-align: left;
+    color: #232323;
+    font-weight: 500;
+}
+.board_view > * > tr > th ul {
+    position: absolute;
+    right: 25px;
+}
+.f_right {
+    float: right !important;
+}
+.board_view > * > tr > th ul li span {
+    color: #727071;
+}
+.board_view > * > tr > th p {
+    float: left;
+    width: 100%;
+    text-align: left;
+    color: #232323;
+    font-weight: 500;
+}
+.board_view > * > tr > th > .tit {
+    padding-right: 300px;
+    position: relative;
+    float: left;
+    width: 100%;
+}
+.board_view > * > tr > th {
+    background: #f6f6f6;
+    padding: 20px 30px;
+}
+.board_view > * > tr > th ul {
+    position: absolute;
+    right: 25px;
+}
+.board_view > * > tr > th ul li:first-child {
+    margin-left: 0;
+}
+.board_view > * > tr > th ul li {
+    margin-left: 20px;
+    color: #c9c9c9;
+}
+.f_left > li, .f_right > li {
+    float: left;
+}
+ol, ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+</style>
+  <script type="text/javascript" src="/editor/js/HuskyEZCreator.js" charset="utf-8"></script>
+<body class="header-fixed header-fixed-space-v2">
+  <div class="board_wrapper">    
+    <?include $_SERVER["DOCUMENT_ROOT"]."/include/navbar.php";?>
+
+	<div class="sub_top">
+		<h2>커뮤니티</h2>
+		<hr class="tit_udline">
+		<span>준비된 인재들이 귀사의 선택을 기다립니다!</span>
+	</div>
+     <!-- Call to Action -->
+    <div class="call-action-v1 margin-top-40">
+      <div class="container">
+        <div class="form-block equal-height-column">         
+          
+        <div id="contents">         
+            <span class="title">자유게시판</span>	
+            <div id="bbs_board_wrap" class="board_wrap">
+	    	<table class="board_view">
+				<caption>게시글 상세</caption>
+				<thead>
+					<tr>
+						<th>
+							<div class="tit">
+								<p id="">[국제선]예약부도수수료 적용 및 여정 취소변경수수료 변경 안내</p>
+								<ul class="f_right">
+									<li><span>등록일&nbsp;&nbsp;&nbsp;<span id="">2016/12/14</span></span></li>	<!-- 등록일 -->
+									<li>|</li>
+									<li><span>조회&nbsp;&nbsp;&nbsp;<span id="">516</span></span></li>	<!-- 조회 -->
+								</ul>
+							</div>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td id=""></td>
+					</tr>
+					<!-- 선택된 파일 다운로드(zip압축) -->
+					
+				</tbody>
+			</table>
+			<table class="bbs_more">
+				<caption>다른 게시글 보기</caption>
+				<colgroup>
+					<col style="width:90px">
+					<col>
+				</colgroup>
+				<tbody>
+					<tr>
+						<th scope="row">이전글</th>	<!-- 이전글 -->
+						<td><p><a href="#" class="ellip" id="">[국제선] 인천-비엔티안 판매스케줄 재변경</a></p><input type="hidden" id="" value="1099"></td>	<!-- 이전 글이 없습니다. -->
+					</tr>
+					<tr>
+						<th scope="row">다음글</th>	<!-- 다음글 -->
+						<td><p><a href="#" class="ellip" id="">다음글이 없습니다.</a></p><input type="hidden" id="" value="undefined"></td>		<!-- 다음 글이 없습니다. -->
+					</tr>
+				</tbody>
+			</table>
+	    </div>
+			</div>
+        </div>  
+		
+		</div>
+			
+		</div>
+
+    <!-- End Call to Action -->
+    <?include $_SERVER["DOCUMENT_ROOT"]."/include/footer.php";?>
+       
+  </div><!--/board_wrapper-->
+
+
+
+</body>
+</html>

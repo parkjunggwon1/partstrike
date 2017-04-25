@@ -29,10 +29,8 @@ $part_ty = ($part_type == "1" || $part_type == "3" || $part_type=="4")?"S":$part
 </form>
 <div class="layer-content">
 	<p class="txt-warning t-ct">납기 확인 바랍니다. </p>
-
-	<div class="btn-area t-rt  <?=$callfrom;?>" >
-		<button class="periodreq" type="button" part_idx="<?=$part_idx?>" price="<?=$price?>" qty="<?=$qty?>"><img  src="/kor/images/btn_transmit.gif" alt="전송"></button>
-
+	<div class="btn-area t-rt  <?=$callfrom;?>">
+		<button class="periodreq" type="button"><img  src="/kor/images/btn_transmit.gif" alt="전송"></button>
 	</div>
 </div>
 
