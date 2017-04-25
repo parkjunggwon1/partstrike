@@ -1819,26 +1819,26 @@ switch($actty) {
 	$real_qty=$part_info_chk->quantity;
 	$real_type=$part_info_chk->part_type;
 	$real_status=$part_info_chk->del_chk;
+	
+	$cnt=QRY_CNT("part","and part_idx='".$_GET['part_idx']."' and del_chk=1");
 
-	$cnt=QRY_CNT("part","and part_idx='".$_GET['part_idx']."'");
-
-	if ($cnt > 0)
+	if ($cnt > 0 && $real_status==1)
 	{
 		if ($real_price != $_GET['price'])
 		{
-			echo "price";
+			echo "price_".$_GET['part_idx'];
 		}
 		else if ($real_qty < $_GET['qty'])
 		{
-			if ($real_type !="2")
+			if ($real_type !="2" && $real_qty < $_GET['odr_qty'])
 			{
-				echo "qty";
+				echo "qty_".$_GET['part_idx'];
 			}
 		}		
 	}
 	else
 	{
-		echo "delete";
+		echo "delete_".$_GET['part_idx'];		
 	}
 	
 

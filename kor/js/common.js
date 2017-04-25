@@ -2049,27 +2049,30 @@ $(document).ready(function(){
 			maskoff();
 			$.ajax({ 
 				type: "GET", 
-				url: "/ajax/proc_ajax.php?actty=part_info_chk&part_idx="+$part_idx.val()+"&price="+price_chk+"&qty="+qty_chk, 					
+				url: "/ajax/proc_ajax.php?actty=part_info_chk&part_idx="+$part_idx.val()+"&price="+price_chk+"&qty="+qty_chk+"&odr_qty="+$odr_qty.val(), 					
 				dataType : "text" ,
 				async : false ,
 				success: function(data){
-					if($.trim(data)=="price"){	//가격변동 경고!!
+					var data_string = $.trim(data);
+					var data_split = data_string.split( '_' );
+
+					if($.trim(data_split[0])=="price"){	//가격변동 경고!!
 							closeCommLayer("layer3");
 							closeCommLayer("layer4");
-							openCommLayer('layer3','05_01','?odr_idx='+$("#odr_idx_05_01").val()+'&addsearch_part_no='+$("#addsearch_part_no").val()+'&change=price&part_idx='+$part_idx.val());
+							openCommLayer('layer3','05_01','?odr_idx='+$("#odr_idx_05_01").val()+'&addsearch_part_no='+$("#addsearch_part_no").val()+'&change=price&part_idx='+$part_idx.val()+"&fromLoadPage="+$("#fromLoadPage").val());
 							openLayer('layer4','alarm2','?odr_idx='+$("#odr_idx_05_01").val());	//가격변동 경고창
 							return;
-					}else if ($.trim(data)=="qty"){							
+					}else if ($.trim(data_split[0])=="qty"){							
 							//alert("재고수량 변경 경고!!");
 							closeCommLayer("layer4");
-							openLayer('layer3','05_01','?odr_idx='+$("#odr_idx_05_01").val()+'&addsearch_part_no='+$("#addsearch_part_no").val()+'&change=qty&part_idx='+$part_idx.val());
+							openLayer('layer3','05_01','?odr_idx='+$("#odr_idx_05_01").val()+'&addsearch_part_no='+$("#addsearch_part_no").val()+'&change=qty&part_idx='+$part_idx.val()+"&fromLoadPage="+$("#fromLoadPage").val());
 							openLayer('layer4','alarm','?odr_idx='+$("#odr_idx_05_01").val());
 							return;							
 					}
-					else if ($.trim(data)=="delete"){							
+					else if ($.trim(data_split[0])=="delete"){							
 							//alert("재고수량 변경 경고!!");
 							closeCommLayer("layer4");
-							openLayer('layer3','05_01','?odr_idx='+$("#odr_idx_05_01").val()+'&addsearch_part_no='+$("#addsearch_part_no").val()+'&change=delete&part_idx='+$part_idx.val());
+							openLayer('layer3','05_01','?odr_idx='+$("#odr_idx_05_01").val()+'&addsearch_part_no='+$("#addsearch_part_no").val()+'&change=delete&part_idx='+$part_idx.val()+"&fromLoadPage="+$("#fromLoadPage").val());
 							openLayer('layer4','alarm3','?odr_idx='+$("#odr_idx_05_01").val());
 							return;							
 					}		
@@ -2459,7 +2462,7 @@ $(document).ready(function(){
 				return false;
 		}else{
 			maskoff();
-			openLayer("layer4","31_03","?callfrom=main&part_idx="+$("#part_idx").val()+"&odr_quantity="+$("#odr_quantity").val());
+			openLayer("layer4","31_03","?callfrom=main&part_idx="+$("#part_idx").val()+"&odr_quantity="+$("#odr_quantity").val()+"&price="+$("#price").val());
 		}
 	});
 	//---- 납기확인 바랍니다. [전송]---
@@ -2467,17 +2470,63 @@ $(document).ready(function(){
 		$(this).children("img").attr("src","/kor/images/loding_img.gif");		
 		$(this).attr("class","");	
 		maskoff();
-		var frompage = $("input[name='fromPage']").val();
-		var f =  document.f;
-		 f.target = "proc";
-		 //f.target = "_blank";
-		 f.action = "/kor/proc/odr_proc.php";
-		 f.submit();
-		 if(frompage != "add"){
-			 //Refresh_Right();
-			 //Refresh_MainSh(); //2016-04-08
-			 showajax(".col-right", "side_order"); //2017-0417
-		 }
+
+		var part_idx = $(this).attr("part_idx");
+		var price_chk = $(this).attr("price");
+		var qty_chk = $(this).attr("qty");
+		var odr_quantity = $(this).attr("odr_quantity");
+
+		$.ajax({ 
+				type: "GET", 
+				url: "/ajax/proc_ajax.php?actty=part_info_chk&part_idx="+part_idx+"&price="+price_chk+"&qty="+qty_chk+"&odr_qty="+odr_quantity, 					
+				dataType : "text" ,
+				async : false ,
+				success: function(data){
+					var data_string = $.trim(data);
+					var data_split = data_string.split( '_' );
+
+					if($.trim(data_split[0])=="price"){	//가격변동 경고!!
+							closeCommLayer("layer3");
+							closeCommLayer("layer4");
+							openCommLayer('layer3','31_02','?part_idx='+part_idx);
+							openLayer('layer4','alarm2','');	//가격변동 경고창
+							return;
+					}else if ($.trim(data_split[0])=="qty"){							
+							//alert("재고수량 변경 경고!!");
+							closeCommLayer("layer4");
+							openCommLayer('layer3','31_02','?part_idx='+part_idx);
+							openLayer('layer4','alarm','');
+							return;							
+					}
+					else if ($.trim(data_split[0])=="delete"){							
+							//alert("재고수량 변경 경고!!");
+							closeCommLayer("layer4");							
+							openLayer('layer4','alarm3','?part_idx='+part_idx);
+							return;							
+					}		
+					else
+					{
+
+						if(stock_type=="btn-dialog-add"){ //Stock 품목 추가
+				
+							var f =  document.f_addproc;
+							f.typ.value="write";
+							f.part_idx.value=$part_idx.val();
+							f.part_type.value=$part_type.val(); 
+							//f.odr_quantity.value=$odr_qty.val();  //2016-03-25 SCRIPT5007 때문에 원문 주석처리
+							$('#odr_quantity_0501').val($odr_qty.val());  //2016-03-25 SCRIPT5007 때문에 신규 작성
+							f.target = "proc";
+							f.action = "/kor/proc/odr_proc.php";
+							f.submit();
+											 		
+						}else{ //--------------------------------------납기품목 확인 메세지창							
+							//openLayer("layer4","31_03","?part_idx="+$part_idx.val()+"&odr_idx="+$("#odr_idx_31_06").val()+"&odr_quantity="+$odr_qty.val()+"&fromPage=add&fromLoadPage="+$("#fromLoadPage").val()+"&addsearch_part_no="+$("#addsearch_part_no").val());
+							//2015-04-05 위에꺼에서 odr_idx 가져오는 객체를 $("#odr_idx_05_01") 로 변경
+							openLayer("layer4","31_03","?part_idx="+$part_idx.val()+"&odr_idx="+$("#odr_idx_05_01").val()+"&odr_quantity="+$odr_qty.val()+"&fromPage=add&fromLoadPage="+$("#fromLoadPage").val()+"&addsearch_part_no="+$("#addsearch_part_no").val());
+						}
+					}			
+				}//success
+			});		
 	});
 
 	//도착 01_36(지속적 공급가능한..... 의 판매자 물품 도착)

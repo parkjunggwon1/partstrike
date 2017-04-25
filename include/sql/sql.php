@@ -1,6 +1,6 @@
 <?
 function dbconn(){
-	$conn=mysql_connect("localhost","root","wjdrnjs1");  // 서버 /ID/pw
+	$conn=mysql_connect("localhost","root","wjdrnjs1!");  // 서버 /ID/pw
 	mysql_select_db("pjg0319", $conn); // DB 명 수정
 	mysql_query("SET NAMES UTF8");
 	return $conn;

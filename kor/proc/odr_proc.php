@@ -928,9 +928,9 @@ if($typ == "poano"){
         $_supp_quantity = replace_out($row["supply_quantity"]);
         $_part_price = replace_out($row["price"]);
         $_odr_price = replace_out($row["odr_price"]);
-        
-        if(($_part_quantity)<$_odr_quantity) $quantity_cnt++;
-        //if(($_part_quantity+$_supp_quantity)<$_odr_quantity) $quantity_cnt++;        
+     
+       // if(($_part_quantity)<$_odr_quantity) $quantity_cnt++;
+        if(($_part_quantity+$_supp_quantity)<$_odr_quantity) $quantity_cnt++;        
     }
     if($quantity_cnt>0){
         echo "STOCK";
