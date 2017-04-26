@@ -766,9 +766,13 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<?if ($loadPage== "05_04"){?>
 								<?if ($part_type=="2"||$part_type=="5"||$part_type=="6"){?>
 									<?if ($supply_quantity==$odr_quantity){?>
-										<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$supply_quantity?>"  value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:58px;ime-mode:disabled;">
+										<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$supply_quantity?>"  value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:58px;ime-mode:disabled;">									
 									<?}else{?>
-										<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$supply_quantity?>"  value="" style="width:58px;ime-mode:disabled;">
+										<?if ($supply_quantity>$quantity){?>
+										<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$quantity?>"  value="" style="width:58px;ime-mode:disabled;">
+										<?}else{?>
+										<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$odr_quantity?>"  value="" style="width:58px;ime-mode:disabled;">
+										<?}?>
 									<?}?>
 								<?}else{?>
 								<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$supply_quantity?>"  value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:58px;ime-mode:disabled;">
@@ -1531,12 +1535,12 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 									<?}?>	
 									
 								<?}else if($loadPage == "02_02"){?>									
-									<td class="t-rt"><?=$odr_stock==0?"-":number_format($odr_stock)?></td>	
+									<td class="t-rt">0</td>	
 								<?}else if($loadPage == "31_06"){?>			
 									<?if ($part_type=="2"){?>
 										<td class="t-rt">I</td>	
 									<?}else{?>
-										<td class="t-rt"><?=$odr_stock==0?"-":number_format($odr_stock)?></td>
+										<td class="t-rt"><?=$part_stock==0?"-":number_format($part_stock)?></td>
 									<?}?>
 								<?}else{?>									
 									<td class="t-rt"><?=$supply_quantity==0?"-":number_format($supply_quantity)?></td>							

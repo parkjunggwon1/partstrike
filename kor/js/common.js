@@ -2488,42 +2488,35 @@ $(document).ready(function(){
 					if($.trim(data_split[0])=="price"){	//가격변동 경고!!
 							closeCommLayer("layer3");
 							closeCommLayer("layer4");
-							openCommLayer('layer3','31_02','?part_idx='+part_idx);
+							openCommLayer('layer3','31_02','?part_idx='+part_idx+'&change=price&change_part_idx='+data_split[1]);
 							openLayer('layer4','alarm2','');	//가격변동 경고창
 							return;
 					}else if ($.trim(data_split[0])=="qty"){							
 							//alert("재고수량 변경 경고!!");
 							closeCommLayer("layer4");
-							openCommLayer('layer3','31_02','?part_idx='+part_idx);
+							openCommLayer('layer3','31_02','?part_idx='+part_idx+'&change=qty&change_part_idx='+data_split[1]);
 							openLayer('layer4','alarm','');
 							return;							
 					}
 					else if ($.trim(data_split[0])=="delete"){							
 							//alert("재고수량 변경 경고!!");
 							closeCommLayer("layer4");							
-							openLayer('layer4','alarm3','?part_idx='+part_idx);
+							openLayer('layer4','alarm3','?part_idx='+part_idx+'&change=delete&change_part_idx='+data_split[1]);
 							return;							
 					}		
 					else
-					{
-
-						if(stock_type=="btn-dialog-add"){ //Stock 품목 추가
-				
-							var f =  document.f_addproc;
-							f.typ.value="write";
-							f.part_idx.value=$part_idx.val();
-							f.part_type.value=$part_type.val(); 
-							//f.odr_quantity.value=$odr_qty.val();  //2016-03-25 SCRIPT5007 때문에 원문 주석처리
-							$('#odr_quantity_0501').val($odr_qty.val());  //2016-03-25 SCRIPT5007 때문에 신규 작성
-							f.target = "proc";
-							f.action = "/kor/proc/odr_proc.php";
-							f.submit();
-											 		
-						}else{ //--------------------------------------납기품목 확인 메세지창							
-							//openLayer("layer4","31_03","?part_idx="+$part_idx.val()+"&odr_idx="+$("#odr_idx_31_06").val()+"&odr_quantity="+$odr_qty.val()+"&fromPage=add&fromLoadPage="+$("#fromLoadPage").val()+"&addsearch_part_no="+$("#addsearch_part_no").val());
-							//2015-04-05 위에꺼에서 odr_idx 가져오는 객체를 $("#odr_idx_05_01") 로 변경
-							openLayer("layer4","31_03","?part_idx="+$part_idx.val()+"&odr_idx="+$("#odr_idx_05_01").val()+"&odr_quantity="+$odr_qty.val()+"&fromPage=add&fromLoadPage="+$("#fromLoadPage").val()+"&addsearch_part_no="+$("#addsearch_part_no").val());
-						}
+					{						
+						var frompage = $("input[name='fromPage']").val();
+						var f =  document.f;
+						 f.target = "proc";
+						 //f.target = "_blank";
+						 f.action = "/kor/proc/odr_proc.php";
+						 f.submit();
+						 if(frompage != "add"){
+							 //Refresh_Right();
+							 //Refresh_MainSh(); //2016-04-08
+							 showajax(".col-right", "side_order"); //2017-0417
+						 }
 					}			
 				}//success
 			});		

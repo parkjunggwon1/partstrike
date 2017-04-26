@@ -747,6 +747,7 @@ switch($actty) {
 		 }
 		 //part 테이블 품목 삭제 처리
 		 update_val("part","del_yn","Y", "part_idx", $part_idx);
+		 update_val("part","del_chk","0", "part_idx", $part_idx);
 	   break;
 	case "DA":	//-------------------------------------------------------------------------------
 		update_val("odr_history","fault_select","Y", "odr_history_idx", $actidx);	  
@@ -1240,8 +1241,17 @@ switch($actty) {
 		}
 	}
 
+	
 	if($price_check>0){	//-- 가격 변동 -----
-		echo "PRICE_".$_part_idx;
+		if ($_part_type =="2" || $_part_type =="5" || $_part_type =="6")
+		{
+
+		}
+		else
+		{
+			echo "PRICE_".$_part_idx;
+		}
+		
 	}elseif($safe_stock>0){ //-- 재고 부족 -------------------------------------------------
 		echo "ERR_".$_part_idx;
 	}elseif($part_chk>0){ //-- 파트 존재 여부 -------------------------------------------------		

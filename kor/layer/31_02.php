@@ -11,15 +11,17 @@ $("#odr_quantity").keyup(function(e){
 	maskoff();
 	var $this = $(this).parent().next();
 	var stock_qty = parseInt($("#quantity").val().replace(/,/g, ''));
-	if($(this).val()==""){
+	if($(this).val()=="" || $(this).val()<1){
 		$this.find("button").hide();
 		$this.find("span").show();
 	}else{
 		$this.find("span").hide();
 		$this.find("button").show();	
 	}
-	if(parseInt($(this).val()) > stock_qty){
+	if(parseInt($(this).val()) > stock_qty || parseInt($(this).val())==0){
 		$(this).val("");
+		$this.find("button").hide();
+		$this.find("span").show();
 	}else{
 		maskon();
 	}
@@ -83,6 +85,23 @@ $("#odr_quantity").keyup(function(e){
 					$price_val = $price;
 				}
 
+				$change_part_idx = $_GET['part_idx'];
+				$change_style_price = "";
+				$change_style_qty = "";
+				if ($_GET['change'] == "price" && $change_part_idx == $part_idx)
+				{
+					$change_style_price="style='border-bottom:1px solid red'";
+				}
+				else if ($_GET['change'] == "qty" && $change_part_idx == $part_idx)
+				{
+					$change_style_qty="style='border-bottom:1px solid red'";
+				}
+				else if ($_GET['change'] == "delete" && $change_part_idx == $part_idx)
+				{
+					$change_style_qty="style='border-bottom:1px solid red'";
+					$quantity="0";
+				}
+
 				?>
 				<tr>
 					<td colspan="11" class="title-box first">
@@ -97,8 +116,8 @@ $("#odr_quantity").keyup(function(e){
 					<td><?=$package?></td>
 					<td><?=$dc?></td>
 					<td><?=$rhtype?></td>
-					<td class="t-rt"><?=$quantity?><input type="hidden" name="quantity" id = "quantity"  value="<?=$quantity?>"></td>
-					<td class="t-rt">$<?=$price_val?></td>
+					<td class="t-rt"><span <?=$change_style_qty?>><?=$quantity?></span><input type="hidden" name="quantity" id = "quantity"  value="<?=$quantity?>"></td>
+					<td class="t-rt"><span <?=$change_style_price?>>$<?=$price_val?></span></td>
 					<td>
 						<input type="hidden" name="quantity" id="quantity" value="<?=$quantity;?>">
 						<input type="hidden" name="part_idx" id = "part_idx"  value="<?=$part_idx?>">
