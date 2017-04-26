@@ -673,7 +673,7 @@ $(document).ready(function(){
 			}
 		}
 
-		
+		checkActive();
 		
 		maskon();
 	});
