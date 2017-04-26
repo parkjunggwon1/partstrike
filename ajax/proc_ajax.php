@@ -1241,17 +1241,9 @@ switch($actty) {
 		}
 	}
 
-	
-	if($price_check>0){	//-- 가격 변동 -----
-		if ($_part_type =="2" || $_part_type =="5" || $_part_type =="6")
-		{
 
-		}
-		else
-		{
-			echo "PRICE_".$_part_idx;
-		}
-		
+	if($price_check>0 && ($_part_type !="2" && $_part_type !="5" && $_part_type !="6")){	//-- 가격 변동 -----
+		echo "PRICE_".$_part_idx;				
 	}elseif($safe_stock>0){ //-- 재고 부족 -------------------------------------------------
 		echo "ERR_".$_part_idx;
 	}elseif($part_chk>0){ //-- 파트 존재 여부 -------------------------------------------------		
