@@ -643,6 +643,8 @@ function del_sel()
 	$memo= $odr[memo];
 }
 $det_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx ");  //odr_det 수량
+$odr_amend_yn_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and amend_yn ='Y'");	//발주추가 주문 수량
+
 ?>
 	<form name="f_09_01" id="f_09_01">
 	<input type="hidden" name="odr_idx" id="odr_idx_09_01" value="<?=$odr_idx?>">	
@@ -691,7 +693,9 @@ $det_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx ");  //odr_det 수량
 		<img src="/kor/images/btn_order_add.gif" alt="발주 추가" style="cursor:pointer"  class="btn-dialog-0501-from_0901">
 		<img src="/kor/images/btn_order_confirm.gif" alt="발주서 확인" odr_idx="<?=$odr_idx?>" class="btn-view-sheet-1207">
 		<img src="/kor/images/btn_cancel_1.gif" id="btn_cancel_09_01" alt="취소">
+		<?if ($odr_amend_yn_cnt>0){?>
 		<img src="/kor/images/btn_delete2_1.gif"  alt="삭제" id="btn_del_09_01">
+		<?}?>
 	</div>
 </div>
 

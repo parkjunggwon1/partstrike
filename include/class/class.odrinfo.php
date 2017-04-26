@@ -861,7 +861,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<div class="select type6" lang="en" style="width:60px; padding:0;" >
 							<label style="padding:0;padding-left:2px;padding-top:2px;"><?=$rhtype==""?"":$rhtype?></label>
 							<select name="rhtype[]">
-								<option lang="en" <?if($rhtype=="None"){echo "selected";}?>></option>
+								<option lang="en" <?if($rhtype=="None"){echo "selected";}?>>None</option>
 								<option lang="en" <?if($rhtype=="RoHS"){echo "selected";}?>>RoHS</option>
 								<option lang="en" <?if($rhtype=="HF"){echo "selected";}?>>HF</option>
 							</select>
@@ -1937,7 +1937,8 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 				$part_condition = get_any("odr_det_temp" , "part_condition", "odr_det_idx= '$odr_det_idx' ");
 				$pack_condition1 = get_any("odr_det_temp" , "pack_condition1", "odr_det_idx= '$odr_det_idx' ");
 				$pack_condition2 = get_any("odr_det_temp" , "pack_condition2", "odr_det_idx= '$odr_det_idx' ");
-				$memo = get_any("odr_det_temp" , "memo", "odr_det_idx= '$odr_det_idx' ");
+				$memo = get_any("odr_det_temp" , "memo", "odr_det_idx= '$odr_det_idx' ");				
+
 			}
 
 			//금액이 정수면 ,2 실수면 ,4 포멧 20161202 박정권
@@ -1975,6 +1976,7 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 					<td class="t-rt"><?if ($loadPage!="18_2_09"){?>$<?=$total_price?><?}?></td>
 				</tr>
 				<?
+				
 				$sql = "select * from part where turnkey_idx = $part_idx order by part_idx";
 				//echo $sql;
 				$conn = dbconn();	
@@ -2043,6 +2045,27 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 				?>
 					<tr>
 						<td><?=$i?></td>
+						<?
+						if ($loadPage=="30_09" && !$sheets_no)
+						{ 
+							$tbl = "part_temp";
+						}
+						else
+						{
+							$tbl = "part";
+						}
+						$sql = "select * from ".$tbl." where part_idx = $part_idx ";
+						//echo $sql;
+						$conn = dbconn();	
+						$result_part=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+						while($row_part = mysql_fetch_array($result_part)){							
+							$part_no= replace_out($row_part["part_no"]);
+							$manufacturer= replace_out($row_part["manufacturer"]);
+							$package= replace_out($row_part["package"]);
+							$dc= replace_out($row_part["dc"]);
+							$rhtype= replace_out($row_part["rhtype"]);
+						}
+						?>
 						<td class="t-lt"><?=$part_no?></td>
 						<?if ($pay_invoice=="D"){?>
 							<td class="t-lt"><?=$manufacturer?>, <?=$package?>, <?=$dc?></td>
