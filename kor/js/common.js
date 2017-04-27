@@ -1096,12 +1096,10 @@ $(document).ready(function(){
 						}
 						else if(data_split[0]=="delete")
 						{
-							alert(data_split[2]);
-							alert($("#det_cnt").val());
+							alert(data_split[2]);							
 							closeCommLayer("layer4");							
 							if ($("#det_cnt").val() > 1 || (data_split[2]==2 || data_split[2]==5 || data_split[2]==6))
-							{
-								alert('123123');
+							{								
 								openLayer('layer3','05_04','?odr_idx='+odr_idx+'&change=delete&change_part_idx='+data_split[1]);
 							}														
 							openLayer('layer4','alarm4','?odr_idx='+odr_idx+"&part_idx="+data_split[1]);
