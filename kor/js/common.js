@@ -1095,8 +1095,7 @@ $(document).ready(function(){
 							return;
 						}
 						else if(data_split[0]=="delete")
-						{
-							alert(data_split[2]);							
+						{														
 							closeCommLayer("layer4");							
 							if ($("#det_cnt").val() > 1 || (data_split[2]==2 || data_split[2]==5 || data_split[2]==6))
 							{								
