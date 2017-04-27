@@ -766,7 +766,11 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<?if ($loadPage== "05_04"){?>
 								<?if ($part_type=="2"||$part_type=="5"||$part_type=="6"){?>
 									<?if ($supply_quantity==$odr_quantity){?>
-										<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$supply_quantity?>"  value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:58px;ime-mode:disabled;">									
+										<?if ($quantity==0){?>
+											<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$supply_quantity?>"  value="" style="width:58px;ime-mode:disabled;">		
+										<?}else{?>
+											<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$supply_quantity?>"  value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:58px;ime-mode:disabled;">
+										<?}?>							
 									<?}else{?>
 										<?if ($supply_quantity>$quantity){?>
 										<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$quantity?>"  value="" style="width:58px;ime-mode:disabled;">
@@ -1519,7 +1523,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<td><?=$rhtype?></td>
 
 							<?if($loadPage != "18R_19" && $loadPage!="19_1_05" && $loadPage!="19_1_06" && $loadPage!="30_14" ){?>
-								<?if($loadPage == "30_10" || $loadPage == "13_04s" || $loadPage == "13_02s"){	//What'sNew(구매자:송장)
+								<?if($loadPage == "30_10" || $loadPage == "13_04s" || $loadPage == "13_02s" || $loadPage == "03_02"){	//What'sNew(구매자:송장)
 									//2016-12-25 : 수정발주서가 있는 경우에는 '실수량+공급수량
 									$poa_cnt = QRY_CNT("odr_history", "and odr_idx=$odr_idx and status='3'");
 									$qty = ($poa_cnt>0)? $part_stock+$supply_quantity : $odr_stock;
@@ -2428,6 +2432,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 	}else{
 		
 		$result = QRY_ODR_HISTORY_LIST(0,$searchand , 1 ,"odr_history_idx ");
+
 	}
 
 	
@@ -2442,13 +2447,14 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 		<ol>
 		<?					
 			while($row = mysql_fetch_array($result)){
+				
 				$i++;				
 				$odr_history_idx = replace_out($row["odr_history_idx"]);
 				$reg_date_fmt= replace_out($row["reg_date_fmt"]);
 				$status = replace_out($row["status"]);
 				$status_name = replace_out($row["status_name"]);
 				$reg_mem_idx = replace_out($row["reg_mem_idx"]);
-				
+				echo $row["odr_history_idx"]."SSSSSSSSSSSSSS";
 				$etc1= replace_out($row["etc1"]);
 				$etc2= replace_out($row["etc2"]);	
 				$reason= replace_out($row["reason"]);	
@@ -2508,7 +2514,11 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 			?>
 		</ol>
 	</div>
-	<?}?>
+	<?}else{
+		//삭제를 위한 idx
+		$odr_history_idx = get_any("odr_history", "odr_history_idx", "odr_idx = $odr_idx order by odr_history_idx desc limit 1");
+	}?>
+
 	<?} //end if($loadPage != "31_04") ?>
 	<!-- //layer-step -->
 	<?echo layerFile($loadPage,$reg_mem_idx , $reg_rel_idx , $odr_idx ,$odr_history_idx);
@@ -2567,8 +2577,9 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						   echo layerOrdListData($loadPage ,$odr_idx,$odr_det_idx);
 						   break;
 						case "03_02":?>
-						<td class="company"><img src="/kor/images/nation_title_<?=$buy_com_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$buy_com_nation)?>"> <span class="name c-blue"><a href="javascript:layer_company_det('<?=$buy_com_idx?>');" class="c-blue"><?=$buy_com_name?></a></span></td>
-						<td class="t-ct w100">사유 : <span class="c-red2"><?=$memo?></span></td>
+						<td class="company" style="width:33%;"><img src="/kor/images/nation_title_<?=$buy_com_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$buy_com_nation)?>"> <span class="name c-blue"><a href="javascript:layer_company_det('<?=$buy_com_idx?>');" class="c-blue"><?=$buy_com_name?></a></span></td>
+						<td class="c-red2" style="width:33%;text-align:center;font-size:15px;">구매자가 품목을 삭제하였습니다.</td>
+						<td style="width:33%;""></td>
 						</tr></tbody></table></div>
 					<?
 							echo layerInvListData($loadPage ,$odr_idx,$odr_det_idx , $odr_history_idx);

@@ -109,10 +109,9 @@ Function QRY_CNT_PART($arrDet){
 	$conn = dbconn();	
 	$sql="
 			SELECT COUNT(a.part_idx) AS CNT FROM part AS a
-			LEFT JOIN odr_det AS b
-			ON(a.part_idx = b.part_idx)
-			WHERE b.odr_det_idx IN($arrDet) AND a.del_chk=0
+			WHERE a.part_idx='$arrDet' AND a.del_chk=0
 		";
+		//echo $sql;
 	mysql_query( "SET NAMES utf8");
 	$result=mysql_query($sql,$conn) or die ("SQL ERROR(QRY_CNT) : ".mysql_error());
 	$row=mysql_fetch_array($result);

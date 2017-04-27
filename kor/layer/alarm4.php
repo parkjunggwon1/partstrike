@@ -7,9 +7,10 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";?>
 <div class="layer-content">
 	<?	
 	$part_no=get_any("part", "part_no", "part_idx='$part_idx' ");
-	$part_cnt = QRY_CNT("odr_det"," and odr_idx='$odr_idx' and part_idx='$part_idx' ");  //odr_det 수량
+	$part_type=get_any("part", "part_type", "part_idx='$part_idx' ");
+	$part_cnt = QRY_CNT("odr_det"," and odr_idx='$odr_idx' ");  //odr_det 수량
 	
-	if ($part_cnt==0 && !$_GET['fromLoadPage'])
+	if ($part_cnt==0 && ($part_type==1 || $part_type==3 || $part_type==4))
 	{
 		$btn_type="btn-refresh";
 	}

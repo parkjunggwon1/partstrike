@@ -120,7 +120,7 @@
 	</ul>
 	<section id="topSrch" class="top-box1">
 		<h2 class="hidden">검색</h2>
-		<form id="ftop_sch">
+		<form id="ftop_sch" method="post">
 		<input type="hidden" name="actty" value="">
 		<input type="hidden" id="sel_nation" name="sel_nation" value="">
 		<input type="hidden" id="sel_manufacturer" name="sel_manufacturer" value="">
@@ -132,15 +132,15 @@
 				<tbody>
 					<tr>
 						<th scope="row" lang="en">Part No.</th>
-						<td><input type="text" name="top_part_no" class="w100 onlyEngNum" style="ime-mode:disabled"  onKeyPress="check_key(main_srch);" onkeyup='removeChar2(event)'></td>
+						<td><input type="text" name="top_part_no" id="top_part_no" class="w100 onlyEngNum" style="ime-mode:disabled"  onKeyPress="check_key(main_srch);" onkeyup='removeChar2(event)'></td>
 					</tr>
 					<tr>
 						<th scope="row" lang="en">Manufacturer</th>
-						<td><input type="text" name="top_manufacturer" style="ime-mode:disabled" class="w100 onlyEngNum"  onKeyPress="check_key(main_srch);" onkeyup='removeChar2(event)'></td>
+						<td><input type="text" name="top_manufacturer" id="top_manufacturer" style="ime-mode:disabled" class="w100 onlyEngNum"  onKeyPress="check_key(main_srch);" onkeyup='removeChar2(event)'></td>
 					</tr>
 					<tr>
 						<th scope="row">요청수량</th>
-						<td><input type="text" class="w50 onlynum numfmt" name="top_qty" style="ime-mode:disabled" onKeyPress="check_key(main_srch);" onkeyup='removeChar(event)' maxlength="10" >
+						<td><input type="text" class="w50 onlynum numfmt" name="top_qty" id="top_qty" style="ime-mode:disabled" onKeyPress="check_key(main_srch);" onkeyup='removeChar(event)' maxlength="10" >
 							<label class="<?=($_SESSION["MEM_IDX"]=="") ?"":"ipt-chk"?> chk1">
 								<input type="checkbox" name="area" <?=($_SESSION["MEM_IDX"]=="") ? "disabled style='border-color:#ff8080;'":""?>  >
 								<span></span><img src="/kor/images/top_srch_chck<?=($_SESSION["MEM_IDX"]=="") ?"02":""?>.gif" alt="근접지역"></label></td>
@@ -150,7 +150,7 @@
 						<td class="chk2">
 							<div class="select" lang="en">
 								<label for="yr">N/A</label>
-								<select id="yr" name="dc">
+								<select id="yr" name="dc" id="dc">
 								<option lang='en' value=''>N/A</option>
 								<?
 								for($i=date('Y');$i>=date('Y')-9;$i--){

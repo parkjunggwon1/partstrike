@@ -108,7 +108,7 @@ function QRY_ODR_HISTORY_LIST($recordcnt, $searchand, $page, $ord){
 			 ORDER BY $ord
 			 $limit
 			";      
-		//	echo $sql;
+			echo $sql;
 	mysql_query( "SET NAMES utf8");		
 	$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 	return $result;
