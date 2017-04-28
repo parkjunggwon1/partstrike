@@ -11,7 +11,7 @@
 							</tr>
 							<tr>
 								<th scope="row">총 가입 회원 :</th>
-								<td lang="en"><?=number_format(QRY_CNT("member" ,"and rel_idx <> 0"))?></td>
+								<td lang="en"><?=number_format(QRY_CNT("member" ,"and mem_type in (1,2)"))?></td>
 							</tr>
 							<tr>
 								<th scope="row">총 거래 금액 :</th>
@@ -19,12 +19,30 @@
 
 
 <?function odr_price($mon){
+	/** JSJ
+	아래 소스는 '이번달'이 아니라, 최근 1개월 이다.-KSR
 	if ($mon){$mon_clause = "AND a.reg_date >= date_add( '".date("Y-m-d")."', INTERVAL -1 MONTH ) ";}
+
+	아래 소스는 '수령'이며 det단위 가져오는 것은 오류-KSR
 	$sql = "SELECT sum( c.price * supply_quantity ) as price
 			FROM odr_history a
 			LEFT OUTER JOIN odr_det b ON a.odr_det_idx = b.odr_det_idx
 			LEFT OUTER JOIN part c ON b.part_idx = c.part_idx
 			WHERE a.status =6  $mon_clause
+	";
+	**/
+	/**
+	2017-04-18 KSR
+	status 6=>수령, 15=>종료
+	**/
+	$strDate   = date("Y-m-d", mktime(0, 0, 0, intval(date('m')), 1, intval(date('Y'))  ));
+	if ($mon){$mon_clause = "AND a.reg_date between date('".$strDate."') AND date('".date("Y-m-d")."')+1";}
+
+	$sql = "SELECT sum( c.price * supply_quantity ) as price
+			FROM odr_history a
+			LEFT OUTER JOIN odr_det b ON a.odr_idx = b.odr_idx
+			LEFT OUTER JOIN part c ON b.part_idx = c.part_idx
+			WHERE a.status =15  $mon_clause
 	";
 	//	echo $sql;
 	$conn = dbconn();

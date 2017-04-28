@@ -60,6 +60,14 @@ $(document).ready(function(){
 		$("#layerPop3 .stock-list-table").append($(totsel).fadeIn(300)).show();
 		$("#layerPop3 .stock-list-table tbody td").removeClass("first");
 		$("#layerPop3 .stock-list-table tbody td:eq(0)").addClass("first");
+
+		//요기서... 09_01일때.. 2.5.6 빼자
+		var LPage = $("#fromLoadPage").val();
+		if(LPage=="09_01"){
+			$("#adtb_2").remove();
+			$("#adtb_5").remove();
+			$("#adtb_6").remove();
+		}
 	
 		if($("#layerPop3 tbody[id^=adtb] input[name=odr_quantity]").length>0){
 			//대표님 요청으로 삭제 2016-11-23
@@ -151,7 +159,7 @@ $(document).ready(function(){
 			</tr>
 		</thead>
 		<?	for ($i = 1; $i<=6; $i++){							
-				if($fromLoadPage != "09_01" || ( $fromLoadPage =="09_01" && ($i ==1 || $i == 3 || $i == 4))){
+				//if($fromLoadPage != "09_01" || ( $fromLoadPage =="09_01" && ($i ==1 || $i == 3 || $i == 4))){
 				$searchand = "and mem_idx = $sell_mem_idx and part_idx not in (select part_idx from odr_det where odr_idx = $odr_idx) ";
 				if ($addsearch_part_no){
 						$searchand .= "and part_no like '%$addsearch_part_no%' "; 
@@ -159,7 +167,7 @@ $(document).ready(function(){
 						$searchand .= "and part_no = '' and manufacturer = '' and rhtype = ''";
 				}
 				echo GET_ADDPART_LIST($i , $searchand);
-			}
+			//}
 		}?>
 		
 	</table>

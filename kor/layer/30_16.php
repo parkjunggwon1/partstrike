@@ -46,6 +46,7 @@ if($ship[delivery_addr_idx] > 0){
 		}
 		//if (nullchk(f.delivery_no,"운송장 번호를 입력해주세요.")== false) return ;
 		//새로운 방법 : 일부일때는 복제하는 ajax 처리 후 new_idx 로 폼 전송.
+		/** 2017-04-18, 선적단계 '취소' PPT(57-1)을 보면 det 단위 선적 없음(option 없음)
 		if(det_cnt > selCnt){  //일부일때 ajax로 복제 처리 하자
 			//alert("복제처리...");
 			var $chked_odr_det = sel_box;
@@ -74,11 +75,12 @@ if($ship[delivery_addr_idx] > 0){
 				}
 			});
 		}
-		/*
+		**/
+
 		f.typ.value="shipping";
 		f.target = "proc";
 		f.action = "/kor/proc/odr_proc.php";
-		f.submit();		*/
+		f.submit();
 
 		openCommLayer("layer6","alert2","?btn=btn_transmit&alert_title="+encodeURIComponent('선적')+"&alert_msg="+encodeURIComponent('선적이 완료되었습니다.')+"")
 	}

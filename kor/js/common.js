@@ -1219,17 +1219,16 @@ $(document).ready(function(){
 	});
 	//선적(3016)화면에서 취소 버튼 -> '취소' 화면에서 '환불' 버튼
 	$("body").on("click",".btn-refund-cancel",function(){
-		/**
+		/** 기존(바로DB처리)
 		var f = document.f_pocancel;
 		f.target = "proc";
 		//f.target = "_blank";
 		f.action = "/ajax/proc_ajax.php";
 		f.submit();	
 		**/
-
 		//INVOICE SHEET 필요
 		var extraVal="" , odr_idx="";
-		openLayer("layer5","30_16_04","?odr_idx="+$("#odr_idx_3016_cancel").val()+"&odr_det_idx="+$("#cancel_det_idx").val());
+		openLayer("layer5","30_16_04","?odr_idx="+$("#odr_idx_3016_cancel").val()+"&cancel_det_idx="+$("#cancel_det_idx").val());
 	});
 	//판매자 송장화면(30_08), 수정발주서(09_01) : '취소' 버튼 -----------------------------------------2016-04-12
 	$("body").on("click",".btn-cancel-3008, .btn-cancel-0901",function(){
@@ -3228,11 +3227,24 @@ function Refresh_MainSh(){
 //---------------------------------------------------- 메인 검색 ------------------------------------------------------------------
 function main_srch(){
 	if ($("input[name=top_part_no]").val().length>1)
-	{		
-		setCookie("main_search","y");
-		$("#sel_nation").val($("#opt1 option:selected").length==0?"":$("#opt1 option:selected").val());
+	{
+	$("#sel_nation").val($("#opt1 option:selected").length==0?"":$("#opt1 option:selected").val());
 	$("#sel_manufacturer").val($("#opt2 option:selected").length==0?"":$("#opt2 option:selected").val());
 	$("#ftop_sch input[name=actty]").val("mainsrch");
+	//2017-04-05 : 특수문자, 공백 제거 관련
+	var tStr = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi
+	var oriPartNo = $("#top_part_no").val();
+	var shPartNo = oriPartNo.replace(tStr,"");
+	shPartNo = shPartNo.replace(/^\s+|\s+$/g,"");
+	shPartNo = shPartNo.replace(/\s/g,"");
+	$("#top_part_no").val(shPartNo);
+
+	var oriManu = $("#top_manufacturer").val();
+	var shManu = oriManu.replace(tStr,"");
+	shManu = shManu.replace(/^\s+|\s+$/g,"");
+	shManu = shManu.replace(/\s/g,"");
+	$("#top_manufacturer").val(shManu);
+
 	setMenuNull();
 	var formData = $("#ftop_sch").serialize(); 
 		$.ajax({
@@ -3317,9 +3329,10 @@ function main_srch(){
 					});
 					
 				}
-		});		
-	}else{		
-		setCookie("main_search","n");
+		});
+		$("#top_part_no").val(oriPartNo);
+		$("#top_manufacturer").val(oriManu);
+	}else{
 		alert_msg("2자 이상 입력바랍니다");
 	}	
 }

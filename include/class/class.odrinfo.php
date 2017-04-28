@@ -2454,7 +2454,6 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 				$status = replace_out($row["status"]);
 				$status_name = replace_out($row["status_name"]);
 				$reg_mem_idx = replace_out($row["reg_mem_idx"]);
-				echo $row["odr_history_idx"]."SSSSSSSSSSSSSS";
 				$etc1= replace_out($row["etc1"]);
 				$etc2= replace_out($row["etc2"]);	
 				$reason= replace_out($row["reason"]);	
