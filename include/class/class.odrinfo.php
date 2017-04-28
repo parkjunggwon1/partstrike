@@ -296,6 +296,10 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								{
 									$quantity= $quantity==0?"":number_format($quantity);
 								}
+								if ($del_chk=="0")
+								{
+									$quantity="0";
+								}
 								echo $quantity;
 							}else{
 								if ($part_type =="2"){									
@@ -535,6 +539,11 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						$no_modify = "readonly";
 						$no_modify_border = "border:0;";
 					}
+
+					$change_part_idx = $_GET['change_part_idx'];
+					$change_style_price = "";
+					$change_style_qty = "";
+										
 					?>
 					<td><?=$i?><input type="hidden" name="odr_det_idx[]" value="<?=$odr_det_idx?>"></td>
 					<td class="t-lt"><input type="text" class="i-txt4" id="part_no"  value="<?=$part_no?>" maxlength="24" style="<?=$no_modify_border?>ime-mode:disabled; width:100%" <?=$no_modify?>></td>
@@ -574,12 +583,33 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					else
 					{
 						$quantity= $quantity==0?"":number_format($quantity);
+
+					}
+
+					if ($_GET['change'] == "price" && $change_part_idx == $real_part_idx)
+					{
+						$change_style_price="style='border-bottom:1px solid red'";
+					}
+					else if ($_GET['change'] == "qty" && $change_part_idx == $real_part_idx)
+					{
+						$change_style_qty="style='border-bottom:1px solid red'";
+						$odr_quantity="";
+					}
+					else if ($_GET['change'] == "delete" && $change_part_idx == $real_part_idx)
+					{
+						$change_style_qty="style='border-bottom:1px solid red'";
+						$quantity="0";
 					}
 					?>
-					<td class="t-rt"><?=$quantity?><input type="hidden" name="qty" id="31_05_qty" value="<?=$quantity;?>"></td>
+					<td class="t-rt"><span <?=$change_style_qty?>><?=$quantity?></span><input type="hidden" name="qty" id="31_05_qty" value="<?=$quantity;?>"></td>
 					<td class="t-rt">$<?=$price_val?></td>
 					<td class="c-blue t-rt"><?=number_format($odr_quantity)?></td>
-					<td><input type="text" id = "supply_quantity" name="supply_quantity" class="i-txt4 c-red2 onlynum numfmt t-rt" maxlength="10" value="" style="width:58px"></td>
+					<td>
+						<input type="text" id = "supply_quantity" name="supply_quantity" class="i-txt4 c-red2 onlynum numfmt t-rt" maxlength="10" value="" style="width:58px">
+						<input type="hidden" class="i-txt2 c-blue onlynum t-rt" name="quantity" value="<?=$quantity?>" maxlength="10">
+						<input type="hidden" name="part_idx" value="<?=$real_part_idx?>">
+						<input type="hidden" name="price" value="<?=$price?>">
+					</td>
 					<td><input type="text" class="i-txt4 c-red2 t-ct" id = "period" name="period" value="" style="width:38px" maxlength="4" readonly> <span class="c-red2"><?if ($part_type=="2"){echo "WK";}else{echo "Days";}?></span></td>
 					<?
 				}elseif ($loadPage== "09_01"){  //-------------------------------------- 09_01 : 수정 발주서 2016-04-14------------------------------------?>
@@ -1541,13 +1571,24 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								<?}else if($loadPage == "02_02"){?>									
 									<td class="t-rt">0</td>	
 								<?}else if($loadPage == "31_06"){?>			
+									<?
+										if ($del_chk=="0")
+										{
+											$part_stock="0";
+											$part_2_stock="0";
+										}
+										else
+										{
+											$part_2_stock="I";
+										}
+									?>
 									<?if ($part_type=="2"){?>
-										<td class="t-rt">I</td>	
+										<td class="t-rt"><?=$part_2_stock?></td>	
 									<?}else{?>
-										<td class="t-rt"><?=$part_stock==0?"-":number_format($part_stock)?></td>
+										<td class="t-rt"><?=$part_stock==0?"0":number_format($part_stock)?></td>
 									<?}?>
 								<?}else{?>									
-									<td class="t-rt"><?=$supply_quantity==0?"-":number_format($supply_quantity)?></td>							
+									<td class="t-rt"><?=$supply_quantity==0?"0":number_format($supply_quantity)?></td>							
 								<?}?>
 							<?}?>
 						<?}?>

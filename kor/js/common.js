@@ -732,24 +732,68 @@ $(document).ready(function(){
 			}else{
 				period = $("#period").val() + "Days";
 			}
-			$.ajax({
-				url: "/kor/proc/odr_proc.php", 
-				//data: "typ=periodcfrm&odr_det_idx="+$("#odr_det_idx_31_05").val()+"&part_type="+$("#part_type_31_05").val()+"&part_no="+$("#part_no").val()+"&manufacturer="+encodeURIComponent($("#manufacturer").val())+"&package="+$("#package").val()+"&dc="+$("#dc").val()+"&supply_quantity="+$("#supply_quantity").val()+"&period="+$("#period").val()+"&pkind="+$(".layer-pagination.red .c-red2").text(),
-				data: "typ=periodcfrm&odr_det_idx="+$("#odr_det_idx_31_05").val()+"&part_type="+$("#part_type_31_05").val()+"&part_no="+$("#part_no").val()+"&manufacturer="+encodeURIComponent($("#manufacturer").val())+"&package="+$("#package").val()+"&dc="+$("#dc").val()+"&rhtype="+$("select[name='rhtype[]']").val()+"&supply_quantity="+$("#supply_quantity").val()+"&period="+period+"&pkind="+$(".layer-pagination.red .c-red2").text(),
-				encType:"multipart/form-data",
-				success: function (data) {	
-					if (trim(data) == "SUCCESS ALL" || trim(data) == "SUCCESS"){		
-						//alert_msg("구매자에게 납기 확인 완료 메세지를 보냈습니다.");
-						document.location.href="/kor/";
-					}else if(trim(data) == "SUCCESS"){	
-						// 아직 납기 처리 해야 할게 남아 있으므로 해다 페이지 reloading
+
+			var $supp_qty = $(this).parent().parent().find("input[name=supply_quantity]");
+			var $qty = $supp_qty.next();
+			var $part_idx = $qty.next();
+			var price_chk = $part_idx.next();
+			
+			$.ajax({ 
+				type: "GET", 
+				url: "/ajax/proc_ajax.php?actty=part_info_chk&part_idx="+$part_idx.val()+"&price="+$qty+"&qty="+$qty.val()+"&odr_qty="+$supp_qty.val()+"&type=period", 					
+				dataType : "text" ,
+				async : false ,
+				success: function(data){
+					var data_string = $.trim(data);
+					var data_split = data_string.split( '_' );
+					
+					if(data_split[0]=="price")
+					{	//가격변동 경고!!
 						closeCommLayer("layer3");
-						openLayer("layer","31_04","?mn=01&status=1&page=1");
-					}else{
-						alert_msg(data);
+						closeCommLayer("layer4");
+						openCommLayer('layer3','31_05','?odr_det_idx='+$("#odr_det_idx_31_05").val()+'&part_type='+$("#part_type_31_05").val()+'&change=price&change_part_idx='+data_split[1]);
+						openLayer('layer4','alarm2','?odr_det_idx='+$("#odr_det_idx_31_05").val());	//가격변동 경고창
+						return;
 					}
-				}  
-		});		
+					else if(data_split[0]=="qty")
+					{
+						closeCommLayer("layer4");
+						openLayer('layer3','31_05','?odr_det_idx='+$("#odr_det_idx_31_05").val()+'&part_type='+$("#part_type_31_05").val()+'&change=qty&change_part_idx='+data_split[1]);
+						openLayer('layer4','alarm','?odr_det_idx='+$("#odr_det_idx_31_05").val());
+						return;
+					}
+					else if(data_split[0]=="delete")
+					{														
+						closeCommLayer("layer4");				
+						openLayer('layer3','31_05','?odr_det_idx='+$("#odr_det_idx_31_05").val()+'&part_type='+$("#part_type_31_05").val()+'&change=delete&change_part_idx='+data_split[1]);			
+						openLayer('layer4','alarm4','?odr_det_idx='+$("#odr_det_idx_31_05").val()+"&part_idx="+data_split[1]);
+						return;
+					}	
+					else
+					{
+
+						$.ajax({
+							url: "/kor/proc/odr_proc.php", 
+							//data: "typ=periodcfrm&odr_det_idx="+$("#odr_det_idx_31_05").val()+"&part_type="+$("#part_type_31_05").val()+"&part_no="+$("#part_no").val()+"&manufacturer="+encodeURIComponent($("#manufacturer").val())+"&package="+$("#package").val()+"&dc="+$("#dc").val()+"&supply_quantity="+$("#supply_quantity").val()+"&period="+$("#period").val()+"&pkind="+$(".layer-pagination.red .c-red2").text(),
+							data: "typ=periodcfrm&odr_det_idx="+$("#odr_det_idx_31_05").val()+"&part_type="+$("#part_type_31_05").val()+"&part_no="+$("#part_no").val()+"&manufacturer="+encodeURIComponent($("#manufacturer").val())+"&package="+$("#package").val()+"&dc="+$("#dc").val()+"&rhtype="+$("select[name='rhtype[]']").val()+"&supply_quantity="+$("#supply_quantity").val()+"&period="+period+"&pkind="+$(".layer-pagination.red .c-red2").text(),
+							encType:"multipart/form-data",
+							success: function (data) {	
+								if (trim(data) == "SUCCESS ALL" || trim(data) == "SUCCESS"){		
+									//alert_msg("구매자에게 납기 확인 완료 메세지를 보냈습니다.");
+									document.location.href="/kor/";
+								}else if(trim(data) == "SUCCESS"){	
+									// 아직 납기 처리 해야 할게 남아 있으므로 해다 페이지 reloading
+									closeCommLayer("layer3");
+									openLayer("layer","31_04","?mn=01&status=1&page=1");
+								}else{
+									alert_msg(data);
+								}
+							}  
+						});
+					}			
+				}//success
+			});	
+
 
 		}
 	});
@@ -1068,7 +1112,7 @@ $(document).ready(function(){
 						addr : $("#addr").val(),
 						log_date : $("#log_date").val(),
 						log_ip : $("#log_ip").val(),
-						actidx : $(this).attr("odr_idx"),
+						actidx : $(this).attr("odr_idx"),						
 						actkind : $(this).attr("new_odr_idx")
 					},
 				dataType : "text" ,

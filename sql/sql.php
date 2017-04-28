@@ -1,12 +1,12 @@
 <?
 function dbconn(){
-	$conn=mysql_connect("localhost","root","wjdrnjs1");  // ¼­¹ö /ID/pw
-	mysql_select_db("pjg0319", $conn); // DB ¸í ¼öÁ¤
+	$conn=mysql_connect("localhost","root","wjdrnjs1");  // Â¼Â­Â¹Ã¶ /ID/pw
+	mysql_select_db("pjg0319", $conn); // DB Â¸Ã­ Â¼Ã¶ÃÂ¤
 	mysql_query("SET NAMES UTF8");
 	return $conn;
 }
 
-//°¹¼ö
+//ê°¯ìˆ˜
 function QRY_CNT($tbl,$searchand){
 
 	$conn = dbconn();
@@ -28,7 +28,7 @@ function QRY_CNT($tbl,$searchand){
 	return $total;
 }
 
-//°¹¼ö
+//ê°¯ìˆ˜
 function QRY_CNT_GROUP($tbl,$searchand,$grb){
 
 	$conn = dbconn();
@@ -51,7 +51,7 @@ function QRY_CNT_GROUP($tbl,$searchand,$grb){
 	return $total;
 }
 
-//°¹¼ö
+//ê°¯ìˆ˜
 function QRY_CNT2($c,$tbl,$searchand){
 
 	$conn = dbconn();	
@@ -69,18 +69,19 @@ function QRY_CNT2($c,$tbl,$searchand){
 	$total=$row[CNT];
 	return $total;
 }
-//Àç°í°¡ 0 º¸´Ù ÀÛÀº °¹¼ö 2016-04-03 ccolle
-//2016-09-11 : Áö¼ÓÀû...Àº Ä«¿îÆ®¿¡¼­ Á¦¿Ü.
-//2016-11-13 : ÅÏÅ°µµ Á¦¿Ü..
+//ìž¬ê³ ê°€ 0 ë³´ë‹¤ ìž‘ì€ ê°¯ìˆ˜ 2016-04-03 ccolle
+//2016-09-11 : ì§€ì†ì ...ì€ ì¹´ìš´íŠ¸ì—ì„œ ì œì™¸.
+//2016-11-13 : í„´í‚¤ë„ ì œì™¸..
 function QRY_CNT_STOCK($arrDet){
 
 	$conn = dbconn();	
 	$sql="
-			SELECT COUNT(a.part_idx) AS CNT FROM part AS a
+			SELECT a.part_idx AS CNT FROM part AS a
 			LEFT JOIN odr_det AS b
 			ON(a.part_idx = b.part_idx)
-			WHERE a.part_type NOT IN('2','7') AND b.odr_det_idx IN($arrDet) AND (a.quantity - b.odr_quantity) < 0
+			WHERE a.part_type NOT IN('2','7') AND b.odr_det_idx IN($arrDet) AND (a.quantity - b.odr_quantity) < 0 order by odr_det_idx asc limit 1
 		";
+		//echo $sql;
 		mysql_query( "SET NAMES utf8");
 	$result=mysql_query($sql,$conn) or die ("SQL ERROR(QRY_CNT) : ".mysql_error());
 	$row=mysql_fetch_array($result);
@@ -88,7 +89,7 @@ function QRY_CNT_STOCK($arrDet){
 	return $total;
 }
 
-//2016-12-28 : ÁÖ¹®¼­¿¡¼­ '°¡°Ýº¯µ¿'ÀÌ ÀÖ´Â Ç°¸ñ Ä«¿îÆ®
+//2016-12-28 : ì£¼ë¬¸ì„œì—ì„œ 'ê°€ê²©ë³€ë™'ì´ ìžˆëŠ” í’ˆëª© ì¹´ìš´íŠ¸
 Function QRY_CNT_FLUC($arrDet){
 	$conn = dbconn();	
 	$sql="
@@ -104,7 +105,7 @@ Function QRY_CNT_FLUC($arrDet){
 	return $total;
 }
 
-//2017-03-28 : ÆÄÆ® Á¸Àç ¿©ºÎ
+//2017-03-28 : íŒŒíŠ¸ ì¡´ìž¬ ì—¬ë¶€
 Function QRY_CNT_PART($arrDet){
 	$conn = dbconn();	
 	$sql="
@@ -119,7 +120,21 @@ Function QRY_CNT_PART($arrDet){
 	return $total;
 }
 
-//ÃÑÆäÀÌÁö¼ö
+Function QRY_STOCK_PART($arrDet){
+	$conn = dbconn();	
+	$sql="
+			SELECT quantity AS CNT FROM part AS a
+			WHERE a.part_idx='$arrDet' AND a.del_chk=1
+		";
+		echo $sql;
+	mysql_query( "SET NAMES utf8");
+	$result=mysql_query($sql,$conn) or die ("SQL ERROR(QRY_CNT) : ".mysql_error());
+	$row=mysql_fetch_array($result);
+	$total=$row[CNT];
+	return $total;
+}
+
+//ì´íŽ˜ì´ì§€ìˆ˜
 Function QRY_TOTALPAGE($cnt,$recordcnt){
 	$total_page = (int)($cnt%$recordcnt);
 

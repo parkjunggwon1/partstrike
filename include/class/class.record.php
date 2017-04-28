@@ -262,8 +262,19 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			<!--odr_stock으로 바꿈 2016-11-8-->
 			
 			<?if ($odr_status==0 || $odr_status==1 || $odr_status==2 || $odr_status==3 || $odr_status==8 || $odr_status==16 || $odr_status==18 || $odr_status==19 || $odr_status==20 || $odr_status==31){?>
+				<?
+					if ($del_chk==0)
+					{
+						$part_stock="0";
+						$part_2_stock="0";
+					}
+					else
+					{
+						$part_2_stock="I";
+					}
+				?>
 				<?if ($part_type==2){?>
-					<td  <?=$goJump?>  class="t-rt">I</td>
+					<td  <?=$goJump?>  class="t-rt"><?=$part_2_stock?></td>
 				<?}else{?>
 					<?if ($imsi_odr_no){?>
 						<td  <?=$goJump?>  class="t-rt"><?=$part_stock<=0?"0":number_format($part_stock)?></td>

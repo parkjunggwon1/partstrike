@@ -18,9 +18,18 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";?>
 	{
 		$btn_type="btn-close";
 	}
+
+	if ($part_type==2 || $part_type==5 || $part_type==6)
+	{
+		$msg="품목이 삭제되었습니다.";
+	}
+	else
+	{
+		$msg="판매자가 해당 품목을 삭제하였습니다.";
+	}
 	?>
 	<p class="txt-warning t-ct">
-	판매자가 해당 품목을 삭제하였습니다.
+	<?=$msg?>
 	</p>
 	<p class="txt-warning t-ct" style="margin-top:10px;">
 		<span class='c-blue'><?=$part_no?></span>
