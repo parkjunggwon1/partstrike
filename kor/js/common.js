@@ -740,7 +740,7 @@ $(document).ready(function(){
 			
 			$.ajax({ 
 				type: "GET", 
-				url: "/ajax/proc_ajax.php?actty=part_info_chk&part_idx="+$part_idx.val()+"&price="+$qty+"&qty="+$qty.val()+"&odr_qty="+$supp_qty.val()+"&type=period", 					
+				url: "/ajax/proc_ajax.php?actty=part_info_chk&part_idx="+$part_idx.val()+"&price="+$qty.val().replace(",","")+"&qty="+$qty.val().replace(",","")+"&odr_qty="+$supp_qty.val().replace(",","")+"&type=period", 					
 				dataType : "text" ,
 				async : false ,
 				success: function(data){
@@ -938,6 +938,7 @@ $(document).ready(function(){
 
 						closeCommLayer("layer5");	//invoic 닫고
 						closeCommLayer("layer3");	//송장(3008) 닫고
+						closeCommLayer("layer4");	//공지창 닫고
 						closeCommLayer("layer");
 						
 						switch (menu_type_chk) {
@@ -960,6 +961,7 @@ $(document).ready(function(){
 					}else{
 						//2016-12-11 : 재고 경고
 						closeCommLayer("layer5");	//invoic 닫고
+						closeCommLayer("layer4");	//공지창 닫고
 						closeCommLayer("layer3");	//송장(3008) 닫고
 						openLayer("layer5","30_05","?odr_idx="+$("#odr_idx_30_09").val());	//P.O 다시 열고
 						openLayer('layer3','30_08','?odr_idx='+$("#odr_idx_30_09").val());		//송장 다시 열고

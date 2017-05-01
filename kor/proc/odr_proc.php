@@ -404,7 +404,8 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
     $ary_rosh = $_POST[rosh];
     $ary_rhtype = $_POST[rhtype];
     $ary_memo = $_POST[memo];
-
+    $ary_part_type = $_POST[part_type];
+    $part_type_chk = "";
     
 
     if($turnkey_cnt>0){
@@ -429,6 +430,10 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
         //턴키가 아닐 경우 odr_det 정보 업데이트
          for ($j = 0 ; $j<count($ary_odr_det_idx); $j++){
 
+            if ($ary_part_type[$j]=="2")
+            {
+                $part_type_chk ="1";
+            }
             /*$sql = "update odr_det_temp set
                  supply_quantity            = '".$ary_supply_quantity[$j]."'
                 , part_condition            = '".$ary_part_condition[$j]."'
@@ -502,7 +507,15 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
      }//end of 턴키 or else
 
      //2016-04-18 송장번호 생성하자
-    $inv_no = get_auto_no("EI", "odr", "invoice_no");
+    if ($part_type_chk==1)
+    {
+        $inv_no = get_auto_no("DPI", "odr", "invoice_no");
+    }
+    else
+    {
+        $inv_no = get_auto_no("EI", "odr", "invoice_no");
+    }
+   
     update_val("odr","invoice_no",$inv_no , "odr_idx", $odr_idx);
      //2016-11-11 : 아래.. 왜 하는지 모르겠으나, tax Update 제거
      //$sql = "update ship set appoint_yn = '$appoint_yn' , tax = '$tax' where odr_idx = $odr_idx";

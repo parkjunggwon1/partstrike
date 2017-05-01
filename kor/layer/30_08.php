@@ -310,7 +310,7 @@ $(document).ready(function(){
 									$tax_name = get_any("tax", "tax_name", "nation=$b_nation");
 									?>
 									<tr>
-										<td colspan="4" style="padding-left:3px"><label class="ipt-chk chk2"><input type="checkbox" disabled="disabled" <?if ($tax){?>checked class="checked"<?}?>><span></span> <?=$tax_name?>  <input type="text" class="i-txt5" name="tax" value="<?=$tax?>" style="width:50px;text-align:right;margin-bottom:5px;" <?if (QRY_CNT("odr_det", "and odr_idx = $odr_idx and part_type =2") > 0){echo "readonly";}?>> %</label></td>
+										<td colspan="4" style="padding-left:3px"><label class="ipt-chk chk2"><input type="checkbox" disabled="disabled" <?if ($tax){?>checked class="checked"<?}?>><span></span> <?=$tax_name?>  <input type="text" class="i-txt5" name="tax" value="<?=$tax?>" style="width:50px;text-align:right;margin-bottom:5px;" > %</label></td>
 									</tr>
 									<?}?>
 									<tr>

@@ -18,10 +18,12 @@ if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 
 	$odr_idx = get_any("odr", "max(odr_idx)", "odr_status=99 AND doc_no='$sheets_no'");
 	//echo "max(odr_idx)", "odr_status=99 AND doc_no='$sheets_no'";
 }
+
 $result_odr = QRY_ODR_VIEW($odr_idx);    
 $row_odr = mysql_fetch_array($result_odr);
 $odr_no = $row_odr['odr_no'];
 $now_invoice = $row_odr['invoice_no'];
+
 $result_odr_det =QRY_ODR_DET_LIST(0,"and odr_idx = ".$odr_idx,0); 
 $row_odr_det = mysql_fetch_array($result_odr_det);
 
@@ -154,23 +156,21 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 			}
 			elseif (($pay_invoice =="D") && $row_odr_det["part_type"]==2){?>Down Payment Invoice<?
 
+
 				$chr = "DPI";
-				$invoice_no = str_replace("EI", $chr, get_auto_no("EI", "odr" , "invoice_no"));
-				$odr_invoice_cnt =QRY_CNT("odr", "and odr_idx ='$odr_idx' and invoice_no <> '".$invoice_no."' "); 
-				$history_invoice_cnt =QRY_CNT("odr_history", "and odr_idx ='$odr_idx' and etc1 = '".$invoice_no."' "); 
+
+				$odr_invoice_cnt =QRY_CNT("odr", "and odr_idx ='$odr_idx' and invoice_no <> '".$row_odr["invoice_no"]."' "); 
+				$history_invoice_cnt =QRY_CNT("odr_history", "and odr_idx ='$odr_idx' and etc1 = '".$row_odr["invoice_no"]."' "); 
 
 				if ($odr_invoice_cnt == $history_invoice_cnt)
 				{
-					$invoice_no = get_auto_no("DPI", "odr" , "invoice_no");
-					$invoice_no = str_replace("EI", $chr,$row_odr["invoice_no"]);
-					
+					$invoice_no = $now_invoice;						
 				}
 				else
 				{
 					if (!$loadPage)
 					{
-						$invoice_no = get_auto_no("DPI", "odr" , "invoice_no");
-						$invoice_no = str_replace("EI", $chr,$invoice_no);
+						$invoice_no = $now_invoice;	
 					}
 					else
 					{

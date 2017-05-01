@@ -335,7 +335,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							$day_val = "WK";
 						}
 					?>
-					<td class=""><?=($period)?"".str_replace("WK","",$period).$day_val."":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>					
+					<td class=""><?=($period)?""."<span class='c-red'>".str_replace("WK","",$period).$day_val."</span>":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>					
 					<?}elseif ($loadPage == "31_04"){?>
 					<td class="c-blue t-rt"><?=number_format($odr_quantity)?></td>
 					<td class="t-rt"<?=($period)? "":"style=\"padding-right:0px;\"";?>>
@@ -582,7 +582,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					}
 					else
 					{
-						$quantity= $quantity==0?"":number_format($quantity);
+						$quantity= $quantity==0?"0":number_format($quantity);
 
 					}
 
@@ -593,7 +593,6 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					else if ($_GET['change'] == "qty" && $change_part_idx == $real_part_idx)
 					{
 						$change_style_qty="style='border-bottom:1px solid red'";
-						$odr_quantity="";
 					}
 					else if ($_GET['change'] == "delete" && $change_part_idx == $real_part_idx)
 					{
@@ -936,7 +935,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							$day_val = "WK";
 						}
 					?>
-					<?=($period)?"<td class=''>".str_replace("WK","",$period).$day_val."":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
+					<?=($period)?"<td class=''>"."<span class='c-red'>".str_replace("WK","",$period).$day_val."</span>":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
 					<??>
 					</tr>
 					<tr>
@@ -2113,7 +2112,7 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 						?>
 						<td class="t-lt"><?=$part_no?></td>
 						<?if ($pay_invoice=="D"){?>
-							<td class="t-lt"><?=$manufacturer?>, <?=$package?>, <?=$dc?></td>
+							<td class="t-lt"><?=$manufacturer?>, <?=$package?>, <?=$dc?>, <?=$rhtype?></td>
 						<?}else{?>
 							<td class="t-lt"><?=$manufacturer?>, <?=$package?>, <?=$dc?>, <?=$rhtype?><?=$extra?></td>
 						<?}?>
@@ -2228,10 +2227,18 @@ if ($for_readonly != "P") {?>
 			{
 				$vat_price = get_any("tax" ,"tax_percent", "nation=$ship_nation ");	//부가세
 			}
-			//echo $vat_price."BBBBB";
-
+			
+			if (($vat_price == (int)$vat_price))
+			{
+				$vat_price = number_format($vat_price);
+			}
+			else
+			{
+				$vat_price = number_format($vat_price,2);
+			}
+	
 			$vat_val = $vat_price/100;
-			$vat_plus =  $tot*$vat_val;			
+			$vat_plus =  $tot*$vat_val;	
 			$tot = $tot + $vat_plus;
 			$tot_val = $tot;
 
@@ -2301,13 +2308,20 @@ if ($for_readonly != "P") {?>
 				<li class="sub  c-red"><strong>Down Payment :</strong><span>-$<?=round_down(str_replace("-","",$down),4)?></span></li>	
 				<li class="sub"><strong><?=$tax_name?> :</strong><span>$<?=$vat_plus?></span></li>			
 			<?}else{	//계약금 계산-------		
-				$tot = str_replace(",","",$tot);	
-				$tot = ($tot / 10) - ($vat_plus/10);
+				$tot = str_replace(",","",$tot_vat_minus);
+				
+				$tot = ($tot / 10);
+
 				$tot = round_down($tot,4);
+
 				$charge_type = "2";
 				if( ($tot == (int)$tot) )
 				{
 					$tot = number_format($tot,2);
+				}
+				else
+				{
+					$tot = number_format($tot,4);
 				}
 				
 				?>
