@@ -484,6 +484,10 @@ $(document).ready(function(){
 			} else{
 				showajaxParam('.col-right','side_order','');
 			}
+			var $button_chk = $(this);
+			
+			$button_chk.children("button").attr("class","");	
+			$button_chk.children("img").attr("src","/kor/images/loding_img.gif");
 		/**
 		$.ajax({
 				url: "/kor/proc/odr_proc.php", 
@@ -737,6 +741,7 @@ $(document).ready(function(){
 			var $qty = $supp_qty.next();
 			var $part_idx = $qty.next();
 			var price_chk = $part_idx.next();
+			var $button_chk = $(this);
 			
 			$.ajax({ 
 				type: "GET", 
@@ -771,6 +776,8 @@ $(document).ready(function(){
 					}	
 					else
 					{
+						$button_chk.children("button").attr("class","");	
+						$button_chk.children("img").attr("src","/kor/images/loding_img.gif");
 
 						$.ajax({
 							url: "/kor/proc/odr_proc.php", 
@@ -1084,7 +1091,7 @@ $(document).ready(function(){
 	//order sheet 실 발주 처리 [공지]화면의 '발주서 확인' 버튼 -----------------------
 	$("body").on("click",".btn-view-sheet",function(){		
 			var odr_idx = $(this).attr("odr_idx");
-			
+			var $button_chk = $(this);			
 
 			$.ajax({ 
 				type: "GET", 
@@ -1153,6 +1160,9 @@ $(document).ready(function(){
 					}
 					else
 					{
+						$button_chk.children("button").attr("class","");	
+						$button_chk.children("img").attr("src","/kor/images/loding_img.gif");
+
 						openLayer("layer5","30_05","?odr_idx="+data); //P.O Sheet
 						$(".layer5-section .btn-close img").css("display","none"); //X버튼 숨기기
 					}

@@ -302,8 +302,16 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								}
 								echo $quantity;
 							}else{
-								if ($part_type =="2"){									
-									echo "I";				
+								if ($part_type =="2"){		
+									if ($loadPage== "01_29")
+									{
+										echo $supply_quantity;
+									}	
+									else
+									{
+										echo "I";	
+									}						
+													
 								}
 								else
 								{
@@ -585,6 +593,10 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						$quantity= $quantity==0?"0":number_format($quantity);
 
 					}
+					if ($del_chk=="0")
+					{
+						$quantity="0";
+					}
 
 					if ($_GET['change'] == "price" && $change_part_idx == $real_part_idx)
 					{
@@ -632,7 +644,11 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td><?=$dc?></td>
 					<td><?=$rhtype?></td>					
 					<?}?>
-					<td class="t-rt"><?=$part_stock==0?$supply_quantity:number_format($part_stock + $supply_quantity)?></td>
+					<?if ($part_type=="2"){?>
+						<td class="t-rt">I</td>
+					<?}else{?>
+						<td class="t-rt"><?=$part_stock==0?$supply_quantity:number_format($part_stock + $supply_quantity)?></td>
+					<?}?>					
 					<td class="t-rt">$<?=$price==0?"":$price_val?></td>
 					<td>
 						<?
@@ -644,7 +660,13 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" name="odr_quantity[]" odr_det_idx="<?=$odr_det_idx?>" supply_quantity="<?=$supply_quantity;?>" quantity="<?=$quantity + $supply_quantity;?>" amd_yn="Y" value="<?=$odr_amend_qty?>" style="width:56px;">
 					</td>
 					<td class="c-red t-rt"><?=$supply_quantity==0?"":number_format($supply_quantity)?></td>
-					<?=($period)?"<td class=''>".(QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"Stock":$period):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
+					<?
+					if ($part_type==2)
+					{
+						$day_val = "WK";
+					}
+					?>
+					<?=($period)?"<td class=''>".(QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"Stock":"<span class='c-red'>".str_replace("WK","",$period).$day_val."</span>"):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
 					<?
 					$com_idx = ($rel_idx)? $rel_idx : $sell_mem_idx;
 					$company_nm = get_any("member","mem_nm_en", "mem_idx=$com_idx"); 	
@@ -1446,7 +1468,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							
 						}
 						?>
-						<td class=""><?=($period)? str_replace("WK","",$period).$day_val."":"Stock";?></td>	
+						<td class=""><?=($period)? "<span class='c-red'>".str_replace("WK","",$period).$day_val."</span>"."":"Stock";?></td>	
 					<!-- 부가내용 시작-->
 					</tr>
 					<!-- 변경 작업 2016.10.17 시작-->
@@ -2704,14 +2726,27 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 					<span class="name c-blue">
 					<a href="javascript:layer_company_det('<?=$buy_com_idx?>');" class="c-blue"><?=$buy_com_name?></a>
 					</span></td>
-					<td class="c-red2 " style="width:33%;text-align:center;font-size:15px;">
+					<td class="c-red2 " style="width:33%;text-align:center;font-size:14px;">
 					<?
+					$pay = str_replace("$","",$pay);		
+
+					if( ($pay == (int)$pay) )
+					{
+						$pay_val = round_down($pay,2);
+						$pay_val = number_format($pay,2);
+					}
+					else
+					{
+						$pay_val = round_down($pay,4);
+						$pay_val = number_format($pay,4);
+					}
+					
 					if($odr_his[charge_ty] == "D"){
-						echo "계약금 (<strong class='c-blue'><span lang='en'>".$etc1."- $".str_replace("$","",$pay); 
+						echo "계약금 [<strong class='c-blue'><span lang='en'>".$etc1."- $".str_replace("$","",$pay_val ); 
 					}else if ($_SESSION["MEM_IDX"] == $odr_his[buy_mem_idx] && $with_deposit=="Y"){
 						echo "보증금, 총 금액 (<strong class='c-blue'><span lang='en'>$"; 
 						$deposit ="1000";
-						echo number_format(floatval(trim(str_replace("입금","",str_replace("$","",$pay)))) + $deposit,2);
+						echo number_format(floatval(trim(str_replace("입금","",str_replace("$","",$pay_val )))) + $deposit,2);
 					}else{$deposit=0;
 						/*
 						if (strpos(preg_replace("/\s/",'',$pay),"[M/B]") >= 0)
@@ -2726,20 +2761,10 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						{
 							$pay = str_replace("[C/C]","신용카드-",$pay);
 						}		*/	
-						$pay = str_replace("$","",$pay);			
-						if( ($pay == (int)$pay) )
-						{
-							$pay_val = round_down($pay,2);
-							$pay_val = number_format($pay,2);
-						}
-						else
-						{
-							$pay_val = round_down($pay,4);
-							$pay_val = number_format($pay,4);
-						}
+						
 						
 						echo "총 금액 (<strong class='c-blue'><span lang='en'>".$etc1."- $".$pay_val; 
-					}?></span></strong>) 결제가 완료되었습니다.</td>
+					}?></span></strong>] 결제가 완료되었습니다.</td>
 					<td class="c-red2 w100 t-ct" style="width:33%;"></td>	
 					</tr></tbody></table></div>	
 					<?

@@ -61,6 +61,7 @@ if ($alert =="sessionend"){
 					}
 				}
 		});		
+		document.location.href="/kor/";
 	}
 </script>
 <div class="layer-hd">

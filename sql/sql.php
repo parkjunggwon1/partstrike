@@ -98,6 +98,7 @@ Function QRY_CNT_FLUC($arrDet){
 			ON(a.part_idx = b.part_idx)
 			WHERE b.odr_det_idx IN($arrDet) AND a.price != b.odr_price
 		";
+		//echo $sql;
 	mysql_query( "SET NAMES utf8");
 	$result=mysql_query($sql,$conn) or die ("SQL ERROR(QRY_CNT) : ".mysql_error());
 	$row=mysql_fetch_array($result);
@@ -125,8 +126,7 @@ Function QRY_STOCK_PART($arrDet){
 	$sql="
 			SELECT quantity AS CNT FROM part AS a
 			WHERE a.part_idx='$arrDet' AND a.del_chk=1
-		";
-		echo $sql;
+		";		
 	mysql_query( "SET NAMES utf8");
 	$result=mysql_query($sql,$conn) or die ("SQL ERROR(QRY_CNT) : ".mysql_error());
 	$row=mysql_fetch_array($result);

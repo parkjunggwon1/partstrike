@@ -1375,7 +1375,7 @@ function SumMyBank2($mem_idx, $rel_idx, $ty=2){
 function SumBankHold($mem_idx, $rel_idx, $ty=2){
 	$com_idx = ($rel_idx ==0 ? $mem_idx : $rel_idx);
 
-	$pay = get_any("mybank" ,"TRUNCATE(sum(mybank_hold),4)", "(mem_idx =$com_idx or rel_idx =$com_idx) and mybank_yn = 'Y'");
+	$pay = get_any("mybank" ,"TRUNCATE(sum(mybank_hold),4)", "(mem_idx =$com_idx or rel_idx =$com_idx) and mybank_yn = 'Y' and charge_type<>2");
 
 	if($ty>0){
 		$pay_val = round_down($pay,4);

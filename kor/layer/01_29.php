@@ -58,7 +58,7 @@ $(document).ready(function(){
 							<img src="/kor/images/nation_title_<?=$buy_com_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$buy_com_nation)?>">
 							<span class="name"><?=$buy_com_name;?></span>
 						</td>
-						<td rowspan="2" class="c-red2">거래를 계속하시려면 계약금을 지불하셔야 합니다.<br>
+						<td rowspan="2" class="c-red2"  style="font-size:14px;">거래를 계속하시려면 계약금을 지불하셔야 합니다.<br>
 						계약금은 보증 용도로서 사용될 것입니다. <br>
 						거래 종료 후 이 계약금은 당신의 My Bank로 충전됩니다. </td>
 					</tr>
@@ -79,7 +79,7 @@ $(document).ready(function(){
 						<th scope="col" class="t-rohs">RoHS</th>
 						<th scope="col" class="t-oty">O'ty</th>
 						<th scope="col" class="t-unitprice">Unit Price</th>
-						<th scope="col" lang="ko" class="t-orderoty">Amount</th>
+						<th scope="col" lang="en" class="t-orderoty">Amount</th>
 						<th scope="col" lang="ko" class="t-period">납기</th>
 					</tr>
 				</thead>

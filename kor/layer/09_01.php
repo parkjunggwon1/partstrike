@@ -510,7 +510,15 @@ function checkActive(){
 	maskoff();
 	$("input[name^=odr_quantity]").each(function(e){ //선택유무와 무관
 		supp_qty = $(this).attr("supply_quantity");
-		odr_qty = parseInt($(this).val());
+		if ($(this).val()!="")
+		{
+			odr_qty = parseInt($(this).val());	
+		}
+		else	
+		{
+			odr_qty=0;
+		}		
+
 		quantity = parseInt($(this).attr("quantity"));  //현 재고.
 		if(supp_qty.length > 0){
 			//if($(this).val().length>0 && odr_qty <= quantity && odr_qty>0) okCnt++;
@@ -519,6 +527,7 @@ function checkActive(){
 		}else{
 			if($(this).val()>0) 	okCnt++;
 		}
+
 	});
 	maskon();
 	//선적정보
@@ -532,12 +541,11 @@ function checkActive(){
 		ErchkCnt = false;	
 	}
 
-
 	//발주서 확인 버튼 활성
-	if(okCnt == det_cnt && ErchkCnt && selCnt == det_cnt && supp_qty <= odr_qty){
-		$("#layerPop3 .btn-area :eq(1)").css("cursor","pointer").addClass("btn-view-sheet-1207").attr("src","/kor/images/btn_order_confirm.gif");
-	}else{
-		$("#layerPop3 .btn-area :eq(1)").css("cursor","").removeClass("btn-view-sheet-1207").attr("src","/kor/images/btn_order_confirm_1.gif");
+	if(okCnt == det_cnt && ErchkCnt && selCnt == det_cnt && supp_qty <= odr_qty){	
+		$("#btn_order_conf").css("cursor","pointer").addClass("btn-view-sheet-1207").attr("src","/kor/images/btn_order_confirm.gif");				
+	}else{		
+		$("#btn_order_conf").css("cursor","").removeClass("btn-view-sheet-1207").attr("src","/kor/images/btn_order_confirm_1.gif");
 	}
 	//취소버튼 활성
 	if (det_cnt==1)
@@ -694,7 +702,7 @@ $part_type2_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and part_type=2 ");  
 		<?if ($part_type2_cnt ==0){?>
 			<img src="/kor/images/btn_order_add.gif" alt="발주 추가" style="cursor:pointer"  class="btn-dialog-0501-from_0901">
 		<?}?>
-		<img src="/kor/images/btn_order_confirm.gif" alt="발주서 확인" odr_idx="<?=$odr_idx?>" class="btn-view-sheet-1207">
+		<img id="btn_order_conf" src="/kor/images/btn_order_confirm_1.gif" alt="발주서 확인" odr_idx="<?=$odr_idx?>">
 		<img src="/kor/images/btn_cancel_1.gif" id="btn_cancel_09_01" alt="취소">
 		<?if ($odr_amend_yn_cnt>0){?>
 		<img src="/kor/images/btn_delete2_1.gif"  alt="삭제" id="btn_del_09_01">

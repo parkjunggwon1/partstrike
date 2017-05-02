@@ -1203,7 +1203,7 @@ switch($actty) {
 	/**재고수량 처리 전에 현, 재고 먼저 체크
 	2016-09-13 : 지속적은 안전재고 체크 않함
 	2016-11-13 : 턴키도 안전재고 계산에서 제외 **/
-	$safe_stock = QRY_CNT_STOCK($actkind);
+	
 	//2016-12-29 : 가격 또는 재고 변동 시 odr_det 정보 Update
 	$searchand = " and a.odr_det_idx IN($actkind)";
 	$result =QRY_ODR_DET_LIST(0,$searchand,0,"","asc");
@@ -1218,9 +1218,11 @@ switch($actty) {
 		$_part_idx = replace_out($row["part_idx"]);
 
 			//2016-12-28 : 가격변동 체크
-		$price_check = QRY_CNT_FLUC($_part_idx);
+		$price_check = QRY_CNT_FLUC($_det_idx);
 
 		$part_chk = QRY_CNT_PART($_part_idx);
+
+		$safe_stock = QRY_STOCK_PART($_part_idx);
 		
 		//재고수량정보Update
 		//if($_quantity != $_odr_stock){	//변경되었을 경우 무조건..
@@ -1244,8 +1246,8 @@ switch($actty) {
 		if($price_check>0 && ($_part_type !="2" && $_part_type !="5" && $_part_type !="6")){	//-- 가격 변동 -----
 			echo "PRICE_".$_part_idx;				
 			exit;
-		}elseif($safe_stock != ""){ //-- 재고 부족 -------------------------------------------------
-			echo "ERR_".$safe_stock;
+		}elseif($safe_stock != $_odr_stock){ //-- 재고 부족 -------------------------------------------------
+			echo "ERR_".$_part_idx;
 			exit;
 		}elseif($part_chk>0 ){ //-- 파트 존재 여부 -------------------------------------------------	
 
@@ -1260,6 +1262,7 @@ switch($actty) {
 			exit;
 		} //end of 재고부족
 	}
+	
 
 	//-- 배송지 변경-------------
 	if ($delivery_addr_idx == "0" && $delivery_save_yn != "Y")
