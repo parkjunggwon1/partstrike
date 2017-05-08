@@ -2013,14 +2013,19 @@ if ($typ =="updfaultydelifee"){ //불량 운임 등록 -------------------------
 if ($typ =="periodcfrm"){
     //납기 확인 전에 개별 part 정보 update 할수 있게 수정.
     $part_idx =get_any("odr_det", "part_idx" ,"odr_det_idx=$odr_det_idx");
-    $sql = "update part set part_no = '$part_no',
+    $part_update_chk =get_any("part", "invreg_chk" ,"part_idx=$part_idx");
+
+    if ($part_update_chk=="0")
+    {
+        $sql = "update part set part_no = '$part_no',
             manufacturer = '$manufacturer',
             package= '$package',
             dc = '$dc',
             rhtype = '$rhtype'
             where part_idx = $part_idx";
-    $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
-
+        $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+    }
+   
     $sql = "update part set 
             invreg_chk = '1'
             where part_idx = $part_idx";

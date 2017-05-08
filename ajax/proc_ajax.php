@@ -1224,6 +1224,8 @@ switch($actty) {
 
 		$safe_stock = QRY_STOCK_PART($_part_idx);
 		
+		//echo $price_check."SS".$part_chk."qqq".$safe_stock."!!!!!".$_odr_stock;
+
 		//재고수량정보Update
 		//if($_quantity != $_odr_stock){	//변경되었을 경우 무조건..
 		if ($_part_type!=2)
@@ -1246,7 +1248,7 @@ switch($actty) {
 		if($price_check>0 && ($_part_type !="2" && $_part_type !="5" && $_part_type !="6")){	//-- 가격 변동 -----
 			echo "PRICE_".$_part_idx;				
 			exit;
-		}elseif($safe_stock != $_odr_stock){ //-- 재고 부족 -------------------------------------------------
+		}elseif( ($safe_stock < $_odr_stock || $safe_stock ==0) && $_part_type !="2" ){ //-- 재고 부족 -------------------------------------------------
 			echo "ERR_".$_part_idx;
 			exit;
 		}elseif($part_chk>0 ){ //-- 파트 존재 여부 -------------------------------------------------	
@@ -1256,14 +1258,17 @@ switch($actty) {
 				$sql = "delete from odr_det where odr_det_idx =".$_det_idx;
 					//echo $sql;
 				$result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
+				echo "delete_".$_part_idx."_".$_part_type;
 			}
+			else
+			{
+				echo "ERR_".$_part_idx;
+			}			
 			
-			echo "delete_".$_part_idx."_".$_part_type;
 			exit;
 		} //end of 재고부족
 	}
 	
-
 	//-- 배송지 변경-------------
 	if ($delivery_addr_idx == "0" && $delivery_save_yn != "Y")
 	{

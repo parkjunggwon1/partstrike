@@ -125,7 +125,7 @@ Function QRY_STOCK_PART($arrDet){
 	$conn = dbconn();	
 	$sql="
 			SELECT quantity AS CNT FROM part AS a
-			WHERE a.part_idx='$arrDet' AND a.del_chk=1
+			WHERE a.part_idx='$arrDet' 
 		";		
 	mysql_query( "SET NAMES utf8");
 	$result=mysql_query($sql,$conn) or die ("SQL ERROR(QRY_CNT) : ".mysql_error());

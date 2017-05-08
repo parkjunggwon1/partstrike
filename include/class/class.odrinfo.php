@@ -875,7 +875,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					}elseif  ($loadPage== "30_08"){
 						//2016-05-27 : 재고 수량에서 현 거래의 주문 수량을 더해 재고로 잡는다.(PO 당시 재고에서 빠졌으므로...)
 						if($part_type!="2"){
-							$origin_qty = $quantity + $odr_quantity;	//2016-12-11 : 파츠대표님 요구대로 되어 있슴(실재고+발주수량)
+							$origin_qty = $quantity + $odr_quantity;	//2016-12-11 : 파츠대표님 요구대로 되어 있슴(실재고+발주수량)							
 						}
 					?>
 					<?if($part_type=="2"){?>
@@ -937,7 +937,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<?if($part_type=="2"){?>
 							<td class="t-rt" style="width:60px;">I</td>
 						<?}else{?>
-							<td class="t-rt" style="width:60px;"><?=$origin_qty==0?"-":number_format($origin_qty)?></td>
+							<td class="t-rt" style="width:60px;"><?=$origin_qty==0?"I":number_format($origin_qty)?></td>
 						<?}?>					
 					
 					<?}	 //end of 턴키($part_type=="7")
@@ -2103,8 +2103,9 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 					if ($loadPage=="30_05")
 					{
 						$extra = "";
+
 						$odr_quantity = (replace_out($row["odr_quantity"]))? replace_out($row["odr_quantity"]) : $odr_quantity;
-						$total_price = number_format(round_down($row["odr_quantity"]*$price,2),2);
+						$total_price = number_format(round_down($odr_quantity*$price,2),2);
 
 					}
 					
@@ -2154,7 +2155,9 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 							<td><?=($period)?( QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"Stock":$period.$day_val):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>
 							<td class="t-rt">
 								<?//2016-10-02 : 지속적... 계약금에서는 'Amount' 표시 무.
-								if ($loadPage!="18_2_09" && !($loadPage=="30_09" && $part_type=="2" && $pay_invoice=="D") ){
+								//if ($loadPage!="18_2_09" && !($loadPage=="30_09" && $part_type=="2" && $pay_invoice=="D") ){
+								//2017-05-08 교체
+								if ($loadPage!="18_2_09" ){
 									echo "$".$total_price;
 
 								}
