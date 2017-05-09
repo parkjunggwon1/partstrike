@@ -1857,7 +1857,15 @@ switch($actty) {
 	}
 	else
 	{
-		echo "delete_".$_GET['part_idx'];		
+		if ($real_type==2 || $real_type==5 || $real_type==6)
+		{
+			echo "delete_".$_GET['part_idx']."_".$real_type;	
+		}
+		else
+		{
+			echo "delete_".$_GET['part_idx'];	
+		}
+			
 	}
 	
 

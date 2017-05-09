@@ -470,7 +470,7 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
 
                 //송장에서도 개별 파트정보 업데이트 가능
                 $part_idx =get_any("odr_det", "part_idx" ,"odr_det_idx=$ary_odr_det_idx[$j]");
-                $part_inv_chk =get_any("part", "part_idx" ,"invreg_chk <> 1 and part_idx=$part_idx");
+                $part_inv_chk =get_any("part", "part_idx" ,"invreg_chk = 0 and part_idx=$part_idx");
 
                 /**
                 2017-01-18 : 여기서 Update하지 않고, 임시테이블에 저장
@@ -483,26 +483,30 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
                 $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
                 **/
                 //2017-01-18
-                $temp_cnt = QRY_CNT("part_temp"," and odr_idx=$odr_idx and odr_det_idx=$ary_odr_det_idx[$j] and part_idx=$part_idx ");
-                if($temp_cnt>0){    //임시테이블에 Data 있다(Update)
-                    $sql = "update part_temp set part_no = '".$ary_part_no[$j]."',
-                            manufacturer = '".$ary_manufacturer[$j]."',
-                            package= '".$ary_package[$j]."',
-                            dc= '".$ary_rosh[$j]."',
-                            rhtype= '".$ary_rhtype[$j]."'
-                            where part_idx = ".$part_idx." and odr_idx=".$odr_idx." and odr_det_idx=".$ary_odr_det_idx[$j];
-                }else{  //임시테이블에 Data 없다(Insert)
-                    $sql = "insert into part_temp set 
-                            odr_idx = ".$odr_idx.", 
-                            odr_det_idx = ".$ary_odr_det_idx[$j].", 
-                            part_idx = ".$part_idx.", 
-                            part_no = '".$ary_part_no[$j]."',
-                            manufacturer = '".$ary_manufacturer[$j]."',
-                            package= '".$ary_package[$j]."',
-                            dc= '".$ary_rosh[$j]."',
-                            rhtype= '".$ary_rhtype[$j]."'";
+
+                if ($part_inv_chk)
+                {
+                    $temp_cnt = QRY_CNT("part_temp"," and odr_idx=$odr_idx and odr_det_idx=$ary_odr_det_idx[$j] and part_idx=$part_idx ");
+                    if($temp_cnt>0){    //임시테이블에 Data 있다(Update)
+                        $sql = "update part_temp set part_no = '".$ary_part_no[$j]."',
+                                manufacturer = '".$ary_manufacturer[$j]."',
+                                package= '".$ary_package[$j]."',
+                                dc= '".$ary_rosh[$j]."',
+                                rhtype= '".$ary_rhtype[$j]."'
+                                where part_idx = ".$part_idx." and odr_idx=".$odr_idx." and odr_det_idx=".$ary_odr_det_idx[$j];
+                    }else{  //임시테이블에 Data 없다(Insert)
+                        $sql = "insert into part_temp set 
+                                odr_idx = ".$odr_idx.", 
+                                odr_det_idx = ".$ary_odr_det_idx[$j].", 
+                                part_idx = ".$part_idx.", 
+                                part_no = '".$ary_part_no[$j]."',
+                                manufacturer = '".$ary_manufacturer[$j]."',
+                                package= '".$ary_package[$j]."',
+                                dc= '".$ary_rosh[$j]."',
+                                rhtype= '".$ary_rhtype[$j]."'";
+                    }
+                    $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
                 }
-                $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
          }//end of for
      }//end of 턴키 or else
 

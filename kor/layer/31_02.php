@@ -54,7 +54,7 @@ $("#odr_quantity").keyup(function(e){
 			<?
 			if ($part_idx){
 				$i = 1;
-				$result =QRY_PART_LIST(0,"and part_idx in ($part_idx)","");
+				$result =QRY_PART_LIST2(0,"and part_idx in ($part_idx)","");
 				$row = mysql_fetch_array($result);		
 				$part_type= replace_out($row["part_type"]);
 				$part_idx= replace_out($row["part_idx"]);
@@ -65,15 +65,22 @@ $("#odr_quantity").keyup(function(e){
 				$dc= replace_out($row["dc"]);
 				$rhtype= replace_out($row["rhtype"]);
 				$quantity= replace_out($row["quantity"]);
-				$price= replace_out($row["price"]);			
-				$rel_idx = get_any("part","case when rel_idx = 0 then mem_idx else rel_idx end ","part_idx = $part_idx");
+				$price= replace_out($row["price"]);	
+				$del_chk= replace_out($row["del_chk"]);	
+
+				if ($del_chk==0)
+				{
+					$quantity=0;
+				}
+
+				//$rel_idx = get_any("part","case when rel_idx = 0 then mem_idx else rel_idx end ","part_idx = $part_idx");
 				if ($part_type =="2"){
 					$dc = "NEW";
 					$quantity="I";				
 				}
 				else
 				{
-					$quantity= $quantity==0?"":number_format($quantity);
+					$quantity= $quantity==0?"0":number_format($quantity);
 				}
 
 				if( ($price == (int)$price) )

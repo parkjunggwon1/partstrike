@@ -485,7 +485,7 @@ $(document).ready(function(){
 				showajaxParam('.col-right','side_order','');
 			}
 			var $button_chk = $(this);
-			
+
 			$button_chk.children("button").attr("class","");	
 			$button_chk.children("img").attr("src","/kor/images/loding_img.gif");
 		/**
@@ -2582,7 +2582,12 @@ $(document).ready(function(){
 							{
 								openLayer('layer3','05_01','?odr_idx='+$("#odr_idx_05_01").val()+'&addsearch_part_no='+$("#addsearch_part_no").val()+'&change=delete&part_idx='+part_idx+"&fromLoadPage="+$("#fromLoadPage").val());
 							}
-							openLayer('layer4','alarm3','?part_idx='+part_idx+'&change=delete&change_part_idx='+data_split[1]+"&fromLoadPage="+fromLoadPage);
+							else
+							{
+								openCommLayer('layer3','31_02','?part_idx='+part_idx+'&change=qty&change_part_idx='+data_split[1]);
+							}
+							openLayer('layer4','alarm','');
+							//openLayer('layer4','alarm3','?part_idx='+part_idx+'&change=delete&change_part_idx='+data_split[1]+"&fromLoadPage="+fromLoadPage);
 					
 							return;							
 					}		
@@ -2747,6 +2752,7 @@ $(document).ready(function(){
 	$("body").on("click",".btn-alert3",function(){
 		//납기 답변 -> 알림창 -> 삭제
 		if($(this).hasClass("31_05")){
+			$(this).children("img").attr("src","/kor/images/loding_img.gif");
 			$.ajax({ 
 			type: "GET", 
 			url: "/ajax/proc_ajax.php", 

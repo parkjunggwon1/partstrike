@@ -965,22 +965,36 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<td colspan="11" style="padding:0">
 							<table class="detail-table">
 								<tbody>
-									<?if($part_type=="2"){?>
-										<input type="hidden" name="part_condition[]" value="">
-										<input type="hidden" name="pack_condition1[]" value="">
-										<input type="hidden" name="pack_condition2[]" value="">
+									<?
+									if($part_type=="2"){
+										$part_condition="1";
+										$pack_condition1="1";
+										if($part_condition){ $div_color="background-image:url(/kor/images/select5_bg.gif)"; }
+										if($pack_condition1){ $div_color2="background-image:url(/kor/images/select5_bg.gif)"; }
+
+									?>
+										<input type="hidden" name="part_condition[]" value="1">
+										<input type="hidden" name="pack_condition1[]" value="1">										
 									<?}?>
-									<tr <?=$part_type=="2"?"style='display:none;'":""?>>
+									<tr >
 										<th scope="row" style="width:230px">
-											&nbsp;부품상태&nbsp;&nbsp;<div class="select type4" lang="en" style="width:150px">
+											&nbsp;부품상태&nbsp;&nbsp;<div class="select type4" lang="en" style="width:150px;<?=$div_color?>">
 											<label  class="c-blue"><?=($part_condition)?GF_Common_GetSingleList("PARTCOND",$part_condition):""?></label>
-											<?=GF_Common_SetComboList("part_condition[]", "PARTCOND", "", 1, "True",  "", $part_condition , "", "", "part_condition");?>
+											<?
+											if($part_type!="2"){
+												echo GF_Common_SetComboList("part_condition[]", "PARTCOND", "", 1, "True",  "", $part_condition , "", "", "part_condition");
+											}
+											?>
 											</div>
 										</th>
 										<th scope="row">
-											&nbsp;포장상태&nbsp;&nbsp;<div class="select type4" lang="en" style="width:77px">
+											&nbsp;포장상태&nbsp;&nbsp;<div class="select type4" lang="en" style="width:77px;<?=$div_color2?>">
 											<label  class="c-blue"><?=($pack_condition1)?GF_Common_GetSingleList("PACKCOND1",$pack_condition1):""?></label>
-											<?=GF_Common_SetComboList("pack_condition1[]", "PACKCOND1", "", 1, "True",  "", $pack_condition1 , "");?></div>
+											<?
+											if($part_type!="2"){
+												echo GF_Common_SetComboList("pack_condition1[]", "PACKCOND1", "", 1, "True",  "", $pack_condition1 , "");
+											}
+											?></div>
 											<div class="select type4" lang="en" style="width:90px">
 											<label  class="c-blue"><?=($pack_condition2)?GF_Common_GetSingleList("PACKCOND2",$pack_condition2):""?></label>
 											<?=GF_Common_SetComboList("pack_condition2[]", "PACKCOND2", "", 1, "True",  "", $pack_condition2 , "");?></div>
@@ -2135,7 +2149,7 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 						?>
 						<td class="t-lt"><?=$part_no?></td>
 						<?if ($pay_invoice=="D"){?>
-							<td class="t-lt"><?=$manufacturer?>, <?=$package?>, <?=$dc?>, <?=$rhtype?></td>
+							<td class="t-lt"><?=$manufacturer?>, <?=$package?>, <?=$dc?>, <?=$rhtype?><?=$extra?></td>
 						<?}else{?>
 							<td class="t-lt"><?=$manufacturer?>, <?=$package?>, <?=$dc?>, <?=$rhtype?><?=$extra?></td>
 						<?}?>

@@ -21,7 +21,7 @@ Function QRY_PART_LIST($recordcnt,$searchand,$page,$ord='price'){
 			SELECT * FROM 
 				part	
 			WHERE
-				del_chk='1' $searchand
+				 $searchand
 			$s_ord
 			$limit
 			";
