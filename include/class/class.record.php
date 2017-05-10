@@ -286,6 +286,11 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 							{
 								$qty="0";
 							}
+
+							if ($poa_cnt=="삭제")
+							{
+								$qty=$part_stock;
+							}
 						?>
 						<td  <?=$goJump?>  class="t-rt"><?=number_format($qty)?></td>
 					<?}?>
@@ -300,6 +305,11 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 						if ($del_chk==0)
 						{
 							$qty="0";
+						}
+
+						if ($poa_cnt=="삭제")
+						{
+							$qty=$part_stock;
 						}
 					?>
 					<td  <?=$goJump?>  class="t-rt"><?=number_format($qty)?></td>

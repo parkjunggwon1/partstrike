@@ -63,7 +63,7 @@ function GET_MYBOX_PART($titleyn, $part_type, $page, $style,$recordcnt){   //$ti
 				<td align="center"><?=$package?></td>
 				<td align="center"><?=$dc?></td>
 				<td align="center"><?=$rhtype?></td>
-				<td class="t-rt"><?=$quantity==0 || $quantity==""?"I":number_format($quantity)?></td>
+				<td class="t-rt"><?=$quantity==0 || $quantity==""?"0":number_format($quantity)?></td>
 				<td class="t-rt">$<?=$price_val?></td>
 				
 				<?if ($part_type=="2" || $part_type=="5" || $part_type=="6"){?>

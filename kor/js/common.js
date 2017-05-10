@@ -2581,13 +2581,15 @@ $(document).ready(function(){
 							if (fromLoadPage=="05_04")
 							{
 								openLayer('layer3','05_01','?odr_idx='+$("#odr_idx_05_01").val()+'&addsearch_part_no='+$("#addsearch_part_no").val()+'&change=delete&part_idx='+part_idx+"&fromLoadPage="+$("#fromLoadPage").val());
+								openLayer('layer4','alarm3','?part_idx='+part_idx+'&change=delete&change_part_idx='+data_split[1]+"&fromLoadPage="+fromLoadPage);
 							}
 							else
 							{
 								openCommLayer('layer3','31_02','?part_idx='+part_idx+'&change=qty&change_part_idx='+data_split[1]);
+								openLayer('layer4','alarm','');
 							}
-							openLayer('layer4','alarm','');
-							//openLayer('layer4','alarm3','?part_idx='+part_idx+'&change=delete&change_part_idx='+data_split[1]+"&fromLoadPage="+fromLoadPage);
+							
+							//
 					
 							return;							
 					}		

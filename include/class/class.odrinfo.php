@@ -2670,7 +2670,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						   echo layerOrdListData($loadPage ,$odr_idx,$odr_det_idx);
 						   break;
 						case "03_02":?>
-						<td class="company" style="width:33%;"><img src="/kor/images/nation_title_<?=$buy_com_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$buy_com_nation)?>"> <span class="name c-blue"><a href="javascript:layer_company_det('<?=$buy_com_idx?>');" class="c-blue"><?=$buy_com_name?></a></span></td>
+						<td class="company" style="width:33%;"></td>
 						<td class="c-red2" style="width:33%;text-align:center;font-size:15px;">구매자가 품목을 삭제하였습니다.</td>
 						<td style="width:33%;""></td>
 						</tr></tbody></table></div>
