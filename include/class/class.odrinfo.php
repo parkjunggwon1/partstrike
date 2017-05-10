@@ -540,7 +540,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<?}?>
 				<?}elseif ($loadPage== "31_05"){ //------------------------------------------------------------------------------------------------------?>
 					<?
-					$part_inv_chk =QRY_CNT("part", "and invreg_chk <> 1 and part_no='$part_no'"); 		
+					$part_inv_chk =QRY_CNT("part", "and invreg_chk <> 1 and part_idx='$real_part_idx'"); 		
 					// $part_inv_chk==0 시작
 					if($part_inv_chk =='0')
 					{

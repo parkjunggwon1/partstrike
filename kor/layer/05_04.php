@@ -83,7 +83,7 @@ $dlvr_cnt = QRY_CNT("freight_charge"," and trade_type=$trade_type and rel_idx = 
 		var det_cnt = $("#det_cnt").val();
 		var sel_box, part_type, det_idx, del_cnt=0, delv_cnt=0;
 		var err = false;
-		err = updateQty();
+		//err = updateQty();
 		if(err == false){
 			//수량 및 배송정보 Update 후 삭제하자 2016-03-31
 			if(det_cnt>1){ //-- 여러개 일때 --------------------------
@@ -150,7 +150,10 @@ $dlvr_cnt = QRY_CNT("freight_charge"," and trade_type=$trade_type and rel_idx = 
 		var det_cnt = $("#det_cnt").val(); //납기 삭제 전 남은 수량
 		var delv_cnt=0;
 		var err = false;
-		err = updateQty();
+		err = false;
+		//err = updateQty();		
+		$("#del_img").attr("src","/kor/images/loding_img.gif");	
+		
 		if(err == false){
 			if(det_cnt>1){ //-- 여러개 일때 --------------------------
 				sel_box = $("input[name^=odr_det_idx]:checked");
@@ -203,8 +206,9 @@ $dlvr_cnt = QRY_CNT("freight_charge"," and trade_type=$trade_type and rel_idx = 
 						}
 					});
 				}
-				//메시지창 닫고
+				//메시지창 닫고					
 				closeCommLayer("layer6");
+
 			}
 		}
 	}
@@ -765,7 +769,7 @@ function checkActive(){
 		var dlvr_cnt = $("#dlvr_cnt").val();
 		var turnkey_cnt = $("#turnkey_cnt").val();
 		var chk_val=$("input:checkbox[id='delivery_chg']").is(":checked");
-		$("#layerPop3 .btn-area :eq(2)").css("cursor","pointer").addClass("btn-dialog-save").attr("src","/kor/images/btn_order_save.gif"); //저장버튼
+		//$("#layerPop3 .btn-area :eq(2)").css("cursor","pointer").addClass("btn-dialog-save").attr("src","/kor/images/btn_order_save.gif"); //저장버튼
 		$("#layerPop3 .btn-area :eq(2)").attr("save_key","on")
 		//2016-03-30 ccolle-------------------------------------------------------------------
 		if(det_cnt>1){ //-- 여러개 일때 --------------------------

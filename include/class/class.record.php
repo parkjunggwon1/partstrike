@@ -314,7 +314,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 					<td  <?=$goJump?> class="t-rt c-blue" ><?=$odr_quantity<=0?"":number_format($odr_quantity)?></td>			
 					<td  <?=$goJump?> class="t-rt c-red" ><?=$supply_quantity<=0?"":number_format($supply_quantity)?></td>
 				<?}else if ($odr_status==7){?>
-					<td  <?=$goJump?>  class="t-rt"><?=$odr_quantity<=0?"":number_format($odr_quantity)?></td>
+					<td  <?=$goJump?>  class="t-rt c-blue"><?=$odr_quantity<=0?"":number_format($odr_quantity)?></td>
 					<td  <?=$goJump?> class="t-rt c-red" ><?=$supply_quantity<=0?"":number_format($supply_quantity)?></td>
 				<?}else{?>
 					<td  <?=$goJump?> class="t-rt" >$<?=number_format($total_price_value,4)?></td>

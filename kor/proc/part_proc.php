@@ -205,8 +205,11 @@ if($typ=="alldel"){
 		$det_cnt = QRY_CNT("odr_det"," and part_idx=$del_part_idx ");
 		if($det_cnt>0){	//--- 거래 있다.(del_chk='0')
 			update_val("part","del_chk",'0', "part_idx", $del_part_idx);
+			//2017-05-10 대표님 요청
+			update_val("part","quantity",'0', "part_idx", $del_part_idx);
 		}else{	//--------------- 거래 없다.(실제 레코드 삭제)
 			update_val("part","del_chk",'0', "part_idx", $del_part_idx);
+			update_val("part","quantity",'0', "part_idx", $del_part_idx);
 			//$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 		}
 	 }
