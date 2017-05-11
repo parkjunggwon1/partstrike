@@ -68,11 +68,6 @@ $("#odr_quantity").keyup(function(e){
 				$price= replace_out($row["price"]);	
 				$del_chk= replace_out($row["del_chk"]);	
 
-				if ($del_chk==0)
-				{
-					$quantity=0;
-				}
-
 				//$rel_idx = get_any("part","case when rel_idx = 0 then mem_idx else rel_idx end ","part_idx = $part_idx");
 				if ($part_type =="2"){
 					$dc = "NEW";
@@ -81,6 +76,11 @@ $("#odr_quantity").keyup(function(e){
 				else
 				{
 					$quantity= $quantity==0?"0":number_format($quantity);
+				}
+
+				if ($del_chk==0)
+				{
+					$quantity=0;
 				}
 
 				if( ($price == (int)$price) )

@@ -1078,7 +1078,7 @@ function checkActive(){
 
 <div class="layer-hd">
 	<h1>발주서</h1>
-	<a href="#" class="btn-close<?=($save_yn =="Y")? " save":" odr";?> <?=($mybox !="")? "mybox":"";?>" odr_idx="<?=$odr_idx;?>" odr_status="<?=$odr_status;?>" imsi_odr_no="<?=$imsi_odr_no?>" part_type="<?=$part_type?>"><img src="/kor/images/btn_layer_close_w.png" alt="close"></a>
+	<a href="#" class="btn-close<?=($save_yn =="Y")? " save":" odr";?> <?=($mybox !="")? "mybox":"";?> amend" odr_idx="<?=$odr_idx;?>" odr_status="<?=$odr_status;?>" imsi_odr_no="<?=$imsi_odr_no?>" part_type="<?=$part_type?>"><img src="/kor/images/btn_layer_close_w.png" alt="close"></a>
 </div>
 <div class="layer-content">
 
@@ -1156,12 +1156,12 @@ function checkActive(){
 			<img id="btn-confirm" src="/kor/images/btn_order_confirm_1.gif" alt="발주서 확인" style="cursor:pointer"><!--class="btn-order-confirm" -->
 			
 			<?if ($det_cnt > 1){?>
-				<?if ($save_yn =="Y"){?>
-					<img src="/kor/images/btn_order_save_1.gif" save_key="" alt="발주 저장">
+				<!--if ($save_yn =="Y"){
+					<img src="/kor/images/btn_order_save_1.gif" save_key="" alt="발주 저장">-->
 					<!--img src="/kor/images/btn_delete2.gif" alt="발주 삭제" style="cursor:pointer" class="btn-close odr" imsi_odr_no="<?=$imsi_odr_no?>"-->
-				<?}else{?>
+				<!--}else{-->
 					<img src="/kor/images/btn_order_save.gif" alt="발주 저장" save_key="on" style="cursor:pointer" class="btn-dialog-save"><!--class="btn-dialog-save" -->
-				<?}?>
+				<!--}-->
 			<?}?>
 			<img src="/kor/images/btn_delete2_1.gif" alt="삭제" id="btn_del_0504">
 		<?}?>
