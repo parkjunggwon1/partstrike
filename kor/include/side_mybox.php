@@ -46,6 +46,7 @@
 				$rhtype= cutbyte(replace_out($row["rhtype"]),4);
 				$quantity= cutbyte(replace_out($row["quantity"]),10);
 				$price= cutbyte(replace_out($row["price"]),10);	
+				$del_chk= replace_out($row["del_chk"]);
 				$already_idx = get_want("mybox","idx"," and mem_idx = '".$_SESSION["MEM_IDX"]."' and part_idx = '$part_idx'");
 				if($already_idx){$already="1";}else{$already="";}
 			
@@ -85,7 +86,22 @@
 					<td align="center"><?=$package?></td>
 					<td align="center"><?=$dc?></td>
 					<td align="center"><?=$rhtype?></td>
-					<td class="t-rt"><?=$quantity==0 && $part_type=="2"?"I":number_format($quantity)?></td>
+					<?
+					if ($part_type==2)
+					{
+						$quantity="I";
+					}
+					else
+					{
+						$quantity = number_format($quantity);
+					}
+
+					if ($del_chk ==0)
+					{
+						$quantity=0;
+					}
+					?>
+					<td class="t-rt"><?=$quantity?></td>
 					<td class="t-rt">$<?=$price_val?></td>
 					
 					<?if ($part_type=="2" || $part_type=="5" || $part_type=="6"){?>

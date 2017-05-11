@@ -17,7 +17,8 @@ if ($alert =="sessionend"){
 <div class="layer-content">
 	<p class="txt-warning t-ct"><?=$alert_msg?></p>
 	<div class="btn-area t-rt"> <!-- periodreq-->
-		<button class="btn-del-confirm" onClick="del_delv();" type="button"><img alt="button" id="del_img" src="/kor/images/<?=$btn;?>.gif"></button>
+		<!--<button class="btn-del-confirm" onClick="del_delv();" type="button"><img alt="button" id="del_img" src="/kor/images/<?=$btn;?>.gif"></button>-->
+		<button class="btn-del-confirm" onClick="del_delv();" type="button"><img alt="button" id="del_img" src="/kor/images/btn_end.gif"></button>
 	</div>
 </div>
 

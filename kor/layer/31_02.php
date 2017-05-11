@@ -100,8 +100,11 @@ $("#odr_quantity").keyup(function(e){
 					$change_style_price="style='border-bottom:1px solid red'";
 				}
 				else if ($_GET['change'] == "qty" && $change_part_idx == $part_idx)
-				{
+				{					
 					$change_style_qty="style='border-bottom:1px solid red'";
+					if ($part_type =="2" && !$_GET['fromLoadPage']){	
+						$quantity="0";				
+					}
 				}
 				else if ($_GET['change'] == "delete" && $change_part_idx == $part_idx)
 				{

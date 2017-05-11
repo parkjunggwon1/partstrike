@@ -748,6 +748,7 @@ switch($actty) {
 		 //part 테이블 품목 삭제 처리
 		 update_val("part","del_yn","Y", "part_idx", $part_idx);
 		 update_val("part","del_chk","0", "part_idx", $part_idx);
+		 update_val("part","quantity", 0, "part_idx", $part_idx);	//재고수량 Update
 	   break;
 	case "DA":	//-------------------------------------------------------------------------------
 		update_val("odr_history","fault_select","Y", "odr_history_idx", $actidx);	  
