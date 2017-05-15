@@ -1,8 +1,3 @@
 <?
-common.js
-include/main_company.php
-layer/30_16.php
-$arrImgInfo = getImageSize($_SERVER['DOCUMENT_ROOT'].'/upload/file/20161223094024_.png');
-
-print_r($arrImgInfo);
+echo preg_replace("/[^0-9]/", "","1,200,000,000");
 ?>

@@ -1992,7 +1992,8 @@ $(document).ready(function(){
 	//----------------- 발주 추가 -------------------------------
 	$("body").on("click",".btn-dialog-0501",function(){
 		var err = false; 
-		err = updateQty(); //2016-04-03 '05_04' 추가
+		//alert('123');
+		//err = updateQty(); //2016-04-03 '05_04' 추가
 		if (err == false)
 		{
 			saveExtraInfo();

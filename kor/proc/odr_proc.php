@@ -2662,6 +2662,8 @@ if($typ =="save_key"){
     
         $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
     }
+  
+    exit;
     
 }
 

@@ -45,7 +45,7 @@ Function QRY_RCD_DET_LIST($recordcnt,$searchand,$page,$ord='odr_det_idx'){
 			$limit
 			";
 	mysql_query( "SET NAMES utf8");	
-//	echo $sql;
+	echo $sql;
 	$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 	return $result;
 }

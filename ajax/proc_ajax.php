@@ -734,10 +734,12 @@ switch($actty) {
 		 $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 		 //저장 데이터와 저장 odr 체크
 		 if($saved_odr_idx){
+		 	
 			 //저장 Data에 해당 품목이 있다면 삭제
 			 $sql = "DELETE FROM odr_det WHERE rel_det_idx = $det_idx AND odr_idx = $saved_odr_idx";
 			 $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
-			 $save_cnt = QRY_CNT("odr_det", "odr_idx = $saved_odr_idx");
+			 
+			 $save_cnt = QRY_CNT("odr_det", "and odr_idx = $saved_odr_idx");
 			 if($save_cnt<1){
 				 $sql = "DELETE FROM odr WHERE odr_idx = $saved_odr_idx";
 				 $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
@@ -745,6 +747,7 @@ switch($actty) {
 				 $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 			 }
 		 }
+
 		 //part 테이블 품목 삭제 처리
 		 update_val("part","del_yn","Y", "part_idx", $part_idx);
 		 update_val("part","del_chk","0", "part_idx", $part_idx);
@@ -1831,7 +1834,7 @@ switch($actty) {
 	fnSelectArea($actkind, $actidx,$lang);  
 	break;
 
-	case "part_info_chk" : //sigungu 다시 뿌려주기
+	case "part_info_chk" : 
 
 	//2017-04-17 : 가격변동 체크
 	$part_info_chk = QRY_PART_CHECK($_GET['part_idx']);
@@ -1839,12 +1842,14 @@ switch($actty) {
 	$real_qty=$part_info_chk->quantity;
 	$real_type=$part_info_chk->part_type;
 	$real_status=$part_info_chk->del_chk;
-	
+
+	$get_price = preg_replace('/,|^\/$/', "", $_GET['price']);
+
 	$cnt=QRY_CNT("part","and part_idx='".$_GET['part_idx']."' and del_chk=1");
 
 	if ($cnt > 0 && $real_status==1)
 	{
-		if ($real_price != $_GET['price'] && $_GET['type'] != "period")
+		if ($real_price != $get_price && $_GET['type'] != "period")
 		{
 			echo "price_".$_GET['part_idx'];
 		}

@@ -31,7 +31,7 @@ Function QRY_RCD_DET_LIST($recordcnt,$searchand,$page,$ord='odr_det_idx'){
 			$s_ord=" order by odr_det_idx desc";
 			break;
 		default:
-			$s_ord=" order by (select max(reg_date) from odr_history where odr_history.odr_idx = a.odr_idx limit 1) desc,c.part_type,(select ifnull(max(reg_date),0) from odr_history where odr_history.odr_det_idx = b.odr_det_idx limit 1) desc";
+			$s_ord=" order by ifnull((select max(reg_date) from odr_history where odr_history.odr_idx = a.odr_idx limit 1),now()) desc,c.part_type,(select ifnull(max(reg_date),0) from odr_history where odr_history.odr_det_idx = b.odr_det_idx limit 1) desc";
 			break;
 	}
 	$sql = "
