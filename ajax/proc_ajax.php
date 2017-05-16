@@ -1252,7 +1252,7 @@ switch($actty) {
 		if($price_check>0 && ($_part_type !="2" && $_part_type !="5" && $_part_type !="6")){	//-- 가격 변동 -----
 			echo "PRICE_".$_part_idx;				
 			exit;
-		}elseif( ($safe_stock < $_odr_stock || $safe_stock ==0) && $_part_type !="2" ){ //-- 재고 부족 -------------------------------------------------
+		}elseif( ($safe_stock < $_odr_quantity || $safe_stock ==0) && $_part_type !="2" ){ //-- 재고 부족 -------------------------------------------------
 			echo "ERR_".$_part_idx;
 			exit;
 		}elseif($part_chk>0 ){ //-- 파트 존재 여부 -------------------------------------------------	

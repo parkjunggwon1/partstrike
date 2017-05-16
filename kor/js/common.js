@@ -3137,12 +3137,12 @@ function updateQty(){
 			supply_quantity = $(this).attr("supply_quantity"); //공급 수량
 		}
 		//alert("qty:"+qty);
-		if(parseInt($(this).parent().prev().prev().text().replace(/,/gi,"")) < parseInt($(this).val())){
+		/*if(parseInt($(this).parent().prev().prev().text().replace(/,/gi,"")) < parseInt($(this).val())){
 			alert_msg("수량을 다시 확인해 주세요.");
 			$(this).focus();
 			err = true;
 			return false;
-		}else{
+		}else{*/
 			maskoff();
 			//alert("qty:"+qty+", det_idx:"+$(this).attr("odr_det_idx"));
 
@@ -3163,7 +3163,7 @@ function updateQty(){
 						maskoff();
 				}
 			});
-		}
+		//}
 	});	//-- end of Row 수량만큼 반복--------------------
 	
 	//-- 배송지 변경--------------------

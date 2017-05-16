@@ -667,7 +667,7 @@ function goMenuJump(data){
 	} 
 }
 
-function showajax (target , gubun){
+function showajax (target , gubun){	
 	$.ajax({ 
 		type: "GET", 
 		url: "/ajax/proc_ajax.php", 
@@ -773,6 +773,7 @@ function openCommLayer(layerNum,loadPage,varNum){
 		
 	}
 function closeCommLayer(layerNum){
+
 	$layer = $("."+layerNum+"-section");
 	//$layer.html("");
 	$layer.removeClass("open");

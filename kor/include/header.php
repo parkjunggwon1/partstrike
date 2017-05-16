@@ -25,11 +25,11 @@
 <meta name="description" content="">
 <meta name="author" content="">
 <title>PARTStrike</title>
-<link rel="stylesheet" href="/kor/css/site.css">
-<link rel="stylesheet" href="/kor/css/content.css">
+<link rel="stylesheet" href="/kor/css/site.css?v=<?=date("YmdHis")?>">
+<link rel="stylesheet" href="/kor/css/content.css?v=<?=date("YmdHis")?>">
 <script src="/kor/js/jquery-1.11.3.min.js"></script>
-<script src="/kor/js/common.js"></script>
-<script src="/include/function.js"></script>
+<script src="/kor/js/common.js?v=<?=date("YmdHis")?>"></script>
+<script src="/include/function.js?v=<?=date("YmdHis")?>"></script>
 
 <SCRIPT LANGUAGE="JavaScript">
 <!--
@@ -38,7 +38,7 @@
 	
 //-->
 </SCRIPT>
-<script src="/kor/js/menu.js"></script>
+<script src="/kor/js/menu.js?v=<?=date("YmdHis")?>"></script>
 <!--[if lt IE 9]>
 <script src="/kor/js/html5shiv.min.js"></script>
 <![endif]-->

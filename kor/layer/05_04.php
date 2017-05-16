@@ -665,6 +665,11 @@ $(document).ready(function(){
 			}
 		}
 
+		if (quantity==0 || quantity=="")
+		{
+			$(this).val("");
+		}
+
 		if (part_type == 2 || part_type == 5 || part_type == 6)
 		{
 			if(parseInt(supp_qty) <= parseInt($(this).val()))
