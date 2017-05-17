@@ -66,7 +66,7 @@ function checkActive(){
 
 	if (part2>=1)
 	{
-		if(selCnt == det_cnt && sqty==det_cnt) btnConfirm = true;
+		if(selCnt == det_cnt && opCond2==det_cnt && sqty==det_cnt ) btnConfirm = true;
 	}
 	else
 	{

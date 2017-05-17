@@ -16,7 +16,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 <!-- layer-left-menu -->
 <?php include ($_SERVER["DOCUMENT_ROOT"]."/kor/layer/sell_menu.php"); 
 $recordcnt = 1;
-$searchand .= "and sell_mem_idx = ".$_SESSION["MEM_IDX"]." and status = $status and confirm_yn = 'N' and reason_ty=2"; 			
+$searchand .= "and sell_mem_idx = ".$_SESSION["MEM_IDX"]." and status = $status and confirm_yn = 'N' and reason_ty=3"; 			
 
 $cnt = QRY_CNT("odr_history",$searchand);				
 
@@ -39,6 +39,7 @@ if ($cnt == 0 ){?>
 		$row = mysql_fetch_array($result);
 		$odr_idx= replace_out($row["odr_idx"]);	
 	}
+
 	?>
 	<!-- //layer-left-menu -->
 

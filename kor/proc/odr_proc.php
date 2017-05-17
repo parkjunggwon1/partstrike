@@ -569,9 +569,9 @@ if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : �
 
     $part_type = get_any("odr_det", "part_type" , "odr_idx = $odr_idx");
     
-    update_val("odr","odr_status","18", "odr_idx", $odr_idx);
+    /*update_val("odr","odr_status","18", "odr_idx", $odr_idx);
     update_val("odr","status_edit_mem_idx",$session_mem_idx, "odr_idx", $odr_idx);
-    update_val("odr","invoice_no",$inv_no, "odr_idx", $odr_idx);    //invoice sheet(30_09)에서 가져온 $inv_no
+    update_val("odr","invoice_no",$inv_no, "odr_idx", $odr_idx);    //invoice sheet(30_09)에서 가져온 $inv_no*/
     //2016-12-06 : 재고 Update (기존 'invreg' 에서 처리 하던 것을 여기서 처리) - ccolle
     $result =QRY_ODR_DET_LIST(0," and odr_idx=$odr_idx ",0,"","asc");
     while($row = mysql_fetch_array($result)){
@@ -593,10 +593,34 @@ if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : �
        
         if ($part_type != 2)
         {
-            if($real_stock < $supp_qty){
+                //2016-12-28 : 가격변동 체크
+            $price_check = QRY_CNT_FLUC($row['odr_det_idx']);
+
+            $part_chk = QRY_CNT_PART($part_idx);
+
+            $safe_stock = QRY_STOCK_PART($part_idx);
+            
+            //echo $price_check."SS".$part_chk."qqq".$safe_stock."!!!!!".$_odr_stock;
+         
+            //2017-04-27 재고부족 파악 
+            if($part_chk>0 ){ //-- 파트 존재 여부 -------------------------------------------------  
+                echo "DELETE_".$part_idx;
+                exit;
+            } 
+            elseif( ($real_stock < $supp_qty && $safe_stock ==0) && $_part_type !="2" ){ //-- 재고 부족 -------------------------------------------------
+                echo "ERR_".$part_idx;
+                exit;
+            }else if($price_check>0 && ($_part_type !="2" && $_part_type !="5" && $_part_type !="6")){    //-- 가격 변동 -----
+                echo "PRICE_".$part_idx;               
+                exit;
+            }
+
+
+
+            /*if($real_stock < $supp_qty){
                 echo "ERR";
                 exit;
-            }else{
+            }else{*/
                 if($odr_qty < $supp_qty){   //공급 수량이 발주 수량보다 클 경우                    
                     $up_qty = $stock_qty - ($supp_qty - $odr_qty);
                     update_val("part","quantity", $up_qty, "part_idx", $part_idx);
@@ -604,7 +628,7 @@ if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : �
                     $up_qty = $stock_qty + ($odr_qty - $supp_qty);                   
                     update_val("part","quantity", $up_qty, "part_idx", $part_idx);
                 }
-            }
+           //}
         }
       
         //2017-01-19 : parts 정보Update(임시테이블에서 가져오기)
@@ -626,6 +650,11 @@ if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : �
             $result2=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
         }
     }//end of while
+
+    update_val("odr","odr_status","18", "odr_idx", $odr_idx);
+    update_val("odr","status_edit_mem_idx",$session_mem_idx, "odr_idx", $odr_idx);
+    update_val("odr","invoice_no",$inv_no, "odr_idx", $odr_idx);    //invoice sheet(30_09)에서 가져온 $inv_no
+    //2016-12-06 : 재고 Update (기존 'invreg' 에서 처리 하던 것을 여기서 처리) - ccolle
 
     //2. 송장 번호 등록
     /** 2016-04-18 송장번호는 'invreg' 에서 처리

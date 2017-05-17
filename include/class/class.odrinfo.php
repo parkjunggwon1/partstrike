@@ -287,7 +287,15 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<?if ($loadPage == "30_22"){
 								echo $supply_quantity==0?"":number_format($supply_quantity);
 							}elseif($loadPage == "09_03" || $loadPage == "30_06"){	//What's New(판매자:수정발주서)
-								echo number_format($part_stock + $odr_quantity);
+								
+								if ($part_type =="2" && $del_chk ==1){									
+									$quantity="I";		
+									echo $quantity;		
+								}
+								else
+								{
+									echo number_format($part_stock + $odr_quantity);
+								}
 							}elseif($loadPage == "31_04"){	//What's New(판매자:수정발주서)
 								if ($part_type =="2"){									
 									$quantity="I";				
@@ -558,7 +566,10 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td class="t-lt"><input type="text" class="i-txt4" id="manufacturer" value="<?=$manufacturer?>" maxlength="20" style="<?=$no_modify_border?>width:100%" <?=$no_modify?>></td>
 					<td><input type="text" class="i-txt4 t-ct" id="package" value="<?=$package?>" maxlength="10" style="<?=$no_modify_border?>width:83px" <?=$no_modify?>></td>
 					<?if ($part_type==2){?>
-						<td><?=$dc?></td>
+						<td>
+							<?=$dc?>
+							<input type="hidden"  id="dc" name="dc" value="<?=$dc?>" />		
+						</td>
 					<?}else{?>
 						<td><input type="text" class="i-txt4 t-ct" id="dc" value="<?=$dc?>" style="<?=$no_modify_border?>width:38px" maxlength="4" <?=$no_modify?>></td>
 					<?}?>					
@@ -895,9 +906,8 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<td colspan="6"><input type="text" name="part_no[]" class="i-txt4" value="<?=$part_no?>" maxlength="30" style="width:584px; ime-mode:disabled" ></td>
 					
 					<?}else{?>
-					<?
-					
-						$part_inv_chk =QRY_CNT("part", "and invreg_chk <> 1 and part_no='$part_no'"); 		
+					<?					
+						$part_inv_chk =QRY_CNT("part", "and invreg_chk <> 1 and part_idx='$real_part_idx'");
 						// $part_inv_chk==0 시작
 						if($part_inv_chk =='0')
 						{
@@ -1601,7 +1611,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 									<?if($part_type=="2"){?>
 										<td class="t-rt" style="width:60px;">I</td>
 									<?}else{?>
-										<td class="t-rt"><?=$part_stock==0?"0":number_format($qty)?></td>	
+										<td class="t-rt"><?=$part_stock==0?$part_stock+$supply_quantity:number_format($qty)?></td>	
 									<?}?>	
 									
 								<?}else if($loadPage == "02_02"){?>									
@@ -2130,7 +2140,17 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 						<?
 						if ($loadPage=="30_09" && !$sheets_no)
 						{ 
-							$tbl = "part_temp";
+							$invreg_chk2 = get_any("part", "invreg_chk", "part_idx=$part_idx");
+
+							if ($invreg_chk2 ==1)
+							{
+								$tbl = "part";
+							}
+							else
+							{
+								$tbl = "part_temp";
+							}
+							
 						}
 						else
 						{
@@ -2494,8 +2514,6 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 	if ($odr_det_idx !=""){ //개별 History가 있다면....
 		$searchand .= " and (odr_det_idx = '$odr_det_idx' or odr_det_idx = 0 or odr_det_idx is null) ";
 	}
-
-
 
 //	if ($loadPage == "01_37"||$loadPage == "09_03" ||$loadPage == "30_10" ||  $loadPage == "30_20" || $loadPage == "30_22" || $loadPage == "30_23"){ 
 		$det_cnt = QRY_CNT("odr_det", $searchand);   //한 odr_idx당 odr_det 개수가 몇개인지 따라 1개이면 전체 다 표시. 한개 이상이면 odr_det=0 or null 인것만 표시
