@@ -35,13 +35,15 @@ $part_type=$row_odr_det["part_type"];
 //재수정
 if ($odr_history_idx)
 {
-	$pay_invoice =get_any("odr_history","charge_ty"," status='5' and odr_history_idx > '$odr_history_idx' and odr_idx = '$odr_idx' order by odr_history_idx asc limit 1");
+	$pay_invoice =QRY_CNT("odr_history","  and odr_history_idx = '$odr_history_idx' and etc1 like '%DPI%' order by odr_history_idx asc limit 1")==1?"D":"F";	
+	
 }
 else
 {
 	if ($part_type==2)
 	{
 		$pay_invoice =QRY_CNT("odr_history"," and status='5'  and odr_idx = '$odr_idx' order by odr_history_idx asc limit 1")==2?"F":"D";	
+
 	}
 	else
 	{

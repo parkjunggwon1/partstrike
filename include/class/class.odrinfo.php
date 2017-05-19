@@ -662,7 +662,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<td class="t-rt" style="width:60px;">I</td>
 						<?}?>
 					<?}else{?>
-						<td class="t-rt"><?=$part_stock==0?$supply_quantity:number_format($part_stock + $supply_quantity)?></td>
+						<td class="t-rt"><?=$part_stock==0?number_format($supply_quantity):number_format($part_stock + $supply_quantity)?></td>
 					<?}?>					
 					<td class="t-rt">$<?=$price==0?"":$price_val?></td>
 					<td>
@@ -1062,7 +1062,14 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<?if($sell_mem_idx != $_SESSION['MEM_IDX'] || ($load_page=="30_08" && $modify_in_odr=="Y")){?>
 					<td class="t-rt"><span class="c-red"><?=$supply_quantity==""?"0":number_format($supply_quantity)?></span></td>		
 					<?}?>			
-					<?=($period)?"<td class=''>".$period:(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
+					<?
+						if ($part_type=="2")
+						{
+							$day_val = "WK";
+						}
+						?>
+						
+					<?=($period)?"<td class='c-red'>".str_replace("WK","",$period).$day_val."":"<td>Stock"?></td>
 					<?if($sell_mem_idx != $_SESSION['MEM_IDX']){?>
 					<td >
 					<?
