@@ -600,14 +600,13 @@ if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : �
 
             $safe_stock = QRY_STOCK_PART($part_idx);
             
-            //echo $price_check."SS".$part_chk."qqq".$safe_stock."!!!!!".$_odr_stock;
-         
+      
             //2017-04-27 재고부족 파악 
             if($part_chk>0 ){ //-- 파트 존재 여부 -------------------------------------------------  
                 echo "DELETE_".$part_idx;
                 exit;
             } 
-            elseif( ($real_stock < $supp_qty && $safe_stock ==0) && $_part_type !="2" ){ //-- 재고 부족 -------------------------------------------------
+            elseif( ($real_stock < $supp_qty) && $_part_type !="2" ){ //-- 재고 부족 -------------------------------------------------
                 echo "ERR_".$part_idx;
                 exit;
             }else if($price_check>0 && ($_part_type !="2" && $_part_type !="5" && $_part_type !="6")){    //-- 가격 변동 -----
@@ -630,7 +629,17 @@ if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : �
                 }
            //}
         }
-      
+        else
+        {
+            $part_chk = QRY_CNT_PART($part_idx);
+
+            //2017-04-27 재고부족 파악 
+            if($part_chk>0 ){ //-- 파트 존재 여부 -------------------------------------------------  
+                echo "DELETE_".$part_idx;
+                exit;
+            } 
+        }
+
         //2017-01-19 : parts 정보Update(임시테이블에서 가져오기)
         $temp_cnt = QRY_CNT("part_temp"," and odr_idx=$odr_idx and part_idx=$part_idx");
         if($temp_cnt>0){

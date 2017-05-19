@@ -655,8 +655,12 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td><?=$dc?></td>
 					<td><?=$rhtype?></td>					
 					<?}?>
-					<?if ($part_type=="2"){?>
-						<td class="t-rt">I</td>
+					<?if($part_type=="2"){?>
+						<?if ($del_chk=="0"){?>									
+							<td class="t-rt" style="width:60px;"><?=number_format($part_stock + $supply_quantity)?></td>
+						<?}else{?>
+							<td class="t-rt" style="width:60px;">I</td>
+						<?}?>
 					<?}else{?>
 						<td class="t-rt"><?=$part_stock==0?$supply_quantity:number_format($part_stock + $supply_quantity)?></td>
 					<?}?>					
@@ -944,11 +948,18 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<?
 					}
 					?>
-						<?if($part_type=="2"){?>
-							<td class="t-rt" style="width:60px;">I</td>
-						<?}else{?>
-							<td class="t-rt" style="width:60px;"><?=$origin_qty==0?"I":number_format($origin_qty)?></td>
-						<?}?>					
+					<td class="t-rt" style="width:60px;">
+						<?
+							if ($part_type =="2" && $del_chk ==1){									
+								$quantity="I";		
+								echo $quantity;		
+							}
+							else
+							{
+								echo number_format($part_stock + $odr_quantity);
+							}
+						?>
+					</td>											
 					
 					<?}	 //end of 턴키($part_type=="7")
 					//금액이 정수면 ,2 실수면 ,4 포멧 20161202 박정권
@@ -1578,7 +1589,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						$bottom_30_20 = $i;
 
 						?>
-						<?if ($loadPage !="18R_06" && $loadPage !="13_02s"){?><td>
+						<?if ($loadPage !="18R_06" && $loadPage !="13_02s" && $loadPage != "03_02"){?><td>
 						<?
 							if($loadPage!="05_04_1" || ($loadPage=="05_04_1" && $sell_mem_idx != $_SESSION["MEM_IDX"])){
 						?>
@@ -1607,9 +1618,15 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 									{
 										$qty = "0";
 									}
+
+									
 								?>
 									<?if($part_type=="2"){?>
-										<td class="t-rt" style="width:60px;">I</td>
+										<?if ($del_chk=="0"){?>									
+											<td class="t-rt" style="width:60px;"><?=number_format($part_stock + $supply_quantity)?></td>
+										<?}else{?>
+											<td class="t-rt" style="width:60px;">I</td>
+										<?}?>
 									<?}else{?>
 										<td class="t-rt"><?=$part_stock==0?$part_stock+$supply_quantity:number_format($qty)?></td>	
 									<?}?>	
@@ -2689,7 +2706,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						   echo layerOrdListData($loadPage ,$odr_idx,$odr_det_idx);
 						   break;
 						case "03_02":?>
-						<td class="company" style="width:33%;"></td>
+						<td class="company" style="width:33%;"><img src="/kor/images/nation_title_<?=$buy_com_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$buy_com_nation)?>"> </td>
 						<td class="c-red2" style="width:33%;text-align:center;font-size:15px;">구매자가 품목을 삭제하였습니다.</td>
 						<td style="width:33%;""></td>
 						</tr></tbody></table></div>
@@ -3306,7 +3323,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						<?}?>
 					<?}?>
 					<th scope="col" class="t-no"  >No.</th>
-					<?if ($loadPage!="18R_06" && $loadPage!="30_15" && $loadPage!="13_02s"){?><th scope="col" style="width:80px">Nation</th><?}?>
+					<?if ($loadPage!="18R_06" && $loadPage!="30_15" && $loadPage!="13_02s" && $loadPage != "03_02"){?><th scope="col" style="width:80px">Nation</th><?}?>
 					<?
 					if ($loadPage=="21_04" ){
 						$part_no_style = "style='width:250px;'";
