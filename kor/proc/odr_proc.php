@@ -566,9 +566,7 @@ if($typ =="invconfirm"){ //-------------------------------------- 송장 확정:
 
 if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : 송장 확정2:30_09 (Invoice) 2016-04-15 ----------------------------------------
     //1. status변경
-
-    $part_type = get_any("odr_det", "part_type" , "odr_idx = $odr_idx");
-    
+        
     /*update_val("odr","odr_status","18", "odr_idx", $odr_idx);
     update_val("odr","status_edit_mem_idx",$session_mem_idx, "odr_idx", $odr_idx);
     update_val("odr","invoice_no",$inv_no, "odr_idx", $odr_idx);    //invoice sheet(30_09)에서 가져온 $inv_no*/
@@ -576,6 +574,8 @@ if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : �
     $result =QRY_ODR_DET_LIST(0," and odr_idx=$odr_idx ",0,"","asc");
     while($row = mysql_fetch_array($result)){
         
+        $part_type = get_any("odr_det", "part_type" , "odr_det_idx = ".$row['odr_det_idx']);
+
         $odr_det_temp_row = get_odr_det_temp($row['odr_det_idx']);
 
         $odr_det_temp_sql = "update odr_det set supply_quantity=".$odr_det_temp_row['supply_quantity'].", part_condition=".$odr_det_temp_row['part_condition'].", pack_condition1=".$odr_det_temp_row['pack_condition1'].", pack_condition2=".$odr_det_temp_row['pack_condition2'].", memo='".$odr_det_temp_row['memo']."' where odr_det_idx=".$row['odr_det_idx'];
@@ -608,10 +608,11 @@ if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : �
             elseif( ($real_stock < $supp_qty) && $_part_type !="2" ){ //-- 재고 부족 -------------------------------------------------
                 echo "ERR_".$part_idx;
                 exit;
-            }else if($price_check>0 && ($_part_type !="2" && $_part_type !="5" && $_part_type !="6")){    //-- 가격 변동 -----
+            }
+            /*else if($price_check>0 && ($_part_type !="2" && $_part_type !="5" && $_part_type !="6")){    //-- 가격 변동 -----
                 echo "PRICE_".$part_idx;               
                 exit;
-            }
+            }*/
 
 
 

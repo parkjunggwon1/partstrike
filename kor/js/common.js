@@ -942,17 +942,8 @@ $(document).ready(function(){
 				success: function (data) {	
 					var data_string = $.trim(data);
 					var data_split = data_string.split( '_' );
-					
-					if($.trim(data_split[0])=="PRICE"){	//가격변동 경고!!
-							//2016-12-11 : 재고 경고
-							closeCommLayer("layer5");	//invoic 닫고
-							closeCommLayer("layer4");	//공지창 닫고
-							closeCommLayer("layer3");	//송장(3008) 닫고
-							openLayer("layer5","30_05","?odr_idx="+$("#odr_idx_30_09").val());	//P.O 다시 열고
-							openLayer('layer3','30_08','?odr_idx='+$("#odr_idx_30_09").val());		//송장 다시 열고
-							openLayer('layer4','alarm2','?odr_idx='+$("#odr_idx_30_09").val()+"&part_idx="+data_split[1]);	//가격변동 경고창
-							return;
-					}else if ($.trim(data_split[0])=="ERR"){
+
+					if ($.trim(data_split[0])=="ERR"){
 							//2016-12-11 : 재고 경고
 							closeCommLayer("layer5");	//invoic 닫고
 							closeCommLayer("layer4");	//공지창 닫고
@@ -969,7 +960,7 @@ $(document).ready(function(){
 							closeCommLayer("layer3");	//송장(3008) 닫고
 							openLayer("layer5","30_05","?odr_idx="+$("#odr_idx_30_09").val());	//P.O 다시 열고
 							openLayer('layer3','30_08','?odr_idx='+$("#odr_idx_30_09").val());		//송장 다시 열고
-							openLayer('layer4','alarm3','?odr_idx='+$("#odr_idx_30_09").val()+"&part_idx="+data_split[1]+"&fromLoadPage="+$("#fromLoadPage").val());	
+							openLayer('layer4','alarm4','?odr_idx='+$("#odr_idx_30_09").val()+"&part_idx="+data_split[1]+"&fromLoadPage="+$("#fromLoadPage").val());	
 							return;							
 					}	
 					else if (trim(data) == "SUCCESS"){		

@@ -1604,6 +1604,7 @@ function GET_WhatsNew($ty,$viewty){
 				//echo $sql;
 			$result=mysql_query($sql);
 			$rowcnt = mysql_num_rows($result);
+			
 			if ($rowcnt > 0 ) {
 				$row = mysql_fetch_array($result);
 				$status= replace_out($row["status"]);

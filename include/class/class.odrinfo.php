@@ -294,7 +294,15 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								}
 								else
 								{
-									echo number_format($part_stock + $odr_quantity);
+									if ($part_type =="2" || $part_type =="5" || $part_type =="6")
+									{
+										echo number_format($part_stock + $supply_quantity);
+									}
+									else
+									{
+										echo number_format($part_stock + $odr_quantity);
+									}
+									
 								}
 							}elseif($loadPage == "31_04"){	//What's New(판매자:수정발주서)
 								if ($part_type =="2"){									
@@ -337,7 +345,15 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<td class="c-blue t-rt"><?=($part_type=="7")?number_format($price,2):number_format($odr_quantity)?></td>
 							<?if ($loadPage == "09_03" || $part_type == 2 || $part_type == 5 || $part_type == 6){?>
 							<td class="c-red t-rt"><?=number_format($supply_quantity)?></td>
-							<?}?>
+							<?}else{?>
+							<?
+							$part_chk = QRY_CNT("odr_det"," and odr_idx=$odr_idx and (part_type=2 or part_type=5 or part_type=6) ");  //지속적, 해외, 국내
+							if (($part_chk >=1 && $loadPage != "31_04" && $loadPage != "02_02")){
+							?>
+								<td class="c-red t-rt"></td>
+							<?
+								}
+							}?>
 						<?}else{?>
 							<?
 								$price_sum = $price*$supply_quantity;
@@ -589,7 +605,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					else
 					{
 					?>
-					<td class="t-lt">
+					<td class="t-ct">
 						<?=$rhtype?>
 						<input type="hidden" name="rhtype[]" value="<?=$rhtype?>" />
 					</td>
@@ -927,7 +943,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					</td>
 					<?if ($no_modify !="readonly"){?>
 					<td>
-						<div class="select type6" lang="en" style="width:60px; padding:0;" >
+						<div class="select type6 t-ct" lang="en" style="width:60px; padding:0;" >
 							<label style="padding:0;padding-left:2px;padding-top:2px;"><?=$rhtype==""?"":$rhtype?></label>
 							<select name="rhtype[]">
 								<option lang="en" <?if($rhtype=="None"){echo "selected";}?>>None</option>
@@ -941,7 +957,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					else
 					{
 					?>
-					<td class="t-lt">
+					<td class="t-ct">
 						<?=$rhtype?>
 						<input type="hidden" name="rhtype[]" value="<?=$rhtype?>" />
 					</td>
@@ -952,11 +968,13 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<?
 							if ($part_type =="2" && $del_chk ==1){									
 								$quantity="I";		
-								echo $quantity;		
+								echo $quantity;	
+								$del_qty = "I";	
 							}
 							else
 							{
 								echo number_format($part_stock + $odr_quantity);
+								$del_qty = $part_stock + $odr_quantity;
 							}
 						?>
 					</td>											
@@ -970,7 +988,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td class="t-rt" style="width:66px;"><span class="c-blue"><?=$odr_quantity==0?"":number_format($odr_quantity)?></span></td>
 					<!--공급수량-->
 					<td class="t-rt">
-						<input type="text" name="supply_quantity[]" class="i-txt4 c-red2 onlynum numfmt t-rt" value="" maxlength="10" style="width:58px" origin_qty="<?=$origin_qty;?>" part_type="<?=$part_type;?>">
+						<input type="text" name="supply_quantity[]" class="i-txt4 c-red2 onlynum numfmt t-rt" value="" maxlength="10" style="width:58px" origin_qty="<?=$origin_qty;?>" del_qty="<?=$del_qty?>" part_type="<?=$part_type;?>">
 					</td>
 					<?
 						if($part_type =="2")
@@ -1059,7 +1077,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<?
 						$modify_in_odr = QRY_CNT("odr_history", "and odr_idx = $odr_idx  and status in (3)") > 0 ? "Y": "N";  //판매자 취소인지 구매자 취소인지 확인
 					?>
-					<?if($sell_mem_idx != $_SESSION['MEM_IDX'] || ($load_page=="30_08" && $modify_in_odr=="Y")){?>
+					<?if($sell_mem_idx != $_SESSION['MEM_IDX'] || ($load_page=="30_08" )){?>
 					<td class="t-rt"><span class="c-red"><?=$supply_quantity==""?"0":number_format($supply_quantity)?></span></td>		
 					<?}?>			
 					<?
@@ -2206,10 +2224,12 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 							<td class="t-rt"><?=number_format($odr_quantity)?></td>
 							<td class="t-rt">$<?=$price_val?></td>
 							<?
+							$day_val ="";
 							if($part_type==2)
 							{
 								$day_val = "WK";
 							}
+
 							?>
 							<td><?=($period)?( QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"Stock":$period.$day_val):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>
 							<td class="t-rt">

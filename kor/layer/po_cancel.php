@@ -101,7 +101,7 @@ $(document).ready(function(){
 						<th scope="col" class="t-oty" style="width:66px;">O'ty</th>
 						<th scope="col" class="t-unitprice" style="width:66px;">Unit Price</th>
 						<th scope="col" class="t-orderoty t-rt" lang="ko" style="width:66px;">발주수량</th>
-						<?if($load_page == "09_01" || ($load_page == "30_08" && $modify_in_odr=="Y")){?>
+						<?if($load_page == "09_01" || $load_page == "30_08" ){?>
 						<th scope="col" class="t-supplyoty t-rt" style="width:66px;" lang="ko">공급수량</th>
 						<?}?>
 						<th scope="col" lang="ko" class="t-period">납기</th>

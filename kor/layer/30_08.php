@@ -57,6 +57,7 @@ function checkActive(){
 	//opCond = opCond + part2;
 	//opCond1 = opCond1 + part2;
 	//opCond2 = opCond2 + part2;
+	check_supp();
 	//공급수량 체크
 	$("input[name^=supply_quantity]").each(function(e){ //공급수량
 		if($(this).val().replace(/,/gi,"")>0) sqty++;
@@ -91,9 +92,20 @@ function check_supp(){
 	$("input[name^=supply_quantity]").each(function(e){ //공급수량
 		if($(this).attr("part_type")!="7"){
 			maskoff();
-			if(parseInt($(this).val()) > parseInt($(this).attr("origin_qty"))){
-				$(this).val("");
+			if ($(this).attr("part_type")=="2" && $(this).attr("del_qty") != "I")
+			{
+
+				if(parseInt($(this).val()) > parseInt($(this).attr("del_qty"))){
+					$(this).val("");
+				}
 			}
+			else
+			{
+				if(parseInt($(this).val()) > parseInt($(this).attr("origin_qty"))){
+					$(this).val("");
+				}
+			}
+			
 			maskon();
 		}
 	});

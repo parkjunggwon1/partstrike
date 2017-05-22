@@ -43,6 +43,8 @@ if (!$_SESSION["MEM_IDX"]){ReopenLayer("layer6","alert","?alert=sessionend");exi
 	$per_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and odr_status=16 ");  //납기 받은 품목 수
 	$turnkey_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and part_type=7 ");  //턴키
 
+	$period3_cnt = QRY_CNT("odr_history"," and odr_idx=$odr_idx and etc1 > 2 and status_name='납기 확인' ");  //턴키
+
 	$part2_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and (part_type=2 or part_type=5 or part_type=6)");  //턴키
 	
 	if ($part2_cnt>0){
@@ -1157,7 +1159,9 @@ function checkActive(){
 		<?if($turnkey_cnt>0){?>
 			<img id="btn-confirm" src="/kor/images/btn_order_confirm_1.gif" alt="발주서 확인">
 		<?}else{?>
+			<?if ($period3_cnt != 1){?>
 			<img src="/kor/images/btn_order_add.gif" class="btn-dialog-0501" alt="발주 추가" style="cursor:pointer">
+			<?}?>
 			<img id="btn-confirm" src="/kor/images/btn_order_confirm_1.gif" alt="발주서 확인" style="cursor:pointer"><!--class="btn-order-confirm" -->
 			
 			<?if ($det_cnt > 1){?>
