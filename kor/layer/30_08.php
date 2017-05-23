@@ -194,7 +194,7 @@ $(document).ready(function(){
 				<thead>
 					<tr>
 						<?if($det_cnt>1){?>
-						<th scope="col" style="width:50px">Option</th>
+						<th scope="col" style="width:40px">Option</th>
 						<?}?>
 						<th scope="col" class="t-no">No. </th>
 						<th scope="col" class="t-partno" Style="width:<?=($det_cnt>1)? "170":"170";?>px;">Part No.</th>
@@ -206,7 +206,7 @@ $(document).ready(function(){
 						<?if($turnkey_cnt<1){?>
 						<th scope="col" class="t-unitprice">Unit Price</th>
 						<th scope="col" lang="ko" class="t-orderoty" >발주수량</th>							
-						<th scope="col" lang="ko" class="t-supplyoty" Style="whdth:66px;">공급수량</th>						
+						<th scope="col" lang="ko" class="t-supplyoty" Style="whdth:80px;">공급수량</th>						
 						<?}?>
 						<th scope="col" lang="ko" class="t-period">납기</th>
 					</tr>

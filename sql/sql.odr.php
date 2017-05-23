@@ -16,7 +16,7 @@ function QRY_ODR_LIST($recordcnt,$searchand,$page,$ord='odr_idx'){
 }
 Function QRY_ODR_DET_LIST($recordcnt,$searchand,$page,$ord='odr_det_idx',$odrby='desc'){
 	$conn = dbconn();	
-	if ($recordcnt > 0) {  //$recordcnt�� �Ѿ���� �׸�ŭ�� ��� ����¡ ó��. recordcnt�� 0���� �Ѿ���� ��ü �� ��� �ϰڴٴ� �ǹ� (���� �ٿ�ε� ��� ����)
+	if ($recordcnt > 0) {  //$recordcnt°¡ ³Ñ¾î¿À¸é ±×¸¸Å­¾¿ ²÷¾î¼­ ÆäÀÌÂ¡ Ã³¸®. recordcnt°¡ 0À¸·Î ³Ñ¾î¿À¸é ÀüÃ¼ ´Ù Ãâ·Â ÇÏ°Ú´Ù´Â ÀÇ¹Ì (¿¢¼¿ ´Ù¿î·Îµå µî¿¡¼­ ¾²ÀÓ)
 		$startno = ($page-1) * $recordcnt;
 		$limit = "LIMIT $startno,$recordcnt";
 	}else{
@@ -40,16 +40,16 @@ Function QRY_ODR_DET_LIST($recordcnt,$searchand,$page,$ord='odr_det_idx',$odrby=
 			$s_ord
 			$limit
 			";
-	mysql_query( "SET NAMES utf8");	
+	mysql_query( "SET NAMES utsf8");	
 	//echo $sql;
 	$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 	return $result;
 }
 
-//2017-01-18 : �ӽ����̺� part ���� �������� ����.
+//2017-01-18 : ÀÓ½ÃÅ×ÀÌºí part Á¤º¸ °¡Á®¿À±â À§ÇØ.
 Function QRY_ODR_DET_LIST_TEMP($recordcnt,$searchand,$page,$ord='odr_det_idx',$odrby='desc'){
 	$conn = dbconn();	
-	if ($recordcnt > 0) {  //$recordcnt�� �Ѿ���� �׸�ŭ�� ��� ����¡ ó��. recordcnt�� 0���� �Ѿ���� ��ü �� ��� �ϰڴٴ� �ǹ� (���� �ٿ�ε� ��� ����)
+	if ($recordcnt > 0) {  //$recordcnt°¡ ³Ñ¾î¿À¸é ±×¸¸Å­¾¿ ²÷¾î¼­ ÆäÀÌÂ¡ Ã³¸®. recordcnt°¡ 0À¸·Î ³Ñ¾î¿À¸é ÀüÃ¼ ´Ù Ãâ·Â ÇÏ°Ú´Ù´Â ÀÇ¹Ì (¿¢¼¿ ´Ù¿î·Îµå µî¿¡¼­ ¾²ÀÓ)
 		$startno = ($page-1) * $recordcnt;
 		$limit = "LIMIT $startno,$recordcnt";
 	}else{
@@ -67,7 +67,7 @@ Function QRY_ODR_DET_LIST_TEMP($recordcnt,$searchand,$page,$ord='odr_det_idx',$o
 
 	$sql = "
 			SELECT *,b.quantity as part_stock,a.odr_price as odr_price FROM odr_det a
-			left outer join part_temp b on a.part_idx = b.part_idx 
+			left outer join part_temp b on a.part_idx = b.part_idx and type='after'
 			WHERE
 				1=1 $searchand
 			$s_ord
@@ -94,10 +94,10 @@ Function QRY_ODR_VIEW($idx){
 	return $result;
 }
 
-//----------------- �����丮(�ֹ��ܰ�) ----------------------------------------------------------
+//----------------- È÷½ºÅä¸®(ÁÖ¹®´Ü°è) ----------------------------------------------------------
 function QRY_ODR_HISTORY_LIST($recordcnt, $searchand, $page, $ord){
 	$conn = dbconn();	
-	if ($recordcnt > 0) {  //$recordcnt�� �Ѿ���� �׸�ŭ�� ��� ����¡ ó��. recordcnt�� 0���� �Ѿ���� ��ü �� ��� �ϰڴٴ� �ǹ� (���� �ٿ�ε� ��� ����)
+	if ($recordcnt > 0) {  //$recordcnt°¡ ³Ñ¾î¿À¸é ±×¸¸Å­¾¿ ²÷¾î¼­ ÆäÀÌÂ¡ Ã³¸®. recordcnt°¡ 0À¸·Î ³Ñ¾î¿À¸é ÀüÃ¼ ´Ù Ãâ·Â ÇÏ°Ú´Ù´Â ÀÇ¹Ì (¿¢¼¿ ´Ù¿î·Îµå µî¿¡¼­ ¾²ÀÓ)
 		$startno = ($page-1) * $recordcnt;
 		$limit = " LIMIT $startno,$recordcnt ";
 	}else{
@@ -116,7 +116,7 @@ function QRY_ODR_HISTORY_LIST($recordcnt, $searchand, $page, $ord){
 
 function QRY_ODR_DIST_LIST($recordcnt, $searchand, $page, $ord){
 	$conn = dbconn();	
-	if ($recordcnt > 0) {  //$recordcnt�� �Ѿ���� �׸�ŭ�� ��� ����¡ ó��. recordcnt�� 0���� �Ѿ���� ��ü �� ��� �ϰڴٴ� �ǹ� (���� �ٿ�ε� ��� ����)
+	if ($recordcnt > 0) {  //$recordcnt°¡ ³Ñ¾î¿À¸é ±×¸¸Å­¾¿ ²÷¾î¼­ ÆäÀÌÂ¡ Ã³¸®. recordcnt°¡ 0À¸·Î ³Ñ¾î¿À¸é ÀüÃ¼ ´Ù Ãâ·Â ÇÏ°Ú´Ù´Â ÀÇ¹Ì (¿¢¼¿ ´Ù¿î·Îµå µî¿¡¼­ ¾²ÀÓ)
 		$startno = ($page-1) * $recordcnt;
 		$limit = " LIMIT $startno,$recordcnt ";
 	}else{
@@ -134,9 +134,9 @@ function QRY_ODR_DIST_LIST($recordcnt, $searchand, $page, $ord){
 }
 
 
-function QRY_HISTORY_LIST($recordcnt, $searchand, $page, $ord){   //odr ��, rcd �� �Ѵ� union
+function QRY_HISTORY_LIST($recordcnt, $searchand, $page, $ord){   //odr ÂÊ, rcd ÂÊ µÑ´Ù union
 $conn = dbconn();	
-	if ($recordcnt > 0) {  //$recordcnt�� �Ѿ���� �׸�ŭ�� ��� ����¡ ó��. recordcnt�� 0���� �Ѿ���� ��ü �� ��� �ϰڴٴ� �ǹ� (���� �ٿ�ε� ��� ����)
+	if ($recordcnt > 0) {  //$recordcnt°¡ ³Ñ¾î¿À¸é ±×¸¸Å­¾¿ ²÷¾î¼­ ÆäÀÌÂ¡ Ã³¸®. recordcnt°¡ 0À¸·Î ³Ñ¾î¿À¸é ÀüÃ¼ ´Ù Ãâ·Â ÇÏ°Ú´Ù´Â ÀÇ¹Ì (¿¢¼¿ ´Ù¿î·Îµå µî¿¡¼­ ¾²ÀÓ)
 		$startno = ($page-1) * $recordcnt;
 		$limit = " LIMIT $startno,$recordcnt ";
 	}else{
@@ -165,7 +165,7 @@ $conn = dbconn();
 
 }
 
-//����� ������ �� ����� �ּ� ���
+//¹è¼ÛÁö º¯°æÀÇ ±â ÀúÀåµÈ ÁÖ¼Ò ¸ñ·Ï
 function QRY_DELIVERY_ADDR_LIST($recordcnt,$searchand,$page,$ord='delivery_addr_idx'){
 	$conn = dbconn();	
 	$sql = "
@@ -196,7 +196,7 @@ function QRY_DELIVERY_ADDR_VIEW($idx){
 	return $result;
 }
 
-// ���� ���� ��, ���� ���� ǰ�� ���� �� �����Ʈ ������ ���� proc_ajax.php case"MRO" ���� ���
+// ÀúÀå ³»¿ª Áß, ³³±â ¹ÞÀº Ç°¸ñ ¹ßÁÖ ½Ã Á¤»ó·çÆ® µ¥ÀÌÅÍ »èÁ¦ proc_ajax.php case"MRO" ¿¡¼­ »ç¿ë
 function DEL_ORIGIN_PERIOD($actkind){
 	$conn = dbconn();
 	$param = "

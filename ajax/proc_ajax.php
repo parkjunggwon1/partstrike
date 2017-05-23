@@ -1321,8 +1321,9 @@ switch($actty) {
 			";
 	$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 	//-- 발주서 처리--------------------------------------------------------------------
-	if ($remain_cnt > 0) {   //선택한 발주외에도  임시 발주서에 부품이 남아있다면 
+	if ($remain_cnt > 0) {   //선택한 발주외에도  임시 발주서에 부품이 남아있다면 //$delivery_addr_idx_val = $delivery_addr_idx;
 		//선택한 부품들은 새로운 odr_idx를 따서 옮겨야 함.
+		
 		$sql = "insert into odr (odr_no, mem_idx, rel_idx, sell_mem_idx, sell_rel_idx, period, odr_status , memo, reg_date, reg_ip)
 				select '".get_odr_no("PO")."' , mem_idx, rel_idx, sell_mem_idx, sell_rel_idx, period, 0 , memo, now(), reg_ip from odr where odr_idx = $actidx ";
 		$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());

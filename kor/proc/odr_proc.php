@@ -486,17 +486,38 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
 
                 if ($part_inv_chk)
                 {
-                    $temp_cnt = QRY_CNT("part_temp"," and odr_idx=$odr_idx and odr_det_idx=$ary_odr_det_idx[$j] and part_idx=$part_idx ");
+                    $temp_cnt = QRY_CNT("part_temp"," and odr_idx=$odr_idx and odr_det_idx=$ary_odr_det_idx[$j] and part_idx=$part_idx and type='after'");
                     if($temp_cnt>0){    //임시테이블에 Data 있다(Update)
                         $sql = "update part_temp set part_no = '".$ary_part_no[$j]."',
                                 manufacturer = '".$ary_manufacturer[$j]."',
                                 package= '".$ary_package[$j]."',
                                 dc= '".$ary_rosh[$j]."',
                                 rhtype= '".$ary_rhtype[$j]."'
-                                where part_idx = ".$part_idx." and odr_idx=".$odr_idx." and odr_det_idx=".$ary_odr_det_idx[$j];
+                                where part_idx = ".$part_idx." and type='after' and odr_idx=".$odr_idx." and odr_det_idx=".$ary_odr_det_idx[$j];
                     }else{  //임시테이블에 Data 없다(Insert)
+                        //바뀌기전 파트정보를 먼저 입력한다.
+                        $sql_before_sel = "SELECT part_idx,part_no,manufacturer,package,dc,rhtype FROM part WHERE part_idx = $part_idx";
+                        $result=mysql_query($sql_before_sel,$conn) or die ("SQL ERROR : ".mysql_error());
+                        while($row_before = mysql_fetch_array($result)){
+                            $sql_before = "insert into part_temp set 
+                                odr_idx = ".$odr_idx.", 
+                                type= 'before',
+                                odr_det_idx = ".$ary_odr_det_idx[$j].", 
+                                part_idx = ".$part_idx.", 
+                                part_no = '".$row_before['part_no']."',
+                                manufacturer = '".$row_before['manufacturer']."',
+                                package= '".$row_before['package']."',
+                                dc= '".$row_before['dc']."',
+                                rhtype= '".$row_before['rhtype']."'";
+
+                            $result=mysql_query($sql_before,$conn) or die ("SQL ERROR : ".mysql_error());
+                        } //end while
+                        
+
+                        //바뀐후의 파트정보를 입력한다.
                         $sql = "insert into part_temp set 
                                 odr_idx = ".$odr_idx.", 
+                                type= 'after',
                                 odr_det_idx = ".$ary_odr_det_idx[$j].", 
                                 part_idx = ".$part_idx.", 
                                 part_no = '".$ary_part_no[$j]."',
@@ -641,7 +662,7 @@ if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : �
         }
 
         //2017-01-19 : parts 정보Update(임시테이블에서 가져오기)
-        $temp_cnt = QRY_CNT("part_temp"," and odr_idx=$odr_idx and part_idx=$part_idx");
+        $temp_cnt = QRY_CNT("part_temp"," and odr_idx=$odr_idx and part_idx=$part_idx and type='after'");
         if($temp_cnt>0){
             $sql = "
                     UPDATE part AS a
@@ -652,10 +673,10 @@ if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : �
                         a.package = b.package,
                         a.dc = b.dc,
                         a.rhtype = b.rhtype
-                    WHERE b.odr_idx=$odr_idx AND b.part_idx=$part_idx
+                    WHERE b.odr_idx=$odr_idx AND b.part_idx=$part_idx and type='after'
                     ";
             $result1=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
-            $sql = "DELETE FROM part_temp WHERE odr_idx=$odr_idx AND part_idx=$part_idx";
+            $sql = "DELETE FROM part_temp WHERE odr_idx=$odr_idx AND part_idx=$part_idx and type='after'";
             $result2=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
         }
     }//end of while

@@ -988,7 +988,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td class="t-rt" style="width:66px;"><span class="c-blue"><?=$odr_quantity==0?"":number_format($odr_quantity)?></span></td>
 					<!--공급수량-->
 					<td class="t-rt">
-						<input type="text" name="supply_quantity[]" class="i-txt4 c-red2 onlynum numfmt t-rt" value="" maxlength="10" style="width:58px" origin_qty="<?=$origin_qty;?>" del_qty="<?=$del_qty?>" part_type="<?=$part_type;?>">
+						<input type="text" name="supply_quantity[]" class="i-txt4 c-red2 onlynum numfmt t-rt" value="" maxlength="10" style="width:70px" origin_qty="<?=$origin_qty;?>" del_qty="<?=$del_qty?>" part_type="<?=$part_type;?>">
 					</td>
 					<?
 						if($part_type =="2")
@@ -1066,7 +1066,15 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						$poa_cnt = get_any("odr_history","status_name", "odr_idx=$odr_idx  and (status_name='송장' or status_name='수정발주서' or status_name='발주서') order by odr_history_idx desc limit 1");
 						$qty = ($poa_cnt == "송장")? $part_stock+$supply_quantity : $part_stock+$odr_quantity;
 					?>
-					<?=$qty==0?"":number_format($qty)?>						
+					<?if($part_type=="2"){?>
+						<?if ($del_chk=="0"){?>									
+							<?=number_format($part_stock + $supply_quantity)?>
+						<?}else{?>
+							I
+						<?}?>
+					<?}else{?>	
+						<?=$qty==0?"":number_format($qty)?>	
+					<?}?>					
 					</td>
 					<?}?>
 					<td class="t-rt">$<?=$price_val?></td>					
@@ -1078,7 +1086,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						$modify_in_odr = QRY_CNT("odr_history", "and odr_idx = $odr_idx  and status in (3)") > 0 ? "Y": "N";  //판매자 취소인지 구매자 취소인지 확인
 					?>
 					<?if($sell_mem_idx != $_SESSION['MEM_IDX'] || ($load_page=="30_08" )){?>
-					<td class="t-rt"><span class="c-red"><?=$supply_quantity==""?"0":number_format($supply_quantity)?></span></td>		
+					<td class="t-rt"><span class="c-red"><?=$supply_quantity==""?"":number_format($supply_quantity)?></span></td>		
 					<?}?>			
 					<?
 						if ($part_type=="2")
@@ -2027,11 +2035,11 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 			$part_type= replace_out($row["part_type"]);
 			$odr_idx= replace_out($row["odr_idx"]);
 			if($temp_yn){ //2017-01-18 : '송장'(30_08) 작성단계에서 'INVOICE'에 임시테이블 데이터 보여주기
-				$part_no= get_any("part_temp", "part_no", "odr_idx=$odr_idx and part_idx=$part_idx");
-				$manufacturer= get_any("part_temp", "manufacturer", "odr_idx=$odr_idx and part_idx=$part_idx");
-				$package= get_any("part_temp", "package", "odr_idx=$odr_idx and part_idx=$part_idx");
-				$dc= get_any("part_temp", "dc", "odr_idx=$odr_idx and part_idx=$part_idx");
-				$rhtype= get_any("part_temp", "rhtype", "odr_idx=$odr_idx and part_idx=$part_idx");
+				$part_no= get_any("part_temp", "part_no", "odr_idx=$odr_idx and part_idx=$part_idx and type='after'");
+				$manufacturer= get_any("part_temp", "manufacturer", "odr_idx=$odr_idx and part_idx=$part_idx and type='after'");
+				$package= get_any("part_temp", "package", "odr_idx=$odr_idx and part_idx=$part_idx and type='after'");
+				$dc= get_any("part_temp", "dc", "odr_idx=$odr_idx and part_idx=$part_idx and type='after'");
+				$rhtype= get_any("part_temp", "rhtype", "odr_idx=$odr_idx and part_idx=$part_idx and type='after'");
 			}else{
 				$part_no= replace_out($row["part_no"]);
 				$manufacturer= replace_out($row["manufacturer"]);
@@ -2180,10 +2188,12 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 					<tr>
 						<td><?=$i?></td>
 						<?
+
 						if ($loadPage=="30_09" && !$sheets_no)
 						{ 
-							$invreg_chk2 = get_any("part", "invreg_chk", "part_idx=$part_idx");
 
+							$invreg_chk2 = get_any("part", "invreg_chk", "part_idx=$part_idx");
+							$tbl_where = "";
 							if ($invreg_chk2 ==1)
 							{
 								$tbl = "part";
@@ -2196,9 +2206,27 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 						}
 						else
 						{
-							$tbl = "part";
+							if ($loadPage=="30_05" && $sheets_no)
+							{
+								$history_chk = QRY_CNT("odr_history", " and etc1 = '$sheets_no' and status = 2 and status_name='발주서' ");
+
+								if ($history_chk)
+								{
+									$tbl_where = " and type='before'";
+								}
+								else
+								{
+									$tbl_where = " and type='after'";
+								}
+								$tbl = "part_temp";
+							}
+							else
+							{
+								$tbl = "part";
+							}
+							
 						}
-						$sql = "select * from ".$tbl." where part_idx = $part_idx ";
+						$sql = "select * from ".$tbl." where part_idx = $part_idx ".$tbl_where ;
 						//echo $sql;
 						$conn = dbconn();	
 						$result_part=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
