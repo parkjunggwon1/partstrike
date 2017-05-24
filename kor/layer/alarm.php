@@ -11,7 +11,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";?>
 		$sql_where = "or part_idx='$part_idx'";
 	}
 
-	$part_type=get_any("odr_det", "part_type", "odr_det_idx='$odr_det_idx' ".$sql_where);
+	//$part_type=get_any("odr_det", "part_type", "odr_det_idx='$odr_det_idx' ".$sql_where);
 	if ($part_type==2 || $part_type==5 || $part_type==6)
 	{
 		$qty_type= "공급 수량";

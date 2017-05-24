@@ -533,6 +533,12 @@ $(document).ready(function(){
 	});	 
 	//수정발주서 Sheet(P.O Amendment) 12_07 '확정 발주서' 클릭
 	$("body").on("click",".odrAmendConfirm",function(){
+
+		var $button_chk = $(this);
+
+		$button_chk.children("button").attr("class","");	
+		$button_chk.children("img").attr("src","/kor/images/loding_img.gif");
+		
 		//openLayer("layer","30_06","?mn=02");
 		odr_idx = $(this).attr("odr_idx");
 		$.ajax({
@@ -541,7 +547,31 @@ $(document).ready(function(){
 				data: "typ=odramendconfirm2&odr_idx="+$(this).attr("odr_idx")+"&amend_no="+$(this).attr("amend_no")+"&poa_no="+$("#poa_no_1207").val(),  //2016-04-15 : odramendconfirm2(Log 기록)으로 수정
 				encType:"multipart/form-data",
 				success: function (data) {	
-					if (trim(data) == "SUCCESS"){		
+					
+					var data_string = $.trim(data);
+					var data_split = data_string.split( '_' );
+
+					if ($.trim(data_split[0])=="ERR"){
+							//2016-12-11 : 재고 경고
+							closeCommLayer("layer5");	//invoic 닫고
+							closeCommLayer("layer4");	//공지창 닫고
+							closeCommLayer("layer3");	//송장(3008) 닫고
+							openLayer("layer5","30_09","?odr_idx="+odr_idx);	//P.O 다시 열고
+							openLayer('layer3','09_01','?odr_idx='+odr_idx);		//송장 다시 열고
+							openLayer('layer4','alarm','?odr_idx='+odr_idx+"&part_idx="+data_split[1]);							
+							return;							
+					}
+					else if ($.trim(data_split[0])=="DELETE"){	
+							//2016-12-11 : 재고 경고
+							closeCommLayer("layer5");	//invoic 닫고
+							closeCommLayer("layer4");	//공지창 닫고
+							closeCommLayer("layer3");	//송장(3008) 닫고
+							openLayer("layer5","30_09","?odr_idx="+odr_idx);	//P.O 다시 열고
+							openLayer('layer3','09_01','?odr_idx='+odr_idx);		//송장 다시 열고
+							openLayer('layer4','alarm4','?odr_idx='+odr_idx+"&part_idx="+data_split[1]+"&fromLoadPage="+$("#fromLoadPage").val());	
+							return;							
+					}	
+					else if (trim(data) == "SUCCESS"){		
 						//alert_msg("판매자에게 확정 발주서를 전송했습니다.");
 						//alert_msg("구매자에게 송장을 발송했습니다.");
 						var menu_type_chk = getCookie('menu');
@@ -566,14 +596,7 @@ $(document).ready(function(){
 							case "side_order"    : showajax(".col-right", "side_order");
 			           					break;
 						}
-						//document.location.href="/kor/";
-					}else if(trim(data) == "ERR"){
-						//재고 경고
-						closeCommLayer("layer5");	//invoic 닫고
-						closeCommLayer("layer3");	//수정발주서(0901) 닫고
-						openLayer("layer5","30_09","?odr_idx="+odr_idx);	//invoice 다시 열고
-						openLayer('layer3','09_01','?odr_idx='+odr_idx);		//수정발주서 다시 열고
-						openLayer('layer4','alarm','?odr_idx='+odr_idx);		//경고창 띄우고
+						//document.location.href="/kor/";					
 					}else{
 						alert_msg(data);
 					}

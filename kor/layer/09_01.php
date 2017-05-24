@@ -349,12 +349,14 @@ $(document).ready(function(){
 	$("#layerPop3 .stock-list-table tr[id^=tr_]").each(function(){
 		n.push(parseInt($(this).attr("id").replace("tr_","")));
 	});	
-	var nSort = n.sort();
+
+	//정렬 필요 없을거 같음 주석
+	/*var nSort = n.sort();
 	for(i=nSort.length-1; i >=0; i--){
 		$this = $("#layerPop3 .stock-list-table tr[id=tr_"+nSort[i]+"]").parent();
 		$("#layerPop3 .stock-list-table tr[id=tr_"+nSort[i]+"]").parent().remove();
 		$("#layerPop3 .stock-list-table thead:eq(0)").after($this);
-	}	
+	}	*/
 	
 	$("#layerPop3 .stock-list-table tbody:eq(0) tr:eq(0) td").addClass("first");
 	$(".txt_stock:eq(0)").show();
@@ -509,24 +511,33 @@ function checkActive(){
 	//det 갯수만큼 반복(발주수량으로...)
 	maskoff();
 	$("input[name^=odr_quantity]").each(function(e){ //선택유무와 무관
-		supp_qty = $(this).attr("supply_quantity");
-		if ($(this).val()!="")
+		part_type = $(this).attr("part_type");
+		if (part_type == "2")
 		{
 			odr_qty = parseInt($(this).val());	
-		}
-		else	
-		{
-			odr_qty=0;
-		}		
-
-		quantity = parseInt($(this).attr("quantity"));  //현 재고.
-		if(supp_qty.length > 0){
-			//if($(this).val().length>0 && odr_qty <= quantity && odr_qty>0) okCnt++;
-			if(odr_qty <= quantity && odr_qty>0) okCnt++;
-			else $(this).val("");
-		}else{
 			if($(this).val()>0) 	okCnt++;
 		}
+		else
+		{
+			supp_qty = $(this).attr("supply_quantity");
+			if ($(this).val()!="")
+			{
+				odr_qty = parseInt($(this).val());	
+			}
+			else	
+			{
+				odr_qty=0;
+			}		
+
+			quantity = parseInt($(this).attr("quantity"));  //현 재고.
+			if(supp_qty.length > 0){
+				//if($(this).val().length>0 && odr_qty <= quantity && odr_qty>0) okCnt++;
+				if(odr_qty <= quantity && odr_qty>0) okCnt++;
+				else $(this).val("");
+			}else{
+				if($(this).val()>0) 	okCnt++;
+			}
+		}		
 
 	});
 	maskon();
@@ -540,7 +551,7 @@ function checkActive(){
 	{
 		ErchkCnt = false;	
 	}
-
+	
 	//발주서 확인 버튼 활성
 	if(okCnt == det_cnt && ErchkCnt && selCnt == det_cnt && supp_qty <= odr_qty){	
 		$("#btn_order_conf").css("cursor","pointer").addClass("btn-view-sheet-1207").attr("src","/kor/images/btn_order_confirm.gif");				

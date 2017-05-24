@@ -926,6 +926,9 @@ if ($typ =="odramendconfirm2"){ //구매자: 수정발주서(P.O Amendment)12_07
         //2016-12-06 : 재고 UPDATE('UQ'에서 Upate 것을 여기서 Update) - ccolle
         $result =QRY_ODR_DET_LIST(0," and odr_idx=$odr_idx ",0,"","asc");
         while($row = mysql_fetch_array($result)){
+
+            
+
             //임시 수량 실제 주문에 업데이트 2017-03-30 박정권
             $odr_qty_real = get_any("odr_det_temp", "odr_quantity" , "odr_det_idx =".$row['odr_det_idx']);
             $qty_sql = "update odr_det set odr_quantity=".$odr_qty_real." where odr_det_idx =".$row['odr_det_idx'];
@@ -940,15 +943,39 @@ if ($typ =="odramendconfirm2"){ //구매자: 수정발주서(P.O Amendment)12_07
             $real_stock = $stock_qty + $supp_qty;
 
            
-            //2016-12-11 : 재고 변동여부 체크하여 BACK~
-            if($real_stock < $odr_qty){
-                echo "ERR";
-                exit;
-            }else{
-                if($odr_qty >= $supp_qty){  //공급 수량보다 발주 수량이 크거나 같은 경우만 존재
-                    $up_qty = $stock_qty - ($odr_qty - $supp_qty);
-                    update_val("part","quantity", $up_qty, "part_idx", $part_idx);
+            if ($part_type != 2)
+            {
+                    //2016-12-28 : 가격변동 체크
+                $price_check = QRY_CNT_FLUC($row['odr_det_idx']);
+
+                $part_chk = QRY_CNT_PART($part_idx);
+
+                $safe_stock = QRY_STOCK_PART($part_idx);
+          
+                //2017-04-27 재고부족 파악 
+                if($part_chk>0 && $real_stock < $odr_qty){ //-- 파트 존재 여부 -------------------------------------------------  
+                    echo "DELETE_".$part_idx;
+                    exit;
+                } 
+                elseif( ($real_stock < $odr_qty) && $_part_type !="2" ){ //-- 재고 부족 -------------------------------------------------
+                    echo "ERR_".$part_idx;
+                    exit;
                 }
+                /*else if($price_check>0 && ($_part_type !="2" && $_part_type !="5" && $_part_type !="6")){    //-- 가격 변동 -----
+                    echo "PRICE_".$part_idx;               
+                    exit;
+                }*/
+
+            }
+            else
+            {
+                $part_chk = QRY_CNT_PART($part_idx);
+
+                //2017-04-27 재고부족 파악 
+                if($part_chk>0 && $real_stock < $odr_qty){ //-- 파트 존재 여부 -------------------------------------------------  
+                    echo "DELETE_".$part_idx;
+                    exit;
+                } 
             }
         }
         //0. 만약에 odr_status가  송장 또는 도착한 데이터가 있다면 그 테이터를 확인 한것으로 표시 (confirm_yn = Y')  왜냐면, 수정 발주서를 발행하는 시점은 처음 송장 받았거나, 물건이 도착 한 후에 할수 있으므로. JSJ
@@ -1006,11 +1033,12 @@ if($typ == "poano"){
         $_odr_price = replace_out($row["odr_price"]);
      
        // if(($_part_quantity)<$_odr_quantity) $quantity_cnt++;
-        if(($_part_quantity+$_supp_quantity)<$_odr_quantity) $quantity_cnt++;        
+        //if(($_part_quantity+$_supp_quantity)<$_odr_quantity) $quantity_cnt++;        
     }
-    if($quantity_cnt>0){
+   
+    /*if($quantity_cnt>0){
         echo "STOCK";
-    }else{
+    }else{*/
         $sql = "update odr set amend_no = '".get_auto_no("POA", "odr" , "amend_no")."', amend_date = now()  where odr_idx=".$odr_idx;
         $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
         /** 2017-01-10 : ship 정보를 임시 테이블에 저장 했다가, '확정발주' 시 ship에 복사
@@ -1033,7 +1061,7 @@ if($typ == "poano"){
             echo $result;
             exit;
         }
-    }
+    //}
 }
 
 if($typ =="chmybank"){  //--------------------------------------------------------------------------------------------------------------------------------------------------

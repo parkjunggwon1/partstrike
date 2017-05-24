@@ -265,7 +265,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				<?
 					if ($del_chk==0)
 					{
-						$part_stock=number_format($odr_quantity);
+						$part_stock=number_format($supply_quantity);
 					}
 					else
 					{
