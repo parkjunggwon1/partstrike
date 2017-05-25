@@ -1068,7 +1068,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					?>
 					<?if($part_type=="2"){?>
 						<?if ($del_chk=="0"){?>									
-							<?=number_format($part_stock + $supply_quantity)?>
+							<?=number_format($part_stock + $odr_quantity)?>
 						<?}else{?>
 							I
 						<?}?>

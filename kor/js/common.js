@@ -568,7 +568,7 @@ $(document).ready(function(){
 							closeCommLayer("layer3");	//송장(3008) 닫고
 							openLayer("layer5","30_09","?odr_idx="+odr_idx);	//P.O 다시 열고
 							openLayer('layer3','09_01','?odr_idx='+odr_idx);		//송장 다시 열고
-							openLayer('layer4','alarm4','?odr_idx='+odr_idx+"&part_idx="+data_split[1]+"&fromLoadPage="+$("#fromLoadPage").val());	
+							openLayer('layer4','alarm','?odr_idx='+odr_idx+"&part_idx="+data_split[1]);			
 							return;							
 					}	
 					else if (trim(data) == "SUCCESS"){		

@@ -170,7 +170,16 @@ $tax_name = get_any("tax", "tax_name", "nation=$seller_nation");
 					</tr>
 				<?
 				}
+
+				$invoice_no_real = get_any("odr","invoice_no","odr_idx='$odr_idx'");
 				?>
+				<tr>
+					
+				</tr>
+				<tr>
+					<th scope="row"><span class="c-blue"></span></th>
+					<td><span class="c-blue"><a href='javascript:openCommLayer("layer5","30_09","?odr_idx=<?=$odr_idx?>&odr_history_idx=<?=$odr_his2[odr_history_idx]?>&forread=Y")'><?=$invoice_no_real?></a></span></td>
+				</tr>
 		</tbody>
 	</table>
 	<div class="btn-area t-rt">

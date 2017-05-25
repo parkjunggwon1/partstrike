@@ -430,9 +430,13 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
         //턴키가 아닐 경우 odr_det 정보 업데이트
          for ($j = 0 ; $j<count($ary_odr_det_idx); $j++){
 
-            if ($ary_part_type[$j]=="2")
-            {
+            if ($ary_part_type[$j]=="2" && $j==0)
+            {                
                 $part_type_chk ="1";
+            }
+            else
+            {
+                $part_type_chk ="0";
             }
             /*$sql = "update odr_det_temp set
                  supply_quantity            = '".$ary_supply_quantity[$j]."'
@@ -530,7 +534,7 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
                 }
          }//end of for
      }//end of 턴키 or else
-
+echo $part_type_chk;
      //2016-04-18 송장번호 생성하자
     if ($part_type_chk==1)
     {

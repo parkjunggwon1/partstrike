@@ -1527,6 +1527,15 @@ switch($actty) {
 		if($odr_det_cnt >$del_det_cnt){ //-- 일부 취소 일경우 --
 			//송장(30_08)로 전환 layer3
 			//ReopenLayer("layer3","30_08","?odr_idx=$odr_idx");
+			if ($load_page=="30_08")
+			{
+				ReopenLayer("layer5","30_05","?odr_idx=$odr_idx");
+			}
+			else if ($load_page=="09_01")
+			{
+				ReopenLayer("layer5","30_09","?odr_idx=$odr_idx");
+			}
+			
 			ReopenLayer("layer3",$load_page,"?odr_idx=$odr_idx");
 			/**
 			closeLayer("layer3");
