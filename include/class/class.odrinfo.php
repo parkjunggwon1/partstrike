@@ -294,13 +294,30 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								}
 								else
 								{
-									if ($part_type =="2" || $part_type =="5" || $part_type =="6")
-									{
-										echo number_format($part_stock + $supply_quantity);
-									}
-									else
-									{
-										echo number_format($part_stock + $odr_quantity);
+
+									$poa_cnt = get_any("odr_history","status_name", "odr_idx=$odr_idx  and (status_name='송장' or status_name='수정발주서' or status_name='발주서') order by odr_history_idx desc limit 1");	
+									$qty = ($poa_cnt == "송장")? $part_stock+$supply_quantity : $part_stock+$odr_quantity;
+								
+									if ($del_chk==0)
+									{	
+
+										if ($part_type==2)
+										{
+											$qty=number_format($odr_quantity);
+										}
+										else
+										{
+
+											if ($poa_cnt=="송장")
+											{												
+												$qty=number_format($supply_quantity);
+											}
+											else
+											{												
+												$qty=number_format($odr_quantity);
+											}
+										}
+										echo $qty;
 									}
 									
 								}
@@ -671,14 +688,39 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td><?=$dc?></td>
 					<td><?=$rhtype?></td>					
 					<?}?>
+
+					<?
+					$poa_cnt = get_any("odr_history","status_name", "odr_idx=$odr_idx  and (status_name='송장' or status_name='수정발주서' or status_name='발주서') order by odr_history_idx desc limit 1");	
+					$qty = ($poa_cnt == "송장")? $part_stock+$supply_quantity : $part_stock+$odr_quantity;
+				
+					if ($del_chk==0)
+					{	
+						if ($part_type==2)
+						{
+							$qty=number_format($odr_quantity);
+						}
+						else
+						{
+							if ($poa_cnt=="송장")
+							{
+								$qty=number_format($supply_quantity);
+							}
+							else
+							{
+								$qty=number_format($odr_quantity);
+							}
+						}
+					}
+
+					?>
 					<?if($part_type=="2"){?>
 						<?if ($del_chk=="0"){?>									
-							<td class="t-rt" style="width:60px;"><?=number_format($part_stock + $supply_quantity)?></td>
+							<td class="t-rt" style="width:60px;"><?=number_format($supply_quantity)?></td>
 						<?}else{?>
 							<td class="t-rt" style="width:60px;">I</td>
 						<?}?>
 					<?}else{?>
-						<td class="t-rt"><?=$part_stock==0?number_format($supply_quantity):number_format($part_stock + $supply_quantity)?></td>
+						<td class="t-rt"><?=$qty?></td>
 					<?}?>					
 					<td class="t-rt">$<?=$price==0?"":$price_val?></td>
 					<td>
@@ -1644,12 +1686,26 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							<?if($loadPage != "18R_19" && $loadPage!="19_1_05" && $loadPage!="19_1_06" && $loadPage!="30_14" ){?>
 								<?if($loadPage == "30_10" || $loadPage == "13_04s" || $loadPage == "13_02s" || $loadPage == "03_02"){	//What'sNew(구매자:송장)
 									//2016-12-25 : 수정발주서가 있는 경우에는 '실수량+공급수량
-									$poa_cnt = QRY_CNT("odr_history", "and odr_idx=$odr_idx and status='3'");
-									$qty = ($poa_cnt>0)? $part_stock+$supply_quantity : $part_stock;
-
-									if ($del_chk=="0")
-									{
-										$qty = "0";
+									$poa_cnt = get_any("odr_history","status_name", "odr_idx=$odr_idx  and (status_name='송장' or status_name='수정발주서' or status_name='발주서') order by odr_history_idx desc limit 1");	
+									$qty = ($poa_cnt == "송장")? $part_stock+$supply_quantity : $part_stock+$odr_quantity;
+								
+									if ($del_chk==0)
+									{	
+										if ($part_type==2)
+										{
+											$qty=number_format($odr_quantity);
+										}
+										else
+										{
+											if ($poa_cnt=="송장")
+											{
+												$qty=number_format($supply_quantity);
+											}
+											else
+											{
+												$qty=number_format($odr_quantity);
+											}
+										}
 									}
 
 									
