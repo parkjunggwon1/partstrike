@@ -512,7 +512,9 @@ function checkActive(){
 	maskoff();
 	$("input[name^=odr_quantity]").each(function(e){ //선택유무와 무관
 		part_type = $(this).attr("part_type");
-		if (part_type == "2")
+		quantity = parseInt($(this).attr("quantity"));  //현 재고.
+
+		if (part_type == "2" && quantity !="I")
 		{
 			odr_qty = parseInt($(this).val());	
 			if($(this).val()>0) 	okCnt++;
@@ -529,7 +531,7 @@ function checkActive(){
 				odr_qty=0;
 			}		
 
-			quantity = parseInt($(this).attr("quantity"));  //현 재고.
+			
 			if(supp_qty.length > 0){
 				//if($(this).val().length>0 && odr_qty <= quantity && odr_qty>0) okCnt++;
 				if(odr_qty <= quantity && odr_qty>0) okCnt++;

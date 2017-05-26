@@ -265,7 +265,18 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				<?
 					if ($del_chk==0)
 					{
-						$part_stock=number_format($supply_quantity);
+						$poa_cnt = QRY_CNT("odr_history", "and odr_idx=$odr_idx  and (status_name='송장' or status_name='수정발주서' or status_name='발주서') ");
+						//$poa_cnt = get_any("odr_history","status_name", "odr_idx=$odr_idx  and (status_name='송장' or status_name='수정발주서' or status_name='발주서') order by odr_history_idx desc limit 1");
+
+						if ($poa_cnt == 0)
+						{
+							$part_stock="0";
+						}
+						else
+						{
+							$part_stock=number_format($supply_quantity);
+						}
+						
 					}
 					else
 					{
@@ -282,6 +293,14 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 							$poa_cnt = get_any("odr_history","status_name", "odr_idx=$odr_idx  and (status_name='송장' or status_name='수정발주서' or status_name='발주서') order by odr_history_idx desc limit 1");	
 							$part_2_stock = ($poa_cnt == "송장")? number_format($supply_quantity) : number_format($odr_quantity);
 
+							$poa_cnt = QRY_CNT("odr_history", "and odr_idx=$odr_idx  and (status_name='송장' or status_name='수정발주서' or status_name='발주서') ");
+							//$poa_cnt = get_any("odr_history","status_name", "odr_idx=$odr_idx  and (status_name='송장' or status_name='수정발주서' or status_name='발주서') order by odr_history_idx desc limit 1");
+
+							if ($poa_cnt == 0)
+							{
+								$part_2_stock="0";
+							}
+							
 						}								
 						
 					}
@@ -318,7 +337,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 									}
 								}
 							}
-							
+
 
 
 							if ($poa_cnt=="삭제")
