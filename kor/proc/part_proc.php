@@ -25,6 +25,9 @@ if ($typ=="write"){
 	}
 
 	/*******************************************************/
+		//2017-05-21
+		$sh_part_no = preg_replace("/[ #\&\+\-%@=\/\\\:;,\.'\"\^`~\_|\!\?\*$#<>()\[\]\{\}]/i", "",$part_no);
+
 		if(strlen($dc)=="2"){
 			$dc = "20".$dc;
 		}
@@ -40,6 +43,7 @@ if ($typ=="write"){
 			,nation='".$_SESSION["NATION"]."' 
 			,dosi='".$_SESSION["DOSI"]."' 
 			, part_no		= '".$part_no."'
+			, sh_part_no		= '".$sh_part_no."'
 			, manufacturer	= '".$manufacturer."'
 			, package		= '".$package."'
 			,  dc			= '".$dc."'

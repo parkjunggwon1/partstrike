@@ -558,3 +558,13 @@ function wrestNumeric2(fld)
 	return number;
 }
 
+//특수문자, 공백 제거==========================================
+function re_srcword(word){
+	var tStr = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi
+	var reWord = word.replace(tStr,"");
+	reWord = reWord.replace(/^\s+|\s+$/g,"");
+	reWord = reWord.replace(/\s/g,"");
+
+	return reWord;
+}
+

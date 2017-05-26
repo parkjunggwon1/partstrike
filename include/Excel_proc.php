@@ -130,7 +130,10 @@ $data->read($dir_dest.$filename1);
 		$option = ", rhtype		= '".trim($data->sheets[0]['cells'][$i][5])."'
 				, quantity		= '".trim($data->sheets[0]['cells'][$i][6])."'
 				   , price			= '".trim($data->sheets[0]['cells'][$i][7])."' ";
-	}	
+	}
+	//2017-05-21
+	$sh_part_no = preg_replace("/[ #\&\+\-%@=\/\\\:;,\.'\"\^`~\_|\!\?\*$#<>()\[\]\{\}]/i", "",trim($data->sheets[0]['cells'][$i][1]));
+
 	$sql="
 		INSERT INTO part set 
 			part_type ='".$part_type."'
@@ -139,6 +142,7 @@ $data->read($dir_dest.$filename1);
 			,nation='".$_SESSION["NATION"]."' 
 			,dosi='".$_SESSION["DOSI"]."' 
 			, part_no		= '".trim($data->sheets[0]['cells'][$i][1])."'
+			, sh_part_no		= '".$sh_part_no."'
 			, manufacturer	= '".trim($data->sheets[0]['cells'][$i][2])."'
 			, package		= '".trim($data->sheets[0]['cells'][$i][3])."'
 			,  dc			= '".$dc."'			

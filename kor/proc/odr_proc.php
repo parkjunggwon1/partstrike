@@ -256,7 +256,7 @@ if ($typ=="write" || $typ=="odredit" ||$typ =="periodreq"){   //periodreq : 납�
         }
         closeLayer("layer4"); //납기(확인바랍니다.) 창
         if ($fromPage=="add"){ //발주추가 검색 창에서 호출 한거면....
-            ReopenLayer("layer3",$fromPage=="add"?"05_01":$fromLoadPage,"?odr_idx=$odr_idx".($fromPage=="add"?"&addsearch_part_no=$addsearch_part_no&fromLoadPage=$fromLoadPage":""));
+            ReopenLayer("layer3",$fromPage=="add"?"05_01":$fromLoadPage,"?odr_idx=$odr_idx".($fromPage=="add"?"&addsearch_part_no=$addsearch_part_no&fromLoadPage=$fromLoadPage&coo_yn=y":""));
         }else{
             Parent_Search_Refresh(); //2016-04-08
             closeLayer("layer3");
@@ -272,9 +272,9 @@ if ($typ=="write" || $typ=="odredit" ||$typ =="periodreq"){   //periodreq : 납�
                 closeLayer("layer3");
             }else{
                 if($fromLoadPage == "05_04_v"){ //2016-03-13 KSR
-                    ReopenLayer("layer3",$fromPage=="add"?"05_01":$fromLoadPage,"?session_mem_idx=$session_mem_idx".($fromPage=="add"?"&addsearch_part_no=$addsearch_part_no&fromLoadPage=$fromLoadPage":""));
+                    ReopenLayer("layer3",$fromPage=="add"?"05_01":$fromLoadPage,"?session_mem_idx=$session_mem_idx".($fromPage=="add"?"&addsearch_part_no=$addsearch_part_no&fromLoadPage=$fromLoadPage&coo_yn=y":""));
                 } else{ //기존(JSJ)
-                    ReopenLayer("layer3",$fromPage=="add"?"05_01":$fromLoadPage,"?odr_idx=$odr_idx&opnnerPage=".$opnnerPage.($fromPage=="add"?"&addsearch_part_no=$addsearch_part_no&fromLoadPage=$fromLoadPage":""));
+                    ReopenLayer("layer3",$fromPage=="add"?"05_01":$fromLoadPage,"?odr_idx=$odr_idx&opnnerPage=".$opnnerPage.($fromPage=="add"?"&addsearch_part_no=$addsearch_part_no&fromLoadPage=$fromLoadPage&coo_yn=y":""));
                 }
             }
             exit;

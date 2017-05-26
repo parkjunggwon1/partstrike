@@ -26,6 +26,7 @@ $part_ty = ($part_type == "1" || $part_type == "3" || $part_type=="4")?"S":$part
 <input type="hidden" name="fromPage" value="<?=$fromPage?>">
 <input type="hidden" name="fromLoadPage" value="<?=$fromLoadPage?>">
 <input type="hidden" name="addsearch_part_no" value="<?=$addsearch_part_no?>">
+<input type="hidden" name="txt_addsearch_part_no" value="<?=$txt_addsearch_part_no?>">
 </form>
 <div class="layer-content">
 	<p class="txt-warning t-ct">납기 확인 바랍니다. </p>

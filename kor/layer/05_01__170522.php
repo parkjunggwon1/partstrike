@@ -9,18 +9,13 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/class/class.partinfo.php";
 if (!$_SESSION["MEM_IDX"]){ReopenLayer("layer6","alert","?alert=sessionend");exit;}
 ?>
 <script src="/kor/js/jquery-1.11.3.min.js"></script>
-<script src="/kor/js/jquery.cookie.js"></script>
 <script src="/include/function.js"></script>
 <script src="/kor/js/menu.js"></script>
 <script>ready();</script>
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 $(document).ready(function(){
-	if($("#coo_yn").val()=="y"){
-		$("#txt_addsearch_part_no").val($.cookie('shword'));
-	}else{
-		$("#txt_addsearch_part_no").val(unescape($("#ip_part_no").val()));
-	}
+	$("#txt_addsearch_part_no").val(decodeURIComponent($("#txt_addsearch_part_no").val()));
 	$("#txt_addsearch_part_no").focus();
 
 	if($("#txt_addsearch_part_no").val()){
@@ -117,8 +112,7 @@ $(document).ready(function(){
 	<input type="hidden" name="fromPage" value="add">
 	<input type="hidden" id="fromLoadPage" name="fromLoadPage" value="<?=$fromLoadPage?>">
 	<input type="hidden" name="addsearch_part_no" value="<?=$addsearch_part_no?>">
-	<input type="hidden" name="txt_addsearch_part_no" id="ip_part_no" value="<?=$txt_addsearch_part_no?>">
-	<input type="hidden" name="coo_yn" id="coo_yn" value="<?=$coo_yn?>">
+	<input type="hidden" name="txt_addsearch_part_no" value="<?=$txt_addsearch_part_no?>">
 </form>
 <!----------- Period parts ---------------------------------->
 <form name="f_add" id="f_add">
@@ -140,7 +134,7 @@ $(document).ready(function(){
 				<tr>
 					<th scope="row" style="width:40px"><label lang="en">Part No.</label></th>
 					<td>
-						<input type="text" style="width:205px; ime-mode:disabled" maxlength="30" name="addsearch_part_no" id="txt_addsearch_part_no" value="" onkeypress="if(window.event.keyCode==13){	btn_addSearch();return false;}" >
+						<input type="text" style="width:205px; ime-mode:disabled" maxlength="30" name="addsearch_part_no" id="txt_addsearch_part_no" value="<?=$txt_addsearch_part_no?>" onkeypress="if(window.event.keyCode==13){	btn_addSearch();return false;}" >
 					</td>
 					<td><button type="button" class="btn-addsearch"><img src="/kor/images/btn_srch.gif" alt="검색"></button></td>
 				</tr>
@@ -166,19 +160,16 @@ $(document).ready(function(){
 				<th scope="col" lang="ko" style="width:50px">납기</th>
 			</tr>
 		</thead>
-		<?	for ($i = 1; $i<=6; $i++){
-
-				$sh_part_no = preg_replace("/[ #\&\+\-%@=\/\\\:;,\.'\"\^`~\_|\!\?\*$#<>()\[\]\{\}]/i", "",$part_no);
-
-				if($fromLoadPage != "09_01" || ( $fromLoadPage =="09_01" && ($i ==1 || $i == 3 || $i == 4))){
+		<?	for ($i = 1; $i<=6; $i++){							
+				//if($fromLoadPage != "09_01" || ( $fromLoadPage =="09_01" && ($i ==1 || $i == 3 || $i == 4))){
 				$searchand = "and mem_idx = $sell_mem_idx and part_idx not in (select part_idx from odr_det where odr_idx = $odr_idx) ";
 				if ($addsearch_part_no){
-						$searchand .= "and sh_part_no like '%$addsearch_part_no%' "; 
+						$searchand .= "and part_no like '%$addsearch_part_no%' "; 
 				}else{
 						$searchand .= "and part_no = '' and manufacturer = '' and rhtype = ''";
 				}
 				echo GET_ADDPART_LIST($i , $searchand);
-			}
+			//}
 		}?>
 		
 	</table>

@@ -2140,7 +2140,12 @@ $(document).ready(function(){
 		var $part_type = $part_idx.next();
 		var price_chk = $(this).attr("price").replace(",","");
 		var qty_chk = $(this).attr("quantity");
-		var stock_type=$(this).attr("class");		
+		var stock_type=$(this).attr("class");
+		//검색어 특수문자 처리 관련
+		var oriPartNo = $("#txt_addsearch_part_no").val();
+		shPartNo = re_srcword(oriPartNo);  //2017-05-11 : 특수문자, 공백 제거
+		var strURI = escape(oriPartNo);
+
 		if($odr_qty.val()==""){
 				$odr_qty.focus();
 		}else if ($part_type!="2" && parseInt(numOffMask($odr_qty.val())) > parseInt(numOffMask($qty.val())))
@@ -2188,7 +2193,7 @@ $(document).ready(function(){
 					{
 
 						if(stock_type=="btn-dialog-add"){ //Stock 품목 추가
-				
+							$.cookie('shword',oriPartNo);
 							var f =  document.f_addproc;
 							f.typ.value="write";
 							f.part_idx.value=$part_idx.val();
@@ -3343,19 +3348,11 @@ function main_srch(){
 	$("#sel_nation").val($("#opt1 option:selected").length==0?"":$("#opt1 option:selected").val());
 	$("#sel_manufacturer").val($("#opt2 option:selected").length==0?"":$("#opt2 option:selected").val());
 	$("#ftop_sch input[name=actty]").val("mainsrch");
-	//2017-04-05 : 특수문자, 공백 제거 관련
-	var tStr = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi
 	var oriPartNo = $("#top_part_no").val();
-	var shPartNo = oriPartNo.replace(tStr,"");
-	shPartNo = shPartNo.replace(/^\s+|\s+$/g,"");
-	shPartNo = shPartNo.replace(/\s/g,"");
-	$("#top_part_no").val(shPartNo);
+	shPartNo = re_srcword(oriPartNo);  //2017-04-05 : 특수문자, 공백 제거
 
 	var oriManu = $("#top_manufacturer").val();
-	var shManu = oriManu.replace(tStr,"");
-	shManu = shManu.replace(/^\s+|\s+$/g,"");
-	shManu = shManu.replace(/\s/g,"");
-	$("#top_manufacturer").val(shManu);
+	shManu = re_srcword(oriManu);  //2017-04-05 : 특수문자, 공백 제거 관련
 
 	setMenuNull();
 	var formData = $("#ftop_sch").serialize(); 
@@ -3442,8 +3439,8 @@ function main_srch(){
 					
 				}
 		});
-		$("#top_part_no").val(oriPartNo);
-		$("#top_manufacturer").val(oriManu);
+		//$("#top_part_no").val(oriPartNo);
+		//$("#top_manufacturer").val(oriManu);
 	}else{
 		alert_msg("2자 이상 입력바랍니다");
 	}	
@@ -3452,8 +3449,16 @@ function main_srch(){
 function btn_addSearch(){
 		if ($("#f_add input[name=addsearch_part_no]").val().length>1)
 		{
-			openCommLayer("layer3","05_01","?odr_idx="+$("#odr_idx_05_01").val()+"&addsearch_part_no="+$("#addsearch_part_no").val()+"&fromLoadPage="+$("#fromLoadPage").val());
-			$("#addsearch_part_no").focus();
+			var oriPartNo = $("#txt_addsearch_part_no").val();
+			shPartNo = re_srcword(oriPartNo);  //2017-05-11 : 특수문자, 공백 제거
+
+			var strURI = escape(oriPartNo);
+
+			$.cookie('shword',oriPartNo);
+
+			//openCommLayer("layer3","05_01","?odr_idx="+$("#odr_idx_05_01").val()+"&addsearch_part_no="+$("#addsearch_part_no").val()+"&fromLoadPage="+$("#fromLoadPage").val());
+			openCommLayer("layer3","05_01","?odr_idx="+$("#odr_idx_05_01").val()+"&txt_addsearch_part_no="+strURI+"&addsearch_part_no="+shPartNo+"&fromLoadPage="+$("#fromLoadPage").val()+"&coo_yn=y");
+			$("#txt_addsearch_part_no").focus();
 		}else{
 			alert_msg("2자 이상 입력바랍니다");
 		}	
