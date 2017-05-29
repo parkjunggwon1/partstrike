@@ -102,6 +102,7 @@ if ($typ == "edit"){
 					$dc = "";
 					$quantity="";
 				}
+			$sh_part_no = preg_replace("/[ #\&\+\-%@=\/\\\:;,\.'\"\^`~\_|\!\?\*$#<>()\[\]\{\}]/i", "",$ary_part_no[$j]);
 
 			$sql = "update part set 
 				mem_idx ='".$_SESSION["MEM_IDX"]."'
@@ -111,6 +112,7 @@ if ($typ == "edit"){
 				, package		= '".$ary_package[$j]."'
 				,  dc			= '".$ary_dc[$j]."'
 				, rhtype		= '".$ary_rhtype[$j]."' 
+				, sh_part_no		= '".$sh_part_no."' 
 				$option 			
 				where part_idx = $ary_part_idx[$j]";
 
@@ -176,6 +178,8 @@ if($typ=="alldel"){
 			$dc = "";
 			$quantity="";
 		}
+		$sh_part_no = preg_replace("/[ #\&\+\-%@=\/\\\:;,\.'\"\^`~\_|\!\?\*$#<>()\[\]\{\}]/i", "",$ary_part_no[$j]);
+
 		$sql = "update part set 
 		mem_idx ='".$_SESSION["MEM_IDX"]."'
 		,rel_idx='".$_SESSION["REL_IDX"]."' 
@@ -184,8 +188,10 @@ if($typ=="alldel"){
 		, package		= '".$ary_package[$j]."'
 		,  dc			= '".$ary_dc[$j]."'
 		, rhtype		= '".$ary_rhtype[$j]."' 
+		, sh_part_no		= '".$sh_part_no."' 
 		$option			 
 		where part_idx = $ary_part_idx[$j]";
+
 		$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 	}
 

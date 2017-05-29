@@ -23,6 +23,35 @@
 					$(this).parent().removeClass("type2").addClass("type7");
 				}
 		});
+		//$("#first_what_new_buy").val();
+		var what_new_s = $("#first_what_new_S").val();
+		var what_new_b = $("#first_what_new_B").val();
+
+		if (what_new_b != "undefined")
+		{
+			$("#order_buy").attr("href",what_new_b);
+			//$("#order_buy").attr("src","/kor/images/btn_new_1.gif");
+			$("#order_buy").children("img").attr("src","/kor/images/btn_new_new.gif");
+		}
+		else
+		{
+			$("#order_buy").attr("href","");
+			//$("#order_buy").attr("src","/kor/images/btn_new_1.gif");
+			$("#order_buy").children("img").attr("src","/kor/images/btn_new_1.gif");
+		}
+
+		if (what_new_s != "undefined")
+		{
+			$("#order_sell").attr("href",what_new_s);
+			//$("#order_buy").attr("src","/kor/images/btn_new_1.gif");
+			$("#order_sell").children("img").attr("src","/kor/images/btn_new_new.gif");
+		}
+		else
+		{
+			$("#order_sell").attr("href","");
+			//$("#order_buy").attr("src","/kor/images/btn_new_1.gif");
+			$("#order_sell").children("img").attr("src","/kor/images/btn_new_1.gif");
+		}
 	});
 
 	function ChangeBackgroundSide(ajaxpage){

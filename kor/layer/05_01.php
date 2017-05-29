@@ -173,7 +173,7 @@ $(document).ready(function(){
 				if($fromLoadPage != "09_01" || ( $fromLoadPage =="09_01" && ($i ==1 || $i == 3 || $i == 4))){
 				$searchand = "and mem_idx = $sell_mem_idx and part_idx not in (select part_idx from odr_det where odr_idx = $odr_idx) ";
 				if ($addsearch_part_no){
-						$searchand .= "and sh_part_no like '%$addsearch_part_no%' "; 
+						$searchand .= "and part_no like '%$addsearch_part_no%' "; 
 				}else{
 						$searchand .= "and part_no = '' and manufacturer = '' and rhtype = ''";
 				}

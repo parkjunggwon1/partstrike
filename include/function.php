@@ -1612,7 +1612,7 @@ function GET_WhatsNew($ty,$viewty){
 				$tb_type= replace_out($row["tb_type"]);
 				if($viewty=="whatsnew"){
 				?>
-				<a href="javascript:goMenuJump('<?=$status?>:<?=$sell_mem_idx?>:<?=$tb_type?>:Y:1:M:side_order');"><img src="/kor/images/btn_new_new.gif" alt="What’s New"></a>	
+				<a id="order_<?=$ty?>" href="javascript:goMenuJump('<?=$status?>:<?=$sell_mem_idx?>:<?=$tb_type?>:Y:1:M:side_order');"><img src="/kor/images/btn_new_new.gif" alt="What’s New"></a>	
 			<?
 				}else{
 					echo $status.":".$sell_mem_idx.":".$tb_type.":Y";
@@ -1620,7 +1620,7 @@ function GET_WhatsNew($ty,$viewty){
 			}else{
 				if ($viewty=="whatsnew"){
 					?>
-					<a ><img src="/kor/images/btn_new_1.gif" alt="What’s New"></a>
+					<a id="order_<?=$ty?>"><img src="/kor/images/btn_new_1.gif" alt="What’s New"></a>
 					<?}
 				}
 

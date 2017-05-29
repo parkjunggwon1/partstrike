@@ -34,6 +34,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 	$array_real_status = array();
 	//$result2 =QRY_RCD_DET_LIST(10,$searchand,1,"a.odr_idx desc, c.part_type asc");
 	$result2 =QRY_RCD_DET_LIST(0,$searchand,1,"a.odr_idx desc, b.part_type ASC, b.odr_det_idx ASC"); //오름차순 정렬
+	$y=1;
 	while($row2 = mysql_fetch_array($result2)){
 		$odr_idx = replace_out($row2["odr_idx"]);
 		$save_yn = replace_out($row2["save_yn"]);
@@ -195,12 +196,23 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 					{
 						if ($odr_det_status==6)
 						{						
+							if ($y==1)
+							{
+								$first_what_new = "javascript:goMenuJump('".$odr_det_status.":".$sell_mem_idx.":odr:Y:".$page.":".$odr_type.":".$_GET['actty']."') ";
+							}
+
 							$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$odr_det_status.":".$sell_mem_idx.":odr:Y:".$page.":".$odr_type.":".$_GET['actty']."')\" ";
+							$y++;
 						}
 						else
 						{
+							if ($y==1)
+							{
+								$first_what_new = "javascript:goMenuJump('".$status.":".$sell_mem_idx.":odr:Y:".$page.":".$odr_type.":".$_GET['actty']."') ";
+							}
 
 							$goJump = "style='cursor:pointer;padding:0;' onclick=\"javascript:goMenuJump('".$status.":".$sell_mem_idx.":odr:Y:".$page.":".$odr_type.":".$_GET['actty']."')\" ";
+							$y++;
 						}
 					}	
 					
@@ -210,7 +222,13 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 					if ($odr_type =="B" && $save_yn =="Y"){
 						if ($fr=="M")
 						{
+							if ($y==1)
+							{
+								$first_what_new = "javascript:openCommLayer('layer3','05_04', '?odr_idx=".$odr_idx."') ";
+							}
+
 							$goJump = "title=\"발주서 저장\" style='cursor:pointer;padding:0;' onclick=\"javascript:openCommLayer('layer3','05_04', '?odr_idx=".$odr_idx."')\" ";
+							$y++;
 						}
 						else
 						{
@@ -354,18 +372,28 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				<?}else{?>
 					<?
 						$poa_cnt = get_any("odr_history","status_name", "odr_idx=$odr_idx order by odr_history_idx desc limit 1");
-						$qty = ($poa_cnt == "송장")? $part_stock+$supply_quantity : $part_stock+$odr_quantity;
-						if ($del_chk==0)
-						{
-							$qty="0";
-						}
+						$qty = ($poa_cnt == "송장")? number_format($part_stock+$supply_quantity) : number_format($part_stock+$odr_quantity);
 
 						if ($poa_cnt=="삭제")
 						{
-							$qty=$part_stock;
+							$qty=number_format($part_stock);
 						}
+
+						if ($del_chk==0)
+						{
+
+							$qty="0";
+						}
+						else
+						{
+
+							if ($part_type==2)
+							{
+								$qty="I";
+							}
+						}						
 					?>
-					<td  <?=$goJump?>  class="t-rt"><?=number_format($qty)?></td>
+					<td  <?=$goJump?>  class="t-rt"><?=$qty?></td>
 				<?}?>
 			<?}else{?>
 				<td  <?=$goJump?>  class="t-rt"><?=$supply_quantity<=0?"0":number_format($supply_quantity)?></td>
@@ -433,7 +461,11 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			$bgcolor = $bgcolor_now;
 			$new_odr_det_idx_chk = $odr_det_idx_chk;
 		}
+   
    }
+   ?>
+   <input type="hidden" name="first_what_new_<?=$odr_type?>" id="first_what_new_<?=$odr_type?>" value="<?=$first_what_new?>" />
+   <?
 }
 function GET_Order($odr_type,$this_mem_idx){
 		?>
