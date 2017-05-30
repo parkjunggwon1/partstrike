@@ -35,6 +35,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 	//$result2 =QRY_RCD_DET_LIST(10,$searchand,1,"a.odr_idx desc, c.part_type asc");
 	$result2 =QRY_RCD_DET_LIST(0,$searchand,1,"a.odr_idx desc, b.part_type ASC, b.odr_det_idx ASC"); //오름차순 정렬
 	$y=1;
+	$page_arr = "";
 	while($row2 = mysql_fetch_array($result2)){
 		$odr_idx = replace_out($row2["odr_idx"]);
 		$save_yn = replace_out($row2["save_yn"]);
@@ -175,19 +176,34 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 					}
 				 
 				}
-
+				
+				$page_real_val = "";
 				if ($qrycnt >0) { 		
 
 					if ($status_now == $status) { 
 
 						if ($criteria_now_idx != $criteria_idx) {
-							
-							$page = $page + 1;
+							for($b = 0 ; $b < count($array_status) ; $b++){
+								
+								if ($array_status[$b]==$status_now)
+								{									
+									$page_real_val = $page_real_val + 1;		
+								}
+							}
+							$page = $page_real_val;
 						}
 					}else{
 						if ($criteria_now_idx != $criteria_idx) {
 							
-							$page = 1;
+							
+							for($b = 0 ; $b < count($array_status) ; $b++){
+								
+								if ($array_status[$b]==$status)
+								{									
+									$page_real_val = $page_real_val + 1;		
+								}
+							}
+							$page = $page_real_val;
 						}
 					}
 					$status_now = $status;

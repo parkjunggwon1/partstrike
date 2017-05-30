@@ -1585,10 +1585,10 @@ switch($actty) {
 	break;
     case "mainsrch":	 /******************************** 메인 검색 ***********************************************************************************************/
 		$top_qty = str_replace(",","",$top_qty);
-		$top_part_no = preg_replace("/[ #\&\+\-%@=\/\\\:;,\.'\"\^`~\_|\!\?\*$#<>()\[\]\{\}]/i", "",$top_part_no);
-		$top_manufacturer = preg_replace("/[ #\&\+\-%@=\/\\\:;,\.'\"\^`~\_|\!\?\*$#<>()\[\]\{\}]/i", "",$top_manufacturer);
+		$re_part_no = preg_replace("/[ #\&\+\-%@=\/\\\:;,\.'\"\^`~\_|\!\?\*$#<>()\[\]\{\}]/i", "",$top_part_no);		//JSJ 특수문자 제거 정규식
+		$re_manufacturer = preg_replace("/[ #\&\+\-%@=\/\\\:;,\.'\"\^`~\_|\!\?\*$#<>()\[\]\{\}]/i", "",$top_manufacturer);		//JSJ 특수문자 제거 정규식
 	  	
-		if ($top_part_no){$searchand .= "and part_no like '%$top_part_no%' ";}
+		if ($top_part_no){$searchand .= "and (part_no like '%$top_part_no%' or sh_part_no like '%$re_part_no%') ";}
 		if ($top_manufacturer){$searchand .= "and replace(manufacturer,' ','') like '%$top_manufacturer%' ";}
 		
 		//echo $searchand;

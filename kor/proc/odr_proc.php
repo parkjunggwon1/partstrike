@@ -602,11 +602,7 @@ if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : �
         $part_type = get_any("odr_det", "part_type" , "odr_det_idx = ".$row['odr_det_idx']);
 
         $odr_det_temp_row = get_odr_det_temp($row['odr_det_idx']);
-
-        $odr_det_temp_sql = "update odr_det set supply_quantity=".$odr_det_temp_row['supply_quantity'].", part_condition=".$odr_det_temp_row['part_condition'].", pack_condition1=".$odr_det_temp_row['pack_condition1'].", pack_condition2=".$odr_det_temp_row['pack_condition2'].", memo='".$odr_det_temp_row['memo']."' where odr_det_idx=".$row['odr_det_idx'];
         
-        $odr_det_temp_result=mysql_query($odr_det_temp_sql,$conn) or die ("SQL ERROR : ".mysql_error());
-
         $part_idx = replace_out($row["part_idx"]);
         //$stock_qty = replace_out($row["quantity"]);
         $stock_qty = replace_out($row["part_stock"]);
@@ -664,6 +660,10 @@ if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : �
                 exit;
             } 
         }
+
+        $odr_det_temp_sql = "update odr_det set supply_quantity=".$odr_det_temp_row['supply_quantity'].", part_condition=".$odr_det_temp_row['part_condition'].", pack_condition1=".$odr_det_temp_row['pack_condition1'].", pack_condition2=".$odr_det_temp_row['pack_condition2'].", memo='".$odr_det_temp_row['memo']."' where odr_det_idx=".$row['odr_det_idx'];
+                
+        $odr_det_temp_result=mysql_query($odr_det_temp_sql,$conn) or die ("SQL ERROR : ".mysql_error());
 
         //2017-01-19 : parts 정보Update(임시테이블에서 가져오기)
         $temp_cnt = QRY_CNT("part_temp"," and odr_idx=$odr_idx and part_idx=$part_idx and type='after'");

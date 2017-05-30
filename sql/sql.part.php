@@ -25,6 +25,7 @@ Function QRY_PART_LIST($recordcnt,$searchand,$page,$ord='price'){
 			$s_ord
 			$limit
 			";
+			
 	mysql_query( "SET NAMES utf8");	
 
 	$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());

@@ -2040,9 +2040,10 @@ $(document).ready(function(){
 	$("body").on("click",".btn-dialog-0501",function(){
 		var err = false; 
 		//alert('123');
-		//err = updateQty(); //2016-04-03 '05_04' 추가
+		err = updateQty(); //2016-04-03 '05_04' 추가		
+
 		if (err == false)
-		{
+		{			
 			saveExtraInfo();
 			openLayer("layer3","05_01","?odr_idx="+$("#odr_idx_05_04").val()+"&fromLoadPage=05_04");
 			$("#addsearch_part_no").focus();
