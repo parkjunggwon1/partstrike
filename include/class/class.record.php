@@ -177,6 +177,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				 
 				}
 				
+				
 				$page_real_val = "";
 				if ($qrycnt >0) { 		
 
@@ -185,8 +186,9 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 						if ($criteria_now_idx != $criteria_idx) {
 							for($b = 0 ; $b < count($array_status) ; $b++){
 								
-								if ($array_status[$b]==$status_now)
-								{									
+								if ($array_status[$b]==$status)
+								{								
+									
 									$page_real_val = $page_real_val + 1;		
 								}
 							}
@@ -206,6 +208,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 							$page = $page_real_val;
 						}
 					}
+					
 					$status_now = $status;
 					
 					if ($fr=="M")
@@ -363,11 +366,12 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 								{
 									if ($poa_cnt=="송장")
 									{
-										$qty=number_format($supply_quantity);
+
+										$qty=$supply_quantity;
 									}
 									else
 									{
-										$qty=number_format($odr_quantity);
+										$qty=$odr_quantity;
 									}
 								}
 							}

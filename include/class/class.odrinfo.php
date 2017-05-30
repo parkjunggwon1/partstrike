@@ -1716,12 +1716,9 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								<?if($loadPage == "30_10" || $loadPage == "13_04s" || $loadPage == "13_02s" || $loadPage == "03_02"){	//What'sNew(구매자:송장)
 									//2016-12-25 : 수정발주서가 있는 경우에는 '실수량+공급수량
 									$poa_cnt = get_any("odr_history","status_name", "odr_idx=$odr_idx  and (status_name='송장' or status_name='수정발주서' or status_name='발주서') order by odr_history_idx desc limit 1");	
-									$qty = ($poa_cnt == "송장")? $part_stock : $part_stock;
+									$qty = ($poa_cnt == "송장")? $part_stock+$supply_quantity : $part_stock+$odr_quantity;
 								
-									if ($del_chk==0)
-									{	
-										$qty="0";
-									}
+									
 
 									
 								?>
@@ -1732,7 +1729,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 											<td class="t-rt" style="width:60px;">I</td>
 										<?}?>
 									<?}else{?>
-										<td class="t-rt"><?=$part_stock==0?$part_stock:number_format($qty)?></td>	
+										<td class="t-rt"><?=number_format($qty)?></td>	
 									<?}?>	
 									
 								<?}else if($loadPage == "02_02"){?>									
