@@ -7,9 +7,14 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";?>
 <div class="layer-content">
 	<?	
 //	$part_type=get_any("odr_det", "part_type", "odr_idx=$odr_idx");
+	$reward_sql = " select odr_det_idx from odr_det where odr_idx = '".$odr_idx."' and part_type=2 and (period ='2WK' or period ='1WK') ";
+
+	$reward_result = mysql_query($reward_sql, $conn);
+	$total_row = mysql_num_rows($reward_result);
+	
 	?>
 	<p class="txt-warning">
-	<?if ($whole_part_type=="E"){?>
+	<?if ($whole_part_type=="E" && $total_row == 0){?>
 	이 제품은 NCNR(취소 불가, 반품 불가)제품 입니다.<br>
 	구매자는 계약금 10%를 지불하고 나머지 대금 90%는 판매자에게 물품 도착 통보를 받은 후 지불하시면 됩니다. 대금 지불을 안 할 경우 구매자의 계약금은 판매자에게 지급할 것이며 회사는 구매자에게 경고조치를 할 것입니다.<br>
 	판매자도 계약금 10%를 지불해야 합니다. 거래 종료 후 이 계약금은 판매자의 My Bank로 충전됩니다.<br>

@@ -34,7 +34,7 @@ if ($cnt == 0 ){?>
 <?}else{
 	if (!$page){ $page = 1;}
 	$totalpage = QRY_TOTALPAGE($cnt,$recordcnt);
-	$result =QRY_ODR_HISTORY_LIST($recordcnt, $searchand, $page, "odr_history_idx desc");
+	$result =QRY_ODR_HISTORY_LIST($recordcnt, $searchand, $page, "odr_history_idx asc");
 	if($result){
 		$row = mysql_fetch_array($result);
 		$odr_idx= replace_out($row["odr_idx"]);	

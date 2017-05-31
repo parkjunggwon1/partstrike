@@ -31,6 +31,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 	}
 	$searchand .= " and b.odr_det_idx <>'' ";
 	$array_status = array();
+	$array_status2 = array();
 	$array_real_status = array();
 	//$result2 =QRY_RCD_DET_LIST(10,$searchand,1,"a.odr_idx desc, c.part_type asc");
 	$result2 =QRY_RCD_DET_LIST(0,$searchand,1,"a.odr_idx desc, b.part_type ASC, b.odr_det_idx ASC"); //오름차순 정렬
@@ -147,9 +148,10 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 
 				$qrycnt = QRY_CNT("odr_history", "and odr_idx =".$odr_idx.$status_6." and reg_mem_idx <> ".$_SESSION["MEM_IDX"] ." and confirm_yn ='N'");
 				$status = get_any("odr_history", "status" , "odr_history_idx = (SELECT max( odr_history_idx ) FROM odr_history WHERE odr_idx =$odr_idx )"); 
+				array_push($array_status2, $status);
 				if($page_val != $status && $status != "")
 				{
-					array_push($array_status, $status);
+					array_push($array_status, $status);					
 				}
 
 				
@@ -178,18 +180,20 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 				}
 				
 				
-				$page_real_val = "";
+				$page_real_val="";
 				if ($qrycnt >0) { 		
 
 					if ($status_now == $status) { 
 
 						if ($criteria_now_idx != $criteria_idx) {
-							for($b = 0 ; $b < count($array_status) ; $b++){
-								
-								if ($array_status[$b]==$status)
-								{								
-									
-									$page_real_val = $page_real_val + 1;		
+							for($b = 0 ; $b < count($array_status2) ; $b++){
+								//echo $array_status2[$b]."SS".$status."<BR>";
+								//echo count($array_status2);
+								if ($array_status2[$b]==$status)
+								{	
+
+									$page_real_val = $page_real_val + 1;
+									//echo $page_real_val."::".$part_type."//".$status."<BR>";		
 								}
 							}
 							$page = $page_real_val;
@@ -198,16 +202,19 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 						if ($criteria_now_idx != $criteria_idx) {
 							
 							
-							for($b = 0 ; $b < count($array_status) ; $b++){
+							for($b = 0 ; $b < count($array_status2) ; $b++){
 								
-								if ($array_status[$b]==$status)
-								{									
+								if ($array_status2[$b]==$status)
+								{		
+
+															
 									$page_real_val = $page_real_val + 1;		
 								}
 							}
 							$page = $page_real_val;
 						}
 					}
+
 					
 					$status_now = $status;
 					
