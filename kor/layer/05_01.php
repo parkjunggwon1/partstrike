@@ -116,7 +116,7 @@ $(document).ready(function(){
 	<input type="hidden" name="sell_mem_idx" id="sell_mem_idx" value="<?=$sell_mem_idx?>">
 	<input type="hidden" name="fromPage" value="add">
 	<input type="hidden" id="fromLoadPage" name="fromLoadPage" value="<?=$fromLoadPage?>">
-	<input type="hidden" name="addsearch_part_no" value="<?=$addsearch_part_no?>">
+	<input type="hidden" name="addsearch_part_no" id="addsearch_part_no" value="<?=$addsearch_part_no?>">
 	<input type="hidden" name="txt_addsearch_part_no" id="ip_part_no" value="<?=$txt_addsearch_part_no?>">
 	<input type="hidden" name="coo_yn" id="coo_yn" value="<?=$coo_yn?>">
 </form>
@@ -173,7 +173,7 @@ $(document).ready(function(){
 				if($fromLoadPage != "09_01" || ( $fromLoadPage =="09_01" && ($i ==1 || $i == 3 || $i == 4))){
 				$searchand = "and mem_idx = $sell_mem_idx and part_idx not in (select part_idx from odr_det where odr_idx = $odr_idx) ";
 				if ($addsearch_part_no){
-						$searchand .= "and part_no like '%$addsearch_part_no%' "; 
+						$searchand .= "and sh_part_no like '%$addsearch_part_no%' "; 
 				}else{
 						$searchand .= "and part_no = '' and manufacturer = '' and rhtype = ''";
 				}

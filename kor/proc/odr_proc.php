@@ -2142,7 +2142,7 @@ if ($typ =="periodcfrm"){
         $rel_odr = get_any("odr_det", "odr_idx" ,"rel_det_idx=$odr_det_idx");
         update_val("odr" , "period", "$period", "odr_idx" , $rel_odr); //납기일
         //저장 Data 중, 3주이상 부터는 삭제. 2016-09-09
-        /**
+		//2017-05-30 아래 주석 해제.KSR
         if ($pkind == "WK" && $period >2 ) {
             $saved_odr_idx = get_any("odr_det", "odr_idx", "rel_det_idx=$odr_det_idx"); //저장 DATA의 odr_idx
             $sql = "DELETE FROM odr_det WHERE rel_det_idx=$odr_det_idx";
@@ -2153,7 +2153,7 @@ if ($typ =="periodcfrm"){
                 $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
             }
         }
-        **/
+
     }
 
     $odr_idx = get_any("odr_det", "odr_idx" ,"odr_det_idx=$odr_det_idx");
@@ -2213,11 +2213,10 @@ if ($typ =="periodcfrm"){
     //저장 Data에 있을경우 history '확인' 처리. 단, 납기 3주 부터는 확인처리 없음
     if($save_cnt>0){
         update_val("odr_history", "confirm_yn", "Y", "odr_history_idx", $new_history_idx);
-        /**
+        //2017-05-30 아래 주석 해제.KSR
         if($pkind == "WK" && $period >2){
             update_val("odr_history", "confirm_yn", "N", "odr_history_idx", $new_history_idx);
         }
-        **/
     }
 
     $cnt = QRY_CNT("odr_det" , "and odr_idx = $odr_idx and (part_type = '2' or part_type = '5' or part_type='6') and period =''");
