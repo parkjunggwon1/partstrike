@@ -51,6 +51,10 @@ if (!$_SESSION["MEM_IDX"]){ReopenLayer("layer6","alert","?alert=sessionend");exi
 		$part_type="256";
 	}
 }
+$part_type2_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and part_type=2 ");  //odr_det 수량
+
+$period_2_1 =QRY_CNT("odr_det", "and odr_idx = $odr_idx and (period = '2WK' or period='1WK') "); 
+
 //국제 배송비 관련
 $trade_type = ($s_nation == $b_nation)? 1:0;
 $dlvr_cnt = QRY_CNT("freight_charge"," and trade_type=$trade_type and rel_idx = $sell_mem_idx 
@@ -1159,7 +1163,7 @@ function checkActive(){
 		<?if($turnkey_cnt>0){?>
 			<img id="btn-confirm" src="/kor/images/btn_order_confirm_1.gif" alt="발주서 확인">
 		<?}else{?>
-			<?if ($period3_cnt != 1){?>
+			<?if ($part_type2_cnt ==0 || $period_2_1 != 0){?>
 			<img src="/kor/images/btn_order_add.gif" class="btn-dialog-0501" alt="발주 추가" style="cursor:pointer">
 			<?}?>
 			<img id="btn-confirm" src="/kor/images/btn_order_confirm_1.gif" alt="발주서 확인" style="cursor:pointer"><!--class="btn-order-confirm" -->

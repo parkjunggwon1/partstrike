@@ -1115,17 +1115,12 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td class="t-rt">
 					<?
 						$poa_cnt = get_any("odr_history","status_name", "odr_idx=$odr_idx  and (status_name='송장' or status_name='수정발주서' or status_name='발주서') order by odr_history_idx desc limit 1");	
-						$qty = ($poa_cnt == "송장")? $part_stock+$supply_quantity : $part_stock+$odr_quantity;
+						$qty = ($poa_cnt == "송장")? number_format($part_stock+$supply_quantity) : number_format($part_stock+$odr_quantity);
 					
 						if ($del_chk==0)
 						{	
 							$quantity = 0;
-							if ($part_type==2)
-							{
-								$qty=number_format($odr_quantity);
-							}
-							else
-							{
+							
 								if ($poa_cnt=="송장")
 								{
 									$qty=number_format($supply_quantity);
@@ -1134,17 +1129,18 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								{
 									$qty=number_format($odr_quantity);
 								}
-							}
+							
 						}
+
 					?>
 					<?if($part_type=="2"){?>
 						<?if ($del_chk=="0"){?>									
-							<?=number_format($part_stock + $odr_quantity)?>
+							<?=$qty?>
 						<?}else{?>
 							I
 						<?}?>
 					<?}else{?>	
-						<?=$qty==0?"":number_format($qty)?>	
+						<?=$qty==0?"":$qty?>	
 					<?}?>					
 					</td>
 					<?}?>
@@ -2324,7 +2320,7 @@ function GET_ODR_DET_LIST_V2($searchand ,$loadPage , $for_readonly="", $temp_yn=
 							}
 
 							?>
-							<td><?=($period)?( QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"Stock":$period.$day_val):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>
+							<td><?=($period)?( QRY_CNT("odr_history", "and  odr_idx = $odr_idx and status = 19 ")>0?"Stock":str_replace("WK","",$period).$day_val):(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>
 							<td class="t-rt">
 								<?//2016-10-02 : 지속적... 계약금에서는 'Amount' 표시 무.
 								//if ($loadPage!="18_2_09" && !($loadPage=="30_09" && $part_type=="2" && $pay_invoice=="D") ){

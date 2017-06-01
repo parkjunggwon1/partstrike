@@ -89,6 +89,8 @@ $row_parts = mysql_fetch_array($result_parts);
 
 $pay_cnt =QRY_CNT("odr_history", "and odr_idx = $odr_idx and status = 5"); 
 
+$period_2_1 =QRY_CNT("odr_det", "and odr_idx = $odr_idx and (period = '2WK' or period='1WK') "); 
+
 
 /*
 if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<2) {
@@ -156,7 +158,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 
 				$chr =  "PL";
 			}
-			elseif (($pay_invoice =="D") && $row_odr_det["part_type"]==2){?>Down Payment Invoice<?
+			elseif (($pay_invoice =="D") && $row_odr_det["part_type"]==2 && $period_2_1 == 0){?>Down Payment Invoice<?
 
 
 				$chr = "DPI";
