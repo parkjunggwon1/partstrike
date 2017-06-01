@@ -973,7 +973,7 @@ $(document).ready(function(){
 							closeCommLayer("layer3");	//송장(3008) 닫고
 							openLayer("layer5","30_05","?odr_idx="+$("#odr_idx_30_09").val());	//P.O 다시 열고
 							openLayer('layer3','30_08','?odr_idx='+$("#odr_idx_30_09").val());		//송장 다시 열고
-							openLayer('layer4','alarm','?odr_idx='+$("#odr_idx_30_09").val()+"&part_idx="+data_split[1]);							
+							openLayer('layer4','alarm','?odr_idx='+$("#odr_idx_30_09").val()+"&part_idx="+data_split[1]+"&fromLoadPage=30_08");							
 							return;							
 					}
 					else if ($.trim(data_split[0])=="DELETE"){	
@@ -983,7 +983,7 @@ $(document).ready(function(){
 							closeCommLayer("layer3");	//송장(3008) 닫고
 							openLayer("layer5","30_05","?odr_idx="+$("#odr_idx_30_09").val());	//P.O 다시 열고
 							openLayer('layer3','30_08','?odr_idx='+$("#odr_idx_30_09").val());		//송장 다시 열고
-							openLayer('layer4','alarm4','?odr_idx='+$("#odr_idx_30_09").val()+"&part_idx="+data_split[1]+"&fromLoadPage="+$("#fromLoadPage").val());	
+							openLayer('layer4','alarm4','?odr_idx='+$("#odr_idx_30_09").val()+"&part_idx="+data_split[1]+"&fromLoadPage=30_08");	
 							return;							
 					}	
 					else if (trim(data) == "SUCCESS"){		

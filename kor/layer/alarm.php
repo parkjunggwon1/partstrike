@@ -6,7 +6,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";?>
 </div>
 <div class="layer-content">
 	<?	
-	if ($odr_idx)
+	/*if ($odr_idx)
 	{
 		$sql_where = "or part_idx='$part_idx'";
 	}
@@ -17,9 +17,17 @@ include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";?>
 		$qty_type= "공급 수량";
 	}
 	else
-	{
-		$qty_type= "발주 수량";
-	}
+	{*/
+		if ($fromLoadPage=="30_08")
+		{
+			$qty_type= "공급 수량";
+		}
+		else
+		{
+			$qty_type= "발주 수량";
+		}
+		
+	//}
 	?>
 	<p class="txt-warning t-ct">
 	재고 수량이 변경되었습니다. <?=$qty_type?>을 수정하시기 바랍니다.
