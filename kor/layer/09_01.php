@@ -512,16 +512,24 @@ function checkActive(){
 	maskoff();
 	$("input[name^=odr_quantity]").each(function(e){ //선택유무와 무관
 		part_type = $(this).attr("part_type");
-		quantity = parseInt($(this).attr("quantity"));  //현 재고.
-
-		if (part_type == "2" && quantity !="I")
+		if ($(this).attr("quantity")=="I")
 		{
-			odr_qty = parseInt($(this).val());	
-			if($(this).val()>0) 	okCnt++;
+			quantity = $(this).attr("quantity");  //현 재고.
 		}
 		else
 		{
-			supp_qty = $(this).attr("supply_quantity");
+			quantity = parseInt($(this).attr("quantity"));  //현 재고.
+		}
+		
+		supp_qty = $(this).attr("supply_quantity");
+
+		if (part_type == "2" && quantity =="I")
+		{	
+			odr_qty = parseInt($(this).val());	
+			if(parseInt(supp_qty) <= $(this).val()) 	okCnt++;
+		}
+		else
+		{			
 			if ($(this).val()!="")
 			{
 				odr_qty = parseInt($(this).val());	
