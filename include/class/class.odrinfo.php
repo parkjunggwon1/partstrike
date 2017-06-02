@@ -742,13 +742,10 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						if ($del_chk=="1")
 						{
 							$chk_qty = $quantity;
-							
 						}
 						else
 						{
 							$chk_qty = $supply_quantity;
-							
-							
 						}
 
 						?>

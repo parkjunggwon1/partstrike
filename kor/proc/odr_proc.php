@@ -946,6 +946,7 @@ if ($typ =="odramendconfirm2"){ //구매자: 수정발주서(P.O Amendment)12_07
             //$odr_qty = replace_out($row["odr_quantity"]);
             $odr_qty = $odr_qty_real;
             $supp_qty = replace_out($row["supply_quantity"]);
+            $part_type = replace_out($row["part_type"]);
             $real_stock = $stock_qty + $supp_qty;
 
            
@@ -963,7 +964,7 @@ if ($typ =="odramendconfirm2"){ //구매자: 수정발주서(P.O Amendment)12_07
                     echo "DELETE_".$part_idx;
                     exit;
                 } 
-                elseif( ($real_stock < $odr_qty) && $_part_type !="2" ){ //-- 재고 부족 -------------------------------------------------
+                elseif( ($real_stock < $odr_qty) && $part_type !="2" ){ //-- 재고 부족 -------------------------------------------------
                     echo "ERR_".$part_idx;
                     exit;
                 }
@@ -2733,28 +2734,17 @@ if($typ =="delivery_del"){
 if($typ =="save_key"){
    
     $mem_session_idx = $_SESSION['MEM_IDX'];
-    $cnt = get_any ("odr_history" , "count(*)", "odr_idx= $actidx and status=90");
+    $cnt = get_any ("odr" , "count(*)", "odr_idx= $actidx ");
 
     if ($cnt == 1)
     {
-        $sql = "update odr_history set
+        $sql = "update odr set
             reg_date = now()
             where odr_idx = '$actidx'";
     
         $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
     }
-    else
-    {
-        $sql = "insert into odr_history set
-            odr_idx = '$actidx'
-            ,status = 90
-            ,status_name = '저장'
-            ,reg_mem_idx = '$mem_session_idx'
-            ,reg_date = now()";
-    
-        $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
-    }
-  
+      
     exit;
     
 }

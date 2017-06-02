@@ -758,7 +758,7 @@ function GET_ADDPART_LIST($part_type,$searchand){
 						<td><?=$dc?></td>
 						<td><?=$rhtype?></td>
 						<td class="t-rt"><span <?=$change_style_qty?>><?=$quantity=="I"  ?"I":number_format($quantity)?></span></td>
-						<td class="t-rt"><span <?=$change_style_price?>>$<?=$price_val?></span></td>
+						<td class="t-rt" part_type="<?=$part_type?>"><span <?=$change_style_price?>>$<?=$price_val?></span></td>
 						<td style="width:60px;">
 							<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" name="odr_quantity"  id="odr_quantity" stock_qty="<?=$quantity;?>" value="" style="width:58px;" maxlength="10">
 							<input type="hidden" class="i-txt2 c-blue onlynum t-rt" name="quantity" value="<?=$quantity?>" maxlength="10">

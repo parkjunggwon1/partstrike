@@ -25,43 +25,75 @@ $(document).ready(function(){
 
 	if($("#txt_addsearch_part_no").val()){
 		var ary = new Array();
-		var idx, newidx;
+		var ary2 = new Array();
+		var idx, newidx, part_type_chk_val,price_int;
+		part_type_chk_val = "";
 		$("#layerPop3 tbody[id^=adtb]").each(function(e){						
 			if (typeof($(this).find("tr:eq(1) td:eq(7)").html())=="string")
 			{
-				ary.push($(this).find("tr:eq(1) td:eq(7)").html().replace(/(<([^>]+)>)/gi, ""));
+				price_int = parseFloat($(this).find("tr:eq(1) td:eq(7)").html().replace(/(<([^>]+)>)/gi, "").replace("$","").replace(",",""));
+			
+				ary.push(price_int);
+				ary2.push(price_int + "_" + $(this).find("tr:eq(1) td:eq(7)").attr("part_type"));
 			}else{
 				ary.push("$99999999");
+				ary2.push("$99999999" + "_" + $(this).find("tr:eq(1) td:eq(7)").attr("part_type"));
 			}
+			part_type_chk_val = part_type_chk_val + $(this).find("tr:eq(1) td:eq(7)").attr("part_type") + ",";
 		});
-
+		
+			
+		ary.sort(
+			function compNumber(a, b) {
+			  return a - b;
+			}
+		);
+		ary2.sort();
 		
 		var aryIdx = new Array();
-		var temp1 , temp2;
-		for (i=0;i<6;i++ )	{aryIdx.push(i);}
+		var aryIdx2 = new Array();
+		var temp1 , temp2,temp3;
 
-		for(i = 0; i < ary.length; i++) {
-		   for(j = 0; j < (ary.length - i-1); j++) {
-			 if((ary[j]) > (ary[j + 1])) {
-			   temp1 = ary[j];
-			   ary[j] = ary[j + 1];
-			   ary[j + 1] = temp1;
-			   temp2 = aryIdx[j];
-			   aryIdx[j] = aryIdx[j + 1];
-			   aryIdx[j + 1] = temp2;
-			 }
-		   }
-		 }
+		for (k=0;k<ary.length;k++ )	
+		{
+			for (b=0;b<ary2.length;b++ )	
+			{
+				temp3 = ary2[b].split('_');
+				if (ary[k] == temp3[0])
+				{
+					aryIdx.push(temp3[1]);				
+				}				
+			}								
+		}
+						
+		if (part_type_chk_val.indexOf("1") != 0) {
+			aryIdx.push("1");
+		}
+		if (part_type_chk_val.indexOf("3") != 0)
+		{
+			aryIdx.push("3");
+		}
+		if (part_type_chk_val.indexOf("4") != 0)
+		{
+			aryIdx.push("4");
+		}
+		
+		var uniqueNames = [];
+		$.each(aryIdx, function(i, el){
+		        if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+		});
 
-		 var $sel, totsel="";
-		 for (i=0;i<6 ;i++)
-		 {										 
-			idx =aryIdx[i];						
-			newidx = idx+1;
-			
+		var $sel, totsel="";
+
+		for (i=0;i<ary2.length ;i++)
+		{					
+			idx =uniqueNames[i];						
+			newidx = idx;
+
 			$sel = $("#layerPop3 .stock-list-table #adtb_"+newidx);		
 			totsel = totsel + "<tbody id= 'adtb_"+newidx+"'>"+$sel.html()+"</tbody>\n";
-		 }
+		}
+
 		$("#layerPop3 .stock-list-table tbody").remove();
 		$("#layerPop3 .stock-list-table").append($(totsel).fadeIn(300)).show();
 		$("#layerPop3 .stock-list-table tbody td").removeClass("first");
