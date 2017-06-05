@@ -36,8 +36,8 @@ $(document).ready(function(){
 				ary.push(price_int);
 				ary2.push(price_int + "_" + $(this).find("tr:eq(1) td:eq(7)").attr("part_type"));
 			}else{
-				ary.push("$99999999");
-				ary2.push("$99999999" + "_" + $(this).find("tr:eq(1) td:eq(7)").attr("part_type"));
+				ary.push(99999999);
+				ary2.push(99999999 + "_" + $(this).find("tr:eq(1) td:eq(7)").attr("part_type"));
 			}
 			part_type_chk_val = part_type_chk_val + $(this).find("tr:eq(1) td:eq(7)").attr("part_type") + ",";
 		});
@@ -49,7 +49,7 @@ $(document).ready(function(){
 			}
 		);
 		ary2.sort();
-		
+				
 		var aryIdx = new Array();
 		var aryIdx2 = new Array();
 		var temp1 , temp2,temp3;
@@ -65,7 +65,7 @@ $(document).ready(function(){
 				}				
 			}								
 		}
-						
+					
 		if (part_type_chk_val.indexOf("1") != 0) {
 			aryIdx.push("1");
 		}
@@ -78,9 +78,29 @@ $(document).ready(function(){
 			aryIdx.push("4");
 		}
 		
+		if(LPage!="09_01")
+		{
+			if (part_type_chk_val.indexOf("2") != 0) {
+				aryIdx.push("2");
+			}
+			if (part_type_chk_val.indexOf("5") != 0)
+			{
+				aryIdx.push("5");
+			}
+			if (part_type_chk_val.indexOf("6") != 0)
+			{
+				aryIdx.push("6");
+			}
+		}
 		var uniqueNames = [];
 		$.each(aryIdx, function(i, el){
-		        if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+
+		        if($.inArray(el, uniqueNames) === -1) {
+		        	if (el != "undefined")
+		        	{
+		        		uniqueNames.push(el);
+		        	}		        	
+		        }
 		});
 
 		var $sel, totsel="";

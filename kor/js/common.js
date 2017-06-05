@@ -805,7 +805,7 @@ $(document).ready(function(){
 						$.ajax({
 							url: "/kor/proc/odr_proc.php", 
 							//data: "typ=periodcfrm&odr_det_idx="+$("#odr_det_idx_31_05").val()+"&part_type="+$("#part_type_31_05").val()+"&part_no="+$("#part_no").val()+"&manufacturer="+encodeURIComponent($("#manufacturer").val())+"&package="+$("#package").val()+"&dc="+$("#dc").val()+"&supply_quantity="+$("#supply_quantity").val()+"&period="+$("#period").val()+"&pkind="+$(".layer-pagination.red .c-red2").text(),
-							data: "typ=periodcfrm&odr_det_idx="+$("#odr_det_idx_31_05").val()+"&part_type="+$("#part_type_31_05").val()+"&part_no="+$("#part_no").val()+"&manufacturer="+encodeURIComponent($("#manufacturer").val())+"&package="+$("#package").val()+"&dc="+$("#dc").val()+"&rhtype="+$("select[name='rhtype[]']").val()+"&supply_quantity="+$("#supply_quantity").val()+"&period="+period+"&pkind="+$(".layer-pagination2.red .c-red2").text(),
+							data: "typ=periodcfrm&odr_det_idx="+$("#odr_det_idx_31_05").val()+"&part_type="+$("#part_type_31_05").val()+"&part_no="+encodeURIComponent($("#part_no").val())+"&manufacturer="+encodeURIComponent($("#manufacturer").val())+"&package="+encodeURIComponent($("#package").val())+"&dc="+$("#dc").val()+"&rhtype="+$("select[name='rhtype[]']").val()+"&supply_quantity="+$("#supply_quantity").val()+"&period="+period+"&pkind="+$(".layer-pagination2.red .c-red2").text(),
 							encType:"multipart/form-data",
 							success: function (data) {	
 								if (trim(data) == "SUCCESS ALL" || trim(data) == "SUCCESS"){		
@@ -955,6 +955,8 @@ $(document).ready(function(){
 	// 확정 송장 클릭시 - Invoice(30_09)
 	$("body").on("click",".buy-mn03",function(){ 
 		maskoff();
+		$(this).children("img").attr("src","/kor/images/loding_img.gif");
+		$(this).removeClass("buy-mn03");
 
 		//openLayer("layer","30_10","?mn=03");
 		$.ajax({
@@ -1230,13 +1232,15 @@ $(document).ready(function(){
 	$("body").on("click",".btn-confirm-1304s",function(){ //실제 취소 처리(DB)
 
 		var part_type = $(this).attr("part_type");
+		$(this).children("img").attr("src","/kor/images/loding_img.gif");
+		$(this).removeClass("btn-confirm-1304s");
 
-		if (part_type ==2)
+		/*if (part_type ==2)
 		{
 			openCommLayer("layer4","13_04_1","?&actidx="+$(this).attr("odr_history_idx"));
 		}
 		else
-		{
+		{*/
 			$.ajax({ 
 			type: "GET", 
 			url: "/ajax/proc_ajax.php", 
@@ -1251,7 +1255,7 @@ $(document).ready(function(){
 					Refresh_Right();
 				}
 			});
-		}
+		//}
 		
 
 		//openCommLayer("layer4","13_04_1","?&actidx="+$(this).attr("odr_history_idx"));		
@@ -1314,6 +1318,10 @@ $(document).ready(function(){
 	
 	//판매자 송장화면(30_08), 수정발주서(09_01)에서 품목 선택 후 취소 버튼-> '취소'(po_cancel.php, odr_cancel.php)화면에서 '종료'버튼
 	$("body").on("click",".btn-po-cancel",function(){ //실제 취소 처리(DB)
+		
+		$(this).attr("src","/kor/images/loding_img.gif");
+		$(this).removeClass("btn-po-cancel");
+
 		var f = document.f_pocancel;
 		f.target = "proc";
 		//f.target = "_blank";

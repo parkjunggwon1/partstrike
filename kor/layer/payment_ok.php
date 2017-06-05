@@ -57,6 +57,10 @@ $total_price = round_down($total_price,4);
 $first_price = round_down($first_price,4);
 	
 $tax_name = get_any("tax", "tax_name", "nation=$seller_nation");
+
+$po_no = get_any("odr", "odr_no", "odr_idx='$odr_idx'");
+$po_cancel = QRY_CNT("odr", "and odr_no='$po_no' and odr_status=8");
+
 ?>
 
 
@@ -176,10 +180,15 @@ $tax_name = get_any("tax", "tax_name", "nation=$seller_nation");
 				<tr>
 					
 				</tr>
+				<?if ($po_cancel>0){?>				
 				<tr>
-					<th scope="row"><span class="c-blue"></span></th>
-					<td><span class="c-blue"><a href='javascript:openCommLayer("layer5","30_09","?odr_idx=<?=$odr_idx?>&odr_history_idx=<?=$odr_his2[odr_history_idx]?>&forread=Y")'><?=$invoice_no_real?></a></span></td>
-				</tr>
+					<td colspan="2" style="padding-right:0;">
+					<div class="layer-hd" style="background: #fff;border: 0px;">
+						<span class="c-red" style="font-size:12px;"><a class="c-red" href='javascript:openCommLayer("layer5","30_09","?odr_idx=<?=$odr_idx?>&odr_history_idx=<?=$odr_his2[odr_history_idx]?>&forread=Y")'><?=$invoice_no_real?></a></span>
+					</div>
+					</td>
+				</tr>				
+				<?}?>
 		</tbody>
 	</table>
 	<div class="btn-area t-rt">

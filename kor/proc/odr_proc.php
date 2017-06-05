@@ -2121,9 +2121,10 @@ if ($typ =="periodcfrm"){
             dc = '$dc',
             rhtype = '$rhtype'
             where part_idx = $part_idx";
+            
         $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
     }
-   
+  
     $sql = "update part set 
             invreg_chk = '1'
             where part_idx = $part_idx";

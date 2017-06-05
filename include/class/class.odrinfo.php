@@ -749,7 +749,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						}
 
 						?>
-						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" name="odr_quantity[]" quantity="<?=$chk_qty?>"  odr_det_idx="<?=$odr_det_idx?>" supply_quantity="<?=$supply_quantity;?>" quantity="<?=$quantity + $supply_quantity;?>" amd_yn="Y" value="<?=$odr_amend_qty?>" part_type="<?=$part_type?>" style="width:56px;">
+						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" name="odr_quantity[]" quantity="<?=$chk_qty?>"  odr_det_idx="<?=$odr_det_idx?>" supply_quantity="<?=$supply_quantity;?>" quantity="<?=$quantity + $supply_quantity;?>" quantity_f="<?=$quantity + $supply_quantity;?>" amd_yn="Y" value="<?=$odr_amend_qty?>" part_type="<?=$part_type?>" style="width:56px;">
 					</td>
 					<td class="c-red t-rt"><?=$supply_quantity==0?"":number_format($supply_quantity)?></td>
 					<?
@@ -2617,14 +2617,14 @@ if ($for_readonly != "P") {?>
 
 		<input type="hidden" name="tot" id="tot_<?=$odr_idx?>" value="<?=$tot?>"></span></li>
 		<?
-/*
+
 		if( (str_replace(",","",$tot) == (int)$tot) )
 		{
 			$tot = number_format($tot,2);
 		}
 		else {
 			$tot = number_format($tot,4);
-		}*/
+		}
 		?>
 		<li class="total"><strong>Total :</strong><span id="g_total">$<?=$tot?></span></li>
 	
@@ -4528,7 +4528,7 @@ function pay_dlvr($odr_idx, $sell_mem_idx, $b_nation){
 											<td colspan="4" style="padding-left:3px;"><strong class="c-black">Memo&nbsp;&nbsp;</strong> <input type="text" class="i-txt<?=$ship_info=="6" || $ship_info=="5"?"2":"5"?>" id ="memo" name="memo" maxlength="300" value="<?=$memo?>" style="width:350px;color:#00759e;"></td>
 										</tr>
 										<tr>
-											<td  colspan="4"><label class="ipt-chk chk2" Style="margin-left:38px;"><input <?if ($ship_info=="6") {echo "disabled";}?> type="checkbox" id="insur_yn" name="insur_yn" <?if ($insur_yn=="o"){echo "checked class='checked'";}?>><span></span> 운송보험11111111111</label> <span class="c-red" lang="en"> <?if ($insur_yn=="o"){echo ": Yes";}else{echo ": No";}?></span></td>
+											<td  colspan="4"><label class="ipt-chk chk2" Style="margin-left:38px;"><input <?if ($ship_info=="6") {echo "disabled";}?> type="checkbox" id="insur_yn" name="insur_yn" <?if ($insur_yn=="o"){echo "checked class='checked'";}?>><span></span> 운송보험</label> <span class="c-red" lang="en"> <?if ($insur_yn=="o"){echo ": Yes";}else{echo ": No";}?></span></td>
 										</tr>
 										<tr>
 											<td colspan="4"><label class="ipt-chk chk2 com-chck" Style="margin-left:38px;"><input type="checkbox" <?if ($ship_info=="6") {echo "disabled";}?> name="delivery_chg" id="delivery_chg"  <?if ($delivery_addr_idx){echo "checked class='checked'";}?> onclick="javascript:add_change_sel('<?=$assign_idx?>');"><span></span> 배송지 변경</label></td>

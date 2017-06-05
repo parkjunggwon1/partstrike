@@ -159,6 +159,7 @@ $dlvr_cnt = QRY_CNT("freight_charge"," and trade_type=$trade_type and rel_idx = 
 		err = false;
 		//err = updateQty();		
 		$("#del_img").attr("src","/kor/images/loding_img.gif");	
+		$(".btn-del-confirm").removeattr("onclick");
 		
 		if(err == false){
 			if(det_cnt>1){ //-- 여러개 일때 --------------------------

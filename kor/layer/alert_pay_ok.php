@@ -8,10 +8,12 @@ if ($alert =="sessionend"){
 }
 ?>	
 <script>
-	function pay_ok()
+	function pay_ok(val)
 	{
 		var f =  document.f;
 		var formData = $("#f").serialize(); 
+		$(".pay_success").children("img").attr("src","/kor/images/loding_img.gif");
+		$(".pay_success").attr("href","#");
 
 		$.ajax({
 				url: "/kor/proc/odr_proc.php", 
@@ -71,7 +73,7 @@ if ($alert =="sessionend"){
 <div class="layer-content">
 	<p class="txt-warning t-ct"><?=$alert_msg?></p>
 	<div class="btn-area t-rt"> <!-- periodreq-->
-		<a href="javascript:pay_ok()"><img alt="확인" src="/kor/images/btn_ok.gif"></a>
+		<a href="javascript:pay_ok(this)" class="pay_success"><img alt="확인" src="/kor/images/btn_ok.gif"></a>
 	</div>
 </div>
 
