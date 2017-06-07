@@ -32,6 +32,7 @@ if ($alert =="sessionend"){
 							closeCommLayer("layer6");	
 							closeCommLayer("layer5");	//invoic 닫고
 							closeCommLayer("layer4");	//송장(3008) 닫고
+							closeCommLayer("layer3");
 							closeCommLayer("layer");
 
 							
@@ -55,6 +56,7 @@ if ($alert =="sessionend"){
 						
 					}else if (trim(data) == "SUCCESS-Deposit")
 					{	
+						closeCommLayer("layer3");
 						closeCommLayer("layer4");
 						closeCommLayer("layer5");
 						openCommLayer("layer","17_16","?mn=05&odr_idx=<?=$odr_idx?>");

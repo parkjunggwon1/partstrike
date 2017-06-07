@@ -10,29 +10,13 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 $(document).ready(function(){
 	$("#layerPop3 .stock-list-table tbody:eq(0) tr:eq(0) td").addClass("first");
 	//-- 부품상태 변경
-	$("select[name^=part_condition]").change(function(e){
-		checkActive();
-	});
-	//-- 포장상태1 변경
-	$("select[name^=pack_condition1]").change(function(e){
-		checkActive();
-	});
-	//-- 포장상태2 변경
-	$("select[name^=pack_condition]").change(function(e){
-		checkActive();
-	});
+	
 	checkActive();
 });
 function checkActive(){
-	var btnSubmit = false;
-	if($("select[name^=part_condition]").val().length>0 && $("select[name^=pack_condition1]").val().length>0 && $("select[name^=pack_condition2]").val().length>0){
-		btnSubmit = true;
-	}
-	if(btnSubmit){
+	
 		$("#btn_submit_0136").css("cursor","pointer").addClass("btn-submit-0136").attr("src","/kor/images/btn_transmit.gif");
-	}else{
-		$("#btn_submit_0136").css("cursor","").removeClass("btn-submit-0136").attr("src","/kor/images/btn_transmit_1.gif");
-	}
+	
 }
 </SCRIPT>
 <div class="layer-hd">
@@ -60,7 +44,7 @@ $buy_com_name = $row_mem["mem_nm_en"];
 							<img src="/kor/images/nation_title_<?=$buy_com_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$buy_com_nation)?>">
 							<span class="name"><?=$buy_com_name?></span>
 						</td>
-						<td class="t-rt c-red2">추가 공급 가능 수량: <input type="text" class="i-txt2 c-blue t-rt onlynum numfmt" onfocus="if(this.value=='0'){this.value=''}" onblur="if(this.value==''){this.value='0'}" name="addcapa" id="addcapa" value="0" style="width:90px"> <span lang="en">EA</span></td>
+						<td class="t-rt c-red2" ><span style="font-size:14px;">추가 공급 가능 수량</span> <input type="text" class="i-txt2 c-blue t-rt onlynum numfmt" onfocus="if(this.value=='0'){this.value=''}" onblur="if(this.value==''){this.value=''}" name="addcapa" id="addcapa" value="" style="width:90px" maxlength="10"> <span lang="en">EA</span></td>
 					</tr>
 				</tbody>
 			</table>
@@ -92,7 +76,7 @@ $buy_com_name = $row_mem["mem_nm_en"];
 		</div>
 		
 		<div class="btn-area t-rt">
-			<img src="/kor/images/btn_transmit_1.gif" id="btn_submit_0136" alt="전송">
+			<img src="/kor/images/btn_transmit.gif" id="btn_submit_0136" class="btn-submit-0136" style="cursor: pointer;" alt="전송">
 		</div>
 	</form>
 </div>

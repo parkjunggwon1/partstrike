@@ -674,9 +674,11 @@ function del_sel()
 }
 $det_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx ");  //odr_det 수량
 $odr_amend_yn_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and amend_yn ='Y'");	//발주추가 주문 수량
-$part_type2_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and part_type=2 ");  //odr_det 수량
+$part_type2_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and part_type=2 and (period <> '2WK' and period <> '1WK' and period <> '')");  //odr_det 수량
 
 $period_2_1 =QRY_CNT("odr_det", "and odr_idx = $odr_idx and (period = '2WK' or period='1WK') "); 
+$period_stock = get_any("odr_det", "period", "odr_idx=$odr_idx");	
+
 
 ?>
 	<form name="f_09_01" id="f_09_01">
@@ -723,9 +725,15 @@ $period_2_1 =QRY_CNT("odr_det", "and odr_idx = $odr_idx and (period = '2WK' or p
 		</table>
 	
 	<div class="btn-area t-rt">
-		<?if ($part_type2_cnt ==0 || $period_2_1 != 0){?>
+		<?if ( ($part_type2_cnt ==0 || $period_2_1 != 0) ){?>
 			<img src="/kor/images/btn_order_add.gif" alt="발주 추가" style="cursor:pointer"  class="btn-dialog-0501-from_0901">
-		<?}?>
+		<?
+		}else{
+			if ($period_stock=="stock"){
+		?>
+			<img src="/kor/images/btn_order_add.gif" alt="발주 추가" style="cursor:pointer"  class="btn-dialog-0501-from_0901">
+		<?}
+		}?>
 		<img id="btn_order_conf" src="/kor/images/btn_order_confirm_1.gif" alt="발주서 확인" odr_idx="<?=$odr_idx?>">
 		<img src="/kor/images/btn_cancel_1.gif" id="btn_cancel_09_01" alt="취소">
 		<?if ($odr_amend_yn_cnt>0){?>

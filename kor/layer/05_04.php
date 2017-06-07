@@ -51,7 +51,7 @@ if (!$_SESSION["MEM_IDX"]){ReopenLayer("layer6","alert","?alert=sessionend");exi
 		$part_type="256";
 	}
 }
-$part_type2_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and part_type=2 ");  //odr_det 수량
+$part_type2_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and part_type=2 and (period <> '2WK' and period <> '1WK' and period <> '')");  //odr_det 수량
 
 $period_2_1 =QRY_CNT("odr_det", "and odr_idx = $odr_idx and (period = '2WK' or period='1WK') "); 
 

@@ -1465,16 +1465,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<td class="t-lt"><?=$manufacturer?></td>
 						<td><?=$package?></td>
 						<td><?=$dc?></td>
-						<td>
-							<div class="select type6" lang="en" style="width:60px">
-								<label><?=$rhtype==""?"":$rhtype?></label>
-								<select name="rhtype[]">
-									<option lang="en" <?if($rhtype=="None"){echo "selected";}?>></option>
-									<option lang="en" <?if($rhtype=="RoHS"){echo "selected";}?>>RoHS</option>
-									<option lang="en" <?if($rhtype=="HF"){echo "selected";}?>>HF</option>
-								</select>
-							</div>
-						</td>
+						<td><?=$rhtype==""?"":$rhtype?></td>
 						<td class="t-rt"><?=$supply_quantity==0?"-":number_format($supply_quantity); //수량?></td>
 						<td class="t-rt">$<?=$price_val?></td>
 						<?
@@ -1488,7 +1479,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 							$day_val = "WK";
 						}
 						?>
-						<td class=""><?=($period)? str_replace("WK","",$period).$day_val."":"Stock";?></td>	
+						<td class="c-red"><?=($period)? str_replace("WK","",$period).$day_val."":"Stock";?></td>	
 					<!-- 부가내용 시작-->
 					</tr>
 					<tr class="bg-none">
@@ -1499,18 +1490,13 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								<tbody>
 									<tr>
 										<th scope="row" style="width:220px">
-											부품상태&nbsp;&nbsp;<div class="select type4" lang="en" style="width:150px">
-											<label  class="c-blue"><?=($part_condition)?GF_Common_GetSingleList("PARTCOND",$part_condition):""?></label>
-											<?=GF_Common_SetComboList("part_condition", "PARTCOND", "", 1, "True",  "", $part_condition , "", "", "part_condition");?>
-											</div>
+											부품상태&nbsp; 
+											<label  class="c-blue"> : <?=($part_condition)?GF_Common_GetSingleList("PARTCOND",$part_condition):""?></label>
 										</th>
 										<th scope="row">
-											포장상태&nbsp;&nbsp;<div class="select type4" lang="en" style="width:77px">
-											<label  class="c-blue"><?=($pack_condition1)?GF_Common_GetSingleList("PACKCOND1",$pack_condition1):""?></label>
-											<?=GF_Common_SetComboList("pack_condition1", "PACKCOND1", "", 1, "True",  "", $pack_condition1 , "");?></div>
-											<div class="select type4" lang="en" style="width:90px">
-											<label  class="c-blue"><?=($pack_condition2)?GF_Common_GetSingleList("PACKCOND2",$pack_condition2):""?></label>
-											<?=GF_Common_SetComboList("pack_condition2", "PACKCOND2", "", 1, "True",  "", $pack_condition2 , "");?></div>
+											포장상태&nbsp;&nbsp;
+											<label  class="c-blue"><?=($pack_condition1)?GF_Common_GetSingleList("PACKCOND1",$pack_condition1):""?> / </label>
+											<label  class="c-blue"><?=($pack_condition2)?GF_Common_GetSingleList("PACKCOND2",$pack_condition2):""?></label>											
 										</th>
 									</tr>
 									<tr>
@@ -2618,15 +2604,15 @@ if ($for_readonly != "P") {?>
 		<input type="hidden" name="tot" id="tot_<?=$odr_idx?>" value="<?=$tot?>"></span></li>
 		<?
 
-		if( (str_replace(",","",$tot) == (int)$tot) )
+		if( ( str_replace(",","",$tot) == (int)str_replace(",","",$tot)) )
 		{
-			$tot = number_format($tot,2);
+			$total_val = number_format(str_replace(",","",$tot),2);
 		}
 		else {
-			$tot = number_format($tot,4);
+			$total_val = number_format(str_replace(",","",$tot),4);
 		}
 		?>
-		<li class="total"><strong>Total :</strong><span id="g_total">$<?=$tot?></span></li>
+		<li class="total"><strong>Total :</strong><span id="g_total">$<?=$total_val?></span></li>
 	
 	</ul>
 		<?
@@ -3067,7 +3053,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						   echo layerInvListData($loadPage ,$odr_idx);
 						   break;
 						   case "01_37":?>
-					<td class="c-red2 t-ct">물품이 입고되었고 선적 준비 중입니다.<br><br>
+					<td class="c-red2 t-ct" style="font-size:14px;">물품이 입고되었고 선적 준비 중입니다.<br><br>
 					추가 공급 가능 수량: <span class="c-blue" lang="en">
 					<?$add_capa=get_any("odr_history","etc1","odr_idx=$odr_idx and status=19");
 					
