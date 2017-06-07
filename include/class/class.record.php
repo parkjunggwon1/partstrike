@@ -42,6 +42,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 		$save_yn = replace_out($row2["save_yn"]);
 		$odr_status= replace_out($row2["order_status"]);
 		$kk = replace_out($row2["odr_det_idx"]);
+		$period = replace_out($row2["a_period"]);
 	
 		//최근 이력이 있거나 save_yn = 'Y'인 경우만 출력하기로.
 		//$status = get_any("odr_history", "status", "odr_history_idx in (select max(odr_history_idx) from odr_history where odr_idx = trim('$odr_idx'))");
@@ -49,7 +50,9 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 		
 		//상태 16인게 저장에 있을경우 비 노출(구매화면) 2016-04-06
 		
-		$st16cnt = QRY_CNT("odr a INNER JOIN odr_det b ON(a.odr_idx=b.odr_idx)", "AND b.rel_det_idx = $kk AND a.save_yn='Y'");
+		//$st16cnt = QRY_CNT("odr a INNER JOIN odr_det b ON(a.odr_idx=b.odr_idx)", "AND b.rel_det_idx = $kk AND a.save_yn='Y'");
+		//2017-06-04 : 저장,납기받은것 중 제조사위탁, 해외위탁만 그리고, 지속...은 3주 이상만
+		$st16cnt = QRY_CNT("odr a INNER JOIN odr_det b ON(a.odr_idx=b.odr_idx)", "AND b.rel_det_idx = $kk AND a.save_yn='Y' AND (b.part_type IN(5,6) OR (b.part_type=2 AND $period<3)) ");
 		$chk = ($st16cnt>0 && $status==16 && $odr_type =="B")? false:true;
 
 		//--------------------------------------------------------------
