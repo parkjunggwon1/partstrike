@@ -8,6 +8,36 @@
 include $_SERVER["DOCUMENT_ROOT"]."/include/dbopen.php";
 include $_SERVER["DOCUMENT_ROOT"]."/include/class/class.odrinfo.php";
 if (!$_SESSION["MEM_IDX"]){ReopenLayer("layer6","alert","?alert=sessionend");exit;}
+
+if (!$odr_idx){
+	$part=get_part($part_idx);
+	$sell_mem_idx = $part[mem_idx];
+	$sell_rel_idx = $part[rel_idx];
+	$part_type = $part[part_type];
+	$session_mem_idx = $_SESSION["MEM_IDX"];
+	$odr_idx = get_any("odr", "odr_idx", "imsi_odr_no ='IM-".$sell_mem_idx."-".$session_mem_idx."'");	
+}else{
+	$odr=get_odr($odr_idx);
+	$sell_mem_idx = $odr[sell_mem_idx];
+	$sell_rel_idx = $odr[sell_rel_idx];
+	$delivery_addr_idx= $odr[delivery_addr_idx];
+	$ship_info= $odr[ship_info];
+	$ship_account_no= $odr[ship_account_no];
+	$insur_yn= $odr[insur_yn];
+	$memo= $odr[memo];
+	$odr_no= $odr[odr_no];
+
+	$ncnr_chk =QRY_CNT("odr_det", "and period <> '1WK' and period <> '2WK' and period <> 'stock' and odr_idx in (select odr_idx from odr where odr_no = '$odr_no') "); 
+
+}
+$det_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx ");  //odr_det 수량
+$odr_amend_yn_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and amend_yn ='Y'");	//발주추가 주문 수량
+$part_type2_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and part_type=2 and (period <> '2WK' and period <> '1WK' and period <> '')");  //odr_det 수량
+
+$period_2_1 =QRY_CNT("odr_det", "and odr_idx = $odr_idx and (period = '2WK' or period='1WK') "); 
+$period_stock = get_any("odr_det", "period", "odr_idx=$odr_idx");	
+
+
 ?>
 <script src="/kor/js/jquery-1.11.3.min.js"></script>
 <script src="/include/function.js"></script>
@@ -461,7 +491,7 @@ $(document).ready(function(){
 
 		if (amend_yn.indexOf("Y") == -1)
 		{	
-			
+			<?if ($ncnr_chk ==0){?>
 			if(amend_yn.indexOf("N") == 0)
 			{
 				$("#btn_cancel_09_01").css("cursor","pointer").addClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel.gif");
@@ -471,7 +501,8 @@ $(document).ready(function(){
 				//$("#btn_del_09_01").hide();
 				$("#btn_del_09_01").css("cursor","").attr("onclick","").attr("src","/kor/images/btn_delete2_1.gif");
 				$("#btn_cancel_09_01").css("cursor","").removeClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel_1.gif");	
-			}						
+			}				
+			<?}?>		
 			
 		}
 		else
@@ -479,7 +510,9 @@ $(document).ready(function(){
 			if(amend_yn.indexOf("N") == 0)
 			{
 				$("#btn_del_09_01").css("cursor","pointer").attr("onclick","del_sel();").attr("src","/kor/images/btn_delete2_1.gif");	
+				<?if ($ncnr_chk ==0){?>
 				$("#btn_cancel_09_01").css("cursor","").removeClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel_1.gif");
+				<?}?>
 			}
 			else
 			{
@@ -570,6 +603,7 @@ function checkActive(){
 		$("#btn_order_conf").css("cursor","").removeClass("btn-view-sheet-1207").attr("src","/kor/images/btn_order_confirm_1.gif");
 	}
 	//취소버튼 활성
+	<?if ($ncnr_chk ==0){?>
 	if (det_cnt==1)
 	{
 		if(selCnt>0){
@@ -578,7 +612,7 @@ function checkActive(){
 			$("#btn_cancel_09_01").css("cursor","").removeClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel_1.gif");
 		}
 	}
-	
+	<?}?>
 	/**
 	$("#layerPop3 .stock-list-table").find("tr[id^=tr]").each(function(e){
 		if($(this).find("input[name^=odr_det_idx]").prop("checked")==true){
@@ -655,32 +689,6 @@ function del_sel()
 	<a href="#" class="btn-close amend" odr_idx="<?=$odr_idx?>"><img src="/kor/images/btn_layer_close_w.png" alt="close"></a>
 </div>
 <div class="layer-content">
-<?if (!$odr_idx){
-	$part=get_part($part_idx);
-	$sell_mem_idx = $part[mem_idx];
-	$sell_rel_idx = $part[rel_idx];
-	$part_type = $part[part_type];
-	$session_mem_idx = $_SESSION["MEM_IDX"];
-	$odr_idx = get_any("odr", "odr_idx", "imsi_odr_no ='IM-".$sell_mem_idx."-".$session_mem_idx."'");	
-}else{
-	$odr=get_odr($odr_idx);
-	$sell_mem_idx = $odr[sell_mem_idx];
-	$sell_rel_idx = $odr[sell_rel_idx];
-	$delivery_addr_idx= $odr[delivery_addr_idx];
-	$ship_info= $odr[ship_info];
-	$ship_account_no= $odr[ship_account_no];
-	$insur_yn= $odr[insur_yn];
-	$memo= $odr[memo];
-}
-$det_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx ");  //odr_det 수량
-$odr_amend_yn_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and amend_yn ='Y'");	//발주추가 주문 수량
-$part_type2_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and part_type=2 and (period <> '2WK' and period <> '1WK' and period <> '')");  //odr_det 수량
-
-$period_2_1 =QRY_CNT("odr_det", "and odr_idx = $odr_idx and (period = '2WK' or period='1WK') "); 
-$period_stock = get_any("odr_det", "period", "odr_idx=$odr_idx");	
-
-
-?>
 	<form name="f_09_01" id="f_09_01">
 	<input type="hidden" name="odr_idx" id="odr_idx_09_01" value="<?=$odr_idx?>">	
 	<input type="hidden" name="typ" id="typ" value="">
@@ -735,7 +743,9 @@ $period_stock = get_any("odr_det", "period", "odr_idx=$odr_idx");
 		<?}
 		}?>
 		<img id="btn_order_conf" src="/kor/images/btn_order_confirm_1.gif" alt="발주서 확인" odr_idx="<?=$odr_idx?>">
+		<?if ($ncnr_chk ==0){?>
 		<img src="/kor/images/btn_cancel_1.gif" id="btn_cancel_09_01" alt="취소">
+		<?}?>
 		<?if ($odr_amend_yn_cnt>0){?>
 		<img src="/kor/images/btn_delete2_1.gif"  alt="삭제" id="btn_del_09_01">
 		<?}?>

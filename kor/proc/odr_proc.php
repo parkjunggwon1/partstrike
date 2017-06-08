@@ -95,7 +95,7 @@ if ($typ=="write" || $typ=="odredit" ||$typ =="periodreq"){   //periodreq : 납�
         $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
 		//******** 2017-06-06 : 발주서(05_04)창이 열려있는 상태에서 납기 받은 후 '저장'을 눌렀을 경우의 처리 **************
 		//1. 지속적...품목중, 납기 받은 품목 있는지 확인
-		$cnt16stat = QRY_CNT("odr_det", "AND odr_det_idx=(select rel_det_idx from odr_det where odr_idx=$odr_idx and part_type=2) AND odr_status=16");
+		$cnt16stat = QRY_CNT("odr_det", "AND odr_det_idx IN(select rel_det_idx from odr_det where odr_idx=$odr_idx and part_type=2) AND odr_status=16");
 		//2. 받은 납기가 3주 이상이면 독립, 미만이면 병합
 		if($cnt16stat>0){
 			$rst16 =QRY_ODR_DET_LIST(0,"and a.odr_idx=$odr_idx and a.part_type=2",0,"","asc");
@@ -971,8 +971,6 @@ if ($typ =="odramendconfirm2"){ //구매자: 수정발주서(P.O Amendment)12_07
         $result =QRY_ODR_DET_LIST(0," and odr_idx=$odr_idx ",0,"","asc");
         while($row = mysql_fetch_array($result)){
 
-            
-
             //임시 수량 실제 주문에 업데이트 2017-03-30 박정권
             $odr_qty_real = get_any("odr_det_temp", "odr_quantity" , "odr_det_idx =".$row['odr_det_idx']);
             $qty_sql = "update odr_det set odr_quantity=".$odr_qty_real." where odr_det_idx =".$row['odr_det_idx'];
@@ -1021,6 +1019,17 @@ if ($typ =="odramendconfirm2"){ //구매자: 수정발주서(P.O Amendment)12_07
                     echo "DELETE_".$part_idx;
                     exit;
                 } 
+            }
+
+            //2016-12-11 : 재고 변동여부 체크하여 BACK~
+            if($real_stock < $odr_qty){
+                echo "ERR";
+                exit;
+            }else{
+                if($odr_qty >= $supp_qty && $part_type != 2){  //공급 수량보다 발주 수량이 크거나 같은 경우만 존재, 파트타입이 지속적일 경우는 마이너스 처리 안함
+                    $up_qty = $stock_qty - ($odr_qty - $supp_qty);
+                    update_val("part","quantity", $up_qty, "part_idx", $part_idx);
+                }
             }
         }
         //0. 만약에 odr_status가  송장 또는 도착한 데이터가 있다면 그 테이터를 확인 한것으로 표시 (confirm_yn = Y')  왜냐면, 수정 발주서를 발행하는 시점은 처음 송장 받았거나, 물건이 도착 한 후에 할수 있으므로. JSJ
