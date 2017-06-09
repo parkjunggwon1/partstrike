@@ -12,7 +12,7 @@ if ($alert =="sessionend"){
 ?>	
 <div class="layer-hd">
 	<h1><?=$alert_title;?></h1>
-	<a href="#" class="btn-close"><img src="/kor/images/btn_layer_close_w.png" alt="close"></a>
+	<a href="#" class="btn-close del_close"><img src="/kor/images/btn_layer_close_w.png" alt="close"></a>
 </div>
 <div class="layer-content">
 	<p class="txt-warning t-ct"><?=$alert_msg?></p>

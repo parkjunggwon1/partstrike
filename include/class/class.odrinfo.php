@@ -2634,7 +2634,8 @@ if ($for_readonly != "P") {?>
 		{
 			$total_val = number_format(str_replace(",","",$tot),2);
 		}
-		else {
+		else 
+		{
 			$total_val = number_format(str_replace(",","",$tot),4);
 		}
 		?>
@@ -2642,15 +2643,16 @@ if ($for_readonly != "P") {?>
 	
 	</ul>
 		<?
+
 		$won_change = agency_won();
-		
+		//echo $won_change;
 		if ($_GET['forread'] == "")
 		{
 			if ((($row_buyer["nation"] == 1 && $row_seller["nation"] ==1) || ($row_seller["nation"]==$ship_nation)) && $loadPage=="30_09" && ($_SESSION["MEM_IDX"]==$row_buyer["mem_idx"]))
 			{	
 		?>
 			<ul class="total-price-ko">						
-				<li class="total"><strong>Total  :</strong><span id="g_total">￦<?=number_format($won_change*$tot_val,2)?></span></li>	
+				<li class="total"><strong>Total  :</strong><span id="g_total">￦<?=number_format($won_change*str_replace(",","",$tot),2)?></span></li>	
 			</ul>
 		<?
 			}
@@ -3373,7 +3375,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 								$ship_idx = get_any("ship", "ship_idx", "odr_idx=$odr_idx and odr_idx = $odr_idx" );
 								$ship = get_ship($ship_idx);
 							?>
-							<?if($ship[delivery_addr_idx] > 0){?>
+							<?if($ship[delivery_addr_idx] > 0 && $row_ship["ship_info"] != 6){?>
 
 							<tr>
 								<td scope="row" colspan="2" bgcolor="#FFFFCC" style="text-align:left;color:#000000;">배송지 변경</td>								

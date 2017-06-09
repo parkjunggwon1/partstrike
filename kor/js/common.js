@@ -136,6 +136,14 @@ $(document).ready(function(){
 			return;
 		}
 
+		if ($(this).hasClass("del_close"))
+		{
+			closeCommLayer("layer3");
+			showajax(".col-right", "side_order");
+			openCommLayer("layer3","05_04","?odr_idx="+$("#odr_idx_05_04").val());
+			return;
+		}
+
 		if ($(this).hasClass("amend")){  // 기존 데이터 제외하고 amend 된 데이터 모두 삭제.
 								
 			$.ajax({ 
@@ -1253,6 +1261,7 @@ $(document).ready(function(){
 					//document.location.href="/kor/";
 					closeCommLayer("layer");
 					Refresh_Right();
+					record('B');
 				}
 			});
 		//}
@@ -1278,10 +1287,10 @@ $(document).ready(function(){
 				closeCommLayer("layer");
 				closeCommLayer("layer4");
 				Refresh_Right();
+				record('B');
 			}
 		});
 		
-
 	});
 
 	//What's New(구매자) (1304_accept)계약금 재 입금화면 '입금' 버튼------
@@ -1327,6 +1336,7 @@ $(document).ready(function(){
 		//f.target = "_blank";
 		f.action = "/ajax/proc_ajax.php";
 		f.submit();		
+		record('S');
 	});
 	//선적(3016)화면에서 취소 버튼 -> '취소' 화면에서 '환불' 버튼
 	$("body").on("click",".btn-refund-cancel",function(){
@@ -3466,7 +3476,7 @@ function btn_addSearch(){
 			$.cookie('shword',oriPartNo);
 
 			//openCommLayer("layer3","05_01","?odr_idx="+$("#odr_idx_05_01").val()+"&addsearch_part_no="+$("#addsearch_part_no").val()+"&fromLoadPage="+$("#fromLoadPage").val());
-			openCommLayer("layer3","05_01","?odr_idx="+$("#odr_idx_05_01").val()+"&txt_addsearch_part_no="+strURI+"&addsearch_part_no="+shPartNo+"&fromLoadPage="+$("#fromLoadPage").val()+"&coo_yn=y");
+			openCommLayer("layer3","05_01","?odr_idx="+$("#odr_idx_05_01").val()+"&txt_addsearch_part_no="+encodeURIComponent(strURI)+"&addsearch_part_no="+encodeURIComponent(shPartNo)+"&fromLoadPage="+$("#fromLoadPage").val()+"&coo_yn=y");
 			$("#txt_addsearch_part_no").focus();
 		}else{
 			alert_msg("2자 이상 입력바랍니다");
