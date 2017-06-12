@@ -94,39 +94,36 @@ if ($typ=="write" || $typ=="odredit" ||$typ =="periodreq"){   //periodreq : 납�
                 ";
         $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
 		//******** 2017-06-06 : 발주서(05_04)창이 열려있는 상태에서 납기 받은 후 '저장'을 눌렀을 경우의 처리 **************
-		//1. 지속적...품목중, 납기 받은 품목 있는지 확인
-		$cnt16stat = QRY_CNT("odr_det", "AND odr_det_idx IN(select rel_det_idx from odr_det where odr_idx=$odr_idx and part_type=2) AND odr_status=16");
-		//2. 받은 납기가 3주 이상이면 독립, 미만이면 병합
+		//1. 납기 받은 품목 있는지 확인.
+		$cnt16stat = QRY_CNT("odr_det", "AND odr_det_idx IN(select rel_det_idx from odr_det where odr_idx=$odr_idx and part_type IN(2,5,6)) AND odr_status=16");
+		//2. 납기 받은 품목이 있으면....
 		if($cnt16stat>0){
-			$rst16 =QRY_ODR_DET_LIST(0,"and a.odr_idx=$odr_idx and a.part_type=2",0,"","asc");
+			$rst16 =QRY_ODR_DET_LIST(0,"and a.odr_idx=$odr_idx and a.part_type IN(2,5,6)",0,"","asc");
 			while($row16 = mysql_fetch_array($rst16)){
 				$_odr_det_idx = replace_out($row16["odr_det_idx"]); 
 				$_rel_det_idx = replace_out($row16["rel_det_idx"]);
+				$_part_type = replace_out($row16["part_type"]);
 				$odr_status16 = get_any("odr_det", "odr_status", "odr_det_idx = $_rel_det_idx");
 				$odr_idx16 = get_any("odr_det", "odr_idx", "odr_det_idx = $_rel_det_idx");
 				$odr_period = get_any("odr", "period", "odr_idx = $odr_idx16");
 				$det_period = get_any("odr_det", "period", "odr_det_idx = $_rel_det_idx");
 				$supply_quantity16 = get_any("odr_det", "supply_quantity", "odr_det_idx = $_rel_det_idx");
+				$history_idx = get_any("odr_history", "odr_history_idx", "odr_idx = $odr_idx16 AND status=16");
 				if($odr_status16==16){	//납기 받은 경우만..
-					if($odr_period<3){	//3주 미만..(병합)
-						//우선 - 공급수량, 납기, 상태 Update..(저장 Data)
-						update_val("odr_det","supply_quantity",$supply_quantity16, "odr_det_idx", $_odr_det_idx);
-						update_val("odr","period",$odr_period, "odr_idx", $odr_idx);
-						update_val("odr_det","period",$det_period, "odr_det_idx", $_odr_det_idx);
-						update_val("odr_det","odr_status",$odr_status16, "odr_det_idx", $_odr_det_idx);
-						//odr_det(납기) 삭제..
-						$sql = "DELETE FROM odr_det WHERE odr_det_idx=$_rel_det_idx";
-						$result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
-						//odr(납기) 삭제..
-						$sql = "DELETE FROM odr WHERE odr_idx=$odr_idx16";
-						$result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
-						//History(납기) 삭제..
-						$sql = "DELETE FROM odr_history WHERE odr_idx=$odr_idx16";
-						$result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
-					}else{	//3주 이상...(독립)
+					if($_part_type==2 && $odr_period>2){	//지속적... 3주 이상만 독립
 						//저장 Data에서 해당 det 삭제
 						$sql = "DELETE FROM odr_det WHERE odr_det_idx=$_odr_det_idx";
 						$result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
+						//History '읽지않음' 표시
+						update_val("odr_history","confirm_yn","N", "odr_history_idx", $history_idx);
+					}else{	//병합..나머지 납기품목 전부...
+						//우선 - 공급수량, 납기, 상태 Update..(저장 Data)
+						update_val("odr_det","supply_quantity",$supply_quantity16, "odr_det_idx", $_odr_det_idx);
+						//update_val("odr","period",$odr_period, "odr_idx", $odr_idx);
+						update_val("odr_det","period",$det_period, "odr_det_idx", $_odr_det_idx);
+						update_val("odr_det","odr_status",$odr_status16, "odr_det_idx", $_odr_det_idx);
+						//History '읽음' 표시
+						update_val("odr_history","confirm_yn","Y", "odr_history_idx", $history_idx);
 					}
 				}
 			}
