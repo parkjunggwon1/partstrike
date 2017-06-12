@@ -1201,8 +1201,16 @@ function get_auto_no($ty, $table, $column, $update=""){  // 통합 no 생성
 //echo "<br>"."and ($column like '".$ty.date("y")."%'".$addCl.") and odr_idx = '".$odr_idx."' "."<BR>";
 		$odr_no_cnt = QRY_CNT("odr","and ($column like '".$ty.date("y")."%'".$addCl.") and odr_idx = '".$odr_idx."' ");
 
-		$cnt = get_any("odr","IFNULL(CAST(SUBSTR(MAX($column),$cut_bit,5) AS UNSIGNED),0)", "odr_status NOT IN(8,99) AND ($column like '".$ty.date("y")."%'".$addCl.")");
+		if ($ty=="DPI")
+		{
+			$cnt = get_any("odr","IFNULL(CAST(SUBSTR(MAX($column),$cut_bit,5) AS UNSIGNED),0)", "odr_status IN(8,99) AND ($column like '".$ty.date("y")."%'".$addCl.")");
+		}
+		else
+		{
+			$cnt = get_any("odr","IFNULL(CAST(SUBSTR(MAX($column),$cut_bit,5) AS UNSIGNED),0)", "odr_status NOT IN(8,99) AND ($column like '".$ty.date("y")."%'".$addCl.")");
+		}
 		
+
 		if ($odr_no_cnt)
 		{	
 

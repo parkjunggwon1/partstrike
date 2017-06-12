@@ -16,13 +16,20 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 <?
 if($sheets_no){ //2016-04-18 : What's New 에서 Sheet 클릭 시 Log 호출을 위해 Sheet No.($sheets_no)를 넘겨준다.
 	$odr_idx = get_any("odr", "max(odr_idx)", "odr_status=99 AND doc_no='$sheets_no'");
+	if ($odr_idx=="diff")
+	{
+		$odr_idx = $_GET['odr_idx'];
+	}
 	//echo "max(odr_idx)", "odr_status=99 AND doc_no='$sheets_no'";
 }
+
+
 
 $result_odr = QRY_ODR_VIEW($odr_idx);    
 $row_odr = mysql_fetch_array($result_odr);
 $odr_no = $row_odr['odr_no'];
 $now_invoice = $row_odr['invoice_no'];
+$ncnr_chk =$row_odr['ncnr_yn'];
 
 $result_odr_det =QRY_ODR_DET_LIST(0,"and odr_idx = ".$odr_idx,0); 
 $row_odr_det = mysql_fetch_array($result_odr_det);
@@ -60,7 +67,9 @@ if ($sheets_no==""){
 	}elseif ($for_readonly=="P"){
 		$chr =  "PL";
 	}elseif ($pay_invoice =="D"){
-		$chr = "DPI";
+		$chr = "DPI";	
+	}elseif ($ncnr_chk =="Y"){
+		$chr = "EI";
 	}else{
 		$chr =  "EI";
 	}
@@ -68,8 +77,8 @@ if ($sheets_no==""){
 	if ($down_yn =="Y"){ //----- 계약금
 		$invoice_no = get_auto_no($chr, "mybank" , "invoice_no");
 	}else{		//---- 계약금 아닌경우
-		if($row_odr_det["part_type"] == 2){
-			$invoice_no = $row_odr["invoice_no"]==""?str_replace("EI", $chr, get_auto_no("EI", "odr" , "invoice_no")):str_replace("EI", $chr,$row_odr["invoice_no"]);
+		if($row_odr_det["part_type"] == 2 && $ncnr_chk=="Y"){
+			$invoice_no = get_auto_no("EI", "odr" , "invoice_no","Y");
 		}else{
 			$invoice_no = $row_odr["invoice_no"]==""?str_replace("EI", $chr, get_auto_no("EI", "odr" , "invoice_no")):str_replace("EI", $chr,$row_odr["invoice_no"]);
 		}
@@ -172,17 +181,20 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 				}
 				else
 				{
+
 					if (!$loadPage)
 					{
-						$invoice_no = $now_invoice;	
+						$invoice_no = $now_invoice;			
 					}
 					else
 					{
+
 						$invoice_no = get_auto_no("DPI", "odr" , "invoice_no","Y");
 						$invoice_no = str_replace("EI", $chr,$invoice_no);
 					}						
 					
 				}
+
 
 			}else{?>Escrow Invoice<?
 				$chr =  "EI";
@@ -198,13 +210,21 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 				{
 					if (!$loadPage)
 					{
-						$invoice_no = $now_invoice;
+						if($row_odr_det["part_type"] == 2 && $ncnr_chk=="Y")
+						{
+								
+						}
+						else
+						{
+							$invoice_no = $now_invoice;	
+						}
 
 					}
 					else
 					{
 						$invoice_no = get_auto_no("EI", "odr" , "invoice_no","Y");
 						$invoice_no = str_replace("DPI", $chr,$invoice_no);
+
 					}						
 					
 				}

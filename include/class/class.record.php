@@ -1018,7 +1018,7 @@ function GF_GET_RECORD_LIST($odr_type, $sch_part_no,$yr,$mon,$this_mem_idx,$page
 			$sn = "and odr_idx in (select odr_idx from odr_det a left outer join part b on a.part_idx = b.part_idx and b.part_no like '%$sch_part_no%')";
 		}
 		
-		$searchand = "and odr_status IN('6','8','13','14','15','25','26','27','28','29','30') $dateClause and odr_no <> ''  and ".($odr_type=="S"?"sell_":"")."mem_idx =$this_mem_idx $sn";
+		$searchand = "and odr_status IN('6','13','14','15','25','26','27','28','29','30') $dateClause and odr_no <> ''  and ".($odr_type=="S"?"sell_":"")."mem_idx =$this_mem_idx $sn";
 		//2016-11-13 : 쿼리 수정(거래 완료된 주문만)
 		//$sql = "SELECT * FROM odr where  odr_status <> 99 and DATE_FORMAT(reg_date,'%Y-%m') = '$yr-$mki' and odr_no <> '' and invoice_no <> '' and ".($odr_type=="S"?"sell_":"")."mem_idx =$this_mem_idx $sn order by odr.odr_idx desc";
 		$sql = "SELECT * FROM odr where 1=1 $searchand order by odr.odr_idx desc";

@@ -441,7 +441,6 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
     $ary_memo = $_POST[memo];
     $ary_part_type = $_POST[part_type];
     $part_type_chk = "";
-    
 
     if($turnkey_cnt>0){
         echo "TURNKEY~<br>";
@@ -575,7 +574,7 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
      //2016-04-18 송장번호 생성하자
     if ($part_type_chk==1)
     {
-        $inv_no = get_auto_no("DPI", "odr", "invoice_no");
+        $inv_no = get_auto_no("DPI", "odr", "invoice_no","Y");
     }
     else
     {
@@ -1301,6 +1300,7 @@ if ($typ == "pay_jisok2"){
         //Invoice No. 신규 작성.
         $inv_no = get_auto_no("EI", "odr" , "invoice_no");
         //잔금(구매자) 송장(Invoice) 읽음 으로 Insert
+       
         $sql = "insert into odr_history set
                 odr_idx = '$odr_idx'
                 ,status = 18
@@ -1312,10 +1312,12 @@ if ($typ == "pay_jisok2"){
                 ,confirm_yn = 'Y'
                 ,reg_date = now()";
         $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+        
     }else{
         $charge_type = '2'; //계약금
         $charge_ty = 'D';   //history에서 사용
     }
+  
     //add. 현재의 Invoice No.로 사본 생성
     //3. 지불기록(관리자페이지):구매자 ------------------------------------------
     $sql = "insert into mybank set
@@ -1360,7 +1362,8 @@ if ($typ == "pay_jisok2"){
     //6-1. 송장(판매자)
     if($pay_mem_idx == $sell_mem_idx){
         $chr = "DPI";
-        $inv_no_new = str_replace("EI", $chr,  get_auto_no("EI", "odr" , "invoice_no"));
+        //$inv_no_new = str_replace("EI", $chr,  get_auto_no("EI", "odr" , "invoice_no"));
+        $inv_no_new = $inv_no;
 
         //송장번호 가져오자
         $sql = "insert into odr_history set
@@ -2103,7 +2106,11 @@ if ($typ =="arrival"){   //물건 도착(지속적...) -------------------------
     $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 
     $sql = "update ship set appoint_yn = '$appoint_yn' , tax = '$tax' where odr_idx = $odr_idx";
-     $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+    $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
+
+    //ncnr 여부 Y 2017-06-12
+    $sql = "update odr set ncnr_yn = 'Y' where odr_idx= $odr_idx ";
+    $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 
     //2. histoy update(결제를 확인한 상태로 update, 혹시 지연요청을 한적 있으면 그 지연 요청도 확인 한 상태로 update)
     $sql = "update odr_history set confirm_yn = 'Y' where odr_idx= $odr_idx and status in (4,5,20) and confirm_yn = 'N'";

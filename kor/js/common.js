@@ -1004,7 +1004,8 @@ $(document).ready(function(){
 						closeCommLayer("layer3");	//송장(3008) 닫고
 						closeCommLayer("layer4");	//공지창 닫고
 						closeCommLayer("layer");
-						
+						showajax(".col-right", "side_order");
+						/*
 						switch (menu_type_chk) {
 							case "order_S"    : if(chkLogin()){order('S'); showajax(".col-right", "side_order");}
 							           break;
@@ -1020,7 +1021,7 @@ $(document).ready(function(){
 							           break;
 							case "side_order"    : showajax(".col-right", "side_order");
 			           					break;
-						}
+						}*/
 						//document.location.href="/kor/";
 					}else{
 						//2016-12-11 : 재고 경고
@@ -1261,7 +1262,7 @@ $(document).ready(function(){
 					//document.location.href="/kor/";
 					closeCommLayer("layer");
 					Refresh_Right();
-					record('B');
+					record('S');
 				}
 			});
 		//}
@@ -1287,7 +1288,7 @@ $(document).ready(function(){
 				closeCommLayer("layer");
 				closeCommLayer("layer4");
 				Refresh_Right();
-				record('B');
+				//record('B');
 			}
 		});
 		
@@ -1328,6 +1329,7 @@ $(document).ready(function(){
 	//판매자 송장화면(30_08), 수정발주서(09_01)에서 품목 선택 후 취소 버튼-> '취소'(po_cancel.php, odr_cancel.php)화면에서 '종료'버튼
 	$("body").on("click",".btn-po-cancel",function(){ //실제 취소 처리(DB)
 		
+
 		$(this).attr("src","/kor/images/loding_img.gif");
 		$(this).removeClass("btn-po-cancel");
 
@@ -1336,7 +1338,7 @@ $(document).ready(function(){
 		//f.target = "_blank";
 		f.action = "/ajax/proc_ajax.php";
 		f.submit();		
-		record('S');
+		//record('S');
 	});
 	//선적(3016)화면에서 취소 버튼 -> '취소' 화면에서 '환불' 버튼
 	$("body").on("click",".btn-refund-cancel",function(){

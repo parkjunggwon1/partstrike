@@ -1499,6 +1499,7 @@ switch($actty) {
 		//공통 3.odr 상태정보 Update ---------------------------------<<
 		update_val("odr","odr_status","8", "odr_idx", $up_odr_idx);	//상태
 		update_val("odr","status_edit_mem_idx","$session_mem_idx", "odr_idx", $up_odr_idx);	//상태 update 한 mem_idx
+		update_val("odr","invoice_no", "", "odr_idx", $odr_idx);	//취소시 입력된 invoice_no 초기화 2017-06-12 박정권
 		//판매자 송장(30_08)취소 : 재고삭제 및 취소 카운트 증가 ------------------------------------<<
 		if($load_page == "30_08"){	//판매자 '송장'화면에서 취소
 			for($i=0; $i<count($odr_det_idx); $i++){

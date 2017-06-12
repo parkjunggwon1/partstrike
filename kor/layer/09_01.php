@@ -26,9 +26,9 @@ if (!$odr_idx){
 	$insur_yn= $odr[insur_yn];
 	$memo= $odr[memo];
 	$odr_no= $odr[odr_no];
-
-	$ncnr_chk =QRY_CNT("odr_det", "and period <> '1WK' and period <> '2WK' and period <> 'stock' and odr_idx in (select odr_idx from odr where odr_no = '$odr_no') "); 
-
+	//ncnr 체크 여부 2017-06-12 박정권
+	$ncnr_chk =$odr[ncnr_yn];
+	
 }
 $det_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx ");  //odr_det 수량
 $odr_amend_yn_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx and amend_yn ='Y'");	//발주추가 주문 수량
@@ -491,7 +491,7 @@ $(document).ready(function(){
 
 		if (amend_yn.indexOf("Y") == -1)
 		{	
-			<?if ($ncnr_chk ==0){?>
+			<?if ($ncnr_chk !="Y"){?>
 			if(amend_yn.indexOf("N") == 0)
 			{
 				$("#btn_cancel_09_01").css("cursor","pointer").addClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel.gif");
@@ -510,7 +510,7 @@ $(document).ready(function(){
 			if(amend_yn.indexOf("N") == 0)
 			{
 				$("#btn_del_09_01").css("cursor","pointer").attr("onclick","del_sel();").attr("src","/kor/images/btn_delete2_1.gif");	
-				<?if ($ncnr_chk ==0){?>
+				<?if ($ncnr_chk !="Y"){?>
 				$("#btn_cancel_09_01").css("cursor","").removeClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel_1.gif");
 				<?}?>
 			}
@@ -603,7 +603,7 @@ function checkActive(){
 		$("#btn_order_conf").css("cursor","").removeClass("btn-view-sheet-1207").attr("src","/kor/images/btn_order_confirm_1.gif");
 	}
 	//취소버튼 활성
-	<?if ($ncnr_chk ==0){?>
+	<?if ($ncnr_chk !="Y"){?>
 	if (det_cnt==1)
 	{
 		if(selCnt>0){
@@ -743,7 +743,7 @@ function del_sel()
 		<?}
 		}?>
 		<img id="btn_order_conf" src="/kor/images/btn_order_confirm_1.gif" alt="발주서 확인" odr_idx="<?=$odr_idx?>">
-		<?if ($ncnr_chk ==0){?>
+		<?if ($ncnr_chk !="Y"){?>
 		<img src="/kor/images/btn_cancel_1.gif" id="btn_cancel_09_01" alt="취소">
 		<?}?>
 		<?if ($odr_amend_yn_cnt>0){?>
