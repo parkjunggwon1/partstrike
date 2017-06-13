@@ -44,7 +44,7 @@ $buy_com_name = $row_mem["mem_nm_en"];
 							<img src="/kor/images/nation_title_<?=$buy_com_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$buy_com_nation)?>">
 							<span class="name"><?=$buy_com_name?></span>
 						</td>
-						<td class="t-rt c-red2" ><span style="font-size:14px;">추가 공급 가능 수량</span> <input type="text" class="i-txt2 c-blue t-rt onlynum numfmt" onfocus="if(this.value=='0'){this.value=''}" onblur="if(this.value==''){this.value=''}" name="addcapa" id="addcapa" value="" style="width:90px" maxlength="10"> <span lang="en">EA</span></td>
+						<td class="t-rt c-red2" ><span style="font-size:14px;">추가공급 가능수량</span> <input type="text" class="i-txt2 c-blue t-rt onlynum numfmt" onfocus="if(this.value=='0'){this.value=''}" onblur="if(this.value==''){this.value=''}" name="addcapa" id="addcapa" value="" style="width:90px" maxlength="10"> <span lang="en">EA</span></td>
 					</tr>
 				</tbody>
 			</table>
@@ -63,7 +63,7 @@ $buy_com_name = $row_mem["mem_nm_en"];
 						<th scope="col" class="t-rohs">RoHS</th>
 						<th scope="col" class="t-oty">O'ty</th>
 						<th scope="col" class="t-unitprice">Unit Price</th>
-						<th scope="col" lang="ko" class="t-orderoty">Amount</th>
+						<th scope="col" class="t-orderoty">Amount</th>
 						<th scope="col" lang="ko" class="t-period">납기</th>
 					</tr>
 				</thead>

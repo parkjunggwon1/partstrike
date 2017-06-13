@@ -26,7 +26,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 <?
 $recordcnt = 1;
 //$searchand .= "and buy_mem_idx = ".$_SESSION["MEM_IDX"]." and status = 8 and confirm_yn='N' and fault_yn = 'Y'"; //기존 JSJ
-$searchand .= "and buy_mem_idx = ".$_SESSION["MEM_IDX"]." and status = 8 and confirm_yn='N' and fault_yn = 'Y'";
+$searchand .= "and buy_mem_idx = ".$_SESSION["MEM_IDX"]." and reg_mem_idx <> ".$_SESSION["MEM_IDX"]." and status = 8 and confirm_yn='N' and fault_yn = 'Y'";
 $cnt = QRY_CNT("odr_history",$searchand);				
 if ($cnt == 0 ){?>
 <div class="layer-file">

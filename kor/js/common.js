@@ -1262,7 +1262,7 @@ $(document).ready(function(){
 					//document.location.href="/kor/";
 					closeCommLayer("layer");
 					Refresh_Right();
-					record('S');
+					record('B');
 				}
 			});
 		//}

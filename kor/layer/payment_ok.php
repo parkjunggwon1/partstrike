@@ -132,7 +132,7 @@ $po_cancel = QRY_CNT("odr", "and odr_no='$po_no' and odr_status=8");
 							<th scope="row"><span class="c-blue">Total : </span></th>
 							<td><span class="c-blue"><?=$etc2_val?></span></td>
 						</tr>
-					
+						
 				<?
 					}
 					else
@@ -141,10 +141,13 @@ $po_cancel = QRY_CNT("odr", "and odr_no='$po_no' and odr_status=8");
 						<tr>
 							<th scope="row"><span >Down Payment</span> : </th>
 							<td><span ><?=$etc2_val?></span></td>
+						</tr>						
+						<tr class="lst">
+							<td colspan="2"></td>
 						</tr>
 						<tr>
-							<th scope="row"><span ></span> Total : </th>
-							<td><span ><?=$etc2_val?></span></td>
+							<th scope="row"><span class="c-blue">Total : </span></th>
+							<td><span class="c-blue"><?=$etc2_val?></span></td>
 						</tr>
 				<?
 					}

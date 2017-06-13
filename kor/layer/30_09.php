@@ -660,7 +660,9 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 						<button type="button" class="btn-dialog-0901" now_idx="<?=$now_idx;?>"><img src="/kor/images/btn_order_edit.gif" alt="발주서 수정"></button>
 												
 					<?}?>
-				<?}?>
+				<?}
+
+				?>
 				<!--<button type="button" class="btn-dialog-18-2-14"><img src="/kor/images/btn_refund.gif" alt="환불"></button>-->
 				<button type="button" class="btn-pop-3012" odr_idx="<?=$row_odr["odr_idx"]?>" odr_det_idx="<?=$row_odr["odr_det_idx"]?>" tot_amt="<?=$tot_amt?>" fromLoadPage="<?=$LoadPage?>"  deposit_yn="<?=$_SESSION["DEPOSIT"]=="N"?"Y":""?>" charge_type="<?=$charge_type?>"><img src="/kor/images/btn_payment.gif" alt="결제"></button>
 			<?}else{ //입금확인중?>
@@ -670,6 +672,7 @@ if($row_odr_det["part_type"] == 2 &&  $row_odr_det["period"] *1 > 2 && $pay_cnt<
 		<?}else{
 			if ($for_readonly !="Y" && $for_readonly !="P"){    //서류 확인이 아닐 경우
 					//판매자가 송장을 확인 할때는 2가지 경우
+
 					if($for_downpay_fr_seller){  //구매자가 계약금을 지불 하여 판매자도 계약금을 결제 할때?>
 
 						<?if(QRY_CNT("mybank", "and odr_idx = $odr_idx and charge_type ='".$charge_type."' and charge_method = '2' and put_money_yn is null")==0){?>

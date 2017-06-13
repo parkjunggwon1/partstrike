@@ -489,8 +489,9 @@ $(document).ready(function(){
 
 		});
 
+
 		if (amend_yn.indexOf("Y") == -1)
-		{	
+		{				
 			<?if ($ncnr_chk !="Y"){?>
 			if(amend_yn.indexOf("N") == 0)
 			{
@@ -507,14 +508,15 @@ $(document).ready(function(){
 		}
 		else
 		{	
-			if(amend_yn.indexOf("N") == 0)
+		
+			if(amend_yn.indexOf("N") != -1)
 			{
 				$("#btn_del_09_01").css("cursor","pointer").attr("onclick","del_sel();").attr("src","/kor/images/btn_delete2_1.gif");	
 				<?if ($ncnr_chk !="Y"){?>
 				$("#btn_cancel_09_01").css("cursor","").removeClass("btn-cancel-0901").attr("src","/kor/images/btn_cancel_1.gif");
 				<?}?>
 			}
-			else
+			else 		
 			{
 				$("#btn_del_09_01").css("cursor","pointer").attr("onclick","del_sel();").attr("src","/kor/images/btn_delete2.gif");
 			}
@@ -596,6 +598,7 @@ function checkActive(){
 		ErchkCnt = false;	
 	}
 	
+
 	//발주서 확인 버튼 활성
 	if(okCnt == det_cnt && ErchkCnt && selCnt == det_cnt && supp_qty <= odr_qty){	
 		$("#btn_order_conf").css("cursor","pointer").addClass("btn-view-sheet-1207").attr("src","/kor/images/btn_order_confirm.gif");				
@@ -737,7 +740,7 @@ function del_sel()
 			<img src="/kor/images/btn_order_add.gif" alt="발주 추가" style="cursor:pointer"  class="btn-dialog-0501-from_0901">
 		<?
 		}else{
-			if ($period_stock=="stock"){
+			if ($period_stock=="stock" || $period_stock==""){
 		?>
 			<img src="/kor/images/btn_order_add.gif" alt="발주 추가" style="cursor:pointer"  class="btn-dialog-0501-from_0901">
 		<?}

@@ -2132,7 +2132,7 @@ if ($typ =="arrival"){   //물건 도착(지속적...) -------------------------
         //echo $sql;
         $result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
         if($result){
-            Page_Parent_Msg_Url1("구매자에게 도착 메세지를 보냈습니다.","/kor/");
+            Page_Parent_Msg_Url2("구매자에게 도착 메세지를 보냈습니다.","/kor/");
         }
 }
 

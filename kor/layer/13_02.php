@@ -20,7 +20,7 @@ include $_SERVER["DOCUMENT_ROOT"]."/sql/sql.member.php";
 <!-- layer-left-menu -->
 <?php include ($_SERVER["DOCUMENT_ROOT"]."/kor/layer/sell_menu.php"); 
 $recordcnt = 1;
-$searchand .= "and sell_mem_idx = ".$_SESSION["MEM_IDX"]." and status = $status and confirm_yn = 'N'"; 			
+$searchand .= "and sell_mem_idx = ".$_SESSION["MEM_IDX"]." and reg_mem_idx <> ".$_SESSION["MEM_IDX"]." and status = $status and confirm_yn = 'N'"; 			
 
 $cnt = QRY_CNT("odr_history",$searchand);				
 

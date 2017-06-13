@@ -1504,7 +1504,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 										</th>
 									</tr>
 									<tr>
-										<td colspan="2" ><strong class="c-black">Memo&nbsp;&nbsp;</strong> <input type="text" class="i-txt3 c-blue" name="memo" value="" style="width:388px"></td>
+										<td colspan="2" ><strong class="c-black">Memo&nbsp;&nbsp;</strong> <input type="text" class="i-txt3 c-blue" name="memo" value="" style="width:388px;border:1px solid #333"></td>
 									</tr>
 								</tbody>
 							</table>
@@ -2504,10 +2504,10 @@ if ($for_readonly != "P") {?>
 			<?
 				$word ="Rest Amount(90%)";
 				// tot의 90%를 무조건 하면 안되고, 수정 발주 된 내역이 있을 가능성도 있기 때문에 mybank에서 실제로 지불한 10%값을 가져와서  tot- 지불값 한 금액이 실제 지불해야 할 금액이다.
-				$down = get_any("mybank" ,"charge_amt", "odr_idx=$odr_idx and mem_idx=".$_SESSION["MEM_IDX"]." and rel_idx = ".$_SESSION["REL_IDX"]);	
+				$down = ($tot_vat_minus / 10);
 
 				$tot = str_replace(",","",$tot);
-				$tot = round_down($tot,4) + round_down($down,4);   //더하기. ( 왜냐하면 down 자체가 마이너스 값이니까)
+				$tot = round_down($tot,4);
 				if( ($down == (int)$down) )
 				{
 					$down = number_format($down,2);
@@ -2632,11 +2632,11 @@ if ($for_readonly != "P") {?>
 
 		if( ( str_replace(",","",$tot) == (int)str_replace(",","",$tot)) )
 		{
-			$total_val = number_format(str_replace(",","",$tot),2);
+			$total_val = number_format(str_replace(",","",$tot-$down),2);
 		}
 		else 
 		{
-			$total_val = number_format(str_replace(",","",$tot),4);
+			$total_val = number_format(str_replace(",","",$tot-$down),4);
 		}
 		?>
 		<li class="total"><strong>Total :</strong><span id="g_total">$<?=$total_val?></span></li>
@@ -2648,7 +2648,7 @@ if ($for_readonly != "P") {?>
 		//echo $won_change;
 		if ($_GET['forread'] == "")
 		{
-			if ((($row_buyer["nation"] == 1 && $row_seller["nation"] ==1) || ($row_seller["nation"]==$ship_nation)) && $loadPage=="30_09" && ($_SESSION["MEM_IDX"]==$row_buyer["mem_idx"]))
+			if ((($row_buyer["nation"] == 1 && $row_seller["nation"] ==1) || ($row_seller["nation"]==$ship_nation)) && $loadPage=="30_09" )
 			{	
 		?>
 			<ul class="total-price-ko">						
@@ -2769,7 +2769,23 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 							<span class="etc"><span ><?if ($etc2){echo openSheet($status, $etc2,$odr_idx,$etc_change,$odr_history_idx);}?></span></span>
 						<?}?>
 						<?}else{?>
-							<span class="etc"><span ><?if ($etc1){echo openSheet($status, $etc1,$odr_idx,$etc_change,$odr_history_idx);}?>
+							<span class="etc"><span >
+								<?
+								if ($etc1)
+								{
+									if ($etc1==" EA")
+									{
+										echo "0".openSheet($status, $etc1,$odr_idx,$etc_change,$odr_history_idx);
+									}
+									else
+									{
+										echo openSheet($status, $etc1,$odr_idx,$etc_change,$odr_history_idx);
+									}
+									
+								}
+
+								?>
+								
 								<?if ($status== "9" || $status== "10"  || $status =="11"){?>							
 									<?=$etc2?>
 								<?}?>
@@ -3081,12 +3097,25 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						   echo layerInvListData($loadPage ,$odr_idx);
 						   break;
 						   case "01_37":?>
-					<td class="c-red2 t-ct" style="font-size:14px;">물품이 입고되었고 선적 준비 중입니다.<br><br>
-					추가 공급 가능 수량: <span class="c-blue" lang="en">
+					<td class="c-red2 t-ct" style="font-size:14px;">물품이 입고되어 선적 준비 중입니다.					
 					<?$add_capa=get_any("odr_history","etc1","odr_idx=$odr_idx and status=19");
 					
-					if ($add_capa){echo str_replace("EA","",$add_capa);}					
-					?></span> <span lang="en">EA</span> </td>
+					if ($add_capa)
+					{
+						if ($add_capa == " EA")
+						{
+							
+						}
+						else
+						{							
+					?>
+							<br><br>추가 공급 가능 수량: <span class="c-blue" lang="en"></span> <span lang="en">EA</span> </td>
+					<?
+							echo str_replace("EA","",$add_capa);
+						}						
+					}
+					
+					?>
 					</tr></tbody></table></div>	
 					<?	   echo layerInvListData($loadPage ,$odr_idx);
 						   break;
