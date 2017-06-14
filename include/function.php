@@ -1199,6 +1199,7 @@ function get_auto_no($ty, $table, $column, $update=""){  // 통합 no 생성
 		//cnt 아닌 최대번호 가져오자. 2016-04-19
 		$cut_bit = strlen($ty) + 6; //ty 문자열 길이에따라 자르는 시작 위치 바뀌어야 한다.
 //echo "<br>"."and ($column like '".$ty.date("y")."%'".$addCl.") and odr_idx = '".$odr_idx."' "."<BR>";
+		
 		$odr_no_cnt = QRY_CNT("odr","and ($column like '".$ty.date("y")."%'".$addCl.") and odr_idx = '".$odr_idx."' ");
 
 		if ($ty=="DPI")

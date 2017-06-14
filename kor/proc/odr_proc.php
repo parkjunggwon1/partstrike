@@ -1018,14 +1018,9 @@ if ($typ =="odramendconfirm2"){ //구매자: 수정발주서(P.O Amendment)12_07
             }
 
             //2016-12-11 : 재고 변동여부 체크하여 BACK~
-            if($real_stock < $odr_qty){
-                echo "ERR";
-                exit;
-            }else{
-                if($odr_qty >= $supp_qty && $part_type != 2){  //공급 수량보다 발주 수량이 크거나 같은 경우만 존재, 파트타입이 지속적일 경우는 마이너스 처리 안함
-                    $up_qty = $stock_qty - ($odr_qty - $supp_qty);
-                    update_val("part","quantity", $up_qty, "part_idx", $part_idx);
-                }
+            if($odr_qty >= $supp_qty && $part_type != 2){  //공급 수량보다 발주 수량이 크거나 같은 경우만 존재, 파트타입이 지속적일 경우는 마이너스 처리 안함
+                $up_qty = $stock_qty - ($odr_qty - $supp_qty);
+                update_val("part","quantity", $up_qty, "part_idx", $part_idx);
             }
         }
         //0. 만약에 odr_status가  송장 또는 도착한 데이터가 있다면 그 테이터를 확인 한것으로 표시 (confirm_yn = Y')  왜냐면, 수정 발주서를 발행하는 시점은 처음 송장 받았거나, 물건이 도착 한 후에 할수 있으므로. JSJ
@@ -1089,7 +1084,11 @@ if($typ == "poano"){
     /*if($quantity_cnt>0){
         echo "STOCK";
     }else{*/
-        $sql = "update odr set amend_no = '".get_auto_no("POA", "odr" , "amend_no")."', amend_date = now()  where odr_idx=".$odr_idx;
+        // 수정발주서 no 초기화 한번 시키고 max 값 입력(수정발주서 no 가 계속 증가되는 현상 방지)
+        $sql = "update odr set amend_no = '' where odr_idx=".$odr_idx;
+        $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
+
+        $sql = "update odr set amend_no = '".get_auto_no("POA", "odr" , "amend_no","Y")."', amend_date = now()  where odr_idx=".$odr_idx;
         $result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());
         /** 2017-01-10 : ship 정보를 임시 테이블에 저장 했다가, '확정발주' 시 ship에 복사
         $ship_sql = "update ship set ship_info = '".$ship_info."', ship_account_no = '".$ship_account_no."', memo = '".$memo."',insur_yn='".$insur_yn."',delivery_addr_idx='".$delivery_addr_idx."'  where odr_idx=".$odr_idx; 

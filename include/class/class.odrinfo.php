@@ -668,7 +668,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td class="t-rt">$<?=$price_val?></td>
 					<td class="c-blue t-rt"><?=number_format($odr_quantity)?></td>
 					<td>
-						<input type="text" id = "supply_quantity" name="supply_quantity" class="i-txt4 c-red2 onlynum numfmt t-rt" maxlength="10" value="" style="width:58px">
+						<input type="text" id = "supply_quantity" name="supply_quantity" class="i-txt4 c-red2 onlynum numfmt t-rt" maxlength="10" value="" style="width:58px" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')">
 						<input type="hidden" class="i-txt2 c-blue onlynum t-rt" name="quantity" value="<?=$quantity?>" maxlength="10">
 						<input type="hidden" name="part_idx" value="<?=$real_part_idx?>">
 						<input type="hidden" name="price" value="<?=$price?>">
@@ -749,7 +749,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						}
 
 						?>
-						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" name="odr_quantity[]" quantity="<?=$chk_qty?>"  odr_det_idx="<?=$odr_det_idx?>" supply_quantity="<?=$supply_quantity;?>" quantity="<?=$quantity + $supply_quantity;?>" quantity_f="<?=$quantity + $supply_quantity;?>" amd_yn="Y" value="<?=$odr_amend_qty?>" part_type="<?=$part_type?>" style="width:56px;">
+						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" name="odr_quantity[]" quantity="<?=$chk_qty?>"  odr_det_idx="<?=$odr_det_idx?>" supply_quantity="<?=$supply_quantity;?>" quantity="<?=$quantity + $supply_quantity;?>" quantity_f="<?=$quantity + $supply_quantity;?>" amd_yn="Y" value="<?=$odr_amend_qty?>" part_type="<?=$part_type?>" style="width:56px;" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')">
 					</td>
 					<td class="c-red t-rt"><?=$supply_quantity==0?"":number_format($supply_quantity)?></td>
 					<?
@@ -901,7 +901,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<?}?>
 					<td class="t-rt">
 						<?if (($part_type=="2"||$part_type=="5"||$part_type=="6") && $period ==""){?>
-						<input type="text" class="i-txt0 c-blue onlynum numfmt t-rt"  maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" odr_det_idx="<?=$odr_det_idx?>" value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:58px;ime-mode:disabled;" readonly>
+						<input type="text" class="i-txt0 c-blue onlynum numfmt t-rt"  maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" name="odr_quantity[]" odr_det_idx="<?=$odr_det_idx?>" value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:58px;ime-mode:disabled;" readonly>
 						<?}else if($part_type=="7"){?>
 							$<?=$price==0?"":$price_val?>
 							<input type="hidden" name="odr_quantity[]" value="1">
@@ -910,26 +910,26 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								<?if ($part_type=="2"||$part_type=="5"||$part_type=="6"){?>
 									<?if ($supply_quantity==$odr_quantity){?>
 										<?if ($quantity=="0"){?>										
-											<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$supply_quantity?>"  value="" style="width:58px;ime-mode:disabled;">		
+											<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$supply_quantity?>"  value="" style="width:58px;ime-mode:disabled;">		
 										<?}else{?>
-											<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$supply_quantity?>"  value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:58px;ime-mode:disabled;">
+											<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$supply_quantity?>"  value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:58px;ime-mode:disabled;">
 										<?}?>							
 									<?}else{?>
 										<?if ($supply_quantity>$quantity){?>
-										<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$quantity?>"  value="" style="width:58px;ime-mode:disabled;">
+										<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$quantity?>"  value="" style="width:58px;ime-mode:disabled;">
 										<?}else{?>
-										<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$odr_quantity?>"  value="" style="width:58px;ime-mode:disabled;">
+										<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$odr_quantity?>"  value="" style="width:58px;ime-mode:disabled;">
 										<?}?>
 									<?}?>
 								<?}else{?>
 									<?if ($quantity<$odr_quantity){?>
-										<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$supply_quantity?>"  value="" style="width:58px;ime-mode:disabled;">
+										<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$supply_quantity?>"  value="" style="width:58px;ime-mode:disabled;">
 									<?}else{?>
-										<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$supply_quantity?>"  value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:58px;ime-mode:disabled;">
+										<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$supply_quantity?>"  value="<?=$odr_quantity==0?"":number_format($odr_quantity)?>" style="width:58px;ime-mode:disabled;">
 									<?}?>
 								<?}?>
 							<?}else{?>
-								<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^(0-9)]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$supply_quantity?>"  value="" style="width:58px;ime-mode:disabled;">
+								<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$supply_quantity?>"  value="" style="width:58px;ime-mode:disabled;">
 							<?}?>
 							
 						<?}?>
@@ -1053,7 +1053,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td class="t-rt" style="width:66px;"><span class="c-blue"><?=$odr_quantity==0?"":number_format($odr_quantity)?></span></td>
 					<!--공급수량-->
 					<td class="t-rt">
-						<input type="text" name="supply_quantity[]" class="i-txt4 c-red2 onlynum numfmt t-rt" value="" maxlength="10" style="width:70px" origin_qty="<?=$origin_qty;?>" del_qty="<?=$del_qty?>" part_type="<?=$part_type;?>">
+						<input type="text" name="supply_quantity[]" class="i-txt4 c-red2 onlynum numfmt t-rt" value="" maxlength="10" style="width:70px" origin_qty="<?=$origin_qty;?>" del_qty="<?=$del_qty?>" part_type="<?=$part_type;?>" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')">
 					</td>
 					<?
 						if($part_type =="2")
@@ -2504,7 +2504,7 @@ if ($for_readonly != "P") {?>
 			<?
 				$word ="Rest Amount(90%)";
 				// tot의 90%를 무조건 하면 안되고, 수정 발주 된 내역이 있을 가능성도 있기 때문에 mybank에서 실제로 지불한 10%값을 가져와서  tot- 지불값 한 금액이 실제 지불해야 할 금액이다.
-				$down = ($tot_vat_minus / 10);
+				$down = (str_replace(",","",$tot_vat_minus) / 10);
 
 				$tot = str_replace(",","",$tot);
 				$tot = round_down($tot,4);
@@ -2632,21 +2632,21 @@ if ($for_readonly != "P") {?>
 
 		if( ( str_replace(",","",$tot) == (int)str_replace(",","",$tot)) )
 		{
-			$total_val = number_format(str_replace(",","",$tot-$down),2);
+			$new_total_val = number_format(str_replace(",","",$tot)-$down,2);
 		}
 		else 
 		{
-			$total_val = number_format(str_replace(",","",$tot-$down),4);
+			$new_total_val = number_format(str_replace(",","",$tot)-$down,4);
 		}
 		?>
-		<li class="total"><strong>Total :</strong><span id="g_total">$<?=$total_val?></span></li>
+		<li class="total"><strong>Total :</strong><span id="g_total">$<?=$new_total_val?></span></li>
 	
 	</ul>
 		<?
 
 		$won_change = agency_won();
 		//echo $won_change;
-		if ($_GET['forread'] == "")
+		if ($_GET['forread'] == "" && !$_GET['loadPage'])
 		{
 			if ((($row_buyer["nation"] == 1 && $row_seller["nation"] ==1) || ($row_seller["nation"]==$ship_nation)) && $loadPage=="30_09" )
 			{	

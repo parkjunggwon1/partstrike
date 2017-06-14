@@ -434,7 +434,8 @@ function maskoff(){
 jQuery("input:text.numfmt").each(function(i){
 		jQuery(this).val(jQuery(this).val().replace(/,/gi,""));
 	});
-$('.onlynum').css("ime-mode","disabled").keydown(function(event){ 		//숫자만 입력하게.(.도 포함) 		
+$('.onlynum').css("ime-mode","disabled").keydown(function(event){ 		//숫자만 입력하게.(.도 포함) 	
+
 	  if (event.which && (event.which == 190 || event.which == 110 || event.which > 45 && event.which < 58 || event.which == 8 || event.which > 95 && event.which < 106)) {			
 	   } else { 
 	   event.preventDefault(); 

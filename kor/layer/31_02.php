@@ -132,7 +132,7 @@ $("#odr_quantity").keyup(function(e){
 						<input type="hidden" name="quantity" id="quantity" value="<?=$quantity;?>">
 						<input type="hidden" name="part_idx" id = "part_idx"  value="<?=$part_idx?>">
 						<input type="hidden" name="price" id = "price"  value="<?=$price?>">
-						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" id = "odr_quantity" name="odr_quantity" value=""  style="width:58px" maxlength="10">
+						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" id = "odr_quantity" name="odr_quantity" value=""  style="width:58px" maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')">
 					</td>
 					<td class="pd-0">
 					<span><img src="/kor/images/btn_ok_1.gif" alt="확인"></span>
