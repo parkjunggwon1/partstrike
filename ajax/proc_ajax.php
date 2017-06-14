@@ -1358,7 +1358,7 @@ switch($actty) {
 
 	//-- 저장 Data 중에 납기 받은 품목 발주가 있다면, What's New(정상루트) 품목에서 삭제
 		//납기 받은 품목 갯수
-		$period_cnt = QRY_CNT("odr_det", "and odr_idx = $actidx and odr_det_idx in ($actkind) AND odr_status=16");
+		$period_cnt = QRY_CNT("odr_det", "and odr_det_idx in ($actkind) AND odr_status=16");
 		if($period_cnt>0){ //납기 받은 품목이 있다.
 			//정상루트 Data 삭제
 			$result = DEL_ORIGIN_PERIOD($actkind); // /sql/sql.odr.php
