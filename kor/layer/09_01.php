@@ -558,11 +558,36 @@ function checkActive(){
 		}
 		
 		supp_qty = $(this).attr("supply_quantity");
+		add_capa_quantity = $(this).attr("add_capa_quantity");		
 
 		if (part_type == "2" && $(this).attr("quantity") =="I")
 		{	
-			odr_qty = parseInt($(this).val());	
-			if(parseInt(supp_qty) <= $(this).val()) 	okCnt++;
+				
+			<?if ($ncnr_chk =="Y"){?>	
+				odr_qty = parseInt(add_capa_quantity)+parseInt(supp_qty);
+				
+				if(parseInt(add_capa_quantity)+parseInt(supp_qty) < $(this).val())
+				{
+					$(this).val("");
+					okCnt = 0;
+				}
+				else
+				{
+					if(parseInt(supp_qty) <= parseInt($(this).val()))
+					{						
+						okCnt++;
+					} 	
+					else
+					{
+						okCnt = 0;
+					}
+				}
+
+			<?}else{?>
+				odr_qty = parseInt($(this).val());
+				if(parseInt(supp_qty) <= $(this).val()) 	okCnt++;
+			<?}?>
+			
 		}
 		else
 		{			
@@ -597,7 +622,6 @@ function checkActive(){
 	{
 		ErchkCnt = false;	
 	}
-	
 
 	//발주서 확인 버튼 활성
 	if(okCnt == det_cnt && ErchkCnt && selCnt == det_cnt && supp_qty <= odr_qty){	

@@ -172,6 +172,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 			$part_stock= replace_out($row["part_stock"]);
 			$del_chk= replace_out($row["del_chk"]);
 			$real_part_idx= replace_out($row["real_part_idx"]);
+			$add_capa_quantity= replace_out($row["add_capa_quantity"]);	
 
 			if( ($price == (int)$price) )
 			{					
@@ -296,7 +297,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								{
 
 									$poa_cnt = get_any("odr_history","status_name", "odr_idx=$odr_idx  and (status_name='송장' or status_name='수정발주서' or status_name='발주서') order by odr_history_idx desc limit 1");	
-									$qty = ($poa_cnt == "송장")? $part_stock+$supply_quantity : $part_stock+$odr_quantity;
+									$qty = ($poa_cnt == "송장")? number_format($part_stock+$supply_quantity) : number_format($part_stock+$odr_quantity);
 								
 									if ($del_chk==0)
 									{	
@@ -344,7 +345,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 								if ($part_type =="2"){		
 									if ($loadPage== "01_29")
 									{
-										echo $supply_quantity;
+										echo number_format($supply_quantity);
 									}	
 									else
 									{
@@ -380,17 +381,34 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<?}else{?>
 							<?
 								$price_sum = $price*$supply_quantity;
-								$price_sum = round_down($price_sum,4);
+								if(strpos($price_sum, ".") == false || strpos($price_sum, ".") == false)  
+								{
+									$price_sum= round_down($price_sum,2);
+									$price_sum= number_format($price_sum,2);
+								}
+								else
+								{
+									$price_sum= round_down($price_sum,4);
+								}
 							?>
-							<td class="t-rt">$<?=number_format($price_sum,4)?></td>
+							<td class="t-rt">$<?=$price_sum?></td>
 						<?}?>
 					<?
 						if($part_type =="2")
 						{
-							$day_val = "WK";
+							if ($period=="stock")
+							{
+								$day_val = "";
+							}
+							else
+							{
+								$day_val = "WK";
+								$color_red="c-red";
+							}							
 						}
+
 					?>
-					<td class=""><?=($period)?""."<span class='c-red'>".str_replace("WK","",$period).$day_val."</span>":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>					
+					<td class=""><?=($period)?""."<span class='<?=$color_red?>'>".str_replace("WK","",$period).$day_val."</span>":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>					
 					<?}elseif ($loadPage == "31_04"){?>
 					<td class="c-blue t-rt"><?=number_format($odr_quantity)?></td>
 					<td class="t-rt"<?=($period)? "":"style=\"padding-right:0px;\"";?>>
@@ -749,7 +767,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						}
 
 						?>
-						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" name="odr_quantity[]" quantity="<?=$chk_qty?>"  odr_det_idx="<?=$odr_det_idx?>" supply_quantity="<?=$supply_quantity;?>" quantity="<?=$quantity + $supply_quantity;?>" quantity_f="<?=$quantity + $supply_quantity;?>" amd_yn="Y" value="<?=$odr_amend_qty?>" part_type="<?=$part_type?>" style="width:56px;" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')">
+						<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" name="odr_quantity[]" quantity="<?=$chk_qty?>"  odr_det_idx="<?=$odr_det_idx?>" supply_quantity="<?=$supply_quantity;?>" quantity="<?=$quantity + $supply_quantity;?>" add_capa_quantity="<?=$add_capa_quantity?>" quantity_f="<?=$quantity + $supply_quantity;?>" amd_yn="Y" value="<?=$odr_amend_qty?>" part_type="<?=$part_type?>" style="width:56px;" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')">
 					</td>
 					<td class="c-red t-rt"><?=$supply_quantity==0?"":number_format($supply_quantity)?></td>
 					<?
@@ -1055,13 +1073,21 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td class="t-rt">
 						<input type="text" name="supply_quantity[]" class="i-txt4 c-red2 onlynum numfmt t-rt" value="" maxlength="10" style="width:70px" origin_qty="<?=$origin_qty;?>" del_qty="<?=$del_qty?>" part_type="<?=$part_type;?>" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')">
 					</td>
-					<?
+					<?					
 						if($part_type =="2")
 						{
-							$day_val = "WK";
+							if ($period=="stock")
+							{
+								$day_val = "";
+							}
+							else
+							{
+								$day_val = "WK";
+								$color_red="c-red";
+							}							
 						}
 					?>
-					<?=($period)?"<td class=''>"."<span class='c-red'>".str_replace("WK","",$period).$day_val."</span>":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
+					<?=($period)?"<td class=''>"."<span class='<?=$color_red?>'>".str_replace("WK","",$period).$day_val."</span>":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<td class='c-red'><span lang='ko'>확인</span>":"<td>Stock")?></td>
 					<??>
 					</tr>
 					<tr>
@@ -1069,7 +1095,9 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<td colspan="11" style="padding:0">
 							<table class="detail-table">
 								<tbody>
-									<?
+									<?				
+									$ncnr_yn = get_any("odr","ncnr_yn", "odr_idx=$odr_idx limit 1");
+
 									if($part_type=="2"){
 										$part_condition="1";
 										$pack_condition1="1";
@@ -1078,19 +1106,60 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 
 									?>
 										<input type="hidden" name="part_condition[]" value="1">
-										<input type="hidden" name="pack_condition1[]" value="1">										
+										<input type="hidden" name="pack_condition1[]" value="1">
+										<input type="hidden" id="ncnr_yn" name="ncnr_yn" value="<?=$ncnr_yn?>">										
 									<?}?>
+
+									<?if ($ncnr_yn=="Y"){?>
+									<!-- 부품상태 ---------------->
+									<tr>
+										<th scope="row" style="width:220px">
+											부품상태&nbsp; 
+											<label  class="c-blue"> : <?=($part_condition)?GF_Common_GetSingleList("PARTCOND",$part_condition):""?></label>
+											<input type="hidden" name="part_condition" id ="part_condition" value="<?=$part_condition?>" />
+										</th>
+										<th scope="row">
+											포장상태&nbsp;&nbsp;
+											<label  class="c-blue"><?=($pack_condition1)?GF_Common_GetSingleList("PACKCOND1",$pack_condition1):""?> / </label>
+											<label  class="c-blue"><?=($pack_condition2)?GF_Common_GetSingleList("PACKCOND2",$pack_condition2):""?></label>		
+											<input type="hidden" name="pack_condition1" id ="pack_condition1" value="<?=$pack_condition1?>" />
+											<input type="hidden" name="pack_condition2" id ="pack_condition2" value="<?=$pack_condition2?>" />									
+										</th>
+									</tr>
+										<?if ($memo){?>
+											<tr>
+												<td colspan="2" ><strong class="c-black">Memo&nbsp;&nbsp;: </strong> <?=$memo?></td>
+												<input type="hidden" name="memo" id ="memo" value="<?=$memo?>" />	
+											</tr>
+										<?}?>
+									<!-- //부품상태 ---------------->
+									<?}else{?>
+									
+
 									<tr >
+
 										<th scope="row" style="width:230px">
 											&nbsp;부품상태&nbsp;&nbsp;<div class="select type4" lang="en" style="width:150px;<?=$div_color?>">
 											<label  class="c-blue"><?=($part_condition)?GF_Common_GetSingleList("PARTCOND",$part_condition):""?></label>
+
 											<?
-											if($part_type!="2"){
-												echo GF_Common_SetComboList("part_condition[]", "PARTCOND", "", 1, "True",  "", $part_condition , "", "", "part_condition");
+
+											if($part_type!="2" ){
+												//echo GF_Common_SetComboList("part_condition[]", "PARTCOND", "", 1, "True",  "", $part_condition , "", "", "part_condition");
+											}
+											else
+											{
+												if ($ncnr_yn=="Y")
+												{
+											?>
+												<input type="hidden" name="part_condition" id ="part_condition" value="<?=$part_condition?>" />
+											<?
+												}
 											}
 											?>
 											</div>
 										</th>
+
 										<th scope="row">
 											&nbsp;포장상태&nbsp;&nbsp;<div class="select type4" lang="en" style="width:77px;<?=$div_color2?>">
 											<label  class="c-blue"><?=($pack_condition1)?GF_Common_GetSingleList("PACKCOND1",$pack_condition1):""?></label>
@@ -1107,6 +1176,8 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 									<tr>
 										<td colspan="2" ><strong class="c-black">&nbsp;Memo&nbsp;&nbsp;</strong> <input type="text" class="i-txt5" name="memo[]" value="" style="width:415px;color:#00759e;"></td>
 									</tr>
+									<?}?>
+									
 								</tbody>
 							</table>
 						</td>
@@ -1474,9 +1545,17 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<td class="t-rt">$<?=$price_val?></td>
 						<?
 							$price_sum = $price*$supply_quantity;
-							$price_sum = round_down($price_sum,4);
+							if(strpos($price_sum, ".") == false || strpos($price_sum, ".") == false)  
+							{
+								$price_sum= round_down($price_sum,2);
+								$price_sum= number_format($price_sum,2);
+							}
+							else
+							{
+								$price_sum= round_down($price_sum,4);
+							}
 						?>
-						<td class="t-rt">$<?=number_format($price_sum,4)?></td>
+						<td class="t-rt">$<?=$price_sum?></td>
 						<?
 						if ($part_type=="2")
 						{
@@ -1496,16 +1575,22 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 										<th scope="row" style="width:220px">
 											부품상태&nbsp; 
 											<label  class="c-blue"> : <?=($part_condition)?GF_Common_GetSingleList("PARTCOND",$part_condition):""?></label>
+											<input type="hidden" name="part_condition" id ="part_condition" value="<?=$part_condition?>" />
 										</th>
 										<th scope="row">
 											포장상태&nbsp;&nbsp;
 											<label  class="c-blue"><?=($pack_condition1)?GF_Common_GetSingleList("PACKCOND1",$pack_condition1):""?> / </label>
-											<label  class="c-blue"><?=($pack_condition2)?GF_Common_GetSingleList("PACKCOND2",$pack_condition2):""?></label>											
+											<label  class="c-blue"><?=($pack_condition2)?GF_Common_GetSingleList("PACKCOND2",$pack_condition2):""?></label>		
+											<input type="hidden" name="pack_condition1" id ="pack_condition1" value="<?=$pack_condition1?>" />
+											<input type="hidden" name="pack_condition2" id ="pack_condition2" value="<?=$pack_condition2?>" />									
 										</th>
 									</tr>
+									<?if ($memo){?>
 									<tr>
-										<td colspan="2" ><strong class="c-black">Memo&nbsp;&nbsp;</strong> <input type="text" class="i-txt3 c-blue" name="memo" value="" style="width:388px;border:1px solid #333"></td>
+										<td colspan="2" ><strong class="c-black">Memo&nbsp;&nbsp;: </strong> <?=$memo?></td>
+										<input type="hidden" name="memo" id ="memo" value="<?=$memo?>" />	
 									</tr>
+									<?}?>
 								</tbody>
 							</table>
 							<!-- //부품상태 ---------------->
@@ -1588,9 +1673,17 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<td class="t-rt">$<?=$price_val?></td>
 						<?
 							$price_sum = $price*$supply_quantity;
-							$price_sum = round_down($price_sum,4);
+							if(strpos($price_sum, ".") == false || strpos($price_sum, ".") == false)  
+							{
+								$price_sum= round_down($price_sum,2);
+								$price_sum= number_format($price_sum,2);
+							}
+							else
+							{
+								$price_sum= round_down($price_sum,4);
+							}
 						?>
-						<td class="t-rt">$<?=number_format($price_sum,4)?></td>
+						<td class="t-rt">$<?=$price_sum?></td>
 						<!--<td class="t-rt c-blue"><?=$odr_quantity==0?"":number_format($odr_quantity); //발주수량?></td>
 						<td class="t-rt c-red"><?=number_format($supply_quantity) //공급수량?></td>-->
 						<?
@@ -2504,10 +2597,11 @@ if ($for_readonly != "P") {?>
 			<?
 				$word ="Rest Amount(90%)";
 				// tot의 90%를 무조건 하면 안되고, 수정 발주 된 내역이 있을 가능성도 있기 때문에 mybank에서 실제로 지불한 10%값을 가져와서  tot- 지불값 한 금액이 실제 지불해야 할 금액이다.
-				$down = (str_replace(",","",$tot_vat_minus) / 10);
+				$down = get_any("odr_history","etc2","odr_idx=$odr_idx and status=5 and charge_ty='D' limit 1");
+				$down = (str_replace("$","",$down));
 
 				$tot = str_replace(",","",$tot);
-				$tot = round_down($tot,4);
+				$tot = round_down($tot-$down,4);
 				if( ($down == (int)$down) )
 				{
 					$down = number_format($down,2);
@@ -2517,7 +2611,7 @@ if ($for_readonly != "P") {?>
 					$down = number_format($down,4);
 				}
 				$tax_name = get_any("tax", "tax_name", "nation=$row_seller[nation]");
-				
+			
 			?>
 				
 				<li class="sub  c-red"><strong>Down Payment :</strong><span>-$<?=round_down(str_replace("-","",$down),4)?></span></li>	
@@ -2630,13 +2724,15 @@ if ($for_readonly != "P") {?>
 		<input type="hidden" name="tot" id="tot_<?=$odr_idx?>" value="<?=$tot?>"></span></li>
 		<?
 
+		
+
 		if( ( str_replace(",","",$tot) == (int)str_replace(",","",$tot)) )
 		{
-			$new_total_val = number_format(str_replace(",","",$tot)-$down,2);
+			$new_total_val = number_format(str_replace(",","",$tot),2);
 		}
 		else 
 		{
-			$new_total_val = number_format(str_replace(",","",$tot)-$down,4);
+			$new_total_val = number_format(str_replace(",","",$tot),4);
 		}
 		?>
 		<li class="total"><strong>Total :</strong><span id="g_total">$<?=$new_total_val?></span></li>
@@ -2733,7 +2829,8 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 				$etc_change = "";
 				if ($status == "3"){
 					$startmodi = true;  //수정발주서 일때 표시 조건
-					$red=" red";
+					// 2017-06-15 사장님 요청 제거 
+					//$red=" red";
 					//$etc_change = "change_img";	//직접수령,다른운송업체 제외하고 이미지 출력 위한 변수
 				}
 				
@@ -2775,7 +2872,7 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 								{
 									if ($etc1==" EA")
 									{
-										echo "0".openSheet($status, $etc1,$odr_idx,$etc_change,$odr_history_idx);
+										echo "0 EA";
 									}
 									else
 									{
@@ -3109,9 +3206,9 @@ function GET_ODR_HISTORY_LIST($loadPage, $odr_idx ,$odr_det_idx=""){
 						else
 						{							
 					?>
-							<br><br>추가 공급 가능 수량: <span class="c-blue" lang="en"></span> <span lang="en">EA</span> </td>
+							<br><br>추가 공급 가능 수량: <span lang="en" class="c-blue"><?=number_format(str_replace("EA","",$add_capa))?></span> EA</td>
 					<?
-							echo str_replace("EA","",$add_capa);
+							
 						}						
 					}
 					

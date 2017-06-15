@@ -505,7 +505,7 @@ if ($typ =="invreg"){   //송장 정보 등록(30_09내용) --------------------
                         memo = '$ary_memo[$j]' ,
                         odr_det_idx = '$ary_odr_det_idx[$j]'";
                 }
-              
+
                 $ship_result = mysql_query($sql,$conn) or die ("SQL Error : ". mysql_error());  
 
                 //송장에서도 개별 파트정보 업데이트 가능
@@ -670,8 +670,6 @@ if($typ =="invconfirm2"){ //-------------------------------------- 판매자 : �
                 echo "PRICE_".$part_idx;               
                 exit;
             }*/
-
-
 
             /*if($real_stock < $supp_qty){
                 echo "ERR";
@@ -2093,6 +2091,7 @@ if ($typ =="arrival"){   //물건 도착(지속적...) -------------------------
   //1. odr_status 변경
     update_val("odr","odr_status","19", "odr_idx", $odr_idx);
     update_val("odr","status_edit_mem_idx",$session_mem_idx, "odr_idx", $odr_idx);
+    $addcapa = str_replace(",","",$addcapa);
   //2. 추가 공급 가능 물량 및 부품,포장상태, 메모정보  update
     $sql = "update odr_det set
      add_capa_quantity          = '".$addcapa."'

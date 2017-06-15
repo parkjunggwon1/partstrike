@@ -42,7 +42,7 @@ $buy_com_name = $row_mem["mem_nm_en"];
 					<tr>
 						<td class="company">
 							<img src="/kor/images/nation_title_<?=$buy_com_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$buy_com_nation)?>">
-							<span class="name"><?=$buy_com_name?></span>
+							<span class="name"><a href="javascript:layer_company_det('<?=$buy_com_idx?>');" class="c-blue"><?=$buy_com_name?></a></span>
 						</td>
 						<td class="t-rt c-red2" ><span style="font-size:14px;">추가공급 가능수량</span> <input type="text" class="i-txt2 c-blue t-rt onlynum numfmt" onfocus="if(this.value=='0'){this.value=''}" onblur="if(this.value==''){this.value=''}" name="addcapa" id="addcapa" value="" style="width:90px" maxlength="10"> <span lang="en">EA</span></td>
 					</tr>

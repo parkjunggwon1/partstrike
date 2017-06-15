@@ -56,7 +56,7 @@ $(document).ready(function(){
 					<tr>
 						<td class="company">
 							<img src="/kor/images/nation_title_<?=$buy_com_nation?>.png" alt="<?=GF_Common_GetSingleList("NA",$buy_com_nation)?>">
-							<span class="name"><?=$buy_com_name;?></span>
+							<span class="name"><a href="javascript:layer_company_det('<?=$buy_com_idx?>');" class="c-blue"><?=$buy_com_name?></a></span>
 						</td>
 						<td rowspan="2" class="c-red2"  style="font-size:14px;">거래를 계속하시려면 계약금을 지불하셔야 합니다.<br>
 						계약금은 보증 용도로서 사용될 것입니다. <br>

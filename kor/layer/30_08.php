@@ -53,6 +53,12 @@ function checkActive(){
 	$("select[name^=pack_condition2]").each(function(e){ //포장상태2
 		if($(this).val().length>0) opCond2++;
 	});
+		
+	if ($("#ncnr_yn").val() == "Y")
+	{
+		opCond2++;
+	}
+
 	//부품상태 및 포장상태 - 지속적 갯수 추가
 	//opCond = opCond + part2;
 	//opCond1 = opCond1 + part2;
@@ -66,7 +72,7 @@ function checkActive(){
 	//송장확인 버튼
 
 	if (part2>=1)
-	{
+	{		
 		if(selCnt == det_cnt && opCond2==det_cnt && sqty==det_cnt ) btnConfirm = true;
 	}
 	else
