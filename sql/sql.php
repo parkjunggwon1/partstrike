@@ -2,7 +2,7 @@
 function dbconn(){
 	$conn=mysql_connect("localhost","root","wjdrnjs1");  // ¼­¹ö /ID/pw
 	mysql_select_db("pjg0319", $conn); // DB ¸í ¼öÁ¤
-	mysql_query("SET NAMES UTF8");
+	mysql_query("SET NAMES UTF8");	
 	return $conn;
 }
 

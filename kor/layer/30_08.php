@@ -53,7 +53,7 @@ function checkActive(){
 	$("select[name^=pack_condition2]").each(function(e){ //포장상태2
 		if($(this).val().length>0) opCond2++;
 	});
-		
+
 	if ($("#ncnr_yn").val() == "Y")
 	{
 		opCond2++;
@@ -66,7 +66,9 @@ function checkActive(){
 	check_supp();
 	//공급수량 체크
 	$("input[name^=supply_quantity]").each(function(e){ //공급수량
-		if($(this).val().replace(/,/gi,"")>0) sqty++;
+		var real_supp_qty = $(this).attr("origin_supp");
+		if(parseInt($(this).val().replace(/,/gi,""))>=parseInt(real_supp_qty)) sqty++;
+	
 	});
 	//alert("selCnt:"+selCnt);
 	//송장확인 버튼

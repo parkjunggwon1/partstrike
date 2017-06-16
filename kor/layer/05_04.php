@@ -678,10 +678,9 @@ $(document).ready(function(){
 		}
 
 		if (part_type == 2 || part_type == 5 || part_type == 6)
-		{
-			
+		{			
 			if(parseInt(supp_qty) <= parseInt($(this).val()))
-			{
+			{				
 				$("#layerPop3 #btn-confirm").css("cursor","pointer").addClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm.gif");
 			}
 			else
@@ -799,10 +798,11 @@ function checkActive(){
 			}**/
 		}
 	
-		var odr_qty=0, stock_qty=0;
+		var odr_qty=0, stock_qty=0,supp_qty=0;
 		sel_box.each(function(e){ //선택 갯수만큼 반복--------------------
 			Erchkbox = true;
 			stock_qty = Number($(this).attr("quantity"));
+
 			if($(this).attr("part_type")=='7'){
 				odr_qty = 1;
 			}else{
@@ -813,9 +813,17 @@ function checkActive(){
 			}else{
 				odr_qty = Number(odr_qty);
 			}
+
 			if(odr_qty == "" || odr_qty<1) FailCnt++; //발주수량 유무.
 			if($(this).attr("part_type")!='2' && $(this).attr("part_type")!='7'){ //지속적이 아닐 경우..2016-11-13:턴키도 안전재고 체크 무
 				if(odr_qty > stock_qty) FailCnt++; //안전재고 체크
+			}			
+
+			// part_type=2 일때는 발주수량이 공급수량보다 적을시 발주서 확인버튼 활성화 안됨 2017-06-15 박정권
+			if ($(this).attr("part_type")=='2')
+			{				
+				supp_qty = $(this).parent().parent().parent().find("input[name^=odr_quantity]").attr("supp_qty");				
+				if(odr_qty < supp_qty) FailCnt++; 
 			}
 
 		}); // end each
@@ -854,7 +862,7 @@ function checkActive(){
 				Erchkbox = true;
 			}
 		}
-		//-- 발주확인 버튼-------------------------
+		//-- 발주확인 버튼-------------------------		
 		if (Erchkbox==true && ErchkCnt == true && FailCnt==0 )
 		{			
 			if (chk_val==true)
@@ -871,7 +879,7 @@ function checkActive(){
 				
 			}
 			else
-			{
+			{			
 				$("#layerPop3 #btn-confirm").css("cursor","pointer").addClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm.gif");
 				//$("#layerPop3 .btn-area :eq(1)").css("cursor","pointer").addClass("btn-order-confirm").attr("src","/kor/images/btn_order_confirm.gif");
 			}

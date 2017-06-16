@@ -25,14 +25,16 @@ $det_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx ");  //odr_det 수량
 		<input type="hidden" name="det_cnt" id="det_cnt_3021" value="<?=$det_cnt?>">
 		<!-- //form1 -->
 	</form>
-		<?if ($ty =="Delay"){?><br><div class="c-red2 w100 t-ct">1 Week 자동연장</div><?}?>
+
+		
+		<div id="file_30_21" class="layer-file"></div>
 		<div class="layer-data">
 			<table class="stock-list-table" id="list_30_21">				
 			</table>
 		</div>
 		
 		<div class="btn-area t-rt">
-			<button type="button" class="<?=$ty?>" odr_idx="<?=$odr_idx?>"><img src="/kor/images/btn_<?if ($ty == ""){ echo "end";}else{ echo "end";}?>.gif" alt="종료"></button>
+			<button type="button" class="<?=$ty?>" odr_idx="<?=$odr_idx?>"><img src="/kor/images/btn_transmit.gif" alt="종료"></button>
 		</div>
 	
 </div>
@@ -42,10 +44,12 @@ $det_cnt = QRY_CNT("odr_det"," and odr_idx=$odr_idx ");  //odr_det 수량
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 
-$(document).ready(function(){
+$(document).ready(function(){	
 	$("#list_30_21").html($("#list_<?=$loadPage?>").html());
 	<?if ($ty == "Delay"){?> 
 		$("#layerPop3 .noinput:eq(0)").css("display","none");
+		$("#file_30_21").html($("#file_<?=$loadPage?>").html());
+		$("#file_30_21 td:eq(1)").html("1 Week 자동연장");
 	<?}else{?>
 		//수령 일때 
 		var odr_det = "<?=$odr_det_idx?>";
