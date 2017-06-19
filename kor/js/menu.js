@@ -455,8 +455,7 @@ function goMenuJump(data){
 	var get_cookie = getCookie('menu');
 
 	if (splData[5] !="M" && splData[6])
-	{
-
+	{		
 		var menu_chk = splData[5];
 		var menu_type = splData[6];
 
@@ -534,7 +533,7 @@ function goMenuJump(data){
 			openCommLayer("layer","21_5_12","?mn=24"+'&status='+splData[0]+'&page='+page+'&validyn='+splData[3]);
 		}
 	break; 
-	case("4"): //납기연장확인 
+	case("4"): //납기연장확인 	
 		if (trim(splData[1])==mem_idx)    
 		{
 			openCommLayer("layer","10_04",'?mn=04&status='+splData[0]+'&page='+page+'&validyn='+splData[3]);
@@ -643,8 +642,13 @@ function goMenuJump(data){
 	case("29"): //반품방법F (구매자 탭)
 			openCommLayer('layer','21_1_07','?mn=23&status='+splData[0]+'&page='+page+'&validyn='+splData[3]);
 	break;
-	case("20"): //지연 (구매자 탭)
-		openCommLayer("layer","08_02",'?mn=05&status='+splData[0]+'&page='+page+'&validyn='+splData[3]);
+	case("20"): //지연 구매자/판매자 둘다 가능
+		if (trim(splData[1])==mem_idx)    
+		{
+			openCommLayer("layer","30_15","?mn=05"+'&status='+splData[0]+'&page='+page+'&validyn='+splData[3]);
+		}else{
+			openCommLayer("layer","08_02",'?mn=05&status='+splData[0]+'&page='+page+'&validyn='+splData[3]);
+		}		
 	break; 
 	case("6"): //수령(판매자 탭/구매자 탭)
 		if (trim(splData[1])==mem_idx)    

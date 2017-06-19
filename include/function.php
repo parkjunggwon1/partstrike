@@ -1199,7 +1199,7 @@ function get_auto_no($ty, $table, $column, $update=""){  // 통합 no 생성
 		//cnt 아닌 최대번호 가져오자. 2016-04-19
 		$cut_bit = strlen($ty) + 6; //ty 문자열 길이에따라 자르는 시작 위치 바뀌어야 한다.
 //echo "<br>"."and ($column like '".$ty.date("y")."%'".$addCl.") and odr_idx = '".$odr_idx."' "."<BR>";
-		
+
 		$odr_no_cnt = QRY_CNT("odr","and ($column like '".$ty.date("y")."%'".$addCl.") and odr_idx = '".$odr_idx."' ");
 
 		if ($ty=="DPI")
@@ -1349,9 +1349,20 @@ function GET_MENU_CNT($ty, $odr_status, $his_ty, $searchand=""){
 		//2016-05-23 : 수령이 구매자 반품 한것을 판매자가 수령하여 '구매자'에게 수령알림의 경우에는 제품 흐름이 판매자, 구매자가 반대다('buy_mem_idx' 나, 'sell_mem_idx' 로 조회는 오류가 있다)
 		//$cnt = get_any($his_ty . "_history" , "count(distinct odr_idx)", "".$ty."_mem_idx = '".$_SESSION["MEM_IDX"]."' and status =$odr_status and confirm_yn = 'N'"); //JSJ
 		//2016-05-23 : 구매자 입장에서 '수령' 알림은, 구매자는 '나' 이지만, 수령 작성자는 '나'가 아닌경우
-		$cnt = get_any($his_ty . "_history" , "count(distinct odr_idx)", "".$ty."_mem_idx = '".$_SESSION["MEM_IDX"]."' and reg_mem_idx != '".$_SESSION["MEM_IDX"]."' and status =$odr_status and confirm_yn = 'N'"); 
+		$cnt = get_any($his_ty . "_history" , "count(distinct odr_idx)", "".$ty."_mem_idx = '".$_SESSION["MEM_IDX"]."' and reg_mem_idx != '".$_SESSION["MEM_IDX"]."' and status =$odr_status and confirm_yn = 'N'"); 	
 	}else{
-		$cnt = QRY_CNT($his_ty . "_history" , $searchand." and ".$ty."_mem_idx = '".$_SESSION["MEM_IDX"]."' and status = $odr_status ".$addCl." and confirm_yn = 'N' ");
+
+		$delay_cnt = get_any("odr_history" , "status", "".$ty."_mem_idx = '".$_SESSION["MEM_IDX"]."' and reg_mem_idx != '".$_SESSION["MEM_IDX"]."' and status_name ='지연' and confirm_yn = 'N'");
+
+		if (($delay_cnt == "4" || $delay_cnt == "20") && $odr_status == 5)
+		{
+			$cnt = 0;
+		}
+		else
+		{
+			$cnt = QRY_CNT($his_ty . "_history" , $searchand." and ".$ty."_mem_idx = '".$_SESSION["MEM_IDX"]."' and status = $odr_status ".$addCl." and confirm_yn = 'N' ");
+		}
+						
 	}
 	return $cnt;
 }

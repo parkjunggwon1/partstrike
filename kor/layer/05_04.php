@@ -820,9 +820,10 @@ function checkActive(){
 			}			
 
 			// part_type=2 일때는 발주수량이 공급수량보다 적을시 발주서 확인버튼 활성화 안됨 2017-06-15 박정권
-			if ($(this).attr("part_type")=='2')
+			if ($(this).attr("part_type")=='2' || $(this).attr("part_type")=='5' || $(this).attr("part_type")=='6')
 			{				
-				supp_qty = $(this).parent().parent().parent().find("input[name^=odr_quantity]").attr("supp_qty");				
+				supp_qty = $(this).parent().parent().parent().find("input[name^=odr_quantity]").attr("supp_qty").replace(",","");	
+						
 				if(odr_qty < supp_qty) FailCnt++; 
 			}
 

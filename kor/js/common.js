@@ -2114,7 +2114,7 @@ $(document).ready(function(){
 						}else{
 							alert_msg("1 Week 자동연장 되었습니다.");
 						}						
-					document.location.href="/kor/";
+				//	document.location.href="/kor/";
 				}
 			});
 

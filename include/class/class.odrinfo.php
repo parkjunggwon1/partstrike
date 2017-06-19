@@ -408,7 +408,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						}
 
 					?>
-					<td class=""><?=($period)?""."<span class='".$color_red."'>".str_replace("WK","",$period).$day_val."</span>":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>					
+					<td class=""><?=($period)?""."<span class='".$color_red."'>".str_replace("WK","",ucfirst($period)).$day_val."</span>":(($part_type=="2"||$part_type=="5"||$part_type=="6")?"<span lang='ko' class='c-red'>확인</span>":"Stock")?></td>					
 					<?}elseif ($loadPage == "31_04"){?>
 					<td class="c-blue t-rt"><?=number_format($odr_quantity)?></td>
 					<td class="t-rt"<?=($period)? "":"style=\"padding-right:0px;\"";?>>
@@ -926,6 +926,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 						<?}else{?>
 							<?if ($loadPage== "05_04"){?>
 								<?if ($part_type=="2"||$part_type=="5"||$part_type=="6"){?>
+									<?$quantity = str_replace(",","",$quantity);?>
 									<?if ($supply_quantity==$odr_quantity){?>
 										<?if ($quantity=="0"){?>										
 											<input type="text" class="i-txt2 c-blue onlynum numfmt t-rt" maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" name="odr_quantity[]" part_type="<?=$part_type?>" odr_det_idx="<?=$odr_det_idx?>" supp_qty="<?=$supply_quantity?>"  value="" style="width:58px;ime-mode:disabled;">		
@@ -987,13 +988,18 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					
 				<? //-------------- 송장(30_08) : 판매자 페이지에서 보여지는 송장 목록 -------------------------------
 					}elseif  ($loadPage== "30_08"){
+						$ncnr_yn = get_any("odr","ncnr_yn", "odr_idx=$odr_idx limit 1");
+
 						//2016-05-27 : 재고 수량에서 현 거래의 주문 수량을 더해 재고로 잡는다.(PO 당시 재고에서 빠졌으므로...)
 						if($part_type!="2"){
 							$origin_qty = $quantity + $odr_quantity;	//2016-12-11 : 파츠대표님 요구대로 되어 있슴(실재고+발주수량)							
 						}
 						else
 						{
-							$origin_qty = $supply_quantity + $add_capa_quantity;
+							if ($ncnr_yn=="Y")
+							{
+								$origin_qty = $supply_quantity + $add_capa_quantity;
+							}							
 						}
 					?>
 					<?if($part_type=="2"){?>
@@ -1075,7 +1081,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 					<td class="t-rt" style="width:66px;"><span class="c-blue"><?=$odr_quantity==0?"":number_format($odr_quantity)?></span></td>
 					<!--공급수량-->
 					<td class="t-rt">
-						<input type="text" name="supply_quantity[]" class="i-txt4 c-red2 onlynum numfmt t-rt" value="" maxlength="10" style="width:70px" origin_qty="<?=$origin_qty;?>" del_qty="<?=$del_qty?>" part_type="<?=$part_type;?>" origin_supp = "<?=$supply_quantity?>" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')">
+						<input type="text" name="supply_quantity[]" class="i-txt4 c-red2 onlynum numfmt t-rt" value="" maxlength="10" style="width:70px" origin_qty="<?=$origin_qty;?>" del_qty="<?=$del_qty?>" part_type="<?=$part_type;?>" origin_supp = "<?=$supply_quantity?>" ncnr_yn = "<?=$ncnr_yn?>" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')">
 					</td>
 					<?					
 						if($part_type =="2")
@@ -1114,7 +1120,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 										<input type="hidden" id="ncnr_yn" name="ncnr_yn" value="<?=$ncnr_yn?>">										
 									<?}?>
 
-									<?if ($ncnr_yn=="Y"){?>
+									<?if ($ncnr_yn=="Y" && $part_type=="2"){?>
 									<!-- 부품상태 ---------------->
 									<tr>
 										<th scope="row" style="width:220px">
@@ -1149,7 +1155,7 @@ function GET_ODR_DET_LIST($loadPage, $part_type, $searchand, $det_cnt = 0, $odr_
 											<?
 
 											if($part_type!="2" ){
-												//echo GF_Common_SetComboList("part_condition[]", "PARTCOND", "", 1, "True",  "", $part_condition , "", "", "part_condition");
+												echo GF_Common_SetComboList("part_condition[]", "PARTCOND", "", 1, "True",  "", $part_condition , "", "", "part_condition");
 											}
 											else
 											{

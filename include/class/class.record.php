@@ -23,6 +23,7 @@ function GET_MyMember($this_mem_idx){
 *** $odr_type : 'B'(Buy) or 'S'(Sell)
 *******************************************************************************/
 function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
+
 	if ($fr == "M"){  //from : main
 		$colspan = $odr_type == "B"? "11" : "9";	
 	}else{
@@ -53,8 +54,8 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 		//$st16cnt = QRY_CNT("odr a INNER JOIN odr_det b ON(a.odr_idx=b.odr_idx)", "AND b.rel_det_idx = $kk AND a.save_yn='Y'");
 		//2017-06-04 : 저장,납기받은것 중 제조사위탁, 해외위탁만 그리고, 지속...은 3주 이상만
 		$st16cnt = QRY_CNT("odr a INNER JOIN odr_det b ON(a.odr_idx=b.odr_idx)", "AND b.rel_det_idx = $kk AND a.save_yn='Y' AND (b.part_type IN(5,6) OR (b.part_type=2 AND $period<3)) ");
-		$chk = ($st16cnt>0 && $status==16 && $odr_type =="B")? false:true;
 
+		$chk = ($st16cnt>0 && $status==16 && $odr_type =="B")? false:true;
 		//--------------------------------------------------------------
 		if (($status && $chk) || ($odr_type =="B" && $save_yn =="Y")) {
 			$odr_det_idx = replace_out($row2["odr_det_idx"]);
@@ -79,6 +80,8 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 			$part_stock = replace_out($row2["part_stock"]);
 			$imsi_odr_no = replace_out($row2["imsi_odr_no"]);
 			$del_chk= replace_out($row2["del_chk"]);
+
+
 			
 			$com_idx = $rel_idx==0 ? $sell_mem_idx : $rel_idx;
 			$company_nm = get_any("member","mem_nm_en", "mem_idx=$com_idx"); 	
@@ -137,7 +140,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 		<?// goMenuJump() splData[0] : status splData[1] : sellmem_idx splData[2] : (odr or fty ) splData[3] : validyn (72시간 적용)?>
 		<?if($fr=="M" || $fr=="S"){
 				//$goJump = "onclick=\"javascript:goMenuJump('".$status.":".$sell_mem_idx.":odr:Y')\" ";				
-				$status_6 = "";
+				//$status_6 = "";
 				
 				/*if ($odr_det_status==6)
 				{
@@ -149,7 +152,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 					$status_6 = " and odr_det_idx='".$odr_det_idx."'  ";				
 				}*/
 
-				$qrycnt = QRY_CNT("odr_history", "and odr_idx =".$odr_idx.$status_6." and reg_mem_idx <> ".$_SESSION["MEM_IDX"] ." and confirm_yn ='N'");
+				$qrycnt = QRY_CNT("odr_history", "and odr_idx =".$odr_idx." and reg_mem_idx <> ".$_SESSION["MEM_IDX"] ." and confirm_yn ='N'");
 				$status = get_any("odr_history", "status" , "odr_history_idx = (SELECT max( odr_history_idx ) FROM odr_history WHERE odr_idx =$odr_idx )"); 
 				array_push($array_status2, $status);
 				if($page_val != $status && $status != "")
@@ -181,7 +184,8 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 					}
 				 
 				}
-				
+
+				//echo "and odr_idx =".$odr_idx.$status_6." and reg_mem_idx <> ".$_SESSION["MEM_IDX"] ." and confirm_yn ='N'";
 				
 				$page_real_val="";
 				if ($qrycnt >0) { 		
@@ -202,6 +206,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 							$page = $page_real_val;
 						}
 					}else{
+
 						if ($criteria_now_idx != $criteria_idx) {
 							
 							
@@ -220,7 +225,7 @@ function GET_RCD_DET_LIST($part_type, $odr_type, $searchand ,$fr){
 
 					
 					$status_now = $status;
-					
+				
 					if ($fr=="M")
 					{
 						if ($odr_det_status==6)

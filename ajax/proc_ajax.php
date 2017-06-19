@@ -655,7 +655,12 @@ switch($actty) {
 		$result=mysql_query($sql,$conn) or die ("SQL ERROR : ".mysql_error());
 	    $buy_mem_idx = get_any("odr", "mem_idx" , "odr_idx = $actidx");
 	    update_val("odr","odr_status",$status, "odr_idx", $actidx);	  
-		update_val("odr","status_edit_mem_idx",$session_mem_idx, "odr_idx", $actidx);	   
+		update_val("odr","status_edit_mem_idx",$session_mem_idx, "odr_idx", $actidx);	
+
+		$sql_period = "update odr set period = period + ".$period." where odr_idx=".$actidx;
+
+		$result=mysql_query($sql_period,$conn) or die ("SQL ERROR : ".mysql_error());
+
 	    $sql = "insert into odr_history set 
 				odr_idx = '$actidx'
 				,status = $status
@@ -754,7 +759,8 @@ switch($actty) {
 		 update_val("part","quantity", 0, "part_idx", $part_idx);	//재고수량 Update
 	   break;
 	case "DA":	//-------------------------------------------------------------------------------
-		update_val("odr_history","fault_select","Y", "odr_history_idx", $actidx);	  
+		update_val("odr_history","fault_select","Y", "odr_history_idx", $actidx);	
+		update_val("odr_history","confirm_yn","Y", "odr_history_idx", $actidx);	  
 		$odr_idx = get_any("odr_history", "odr_idx" , "odr_history_idx = $actidx");
 		update_val("odr","accept_yn","Y", "odr_idx", $odr_idx);	  
 		break;

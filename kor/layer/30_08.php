@@ -66,8 +66,17 @@ function checkActive(){
 	check_supp();
 	//공급수량 체크
 	$("input[name^=supply_quantity]").each(function(e){ //공급수량
-		var real_supp_qty = $(this).attr("origin_supp");
-		if(parseInt($(this).val().replace(/,/gi,""))>=parseInt(real_supp_qty)) sqty++;
+
+		if ($(this).attr("part_type")=="2" && $(this).attr("ncnr_yn")=="Y")
+		{			
+			var real_supp_qty = $(this).attr("origin_supp");
+			if(parseInt($(this).val().replace(/,/gi,""))>=parseInt(real_supp_qty)) sqty++;
+		}
+		else
+		{
+			if($(this).val().replace(/,/gi,"")>0) sqty++;
+		}
+		
 	
 	});
 	//alert("selCnt:"+selCnt);
